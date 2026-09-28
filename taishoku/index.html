@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職日の逆算ツール｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f;
+      --warn: #f0a08f; --warn-soft: #3d2622; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif;
+    line-height: 1.7; font-size: 16px;
+  }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select {
+    width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text);
+  }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; }
+  .days { display: flex; flex-wrap: wrap; gap: 6px; }
+  .days label { display: inline-flex; align-items: center; gap: 4px; margin: 0; font-weight: 400;
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: var(--input); }
+  .check { display: flex; align-items: center; gap: 8px; font-weight: 400; margin-top: 10px; }
+  button {
+    width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer;
+  }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .result h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  ol.timeline { list-style: none; padding: 0; margin: 0; }
+  ol.timeline li { border-left: 3px solid var(--accent); padding: 4px 0 10px 12px; margin-left: 4px; }
+  ol.timeline .d { font-weight: 700; }
+  ol.timeline .t { color: var(--sub); font-size: .9rem; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 8px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職日の逆算ツール</h1>
+  <p class="lead">退職日・有給休暇の残り・引き継ぎの日数を入れると、「最終出社日」と「退職を伝える日の目安」がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label for="retire">退職日（会社に在籍する最後の日）</label>
+    <input type="date" id="retire">
+
+    <label for="paid">残っている有給休暇の日数
+      <span class="hint">給与明細や勤怠システムで確認できます</span></label>
+    <input type="number" id="paid" min="0" max="80" value="20" inputmode="numeric">
+
+    <label for="handover">引き継ぎに必要な出勤日数
+      <span class="hint">迷ったら10日（約2週間）で試してみてください</span></label>
+    <input type="number" id="handover" min="0" max="80" value="10" inputmode="numeric">
+
+    <label>会社のルールで、退職を伝える期限
+      <span class="hint">就業規則の「退職の申し出」の欄。わからなければ1か月前で</span></label>
+    <div class="row">
+      <input type="number" id="ruleNum" min="0" max="12" value="1" inputmode="numeric">
+      <select id="ruleUnit"><option value="m">か月前</option><option value="d">日前</option></select>
+    </div>
+
+    <label>ふだんの休みの曜日</label>
+    <div class="days" id="days"></div>
+    <label class="check"><input type="checkbox" id="holiday" checked> 祝日も休み</label>
+
+    <button id="calc">計算する</button>
+  </div>
+
+  <div class="card result" id="result" hidden>
+    <h2>結果</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div class="big"><div class="k">退職を伝える日の目安（この日までに）</div><div class="v" id="tellBy"></div></div>
+    <div class="big"><div class="k">最終出社日</div><div class="v" id="lastDay"></div></div>
+    <ol class="timeline" id="timeline"></ol>
+    <button class="copy" id="copy">結果をコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。メモ帳などに貼り付けて使ってください。</p>
+  </div>
+
+  <p class="note">※有給休暇は、出勤日に当てはめて数えています。会社の休日や、年末年始などの特別な休みは入っていません。<br>
+  ※祝日は2026〜2027年分を入れています。<br>
+  ※結果は目安です。退職日や有給休暇の使い方は、会社との相談で決まります。<br>
+  最終更新：2026年9月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var HOLIDAYS = [
+    "2026-01-01","2026-01-12","2026-02-11","2026-02-23","2026-03-20","2026-04-29","2026-05-03","2026-05-04","2026-05-05","2026-05-06",
+    "2026-07-20","2026-08-11","2026-09-21","2026-09-22","2026-09-23","2026-10-12","2026-11-03","2026-11-23",
+    "2027-01-01","2027-01-11","2027-02-11","2027-02-23","2027-03-21","2027-03-22","2027-04-29","2027-05-03","2027-05-04","2027-05-05",
+    "2027-07-19","2027-08-11","2027-09-20","2027-09-23","2027-10-11","2027-11-03","2027-11-23"
+  ];
+  var WD = ["日","月","火","水","木","金","土"];
+  var daysBox = document.getElementById("days");
+  WD.forEach(function (n, i) {
+    var l = document.createElement("label");
+    var c = document.createElement("input");
+    c.type = "checkbox"; c.value = i; c.checked = (i === 0 || i === 6);
+    l.appendChild(c); l.appendChild(document.createTextNode(n));
+    daysBox.appendChild(l);
+  });
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function addDays(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  document.getElementById("retire").value = key(addDays(today, 75));
+
+  function isOff(d, off, useHol) {
+    return off.indexOf(d.getDay()) >= 0 || (useHol && HOLIDAYS.indexOf(key(d)) >= 0);
+  }
+  // 基準日を含めて、さかのぼってn番目の出勤日
+  function backWorkdays(from, n, off, useHol) {
+    var d = new Date(from), c = 0;
+    while (true) {
+      if (!isOff(d, off, useHol)) { c++; if (c === n) return d; }
+      d = addDays(d, -1);
+    }
+  }
+  function prevWorkday(from, off, useHol) {
+    var d = addDays(from, -1);
+    while (isOff(d, off, useHol)) d = addDays(d, -1);
+    return d;
+  }
+
+  var lastText = "";
+  document.getElementById("calc").addEventListener("click", function () {
+    var rv = document.getElementById("retire").value;
+    if (!rv) { alert("退職日を入れてください"); return; }
+    var retire = parse(rv);
+    var paid = Math.max(0, parseInt(document.getElementById("paid").value || "0", 10));
+    var hand = Math.max(0, parseInt(document.getElementById("handover").value || "0", 10));
+    var rn = Math.max(0, parseInt(document.getElementById("ruleNum").value || "0", 10));
+    var ru = document.getElementById("ruleUnit").value;
+    var useHol = document.getElementById("holiday").checked;
+    var off = [];
+    daysBox.querySelectorAll("input").forEach(function (c) { if (c.checked) off.push(+c.value); });
+    if (off.length >= 7) { alert("出勤する曜日が1日もありません"); return; }
+
+    // 有給の期間：退職日から出勤日をさかのぼってpaid日
+    var paidStart = paid > 0 ? backWorkdays(retire, paid, off, useHol) : null;
+    var lastDay = paid > 0 ? prevWorkday(paidStart, off, useHol)
+                           : (isOff(retire, off, useHol) ? prevWorkday(retire, off, useHol) : retire);
+    var handStart = hand > 0 ? backWorkdays(lastDay, hand, off, useHol) : lastDay;
+    var tellHand = prevWorkday(handStart, off, useHol);
+
+    var tellRule = new Date(retire);
+    if (ru === "m") tellRule.setMonth(tellRule.getMonth() - rn); else tellRule = addDays(tellRule, -rn);
+    var law = addDays(retire, -14);
+
+    var tellBy = tellHand < tellRule ? tellHand : tellRule;
+    var tellReason = tellHand < tellRule ? "引き継ぎと有給休暇の日数から逆算" : "会社のルールの期限";
+
+    document.getElementById("tellBy").textContent = fmt(tellBy);
+    document.getElementById("lastDay").textContent = fmt(lastDay);
+
+    var items = [
+      [tellBy, "退職を伝える（" + tellReason + "）"],
+      [handStart, "引き継ぎを始める（出勤" + hand + "日）"],
+      [lastDay, "最終出社日（挨拶・返却物）"]
+    ];
+    if (paidStart) items.push([paidStart, "有給休暇に入る（" + paid + "日）"]);
+    items.push([retire, "退職日"]);
+    items.sort(function (a, b) { return a[0] - b[0]; });
+
+    var tl = document.getElementById("timeline");
+    tl.innerHTML = "";
+    var lines = ["【退職までの予定】"];
+    items.forEach(function (it) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div class="d">' + fmt(it[0]) + '</div><div class="t">' + it[1] + '</div>';
+      tl.appendChild(li);
+      lines.push(fmt(it[0]) + "　" + it[1]);
+    });
+    lines.push("", "参考：会社のルールの期限 " + fmt(tellRule), "参考：法律上の目安（期間の定めのない雇用の場合、2週間前） " + fmt(law));
+    var li2 = document.createElement("li");
+    li2.innerHTML = '<div class="t">参考：会社のルールの期限 ' + fmt(tellRule) + '<br>参考：法律上の目安（期間の定めのない雇用の場合、退職日の2週間前） ' + fmt(law) + '</div>';
+    tl.appendChild(li2);
+    lastText = lines.join("\n");
+
+    var w = document.getElementById("warn");
+    if (tellBy < today) {
+      w.hidden = false;
+      w.textContent = "伝える日の目安が、今日より前になっています。退職日を後ろにずらすか、引き継ぎの日数や有給休暇の使い方を、会社と相談する必要がありそうです。";
+    } else {
+      var left = Math.round((tellBy - today) / 86400000);
+      w.hidden = left > 7;
+      w.textContent = "伝える日の目安まで、あと" + left + "日です。早めに準備を始めましょう。";
+    }
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("retire").value = "2026-12-31";
+    document.getElementById("calc").click();
+  }
+
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    if (navigator.clipboard) { navigator.clipboard.writeText(lastText).then(done, function () { fallback(); }); } else { fallback(); }
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+  });
+})();
+</script>
+</body>
+</html>
