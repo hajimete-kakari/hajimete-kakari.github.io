@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職務経歴書の作成ページ（パート・アルバイト向け）｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=month], input[type=number], select, textarea {
+    width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  textarea { min-height: 72px; }
+  .row { display: flex; gap: 8px; } .row > * { flex: 1; min-width: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips label { display: inline-flex; align-items: center; gap: 4px; font-weight: 400;
+    border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: var(--input); font-size: .95rem; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 16px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .job { border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 8px; }
+  .job:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+  pre#out { white-space: pre-wrap; word-break: break-word; background: var(--accent-soft); border-radius: 10px;
+    padding: 14px; font-family: inherit; font-size: .95rem; margin: 0; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職務経歴書の作成ページ</h1>
+  <p class="lead">パート・アルバイトの経験を選ぶだけで、職務経歴書の文章ができます。できた文章はコピーして、Wordなどに貼り付けて仕上げてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 職歴</h2>
+    <div id="jobs"></div>
+    <button class="sub" id="addJob" type="button">＋ 職歴を追加する（最大4つ）</button>
+  </div>
+
+  <div class="card">
+    <h2>2. 資格・スキル</h2>
+    <div class="chips" id="skills"></div>
+    <label class="f" for="skillFree">そのほかの資格・スキル<span class="hint">例：日商簿記3級、フォークリフト運転技能講習</span></label>
+    <input type="text" id="skillFree">
+  </div>
+
+  <div class="card">
+    <h2>3. 自己PR</h2>
+    <label class="f">あなたの強みを2つまで選んでください</label>
+    <div class="chips" id="strengths"></div>
+    <label class="f" for="target">応募する仕事<span class="hint">例：一般事務、販売スタッフ（空欄でも作れます）</span></label>
+    <input type="text" id="target">
+    <button id="make" type="button">職務経歴書を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <p class="note">〇〇の部分は、自分の言葉に書き換えてください。</p>
+    <pre id="out"></pre>
+    <button id="copy" type="button">文章をコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。Wordやメモ帳に貼り付けてください。</p>
+  </div>
+
+  <p class="note">※できあがる文章は、書き始めるための下書きです。応募先に合わせて、言葉を足したり削ったりして仕上げてください。<br>最終更新：2026年9月　はじめての係</p>
+</main>
+
+<template id="jobTpl">
+  <div class="job">
+    <label class="f">勤務先の名前<span class="hint">例：〇〇スーパー △△店</span></label>
+    <input type="text" class="jName">
+    <label class="f">仕事の種類</label>
+    <select class="jType"></select>
+    <div class="row">
+      <div><label class="f">始めた月</label><input type="month" class="jFrom"></div>
+      <div><label class="f">辞めた月</label><input type="month" class="jTo"></div>
+    </div>
+    <label class="check"><input type="checkbox" class="jNow"> 今も働いている</label>
+    <div class="row">
+      <div><label class="f">働き方</label><select class="jForm"><option>パート</option><option>アルバイト</option><option>派遣</option><option>契約社員</option></select></div>
+      <div><label class="f">週の日数</label><input type="number" class="jDays" min="1" max="7" value="4" inputmode="numeric"></div>
+      <div><label class="f">1日の時間</label><input type="number" class="jHours" min="1" max="12" value="5" inputmode="numeric"></div>
+    </div>
+    <label class="f">担当した業務（当てはまるものすべて）</label>
+    <div class="chips jTasks"></div>
+    <label class="f">工夫したこと・任されたこと</label>
+    <div class="chips jAch"></div>
+    <label class="f">ひとこと補足（あれば）<span class="hint">例：1日約300人のお客様のレジを担当</span></label>
+    <input type="text" class="jFree">
+  </div>
+</template>
+
+<script>
+(function () {
+  var TYPES = {
+    "スーパー・食品販売": ["レジ", "品出し・陳列", "商品の発注", "売場づくり・POP作成", "惣菜・食品の加工", "鮮度・期限の管理", "接客・問い合わせ対応"],
+    "コンビニ": ["レジ", "品出し・陳列", "商品の発注", "店内調理（揚げ物など）", "宅配便・公共料金の受付", "清掃", "夜間の店舗管理"],
+    "小売（ドラッグストア・ホームセンターなど）": ["レジ", "品出し・陳列", "商品の発注", "売場づくり・POP作成", "在庫の管理", "接客・商品の案内", "ポイントカードの案内"],
+    "飲食店": ["ホールでの接客", "キッチンでの調理", "レジ・会計", "仕込み", "食材の在庫管理", "衛生管理", "予約の受付"],
+    "アパレル・雑貨の販売": ["接客・販売", "コーディネートの提案", "レジ", "在庫の管理", "ディスプレイ", "顧客情報の管理"],
+    "事務": ["データ入力", "電話・来客の対応", "書類の作成", "ファイリング", "請求書などの発行の補助", "郵便物の対応"],
+    "介護・福祉": ["生活の援助（掃除・洗濯）", "食事の介助", "入浴の介助", "送迎", "記録の作成", "レクリエーションの企画"],
+    "工場・倉庫": ["ピッキング", "検品", "梱包", "ライン作業", "在庫の管理", "フォークリフトの運転"],
+    "コールセンター": ["電話の受付（受信）", "電話での案内（発信）", "問い合わせへの対応", "システムへの入力", "クレームの一次対応"],
+    "その他": ["接客", "事務作業", "軽作業", "清掃", "配達"]
+  };
+  var ACH = ["新人スタッフの教育", "シフト作成の補助", "責任者の代行（鍵の管理・レジ締めなど）", "売上や目標の達成", "お客様からの評価・表彰", "仕事のやり方の改善提案", "複数の業務の兼任"];
+  var ACH_TEXT = {
+    "新人スタッフの教育": "新人スタッフの教育を任され、仕事の手順を教えました",
+    "シフト作成の補助": "シフト作成の補助を担当しました",
+    "責任者の代行（鍵の管理・レジ締めなど）": "責任者が不在のときに、鍵の管理やレジ締めなどを代行しました",
+    "売上や目標の達成": "〇〇の目標（例：月間の売上・獲得件数）の達成に貢献しました",
+    "お客様からの評価・表彰": "お客様からの評価をいただき、〇〇（例：店舗内での表彰）を受けました",
+    "仕事のやり方の改善提案": "〇〇（例：備品の置き場所・作業の順番）の見直しを提案し、作業の効率化につなげました",
+    "複数の業務の兼任": "複数の業務を兼任し、状況に応じて担当を切り替えて対応しました"
+  };
+  var SKILLS = ["Word（文書の作成）", "Excel（表の作成・入力）", "Excel（関数を使った集計）", "PowerPoint", "普通自動車運転免許", "タイピング"];
+  var STR = {
+    "丁寧さ": "私の強みは、仕事を丁寧に進めることです。{task}などの業務では、ミスを防ぐために確認の手順を省かないよう心がけてきました。",
+    "続ける力": "私の強みは、ひとつの仕事を続ける力です。{place}では約{years}働き、任される業務の幅を少しずつ広げてきました。",
+    "周りとの協力": "私の強みは、周りと協力して仕事を進めることです。忙しい時間帯には、自分の担当以外の業務も手伝い、職場全体がスムーズに回るよう動いてきました。",
+    "臨機応変さ": "私の強みは、状況に応じて動けることです。混雑しているときや急に人手が足りなくなったときも、優先順位を考えて対応してきました。",
+    "接客の姿勢": "私の強みは、相手の立場に立った対応です。{task}では、お客様が困っていることを先回りして聞くよう心がけてきました。",
+    "体力・立ち仕事": "立ち仕事や体を動かす仕事に慣れており、忙しい日が続いても、安定して働くことができます。",
+    "パソコン作業": "パソコンでのデータ入力や書類の作成にも対応でき、正確さとスピードの両方を意識して作業してきました。"
+  };
+
+  function chips(box, list, cls, max) {
+    list.forEach(function (t) {
+      var l = document.createElement("label");
+      var c = document.createElement("input"); c.type = "checkbox"; c.value = t; if (cls) c.className = cls;
+      if (max) c.addEventListener("change", function () {
+        var on = box.querySelectorAll("input:checked");
+        if (on.length > max) { c.checked = false; }
+      });
+      l.appendChild(c); l.appendChild(document.createTextNode(t)); box.appendChild(l);
+    });
+  }
+
+  var jobsBox = document.getElementById("jobs");
+  var tpl = document.getElementById("jobTpl");
+  function addJob() {
+    if (jobsBox.children.length >= 4) return;
+    var n = tpl.content.firstElementChild.cloneNode(true);
+    var sel = n.querySelector(".jType");
+    Object.keys(TYPES).forEach(function (k) { var o = document.createElement("option"); o.textContent = k; sel.appendChild(o); });
+    var tasks = n.querySelector(".jTasks");
+    function fill() { tasks.innerHTML = ""; chips(tasks, TYPES[sel.value]); }
+    sel.addEventListener("change", fill); fill();
+    chips(n.querySelector(".jAch"), ACH);
+    var now = n.querySelector(".jNow"), to = n.querySelector(".jTo");
+    now.addEventListener("change", function () { to.disabled = now.checked; });
+    jobsBox.appendChild(n);
+  }
+  addJob();
+  document.getElementById("addJob").addEventListener("click", addJob);
+  chips(document.getElementById("skills"), SKILLS);
+  chips(document.getElementById("strengths"), Object.keys(STR), null, 2);
+
+  function ym(v) { if (!v) return "〇〇〇〇年〇月"; var p = v.split("-"); return p[0] + "年" + (+p[1]) + "月"; }
+  function months(from, to) {
+    if (!from) return 0;
+    var a = from.split("-"), b;
+    if (to) b = to.split("-"); else { var d = new Date(); b = [d.getFullYear(), d.getMonth() + 1]; }
+    return (+b[0] - +a[0]) * 12 + (+b[1] - +a[1]) + 1;
+  }
+  function span(m) {
+    if (m <= 0) return "〇年";
+    var y = Math.floor(m / 12), r = m % 12;
+    return (y ? y + "年" : "") + (r ? r + "か月" : (y ? "" : "1か月"));
+  }
+  function checked(box) { return Array.prototype.map.call(box.querySelectorAll("input:checked"), function (c) { return c.value; }); }
+
+  var lastText = "";
+  document.getElementById("make").addEventListener("click", function () {
+    var jobs = Array.prototype.map.call(jobsBox.children, function (n) {
+      var now = n.querySelector(".jNow").checked;
+      var from = n.querySelector(".jFrom").value, to = now ? "" : n.querySelector(".jTo").value;
+      return {
+        name: n.querySelector(".jName").value.trim() || "〇〇（勤務先）",
+        type: n.querySelector(".jType").value,
+        from: from, to: to, now: now, m: months(from, now ? "" : (to || from)),
+        form: n.querySelector(".jForm").value,
+        days: n.querySelector(".jDays").value, hours: n.querySelector(".jHours").value,
+        tasks: checked(n.querySelector(".jTasks")), ach: checked(n.querySelector(".jAch")),
+        free: n.querySelector(".jFree").value.trim()
+      };
+    });
+    jobs.sort(function (a, b) { return (b.from || "").localeCompare(a.from || ""); });
+    var total = jobs.reduce(function (s, j) { return s + (j.m > 0 ? j.m : 0); }, 0);
+    var typeNames = []; jobs.forEach(function (j) { var t = j.type.replace(/（.*）/, ""); if (typeNames.indexOf(t) < 0) typeNames.push(t); });
+    var allTasks = []; jobs.forEach(function (j) { j.tasks.forEach(function (t) { if (allTasks.indexOf(t) < 0) allTasks.push(t); }); });
+    var d = new Date();
+    var L = [];
+    L.push("職務経歴書");
+    L.push(d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日現在");
+    L.push("氏名　〇〇 〇〇", "");
+    L.push("■職務要約");
+    L.push("パート・アルバイトとして通算約" + span(total) + "、" + typeNames.join("・") + "の仕事に携わってきました。" +
+      (allTasks.length ? allTasks.slice(0, 3).join("、") + "などを担当し、" : "") +
+      "お客様や一緒に働く人と協力しながら、任された仕事を責任をもって進めてきました。", "");
+    L.push("■職務経歴");
+    jobs.forEach(function (j) {
+      L.push(ym(j.from) + "〜" + (j.now ? "現在" : ym(j.to)) + "（約" + span(j.m) + "）");
+      L.push(j.name + "（" + j.type.replace(/（.*）/, "") + "）　" + j.form + "（週" + (j.days || "〇") + "日・1日" + (j.hours || "〇") + "時間）");
+      L.push("〔主な業務〕");
+      (j.tasks.length ? j.tasks : ["〇〇"]).forEach(function (t) { L.push("・" + t); });
+      if (j.free) L.push("・" + j.free);
+      if (j.ach.length) { L.push("〔工夫したこと・任されたこと〕"); j.ach.forEach(function (a) { L.push("・" + ACH_TEXT[a]); }); }
+      L.push("");
+    });
+    var sk = checked(document.getElementById("skills"));
+    var sf = document.getElementById("skillFree").value.trim(); if (sf) sk.push(sf);
+    L.push("■資格・スキル");
+    (sk.length ? sk : ["〇〇"]).forEach(function (s) { L.push("・" + s); });
+    L.push("");
+    L.push("■自己PR");
+    var st = checked(document.getElementById("strengths"));
+    if (!st.length) st = ["丁寧さ", "周りとの協力"];
+    var longest = jobs.slice().sort(function (a, b) { return b.m - a.m; })[0];
+    st.forEach(function (s, i) {
+      var p = STR[s].replace("{task}", allTasks[0] || "〇〇").replace("{place}", longest.name).replace("{years}", span(longest.m));
+      if (i > 0) p = p.replace(/^私の強みは、/, "もう1つの強みは、").replace(/^(立ち仕事|パソコン)/, "また、$1");
+      L.push(p, "");
+    });
+    var target = document.getElementById("target").value.trim();
+    L.push((target ? target + "の仕事" : "貴社の仕事") + "でも、これまでの経験を活かして、〇〇（例：正確な事務処理・丁寧な接客）で貢献したいと考えています。");
+    lastText = L.join("\n");
+    document.getElementById("out").textContent = lastText;
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+
+  if (location.search.indexOf("demo") >= 0) {
+    var j = jobsBox.children[0];
+    j.querySelector(".jName").value = "〇〇スーパー △△店";
+    j.querySelector(".jFrom").value = "2020-04";
+    j.querySelector(".jNow").checked = true;
+    ["レジ", "品出し・陳列", "商品の発注"].forEach(function (t) {
+      j.querySelectorAll(".jTasks input").forEach(function (c) { if (c.value === t) c.checked = true; });
+    });
+    j.querySelectorAll(".jAch input").forEach(function (c) { if (c.value === "新人スタッフの教育") c.checked = true; });
+    document.querySelectorAll("#skills input").forEach(function (c) { if (c.value.indexOf("Excel（表") === 0) c.checked = true; });
+    document.querySelectorAll("#strengths input").forEach(function (c) { if (c.value === "丁寧さ" || c.value === "続ける力") c.checked = true; });
+    document.getElementById("target").value = "一般事務";
+    document.getElementById("make").click();
+  }
+})();
+</script>
+</body>
+</html>
