@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接の答え作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > * { flex: 1; min-width: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips label { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 10px; background: var(--input); font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .qa { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .qa:last-child { border-bottom: 0; }
+  .qa .q { font-weight: 700; margin-bottom: 4px; }
+  .qa .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+  .qa .tip { font-size: .85rem; color: var(--sub); margin-top: 6px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接の答え作成ページ</h1>
+  <p class="lead">これまでの仕事と、辞めた理由・応募先を選んだ理由を選ぶと、面接でよく聞かれる10の質問への「自分用の答えの下書き」ができます。声に出して練習できる長さ（1問30秒〜1分）にしてあります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. これまでの仕事</h2>
+    <label class="f" for="job">直近の仕事の内容<span class="hint">例：スーパーのレジと品出し、一般事務、飲食店のホール</span></label>
+    <input type="text" id="job" value="スーパーのレジと品出し">
+    <div class="row">
+      <div><label class="f" for="years">その仕事の年数</label><input type="number" id="years" min="0" max="40" value="5" inputmode="numeric"></div>
+      <div><label class="f" for="form">働き方</label><select id="form"><option>パート</option><option>アルバイト</option><option>正社員</option><option>契約社員</option><option>派遣</option></select></div>
+    </div>
+    <label class="f">その仕事で、任されたこと・工夫したこと（2つまで）</label>
+    <div class="chips" id="ach"></div>
+    <label class="f">働いていない期間（ブランク）</label>
+    <select id="blank">
+      <option value="">ない（または3か月未満）</option>
+      <option value="子育て">子育てのため</option>
+      <option value="介護">家族の介護のため</option>
+      <option value="療養">病気・けがの療養のため</option>
+      <option value="勉強">資格の勉強のため</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めた（辞める）理由</h2>
+    <select id="reason">
+      <option value="time">勤務時間・シフトが合わなくなった</option>
+      <option value="growth">もっと仕事の幅を広げたい</option>
+      <option value="pay">収入を上げたい</option>
+      <option value="move">引越し・家庭の事情</option>
+      <option value="company">会社の事情（閉店・契約終了など）</option>
+      <option value="env">職場の人間関係・環境が合わなかった</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 応募先のこと</h2>
+    <label class="f" for="target">応募する仕事<span class="hint">例：一般事務、販売スタッフ、介護スタッフ</span></label>
+    <input type="text" id="target" value="一般事務">
+    <label class="f">応募先を選んだ理由（2つまで）</label>
+    <div class="chips" id="why"></div>
+    <label class="f">自分の強み（2つまで）</label>
+    <div class="chips" id="str"></div>
+    <label class="f">自分の弱み（1つ）</label>
+    <select id="weak">
+      <option value="慎重">慎重すぎて、時間がかかることがある</option>
+      <option value="抱え込み">1人で抱え込んでしまうことがある</option>
+      <option value="人前">人前で話すのが得意ではない</option>
+      <option value="PC">パソコンの操作に慣れていない部分がある</option>
+    </select>
+    <label class="f" for="start">働き始められる時期<span class="hint">例：内定をいただいてから2週間後、来月1日から</span></label>
+    <input type="text" id="start" value="内定をいただいてから2週間後">
+    <button id="make" type="button">答えを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>あなたの答えの下書き</h2>
+    <p class="note">〇〇の部分を、自分の言葉で埋めてください。丸暗記より、要点を覚えて自分の言葉で話すほうが伝わります。</p>
+    <div id="qas"></div>
+    <button class="copy" id="copy" type="button">全部コピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。メモ帳に貼って、声に出して練習してください。</p>
+  </div>
+
+  <p class="note">※できあがる答えは、練習のための下書きです。応募先や自分の状況に合わせて、言葉を変えて使ってください。<br>最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var ACH = {
+    "新人の教育": "新人スタッフの教育を任され、仕事の手順を教えてきました",
+    "責任者の代行": "責任者が不在のときに、閉店作業やレジ締めなどを任されてきました",
+    "ミスを減らす工夫": "ミスを減らすために、確認の手順を自分で決めて続けてきました",
+    "お客様からの評価": "お客様から名前を覚えていただいたり、お礼の言葉をいただいたりしました",
+    "作業の改善": "作業の順番や物の置き場所を見直して、作業を早くする工夫をしてきました",
+    "複数の業務の兼任": "複数の業務を兼任し、忙しさに応じて担当を切り替えてきました"
+  };
+  var WHY = {
+    "仕事内容": "{target}の仕事内容が、これまでの経験を活かせると感じた",
+    "働き方": "勤務時間や働き方が、今の生活に合っていて、長く続けられると感じた",
+    "成長": "新しいことを学びながら、仕事の幅を広げられる環境だと感じた",
+    "会社の雰囲気": "求人や会社のホームページから、スタッフを大切にしている雰囲気が伝わった",
+    "地元・通いやすさ": "地元で、通いやすく、地域の方の役に立てる仕事だと感じた"
+  };
+  var STR = {
+    "丁寧さ": ["丁寧に仕事を進めること", "確認の手順を省かず、ミスを防ぐようにしてきました"],
+    "続ける力": ["1つの仕事を続ける力", "同じ職場で長く働き、任される仕事を少しずつ増やしてきました"],
+    "周りとの協力": ["周りと協力して動けること", "忙しい時間帯には、自分の担当以外の仕事も手伝ってきました"],
+    "臨機応変さ": ["状況に合わせて動けること", "急に人手が足りなくなったときも、優先順位を考えて対応してきました"],
+    "接客の姿勢": ["相手の立場に立った対応", "お客様が困っていることを、先回りして聞くようにしてきました"],
+    "覚える早さ": ["新しい仕事を覚える早さ", "わからないことはその日のうちにメモして、次の日には一人でできるようにしてきました"]
+  };
+  var REASON = {
+    time: ["勤務時間が合わなくなったため", "家庭の事情で、働ける時間帯が変わり、今の職場のシフトでは続けることが難しくなりました。働ける時間がはっきりしたので、長く続けられる職場で働きたいと考えています。"],
+    growth: ["仕事の幅を広げたいため", "今の仕事で〇年経験を積み、一通りの業務を任されるようになりました。これからは、〇〇（例：事務作業）にも取り組める仕事で、できることを広げたいと考えています。"],
+    pay: ["収入を上げたいため", "家族の状況が変わり、働く時間を増やしたいと考えるようになりました。経験を活かしながら、より長く働ける職場を探しています。"],
+    move: ["引越し・家庭の事情のため", "〇〇（例：引越し）のため、通い続けることが難しくなりました。前の職場では〇年勤め、円満に退職しています。"],
+    company: ["会社の事情のため", "勤めていた〇〇（例：店舗の閉店・契約期間の終了）にともない、退職することになりました。そこで身につけた経験を、次の職場でも活かしたいと考えています。"],
+    env: ["働く環境を見直したいため", "前の職場では、〇〇（例：チームで協力して働く場面）が少なく、自分の力を活かしきれないと感じていました。周りと協力しながら働ける環境で、長く働きたいと考えています。"]
+  };
+  var WEAK = {
+    "慎重": ["慎重すぎて、時間がかかることがあるところです", "そのため、作業ごとに目安の時間を決めて、時間を意識しながら進めるようにしています。"],
+    "抱え込み": ["1人で抱え込んでしまうことがあるところです", "そのため、迷ったら早めに周りに相談すると決めて、途中で進み具合を伝えるようにしています。"],
+    "人前": ["人前で話すのが得意ではないところです", "そのため、話す前に要点をメモにまとめて、伝えたいことを短く話すよう心がけています。"],
+    "PC": ["パソコンの操作に慣れていない部分があるところです", "そのため、今は〇〇（例：表計算ソフトの基本操作）を、自分で練習しています。"]
+  };
+  var BLANK = {
+    "子育て": "子育てのため仕事を離れていましたが、子どもを預ける先が決まり、〇曜日〜〇曜日の〇時〜〇時は、安定して働ける状態です。",
+    "介護": "家族の介護のため仕事を離れていましたが、介護の体制が整い、今は安定して働ける状態です。",
+    "療養": "体調を崩して療養していましたが、今は回復し、医師からも働くことに問題はないと言われています。",
+    "勉強": "〇〇の資格の勉強に集中していました。その知識を、仕事でも活かしたいと考えています。"
+  };
+  function chips(box, list, max) {
+    list.forEach(function (t, i) {
+      var l = document.createElement("label");
+      var c = document.createElement("input"); c.type = "checkbox"; c.value = t;
+      c.addEventListener("change", function () { if (box.querySelectorAll("input:checked").length > max) c.checked = false; });
+      l.appendChild(c); l.appendChild(document.createTextNode(t)); box.appendChild(l);
+    });
+  }
+  chips(document.getElementById("ach"), Object.keys(ACH), 2);
+  chips(document.getElementById("why"), Object.keys(WHY), 2);
+  chips(document.getElementById("str"), Object.keys(STR), 2);
+  function checked(id) { return Array.prototype.map.call(document.querySelectorAll("#" + id + " input:checked"), function (c) { return c.value; }); }
+
+  var lastText = "";
+  function make() {
+    var job = document.getElementById("job").value.trim() || "〇〇";
+    var years = document.getElementById("years").value || "〇";
+    var form = document.getElementById("form").value;
+    var target = document.getElementById("target").value.trim() || "〇〇";
+    var ach = checked("ach"), why = checked("why"), str = checked("str");
+    if (!why.length) why = ["仕事内容", "働き方"];
+    if (!str.length) str = ["丁寧さ", "周りとの協力"];
+    var reason = REASON[document.getElementById("reason").value];
+    var weak = WEAK[document.getElementById("weak").value];
+    var blank = document.getElementById("blank").value;
+    var start = document.getElementById("start").value.trim() || "〇〇";
+    var s0 = STR[str[0]], achText = ach.length ? ACH[ach[0]] : "〇〇（任されたこと）を担当してきました";
+
+    var QA = [
+      ["1. 自己紹介をお願いします",
+        "〇〇と申します。本日はお時間をいただき、ありがとうございます。\nこれまで" + years + "年ほど、" + form + "として" + job + "の仕事をしてきました。" + achText + "。\nこれまでの経験を活かして、" + target + "の仕事でもお役に立ちたいと思い、応募いたしました。本日はよろしくお願いいたします。",
+        "1分以内。最後に「よろしくお願いいたします」で締める"],
+      ["2. これまでの仕事について教えてください",
+        job + "の仕事を" + years + "年ほど担当してきました。" + (ach.length ? ach.map(function (a) { return ACH[a]; }).join("。また、") + "。" : "〇〇を担当してきました。") + "\nとくに、" + s0[1].replace(/ました$/, "たこと") + "は、" + target + "の仕事でも活かせると考えています。",
+        "数字（人数・件数・年数）を1つ入れると伝わりやすい"],
+      ["3. 前の仕事を辞めた理由は？",
+        reason[1],
+        "前の職場の悪口は言わない。最後は「次はこうしたい」で前向きに締める"],
+      ["4. 当社を志望した理由は？",
+        "理由は2つあります。1つ目は、" + WHY[why[0]].replace("{target}", target) + "ことです。" + (why[1] ? "2つ目は、" + WHY[why[1]].replace("{target}", target) + "ことです。" : "") + "\nこれまでの" + job + "の経験を活かしながら、長く働きたいと考えています。",
+        "求人票やホームページで見た言葉を1つ入れると、ほかの会社との違いが出る"],
+      ["5. あなたの強みは？",
+        "私の強みは、" + s0[0] + "です。前の職場では、" + s0[1] + "。" + (str[1] ? "\nまた、" + STR[str[1]][0] + "も強みだと思っています。" : "") + "\n" + target + "の仕事でも、この強みを活かしたいと考えています。",
+        "強みは1つを深く。具体的な場面を1つ添える"],
+      ["6. あなたの弱みは？",
+        "私の弱みは、" + weak[0] + "。" + weak[1],
+        "弱みだけで終わらせず、「どう工夫しているか」までセットで話す"],
+      ["7. ブランク（働いていない期間）について教えてください",
+        blank ? BLANK[blank] : "（ブランクがない場合は、この質問はされないことが多いです）",
+        "理由は短く。「今は働ける状態」をはっきり伝える"],
+      ["8. 希望の勤務時間・日数は？",
+        "週〇日、〇時から〇時までを希望しています。〇曜日は〇〇のため難しいですが、それ以外の曜日は相談に応じられます。",
+        "できること・できないことをはっきり。あとから変えると信頼を失いやすい"],
+      ["9. いつから働けますか？",
+        start + "から働けます。",
+        "前の職場の引き継ぎがある場合は、その日数も考えて答える"],
+      ["10. 最後に、何か質問はありますか？（逆質問）",
+        "・入社してから、仕事を覚えるまでの流れを教えていただけますか。\n・同じ仕事をしている方は、どのような方が多いですか。\n・早く仕事に慣れるために、事前に準備しておくとよいことはありますか。",
+        "「特にありません」は避ける。働く意欲が伝わる質問を1〜2つ"]
+    ];
+    var box = document.getElementById("qas"); box.innerHTML = "";
+    var lines = ["【面接の答えの下書き】"];
+    QA.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "qa";
+      d.innerHTML = '<div class="q"></div><div class="a"></div><div class="tip"></div>';
+      d.querySelector(".q").textContent = x[0];
+      d.querySelector(".a").textContent = x[1];
+      d.querySelector(".tip").textContent = "ポイント：" + x[2];
+      box.appendChild(d);
+      lines.push("", "■" + x[0], x[1]);
+    });
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+  if (location.search.indexOf("demo") >= 0) {
+    ["新人の教育"].forEach(function (v) { document.querySelector("#ach input[value='" + v + "']").checked = true; });
+    ["仕事内容", "働き方"].forEach(function (v) { document.querySelector("#why input[value='" + v + "']").checked = true; });
+    ["丁寧さ"].forEach(function (v) { document.querySelector("#str input[value='" + v + "']").checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
