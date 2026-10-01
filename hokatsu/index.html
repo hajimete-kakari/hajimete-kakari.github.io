@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>保育園の申込スケジュール作成｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --input: #fffbe8; --done: #9a9a9a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f;
+      --warn: #f0a08f; --warn-soft: #3d2622; --input: #2e2c22; --done: #777;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=month], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .opts { display: grid; gap: 6px; }
+  .opts label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 10px; background: var(--input); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  ol.timeline { list-style: none; padding: 0; margin: 4px 0 0; }
+  ol.timeline li { border-left: 3px solid var(--accent); padding: 4px 0 10px 12px; margin-left: 4px; }
+  ol.timeline .d { font-weight: 700; }
+  ol.timeline .t { color: var(--sub); font-size: .9rem; }
+  .task { display: flex; gap: 10px; align-items: flex-start; padding: 8px 2px; border-bottom: 1px solid var(--line); }
+  .task input { margin-top: 6px; width: 18px; height: 18px; flex: none; }
+  .task .name { font-weight: 600; }
+  .task .where { font-size: .85rem; color: var(--sub); }
+  .task.done .name, .task.done .where { color: var(--done); text-decoration: line-through; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>保育園の申込スケジュール作成</h1>
+  <p class="lead">入園したい月と、住んでいる市区町村の申込締切を入れると、見学から入園までの逆算スケジュールと、必要な書類のチェックリストができます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="month">入園したい月</label>
+    <input type="month" id="month">
+
+    <label class="f" for="deadline">申込の締切日
+      <span class="hint">市区町村のホームページの「入園のご案内」で確認。わからなければ空欄で（4月入園は11月末ごろ、それ以外は前の月の10日ごろで仮に計算します）</span></label>
+    <input type="date" id="deadline">
+
+    <label class="f">保護者の状況（2人とも当てはまるものを選ぶ）</label>
+    <div class="opts" id="opts">
+      <label><input type="checkbox" value="employee" checked> 会社員・パートとして働いている</label>
+      <label><input type="checkbox" value="ikukyu" checked> 育休中で、入園に合わせて復帰する</label>
+      <label><input type="checkbox" value="self"> 自営業・フリーランス</label>
+      <label><input type="checkbox" value="job"> 仕事を探している（求職中）</label>
+      <label><input type="checkbox" value="sibling"> 上の子が、もう保育園に通っている</label>
+    </div>
+    <button id="make" type="button">スケジュールを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>逆算スケジュール</h2>
+    <div class="warn" id="warn" hidden></div>
+    <ol class="timeline" id="timeline"></ol>
+    <h2 style="margin-top:18px">必要な書類のチェックリスト</h2>
+    <p class="note" id="progress"></p>
+    <div id="docs"></div>
+    <button class="copy" id="copy" type="button">スケジュールとリストをコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。</p>
+  </div>
+
+  <p class="note">※申込の締切・結果の発表の時期・必要な書類は、市区町村によって違います。最終的には、市区町村の「入園のご案内」で確認してください。<br>
+  ※チェックの状態は、このスマホ・パソコンのブラウザにだけ保存されます。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d); x.setMonth(x.getMonth() + n); return x; }
+  function load() { try { return JSON.parse(localStorage.getItem("hokatsu-done") || "{}"); } catch (e) { return {}; } }
+  function save(o) { try { localStorage.setItem("hokatsu-done", JSON.stringify(o)); } catch (e) {} }
+
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var nextApril = new Date(today.getMonth() >= 3 ? today.getFullYear() + 1 : today.getFullYear(), 3, 1);
+  document.getElementById("month").value = nextApril.getFullYear() + "-04";
+
+  // [名前, 説明, 条件]
+  var DOCS = [
+    ["入園の申込書（支給認定の申請書と一緒のことが多い）", "市区町村の窓口・ホームページ。オンライン申請できる市区町村も", ""],
+    ["就労証明書", "勤め先に書いてもらう。保護者1人につき1枚。時間がかかることがある", "employee"],
+    ["就労証明書（育休からの復帰予定）", "勤め先に、復帰予定日を書いてもらう", "ikukyu"],
+    ["自営業の就労状況の申告書と、仕事の内容がわかる書類", "確定申告書の写し、開業届の写しなど", "self"],
+    ["求職活動の申立書", "求職中の場合。入園後の一定期間内に仕事を見つける条件がつくことが多い", "job"],
+    ["マイナンバーがわかるもの・本人確認の書類", "保護者全員分", ""],
+    ["上の子の在園証明など", "きょうだいで加点される市区町村がある", "sibling"],
+    ["希望する保育園の一覧（第1希望から順に）", "見学した園から。通える範囲で多めに書くのが一般的", ""]
+  ];
+
+  var lastText = "";
+  function make() {
+    var mv = document.getElementById("month").value;
+    if (!mv) { alert("入園したい月を入れてください"); return; }
+    var p = mv.split("-"), start = new Date(+p[0], +p[1] - 1, 1);
+    var dv = document.getElementById("deadline").value, deadline, assumed = false;
+    if (dv) { var q = dv.split("-"); deadline = new Date(+q[0], +q[1] - 1, +q[2]); }
+    else {
+      assumed = true;
+      deadline = start.getMonth() === 3 ? new Date(start.getFullYear() - 1, 10, 30) : new Date(start.getFullYear(), start.getMonth() - 1, 10);
+    }
+    var on = { "": true };
+    document.querySelectorAll("#opts input:checked").forEach(function (c) { on[c.value] = true; });
+    var isApril = start.getMonth() === 3;
+    var items = [
+      [addM(deadline, isApril ? -4 : -2), "保育園の情報を集める・見学の予約を入れる"],
+      [addM(deadline, -1), "見学を終える（気になる園は2〜3か所以上）"]
+    ];
+    if (on.employee || on.ikukyu) items.push([add(deadline, -30), "勤め先に就労証明書を頼む（遅くともこのころ）"]);
+    items.push([add(deadline, -7), "書類をそろえて、申込書を書き終える"]);
+    items.push([deadline, "申込の締切" + (assumed ? "（仮の日付。市区町村で確認を）" : "")]);
+    var result1;
+    if (isApril) {
+      result1 = new Date(start.getFullYear(), 1, 10);
+      items.push([result1, "1次の結果が届くころ（2月上旬〜中旬が多い）"]);
+      items.push([new Date(start.getFullYear(), 2, 5), "2次募集の結果が届くころ（3月上旬が多い）"]);
+    } else {
+      result1 = new Date(start.getFullYear(), start.getMonth() - 1, 20);
+      items.push([result1, "結果が届くころ（入園の前の月の中旬〜下旬が多い）"]);
+    }
+    items.push([add(result1, isApril ? 10 : 3), "内定したら：園の面談・健康診断、入園の準備"]);
+    if (on.ikukyu) items.push([add(result1, isApril ? 11 : 4), "内定したら：勤め先に、復帰の日を伝える"]);
+    items.push([start, "入園。最初の1〜2週間は「慣らし保育」で短い時間が多い"]);
+    if (on.ikukyu) items.push([add(start, 7), "復帰の目安（慣らし保育が終わるころ）"]);
+    items.sort(function (a, b) { return a[0] - b[0]; });
+
+    var tl = document.getElementById("timeline"); tl.innerHTML = "";
+    var lines = ["【保育園の申込スケジュール】"];
+    items.forEach(function (it) {
+      if (it[0] < today && it[1].indexOf("結果") < 0) it[1] += "（この日は過ぎています。できるだけ早く）";
+      var li = document.createElement("li");
+      li.innerHTML = '<div class="d">' + fmt(it[0]) + '</div><div class="t">' + it[1] + '</div>';
+      tl.appendChild(li);
+      lines.push(fmt(it[0]) + "　" + it[1]);
+    });
+
+    var warn = document.getElementById("warn"), msgs = [];
+    if (deadline < today) msgs.push("申込の締切が過ぎています。2次募集や、途中入園の申込を市区町村に確認してください。");
+    else if ((deadline - today) / 86400000 < 45) msgs.push("締切まで、あと" + Math.round((deadline - today) / 86400000) + "日です。就労証明書は時間がかかるので、すぐに勤め先に頼んでください。");
+    if (on.ikukyu) msgs.push("育休を延長する可能性があるなら、申込書の写しなどが必要になります。2025年4月から確認が厳しくなっているので、記事の「延長」の項目を読んでおいてください。");
+    warn.hidden = !msgs.length; warn.innerHTML = msgs.join("<br>");
+
+    var done = load(), box = document.getElementById("docs"); box.innerHTML = "";
+    lines.push("", "【必要な書類】");
+    DOCS.forEach(function (d) {
+      if (!on[d[2]]) return;
+      var row = document.createElement("label"); row.className = "task";
+      var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!done[d[0]];
+      if (cb.checked) row.classList.add("done");
+      cb.addEventListener("change", function () {
+        var s = load(); if (cb.checked) s[d[0]] = 1; else delete s[d[0]]; save(s);
+        row.classList.toggle("done", cb.checked); count();
+      });
+      var t = document.createElement("div");
+      t.innerHTML = '<div class="name">' + d[0] + '</div><div class="where">' + d[1] + '</div>';
+      row.appendChild(cb); row.appendChild(t); box.appendChild(row);
+      lines.push("□ " + d[0]);
+    });
+    function count() {
+      document.getElementById("progress").textContent = "そろったもの：" + box.querySelectorAll("input:checked").length + " / " + box.querySelectorAll("input").length;
+    }
+    count();
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("month").value = "2027-04";
+    document.getElementById("deadline").value = "2026-11-27";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
