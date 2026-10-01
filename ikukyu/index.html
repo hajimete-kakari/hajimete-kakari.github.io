@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>産休・育休のお金かんたん計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f;
+      --warn: #f0a08f; --warn-soft: #3d2622; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select {
+    width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 10px; background: var(--input); font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  ol.timeline { list-style: none; padding: 0; margin: 12px 0 0; }
+  ol.timeline li { border-left: 3px solid var(--accent); padding: 4px 0 10px 12px; margin-left: 4px; }
+  ol.timeline .d { font-weight: 700; }
+  ol.timeline .t { color: var(--sub); font-size: .9rem; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>産休・育休のお金かんたん計算</h1>
+  <p class="lead">出産予定日と給料を入れると、出産手当金・育児休業給付金・出生後休業支援給付金の目安と、休みの日程がわかります。2026年8月1日からの金額に対応しています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f">計算する人</label>
+    <div class="seg">
+      <label><input type="radio" name="who" value="mother" checked> 出産する人</label>
+      <label><input type="radio" name="who" value="partner"> パートナー（出産しない親）</label>
+    </div>
+
+    <label class="f" for="due">出産予定日</label>
+    <input type="date" id="due">
+
+    <label class="f" for="pay">休む前の月給（額面・円）
+      <span class="hint">残業代や通勤手当を含み、ボーナスは除いた、休む前6か月の平均</span></label>
+    <input type="number" id="pay" min="0" step="1000" value="250000" inputmode="numeric">
+
+    <div id="pStart" hidden>
+      <label class="f" for="leaveStart">育休を始める日<span class="hint">出産の日から取ることもできます</span></label>
+      <input type="date" id="leaveStart">
+    </div>
+
+    <label class="f" for="leaveEnd">育休を終える日<span class="hint">子どもの1歳の誕生日の前日までが基本です</span></label>
+    <input type="date" id="leaveEnd">
+
+    <label class="f">出生後休業支援給付金（上乗せ）の条件</label>
+    <select id="both">
+      <option value="yes">両親とも、決められた期間に14日以上の育休を取る</option>
+      <option value="exempt">配偶者が会社員ではない・ひとり親など（自分だけでよい）</option>
+      <option value="no">どちらかが取らない・14日未満</option>
+    </select>
+    <p class="note">パートナーは子の出生後8週間以内、出産した人は産後休業のあと8週間以内に、それぞれ通算14日以上の育休を取ると、最大28日分が上乗せされます。</p>
+
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <ol class="timeline" id="timeline"></ol>
+    <button class="copy" id="copy" type="button">結果をコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。</p>
+  </div>
+
+  <p class="note">※厚生労働省が公表している2026年8月1日以降の上限額・下限額をもとにした目安です。出産手当金は、月給を標準報酬月額の代わりに使った概算です。<br>
+  ※育児休業給付金と出生後休業支援給付金は非課税で、育休中は健康保険料・厚生年金保険料が免除されます。<br>
+  ※実際の金額と受け取れるかどうかは、ハローワークと加入している健康保険が判断します。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var W_MIN = 3203, W_MAX = 16540; // 休業開始時賃金日額の下限・上限（2026年8月1日〜）
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function days(a, b) { return Math.round((b - a) / 86400000) + 1; }
+  function yen(n) { return Math.floor(n).toLocaleString("ja-JP") + "円"; }
+  function wage(pay) { return Math.min(W_MAX, Math.max(W_MIN, Math.floor(pay * 6 / 180))); }
+
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var due0 = add(today, 120);
+  document.getElementById("due").value = key(due0);
+  function defaultEnd() {
+    var d = parse(document.getElementById("due").value);
+    var e = new Date(d); e.setFullYear(e.getFullYear() + 1); e = add(e, -1);
+    document.getElementById("leaveEnd").value = key(e);
+    document.getElementById("leaveStart").value = key(d);
+  }
+  defaultEnd();
+  document.getElementById("due").addEventListener("change", defaultEnd);
+  document.querySelectorAll("input[name=who]").forEach(function (r) {
+    r.addEventListener("change", function () {
+      document.getElementById("pStart").hidden = document.querySelector("input[name=who]:checked").value !== "partner";
+    });
+  });
+
+  var lastText = "";
+  document.getElementById("calc").addEventListener("click", function () {
+    var who = document.querySelector("input[name=who]:checked").value;
+    var due = parse(document.getElementById("due").value);
+    var pay = parseInt(document.getElementById("pay").value || "0", 10);
+    var end = parse(document.getElementById("leaveEnd").value);
+    var both = document.getElementById("both").value;
+    if (!pay) { alert("月給を入れてください"); return; }
+    var w = wage(pay);
+    var cards = [], items = [], lines = ["【産休・育休のお金の目安】"], msgs = [], total = 0;
+
+    var start;
+    if (who === "mother") {
+      var preStart = add(due, -41), postEnd = add(due, 56);
+      var stdDaily = Math.round(pay / 30 / 10) * 10; // 標準報酬日額（概算）
+      var shoDaily = Math.round(stdDaily * 2 / 3);
+      var shoDays = days(preStart, postEnd);
+      var sho = shoDaily * shoDays;
+      total += sho;
+      cards.push(["出産手当金（健康保険）", yen(sho), "1日" + yen(shoDaily) + "×" + shoDays + "日（予定日どおりに生まれた場合）"]);
+      lines.push("出産手当金：" + yen(sho) + "（1日" + yen(shoDaily) + "×" + shoDays + "日）");
+      start = add(postEnd, 1);
+      items.push([preStart, "産前休業が始まる（出産予定日の6週間前）"], [due, "出産予定日"], [postEnd, "産後休業が終わる（出産の翌日から8週間）"]);
+    } else {
+      start = parse(document.getElementById("leaveStart").value);
+      if (start < due) msgs.push("育休は、子どもが生まれた日から取れます。");
+    }
+    if (end < start) { alert("育休を終える日が、始める日より前になっています"); return; }
+
+    var D = days(start, end), d67 = Math.min(D, 180), d50 = D - d67;
+    var m67 = Math.floor(w * 30 * 0.67), m50 = Math.floor(w * 30 * 0.5);
+    var ik = Math.floor(w * d67 * 0.67) + Math.floor(w * d50 * 0.5);
+    total += ik;
+    cards.push(["育児休業給付金（雇用保険）", yen(ik),
+      "最初の180日：1か月あたり約" + yen(m67) + "（67%）" + (d50 ? "／181日目から：約" + yen(m50) + "（50%）" : "") + "／育休" + D + "日"]);
+    lines.push("育児休業給付金：" + yen(ik) + "（1か月あたり 67%:" + yen(m67) + (d50 ? "／50%:" + yen(m50) : "") + "）");
+
+    var winEnd = who === "mother" ? add(start, 55) : add(due, 55);
+    if (both !== "no") {
+      var within = days(start, winEnd < end ? winEnd : end);
+      if (within >= 14) {
+        var sd = Math.min(28, within);
+        var shien = Math.floor(w * sd * 0.13);
+        total += shien;
+        cards.push(["出生後休業支援給付金（上乗せ）", yen(shien), sd + "日分×13%（育児休業給付金と合わせて80%）"]);
+        lines.push("出生後休業支援給付金：" + yen(shien) + "（" + sd + "日分）");
+      } else {
+        msgs.push("上乗せ（出生後休業支援給付金）を受けるには、決められた期間（" + fmt(winEnd) + "まで）の間に、通算14日以上の育休が必要です。");
+      }
+    }
+    cards.push(["合計の目安", yen(total), "非課税。育休中は社会保険料も免除されます"]);
+    lines.push("合計：" + yen(total));
+
+    items.push([start, "育休が始まる"]);
+    items.push([winEnd, "上乗せ（出生後休業支援給付金）の対象期間の終わり"]);
+    items.push([add(start, 179), "育休181日目の前日（ここまで67%）"]);
+    items.push([end, "育休が終わる"]);
+    items.sort(function (a, b) { return a[0] - b[0]; });
+
+    var box = document.getElementById("cards"); box.innerHTML = "";
+    cards.forEach(function (c) {
+      var div = document.createElement("div"); div.className = "big";
+      div.innerHTML = '<div class="k">' + c[0] + '</div><div class="v">' + c[1] + '</div><div class="s">' + c[2] + '</div>';
+      box.appendChild(div);
+    });
+    var tl = document.getElementById("timeline"); tl.innerHTML = "";
+    lines.push("");
+    items.forEach(function (it) {
+      if (it[0] > end && it[1].indexOf("181日目") >= 0) return;
+      var li = document.createElement("li");
+      li.innerHTML = '<div class="d">' + fmt(it[0]) + '</div><div class="t">' + it[1] + '</div>';
+      tl.appendChild(li);
+      lines.push(fmt(it[0]) + "　" + it[1]);
+    });
+    if (Math.floor(pay * 6 / 180) > W_MAX) msgs.push("給料が上限を超えているため、育児休業給付金は上限額で計算しています。");
+    var warn = document.getElementById("warn");
+    warn.hidden = !msgs.length; warn.innerHTML = msgs.join("<br>");
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("due").value = "2027-03-10";
+    defaultEnd();
+    document.getElementById("calc").click();
+  }
+  window.__ik = { wage: wage };
+})();
+</script>
+</body>
+</html>
