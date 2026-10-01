@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険のかんたん計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f;
+      --warn: #f0a08f; --warn-soft: #3d2622; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 12px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select {
+    width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 10px; background: var(--input); font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  ol.timeline { list-style: none; padding: 0; margin: 12px 0 0; }
+  ol.timeline li { border-left: 3px solid var(--accent); padding: 4px 0 10px 12px; margin-left: 4px; }
+  ol.timeline .d { font-weight: 700; }
+  ol.timeline .t { color: var(--sub); font-size: .9rem; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険のかんたん計算</h1>
+  <p class="lead">辞める前の給料と年齢などを入れると、1日あたりの金額・もらえる日数・合計の目安と、受け取りまでの日程がわかります。2026年8月1日からの金額に対応しています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f">辞めた日（または辞める予定の日）の年齢</label>
+    <input type="number" id="age" min="15" max="64" value="35" inputmode="numeric">
+
+    <label class="f">辞める前6か月の給料の合計（額面・円）
+      <span class="hint">ボーナスは入れません。残業代や通勤手当は入れます。わからなければ、下の「月給から計算」を使ってください</span></label>
+    <input type="number" id="total" min="0" step="1000" inputmode="numeric">
+    <label class="f">月給から計算（額面・円）<span class="hint">6か月同じだった場合。上の欄が空のときに使います</span></label>
+    <input type="number" id="monthly" min="0" step="1000" value="250000" inputmode="numeric">
+
+    <label class="f">辞めた理由</label>
+    <div class="seg">
+      <label><input type="radio" name="reason" value="self" checked> 自分の都合</label>
+      <label><input type="radio" name="reason" value="company"> 会社の都合（倒産・解雇など）</label>
+    </div>
+    <p class="note">契約期間の満了や、病気・介護などやむを得ない理由の場合は、会社の都合と同じ扱いになることがあります。ハローワークで判断されます。</p>
+
+    <label class="f">雇用保険に入っていた期間（通算）</label>
+    <select id="years">
+      <option value="0">1年未満</option>
+      <option value="1" selected>1年以上5年未満</option>
+      <option value="5">5年以上10年未満</option>
+      <option value="10">10年以上20年未満</option>
+      <option value="20">20年以上</option>
+    </select>
+
+    <label class="f">辞めた日</label>
+    <input type="date" id="quit">
+    <label class="f">ハローワークで手続きする日（予定）<span class="hint">離職票が届いてからになります。わからなければ、辞めた日の2週間後くらいで</span></label>
+    <input type="date" id="apply">
+
+    <label class="f">自分の都合で辞めた回数（過去5年間、今回を含む）</label>
+    <select id="times"><option value="1">1〜2回</option><option value="3">3回以上</option></select>
+
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div class="grid">
+      <div class="big"><div class="k">1日あたり</div><div class="v" id="daily"></div></div>
+      <div class="big"><div class="k">もらえる日数</div><div class="v" id="days"></div></div>
+      <div class="big"><div class="k">4週間分（1回の振込の目安）</div><div class="v" id="four"></div></div>
+      <div class="big"><div class="k">合計</div><div class="v" id="sum"></div></div>
+    </div>
+    <p class="note" id="detail"></p>
+    <ol class="timeline" id="timeline"></ol>
+    <button class="copy" id="copy" type="button">結果をコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。</p>
+  </div>
+
+  <p class="note">※厚生労働省が公表している計算式（2026年8月1日以降）をもとにした目安です。実際の金額と日数は、ハローワークで決まります。<br>
+  ※65歳以上の方は、「高年齢求職者給付金」という別の仕組みになるため、このページでは計算できません。<br>
+  ※振込の日は、認定日から1週間ほど後になることが多いですが、地域や時期で前後します。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  // 2026年8月1日以降の金額（厚生労働省 公表）
+  var MIN_W = 3203, MIN_Y = 2562, B1 = 5480;
+  function ageGroup(a) { return a < 30 ? "u30" : a < 45 ? "30" : a < 60 ? "45" : "60"; }
+  var CAP = { u30: [14900, 7450], "30": [16540, 8270], "45": [18220, 9110], "60": [17400, 7830] };
+  function daily(w, g) {
+    var y;
+    if (w < MIN_W) return MIN_Y;
+    if (w > CAP[g][0]) return CAP[g][1];
+    if (w < B1) y = 0.8 * w;
+    else if (g === "60") {
+      if (w <= 12120) y = Math.min(0.8 * w - 0.35 * ((w - B1) / (12120 - B1)) * w, 0.05 * w + 12120 * 0.4);
+      else y = 0.45 * w;
+    } else {
+      if (w <= 13490) y = 0.8 * w - 0.3 * ((w - B1) / (13490 - B1)) * w;
+      else y = 0.5 * w;
+    }
+    return Math.floor(y);
+  }
+  // 所定給付日数
+  function benefitDays(age, years, reason) {
+    if (reason === "self") return years === 0 ? 0 : years < 10 ? 90 : years < 20 ? 120 : 150;
+    if (years === 0) return 90;
+    var col = years < 5 ? 0 : years < 10 ? 1 : years < 20 ? 2 : 3;
+    var t = age < 30 ? [90, 120, 180, 180] : age < 35 ? [120, 180, 210, 240] : age < 45 ? [150, 180, 240, 270]
+          : age < 60 ? [180, 240, 270, 330] : [150, 180, 210, 240];
+    return t[col];
+  }
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d); x.setMonth(x.getMonth() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  document.getElementById("quit").value = key(today);
+  document.getElementById("apply").value = key(add(today, 14));
+
+  var lastText = "";
+  document.getElementById("calc").addEventListener("click", function () {
+    var age = parseInt(document.getElementById("age").value || "0", 10);
+    var total = parseInt(document.getElementById("total").value || "0", 10);
+    var monthly = parseInt(document.getElementById("monthly").value || "0", 10);
+    if (!total) total = monthly * 6;
+    var reason = document.querySelector("input[name=reason]:checked").value;
+    var years = parseInt(document.getElementById("years").value, 10);
+    var times = parseInt(document.getElementById("times").value, 10);
+    var warn = document.getElementById("warn");
+    warn.hidden = true;
+    if (age >= 65) { alert("65歳以上の方は、このページでは計算できません"); return; }
+    if (!total) { alert("給料の合計か、月給を入れてください"); return; }
+
+    var w = Math.floor(total / 180), g = ageGroup(age);
+    var y = daily(w, g), n = benefitDays(age, years, reason);
+    var msgs = [];
+    if (reason === "self" && years === 0) {
+      msgs.push("自分の都合で辞めた場合は、原則として辞める前の2年間に、雇用保険に入っていた期間が通算12か月以上必要です。期間の数え方はハローワークで確認してください。");
+    }
+    if (w > CAP[g][0]) msgs.push("給料が上限を超えているため、1日あたりの金額は上限額（" + yen(CAP[g][1]) + "）になります。");
+
+    document.getElementById("daily").textContent = yen(y);
+    document.getElementById("days").textContent = n ? n + "日" : "対象外の可能性";
+    document.getElementById("four").textContent = yen(y * 28);
+    document.getElementById("sum").textContent = n ? yen(y * n) : "―";
+    document.getElementById("detail").textContent = "賃金日額（6か月の給料÷180）：" + yen(w) + "／年齢の区分：" +
+      (g === "u30" ? "30歳未満" : g === "30" ? "30〜44歳" : g === "45" ? "45〜59歳" : "60〜64歳");
+
+    var tl = document.getElementById("timeline"); tl.innerHTML = "";
+    var lines = ["【失業保険の目安】", "1日あたり " + yen(y) + "／日数 " + (n ? n + "日" : "対象外の可能性") + "／合計 " + (n ? yen(y * n) : "―"), ""];
+    var qv = document.getElementById("quit").value, av = document.getElementById("apply").value;
+    if (qv && av && n) {
+      var quit = parse(qv), apply = parse(av);
+      var waitEnd = add(apply, 6);
+      var restrict = reason === "self" ? (times >= 3 ? 3 : 1) : 0;
+      var payStart = restrict ? add(addM(add(waitEnd, 1), restrict), 0) : add(waitEnd, 1);
+      var limit = addM(quit, 12); // 辞めた日の翌日から1年間
+      var firstNin = add(apply, 28);
+      if (restrict) { firstNin = add(payStart, 27); }
+      var lastBenefit = add(payStart, n - 1);
+      var items = [
+        [quit, "辞めた日"],
+        [apply, "ハローワークで手続き（求職の申し込み）"],
+        [waitEnd, "待期（手当が出ない7日間）が終わる"]
+      ];
+      if (restrict) items.push([payStart, "給付制限（" + restrict + "か月）が終わり、支給の対象になる"]);
+      else items.push([payStart, "支給の対象になる"]);
+      items.push([firstNin, "このころの認定日のあと、最初の振込（目安）"]);
+      items.push([lastBenefit, "全部受け取った場合の、最後の支給対象日（目安）"]);
+      items.push([limit, "受け取れる期間（受給期間）の終わり"]);
+      items.forEach(function (it) {
+        var li = document.createElement("li");
+        li.innerHTML = '<div class="d">' + fmt(it[0]) + '</div><div class="t">' + it[1] + '</div>';
+        tl.appendChild(li);
+        lines.push(fmt(it[0]) + "　" + it[1]);
+      });
+      if (lastBenefit > limit) msgs.push("手続きが遅いと、受給期間（辞めた日の翌日から1年）の終わりまでに、全部の日数を受け取れないことがあります。早めに手続きしてください。");
+    }
+    if (msgs.length) { warn.hidden = false; warn.innerHTML = msgs.join("<br>"); }
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("quit").value = "2026-10-31";
+    document.getElementById("apply").value = "2026-11-12";
+    document.getElementById("calc").click();
+  }
+  window.__calc = { daily: daily, benefitDays: benefitDays };
+})();
+</script>
+</body>
+</html>
