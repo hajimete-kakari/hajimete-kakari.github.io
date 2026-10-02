@@ -160,8 +160,8 @@
     p1.push(w0[0].replace("{target}", target) + "ひかれ、" + w0[1].replace("{target}", target) + "から志望いたしました。");
     if (word) p1.push("とくに「" + word + "」という言葉に共感しました。");
     if (pattern === "same") p1.push(job + "の仕事を" + years + "年経験し、" + s0[0] + "を身につけてきました。");
-    else if (pattern === "change") p1.push(job + "の仕事で身につけた" + s0[0] + "は、" + target + "の仕事でも活かせると考えています。");
-    else if (pattern === "blank") p1.push(BLANK[br] + "。以前の" + job + "の仕事で身につけた" + s0[0] + "を活かしたいと考えています。");
+    else if (pattern === "change") p1.push(job + "の仕事で身につけた" + s0[0] + "は、" + target + "の仕事でも活かせると感じています。");
+    else if (pattern === "blank") p1.push(BLANK[br] + "。以前の" + job + "の仕事で身につけた" + s0[0] + "を活かしたいと思っています。");
     else p1.push("働いた経験は多くありませんが、" + s0[0] + "には自信があります。");
     p1.push(nm[0] + "で" + target + "として、" + style + "と考えています。");
     var doc = p1.join("");
