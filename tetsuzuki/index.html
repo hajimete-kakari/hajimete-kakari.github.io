@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>家族が亡くなったあとの手続きリスト｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #4a6670; --accent-soft: #e9eef0; --input: #fffbe8; --done: #9a9a9a;
+    --warn: #8a4a3a; --warn-soft: #f6ece8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #9fbcc6; --accent-soft: #283338; --input: #2e2c22; --done: #777;
+      --warn: #e9b3a5; --warn-soft: #3a2a26;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  input[type=date] { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .opts { display: grid; gap: 6px; }
+  .opts label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 8px 10px; background: var(--input); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #13202a; } }
+  .group h3 { font-size: 1rem; margin: 18px 0 6px; padding: 6px 10px; background: var(--accent-soft); border-radius: 8px; }
+  .group h3 .d { font-weight: 400; font-size: .85rem; color: var(--sub); margin-left: 4px; }
+  .task { display: flex; gap: 10px; align-items: flex-start; padding: 8px 2px; border-bottom: 1px solid var(--line); }
+  .task input { margin-top: 6px; width: 18px; height: 18px; flex: none; }
+  .task .name { font-weight: 600; }
+  .task .where { font-size: .85rem; color: var(--sub); }
+  .task .who { font-size: .8rem; color: var(--warn); }
+  .task.done .name, .task.done .where { color: var(--done); text-decoration: line-through; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .progress { font-size: .9rem; color: var(--sub); margin: 0 0 4px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>家族が亡くなったあとの手続きリスト</h1>
+  <p class="lead">亡くなった日と、当てはまるものを選ぶと、期限の近い順に「いつまでに・どこで・何をするか」のリストができます。終わったものにチェックを入れながら進められます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="day">亡くなった日</label>
+    <input type="date" id="day">
+
+    <label class="f">亡くなった方について、当てはまるもの</label>
+    <div class="opts" id="opts">
+      <label><input type="checkbox" value="pension" checked> 年金を受け取っていた</label>
+      <label><input type="checkbox" value="kokuho" checked> 国民健康保険・後期高齢者医療に入っていた</label>
+      <label><input type="checkbox" value="kaigo" checked> 65歳以上（介護保険の被保険者）</label>
+      <label><input type="checkbox" value="shaho"> 会社員だった（会社の健康保険）</label>
+      <label><input type="checkbox" value="head"> 世帯主だった（同じ世帯に家族が2人以上残る）</label>
+      <label><input type="checkbox" value="insurance"> 生命保険に入っていた</label>
+      <label><input type="checkbox" value="land"> 家や土地を持っていた</label>
+      <label><input type="checkbox" value="debt"> 借金があるかもしれない</label>
+      <label><input type="checkbox" value="tax"> 確定申告をしていた（自営業・家賃収入・年金が多いなど）</label>
+      <label><input type="checkbox" value="bigestate"> 財産が多く、相続税がかかるかもしれない</label>
+      <label><input type="checkbox" value="survivor"> 配偶者や子どもなど、遺族年金を受け取れるかもしれない家族がいる</label>
+    </div>
+    <button id="make" type="button">リストを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>手続きのリスト</h2>
+    <div class="warn" id="warn" hidden></div>
+    <p class="progress" id="progress"></p>
+    <div id="list"></div>
+    <button class="copy" id="copy" type="button">リストをコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。家族と共有するときにも使えます。</p>
+  </div>
+
+  <p class="note">※期限は一般的な目安です。市区町村や加入している制度によって、名前や期限が違うことがあります。<br>
+  ※「相談先」の書いてある手続きは、内容によっては専門家（司法書士・税理士・弁護士）への相談をおすすめします。<br>
+  ※チェックの状態は、このスマホ・パソコンのブラウザにだけ保存されます。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  // [日数, 区切り, 名前, どこで・メモ, 条件, 相談先]
+  var T = [
+    [7, "7日以内", "死亡届を出し、火葬許可証を受け取る", "市区町村の窓口。葬儀社が代わりに出してくれることが多い", "", ""],
+    [10, "10日・14日以内", "年金を止める手続き", "年金事務所。マイナンバーが登録されていれば省略できることも", "pension", ""],
+    [14, "10日・14日以内", "国民健康保険・後期高齢者医療の資格喪失の届け出", "市区町村の窓口。保険証や資格確認書を返す", "kokuho", ""],
+    [14, "10日・14日以内", "介護保険の資格喪失の届け出", "市区町村の窓口。介護保険証を返す", "kaigo", ""],
+    [14, "10日・14日以内", "世帯主の変更の届け出", "市区町村の窓口", "head", ""],
+    [14, "10日・14日以内", "勤め先への連絡と、退職の手続き", "会社の担当者。給与・退職金・健康保険証の返却など", "shaho", ""],
+    [30, "落ち着いたら早めに", "公共料金・携帯電話・クレジットカードの名義変更や解約", "電気・ガス・水道・携帯・カード会社", "", ""],
+    [30, "落ち着いたら早めに", "銀行に亡くなったことを伝える", "口座は凍結される。葬儀費用などは「仮払い制度」で一部引き出せることがある", "", ""],
+    [30, "落ち着いたら早めに", "遺言書があるか確かめる", "自宅・公証役場・法務局（自筆証書遺言の保管制度）", "", ""],
+    [90, "3か月以内", "相続放棄・限定承認を考えるなら、家庭裁判所に申し立てる", "借金が多い場合。期限は「亡くなったことを知った日」から", "debt", "司法書士・弁護士"],
+    [120, "4か月以内", "準確定申告（亡くなった年の所得の申告）", "税務署", "tax", "税理士"],
+    [300, "10か月以内", "相続税の申告と納付", "税務署", "bigestate", "税理士"],
+    [730, "2年以内", "葬祭費・埋葬料の申請", "国民健康保険・後期高齢者は市区町村、会社の健康保険は協会けんぽ・健康保険組合", "", ""],
+    [730, "2年以内", "高額療養費の払い戻しの申請（入院などで医療費が高かった場合）", "加入していた健康保険", "", ""],
+    [1095, "3年以内", "生命保険金の請求", "保険会社", "insurance", ""],
+    [1095, "3年以内", "相続登記（家や土地の名義変更）", "法務局。2024年4月から義務になった", "land", "司法書士"],
+    [1825, "5年以内", "遺族年金・未支給年金の請求", "年金事務所。受け取れるか、早めに確認を", "survivor", ""]
+  ];
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d); x.setMonth(x.getMonth() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function load() { try { return JSON.parse(localStorage.getItem("tetsuzuki-done") || "{}"); } catch (e) { return {}; } }
+  function save(o) { try { localStorage.setItem("tetsuzuki-done", JSON.stringify(o)); } catch (e) {} }
+  function due(day, n) {
+    if (n === 90) return addM(day, 3); if (n === 120) return addM(day, 4); if (n === 300) return addM(day, 10);
+    if (n === 730) return addM(day, 24); if (n === 1095) return addM(day, 36); if (n === 1825) return addM(day, 60);
+    return add(day, n);
+  }
+
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  document.getElementById("day").value = key(today);
+
+  var lastText = "";
+  function make() {
+    var dv = document.getElementById("day").value;
+    if (!dv) { alert("亡くなった日を入れてください"); return; }
+    var day = parse(dv);
+    var on = { "": true };
+    document.querySelectorAll("#opts input:checked").forEach(function (c) { on[c.value] = true; });
+    var done = load(), list = document.getElementById("list"); list.innerHTML = "";
+    var lines = ["【家族が亡くなったあとの手続き】亡くなった日 " + fmt(day)];
+    var groups = [];
+    T.forEach(function (t) {
+      if (!on[t[4]]) return;
+      var g = groups[groups.length - 1];
+      if (!g || g.label !== t[1]) { g = { label: t[1], items: [] }; groups.push(g); }
+      g.items.push(t);
+    });
+    var overdue = 0;
+    groups.forEach(function (g) {
+      var wrap = document.createElement("div"); wrap.className = "group";
+      var h = document.createElement("h3");
+      var soon = g.label.indexOf("落ち着いたら") === 0;
+      var lim = soon ? null : due(day, g.items[g.items.length - 1][0]);
+      var limTxt = soon ? "" : (g.label === "10日・14日以内" ? fmt(due(day, 10)) + "〜" + fmt(lim) : fmt(lim)) + "まで";
+      h.innerHTML = g.label + (limTxt ? '<span class="d">' + limTxt + '</span>' : "");
+      wrap.appendChild(h);
+      lines.push("", "■" + g.label + (limTxt ? "（" + limTxt + "）" : ""));
+      g.items.forEach(function (t) {
+        var id = t[2];
+        var row = document.createElement("label"); row.className = "task";
+        var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!done[id];
+        if (cb.checked) row.classList.add("done");
+        if (!soon && !cb.checked && due(day, t[0]) < today) overdue++;
+        cb.addEventListener("change", function () {
+          var s = load(); if (cb.checked) s[id] = 1; else delete s[id]; save(s);
+          row.classList.toggle("done", cb.checked); count();
+        });
+        var txt = document.createElement("div");
+        txt.innerHTML = '<div class="name"></div><div class="where"></div>' + (t[5] ? '<div class="who"></div>' : "");
+        txt.querySelector(".name").textContent = t[2];
+        txt.querySelector(".where").textContent = t[3];
+        if (t[5]) txt.querySelector(".who").textContent = "相談先：" + t[5];
+        row.appendChild(cb); row.appendChild(txt); wrap.appendChild(row);
+        lines.push("□ " + t[2] + "（" + t[3] + "）" + (t[5] ? "［相談先：" + t[5] + "］" : ""));
+      });
+      list.appendChild(wrap);
+    });
+    function count() {
+      document.getElementById("progress").textContent = "終わったもの：" + list.querySelectorAll("input:checked").length + " / " + list.querySelectorAll("input").length;
+    }
+    count();
+    var w = document.getElementById("warn");
+    if (overdue) { w.hidden = false; w.textContent = "期限を過ぎている手続きが" + overdue + "件あります。期限を過ぎても受け付けてもらえることが多いので、窓口に相談しながら、できるだけ早く進めてください。"; }
+    else w.hidden = true;
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("day").value = "2026-10-02";
+    ["head", "insurance", "land", "survivor"].forEach(function (v) { document.querySelector("#opts input[value=" + v + "]").checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
