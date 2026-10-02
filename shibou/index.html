@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>志望動機の作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > * { flex: 1; min-width: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips label { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 10px; background: var(--input); font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .out { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .out:last-child { border-bottom: 0; }
+  .out .q { font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 8px; }
+  .out .n { font-weight: 400; font-size: .85rem; color: var(--sub); white-space: nowrap; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>志望動機の作成ページ</h1>
+  <p class="lead">応募先の魅力と、自分の経験を選ぶと、志望動機の下書きが3種類できます（履歴書の欄用・面接で話す用・応募フォーム用の短い版）。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 応募先のこと</h2>
+    <label class="f" for="target">応募する仕事<span class="hint">例：一般事務、販売スタッフ、介護スタッフ</span></label>
+    <input type="text" id="target" value="一般事務">
+    <label class="f" for="company">応募先の呼び方<span class="hint">書類では「貴社」、面接では「御社」に自動でそろえます</span></label>
+    <select id="company"><option value="社">会社（貴社・御社）</option><option value="店">お店（貴店）</option><option value="施設">施設・病院（貴施設・貴院）</option></select>
+    <label class="f">応募先の、ひかれたところ（2つまで）</label>
+    <div class="chips" id="why"></div>
+    <label class="f" for="word">求人票やホームページで目にとまった言葉<span class="hint">例：「お客様の声を大切に」「未経験から丁寧に教えます」（空欄でも作れます）</span></label>
+    <input type="text" id="word">
+  </div>
+
+  <div class="card">
+    <h2>2. 自分のこと</h2>
+    <label class="f">今回の応募は</label>
+    <select id="pattern">
+      <option value="same">今までと同じ種類の仕事</option>
+      <option value="change" selected>今までと違う種類の仕事</option>
+      <option value="blank">ブランクからの仕事復帰</option>
+      <option value="first">働いた経験がほとんどない</option>
+    </select>
+    <label class="f" for="job">これまでの仕事<span class="hint">例：スーパーのレジと品出し（ブランクの場合は、以前の仕事）</span></label>
+    <input type="text" id="job" value="スーパーのレジと品出し">
+    <div class="row">
+      <div><label class="f" for="years">その年数</label><input type="number" id="years" min="0" max="40" value="5" inputmode="numeric"></div>
+      <div><label class="f" for="blankReason">ブランクの理由</label><select id="blankReason"><option value="子育て">子育て</option><option value="介護">家族の介護</option><option value="療養">療養</option><option value="勉強">勉強</option></select></div>
+    </div>
+    <label class="f">活かせる力（2つまで）</label>
+    <div class="chips" id="skill"></div>
+    <label class="f">働き方の希望</label>
+    <select id="style">
+      <option value="long">長く続けたい</option>
+      <option value="grow">仕事の幅を広げたい</option>
+      <option value="local">地元で、地域の役に立ちたい</option>
+    </select>
+    <button id="make" type="button">志望動機を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>あなたの志望動機の下書き</h2>
+    <p class="note">〇〇の部分を、自分の言葉で埋めてください。応募先ごとに「ひかれたところ」と「目にとまった言葉」を変えると、使い回しに見えません。</p>
+    <div id="outs"></div>
+  </div>
+
+  <p class="note">※できあがる文章は、書き始めるための下書きです。応募先に合わせて、言葉を足したり削ったりして仕上げてください。<br>最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var WHY = {
+    "仕事内容": ["{target}の仕事内容に", "これまでの経験を活かせると感じたこと"],
+    "教える体制": ["研修や教える体制が整っていることに", "未経験の分野でも、一から学びながら成長できると感じたこと"],
+    "働き方": ["勤務時間や働き方に", "今の生活に合っていて、長く続けられると感じたこと"],
+    "お客様への姿勢": ["お客様を大切にする姿勢に", "自分が大事にしてきたことと重なると感じたこと"],
+    "職場の雰囲気": ["スタッフを大切にする雰囲気に", "安心して力を発揮できる職場だと感じたこと"],
+    "地域とのつながり": ["地域に根ざした取り組みに", "地元の役に立てる仕事だと感じたこと"]
+  };
+  var SKILL = {
+    "接客": ["お客様の立場に立った接客", "お客様が困っていることを先回りして聞くよう心がけてきました"],
+    "正確さ": ["正確に作業を進める力", "お金や数字を扱う場面で、確認の手順を省かないようにしてきました"],
+    "段取り": ["段取りよく進める力", "忙しい時間帯でも、優先順位を考えて作業を進めてきました"],
+    "協力": ["周りと協力して働く力", "自分の担当以外の仕事も手伝い、職場全体が回るよう動いてきました"],
+    "続ける力": ["1つの仕事を続ける力", "同じ職場で長く働き、任される仕事を少しずつ増やしてきました"],
+    "パソコン": ["パソコンを使った作業", "データの入力や簡単な表の作成に取り組んできました"]
+  };
+  var STYLE = {
+    long: "長く働き続けたい",
+    grow: "仕事の幅を広げながら成長したい",
+    local: "地域の方の役に立ちたい"
+  };
+  var BLANK = {
+    "子育て": "子育てのため仕事を離れていましたが、子どもの預け先が決まり、働ける環境が整いました",
+    "介護": "家族の介護のため仕事を離れていましたが、介護の体制が整い、働ける環境ができました",
+    "療養": "療養のため仕事を離れていましたが、体調が回復し、働ける状態になりました",
+    "勉強": "資格の勉強のため仕事を離れていましたが、学んだことを仕事で活かしたいと考えています"
+  };
+  function chips(box, list, max) {
+    list.forEach(function (t) {
+      var l = document.createElement("label");
+      var c = document.createElement("input"); c.type = "checkbox"; c.value = t;
+      c.addEventListener("change", function () { if (box.querySelectorAll("input:checked").length > max) c.checked = false; });
+      l.appendChild(c); l.appendChild(document.createTextNode(t)); box.appendChild(l);
+    });
+  }
+  chips(document.getElementById("why"), Object.keys(WHY), 2);
+  chips(document.getElementById("skill"), Object.keys(SKILL), 2);
+  function checked(id) { return Array.prototype.map.call(document.querySelectorAll("#" + id + " input:checked"), function (c) { return c.value; }); }
+  function names(kind) {
+    return kind === "店" ? ["貴店", "こちらのお店"] : kind === "施設" ? ["貴施設", "こちらの施設"] : ["貴社", "御社"];
+  }
+
+  function make() {
+    var target = document.getElementById("target").value.trim() || "〇〇";
+    var nm = names(document.getElementById("company").value);
+    var why = checked("why"); if (!why.length) why = ["仕事内容", "働き方"];
+    var word = document.getElementById("word").value.trim().replace(/^「|」$/g, "");
+    var pattern = document.getElementById("pattern").value;
+    var job = document.getElementById("job").value.trim() || "〇〇";
+    var years = document.getElementById("years").value || "〇";
+    var skill = checked("skill"); if (!skill.length) skill = ["正確さ"];
+    var style = STYLE[document.getElementById("style").value];
+    var br = document.getElementById("blankReason").value;
+    var w0 = WHY[why[0]], s0 = SKILL[skill[0]];
+
+    // 書類用（約200字）
+    var p1 = [];
+    p1.push(w0[0].replace("{target}", target) + "ひかれ、" + w0[1].replace("{target}", target) + "から志望いたしました。");
+    if (word) p1.push("とくに「" + word + "」という言葉に共感しました。");
+    if (pattern === "same") p1.push(job + "の仕事を" + years + "年経験し、" + s0[0] + "を身につけてきました。");
+    else if (pattern === "change") p1.push(job + "の仕事で身につけた" + s0[0] + "は、" + target + "の仕事でも活かせると考えています。");
+    else if (pattern === "blank") p1.push(BLANK[br] + "。以前の" + job + "の仕事で身につけた" + s0[0] + "を活かしたいと考えています。");
+    else p1.push("働いた経験は多くありませんが、" + s0[0] + "には自信があります。");
+    p1.push(nm[0] + "で" + target + "として、" + style + "と考えています。");
+    var doc = p1.join("");
+
+    // 面接用（約1分）
+    var p2 = [];
+    p2.push(nm[1] + "を志望した理由は、" + (why[1] ? "2つあります。" : "") );
+    p2.push((why[1] ? "1つ目は、" : "") + w0[0].replace("{target}", target) + "ひかれ、" + w0[1].replace("{target}", target) + "です。");
+    if (why[1]) { var w1 = WHY[why[1]]; p2.push("2つ目は、" + w1[0].replace("{target}", target) + "ひかれ、" + w1[1].replace("{target}", target) + "です。"); }
+    if (word) p2.push("求人で「" + word + "」という言葉を拝見し、ここで働きたいという気持ちが強くなりました。");
+    if (pattern === "blank") p2.push(BLANK[br] + "。");
+    p2.push((pattern === "first" ? "これまで" : "前の" + job + "の仕事では、") + s0[1] + "。");
+    if (skill[1]) p2.push("また、" + SKILL[skill[1]][0] + "も活かせると思っています。");
+    p2.push("この経験を活かして、" + target + "の仕事で" + style + "と考えています。");
+    var talk = p2.join("\n").replace("理由は、\n", "理由は、");
+
+    // 短い版（約100字）
+    var short = w0[0].replace("{target}", target) + "ひかれて志望しました。" +
+      (pattern === "first" ? s0[0] + "を活かし、" : job + "の経験で身につけた" + s0[0] + "を活かし、") + style + "です。";
+
+    if (pattern === "first") {
+      var fix = function (s) { return s.replace(/これまでの経験を活かせる/g, "自分の強みを活かせる").replace("この経験を活かして", "この力を活かして"); };
+      doc = fix(doc); talk = fix(talk); short = fix(short);
+    }
+    var outs = [["履歴書の欄用", doc], ["面接で話す用（約1分）", talk], ["応募フォーム用の短い版", short]];
+    var box = document.getElementById("outs"); box.innerHTML = "";
+    outs.forEach(function (o) {
+      var d = document.createElement("div"); d.className = "out";
+      var len = o[1].replace(/\s/g, "").length;
+      d.innerHTML = '<div class="q"><span></span><span class="n"></span></div><div class="a"></div><button type="button">この文章をコピー</button>';
+      d.querySelector(".q span").textContent = o[0];
+      d.querySelector(".n").textContent = len + "字";
+      d.querySelector(".a").textContent = o[1];
+      d.querySelector("button").addEventListener("click", function (e) {
+        var b = e.target, txt = o[1];
+        var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文章をコピー"; }, 1500); };
+        function fallback() {
+          var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+          t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+        }
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+      });
+      box.appendChild(d);
+    });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (location.search.indexOf("demo") >= 0) {
+    ["仕事内容", "教える体制"].forEach(function (v) { document.querySelector("#why input[value='" + v + "']").checked = true; });
+    ["正確さ", "協力"].forEach(function (v) { document.querySelector("#skill input[value='" + v + "']").checked = true; });
+    document.getElementById("word").value = "未経験から丁寧に教えます";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
