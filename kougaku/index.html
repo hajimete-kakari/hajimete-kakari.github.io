@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>入院・手術の自己負担 上限計算（高額療養費）｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  ul.tips { padding-left: 1.2em; margin: 8px 0 0; }
+  ul.tips li { margin-bottom: 6px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>入院・手術の自己負担 上限計算</h1>
+  <p class="lead">年齢と収入の区分、1か月の医療費を入れると、高額療養費制度で「自己負担はいくらまでで済むか」と「いくら戻ってくるか」の目安がわかります。2026年8月からの上限額に対応しています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="age">医療を受ける人の年齢</label>
+    <select id="age">
+      <option value="u70">69歳以下</option>
+      <option value="70">70〜74歳</option>
+      <option value="75">75歳以上（後期高齢者医療）</option>
+    </select>
+
+    <div id="u70Box">
+      <label class="f" for="k70">収入の区分<span class="hint">会社員は給与明細の健康保険料から「標準報酬月額」を確認。わからなければ年収の目安で</span></label>
+      <select id="k70">
+        <option value="a">ア：年収 約1,160万円〜（標準報酬月額 83万円以上）</option>
+        <option value="i">イ：年収 約770〜1,160万円（標準報酬月額 53〜79万円）</option>
+        <option value="u" selected>ウ：年収 約370〜770万円（標準報酬月額 28〜50万円）</option>
+        <option value="e">エ：年収 約370万円まで（標準報酬月額 26万円以下）</option>
+        <option value="o">オ：住民税が非課税</option>
+      </select>
+    </div>
+    <div id="o75Box" hidden>
+      <label class="f" for="k75">収入の区分<span class="hint">保険証や資格確認書の「負担割合」、市区町村の通知で確認</span></label>
+      <select id="k75">
+        <option value="g3">現役並み所得Ⅲ（3割負担・課税所得690万円以上）</option>
+        <option value="g2">現役並み所得Ⅱ（3割負担・課税所得380万円以上）</option>
+        <option value="g1">現役並み所得Ⅰ（3割負担・課税所得145万円以上）</option>
+        <option value="i2">一般Ⅱ（2割負担）</option>
+        <option value="i1" selected>一般Ⅰ（1割負担）</option>
+        <option value="l2">住民税非課税 区分Ⅱ</option>
+        <option value="l1">住民税非課税 区分Ⅰ</option>
+      </select>
+      <label class="check"><input type="checkbox" id="nyuin" checked> 入院がある（外来だけなら外す）</label>
+    </div>
+    <div id="o70Box" hidden>
+      <div class="warn">70〜74歳の方は、入っている健康保険によって区分の名前や上限額が少しずつ違うため、このページでは計算できません。加入している健康保険（保険証・資格確認書に書いてある保険者）に確認してください。</div>
+    </div>
+
+    <div id="costBox">
+      <label class="f" for="pay">1か月に窓口で払う（払った）金額（円）<span class="hint">同じ月・同じ人の分。食事代・差額ベッド代などは含めません</span></label>
+      <input type="number" id="pay" min="0" step="1000" value="300000" inputmode="numeric">
+      <label class="f" for="rate">窓口での負担割合</label>
+      <select id="rate"><option value="0.3" selected>3割</option><option value="0.2">2割</option><option value="0.1">1割</option></select>
+      <label class="check"><input type="checkbox" id="tasu"> 過去12か月に、すでに3回以上上限まで払った</label>
+    </div>
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div id="cards"></div>
+    <h2 style="margin-top:12px">知っておくと助かること</h2>
+    <ul class="tips">
+      <li>マイナ保険証を使うか、事前に「限度額適用認定証」を出しておくと、窓口での支払いが最初から上限までで済みます。</li>
+      <li>上限は「同じ月（1日〜末日）」ごとに計算します。月をまたぐ入院は、月ごとに分かれます。</li>
+      <li>同じ世帯の家族の分を合算できる場合があります（69歳以下は、1つの医療機関で21,000円以上の分）。</li>
+      <li>入院中の食事代・差額ベッド代・先進医療の技術料などは、上限の計算に入りません。</li>
+    </ul>
+  </div>
+
+  <p class="note">※厚生労働省などが公表している2026年8月診療分からの上限額をもとにした目安です。実際の金額は、加入している健康保険が計算します。<br>
+  ※2027年8月から、所得区分がさらに細かく分かれる予定です。そのときは、このページも更新します。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  // 69歳以下（2026年8月〜）
+  var U70 = {
+    a: { name: "ア", base: 270300, th: 901000, tasu: 140100, year: 1680000 },
+    i: { name: "イ", base: 179100, th: 597000, tasu: 93000, year: 1110000 },
+    u: { name: "ウ", base: 85800, th: 286000, tasu: 44400, year: 530000 },
+    e: { name: "エ", flat: 61500, tasu: 44400, year: 530000 },
+    o: { name: "オ", flat: 36900, tasu: 24600, year: 290000 }
+  };
+  // 75歳以上（後期高齢者医療・2026年8月〜）
+  var O75 = {
+    g3: { name: "現役並み所得Ⅲ", base: 270300, th: 901000, tasu: 140100, year: 1680000 },
+    g2: { name: "現役並み所得Ⅱ", base: 179100, th: 597000, tasu: 93000, year: 1110000 },
+    g1: { name: "現役並み所得Ⅰ", base: 85800, th: 286000, tasu: 44400, year: 530000 },
+    i2: { name: "一般Ⅱ", out: 22000, flat: 61500, tasu: 44400, year: 530000, outYear: 216000 },
+    i1: { name: "一般Ⅰ", out: 11000, flat: 25700, tasu: 24600, year: 290000, outYear: 96000 },
+    l2: { name: "住民税非課税 区分Ⅱ", out: 11000, flat: 25700, tasu: 24600, year: 290000, outYear: 96000 },
+    l1: { name: "住民税非課税 区分Ⅰ", out: 8000, flat: 15700, year: 180000 }
+  };
+  function yen(n) { return Math.round(n).toLocaleString("ja-JP") + "円"; }
+  function sync() {
+    var a = document.getElementById("age").value;
+    document.getElementById("u70Box").hidden = a !== "u70";
+    document.getElementById("o75Box").hidden = a !== "75";
+    document.getElementById("o70Box").hidden = a !== "70";
+    document.getElementById("costBox").hidden = a === "70";
+    document.getElementById("calc").hidden = a === "70";
+    document.getElementById("rate").value = a === "75" ? "0.1" : "0.3";
+  }
+  document.getElementById("age").addEventListener("change", sync);
+  document.getElementById("k75").addEventListener("change", function () {
+    var v = this.value; document.getElementById("rate").value = v.charAt(0) === "g" ? "0.3" : v === "i2" ? "0.2" : "0.1";
+  });
+
+  function capOf(r, total, useTasu, nyuin) {
+    var cap;
+    if (r.base) cap = r.base + Math.max(0, total - r.th) * 0.01;
+    else cap = (r.out && !nyuin) ? r.out : r.flat;
+    var tasuUsed = false;
+    if (useTasu && r.tasu && (nyuin || !r.out) && r.tasu < cap) { cap = r.tasu; tasuUsed = true; }
+    return { cap: Math.round(cap), tasu: tasuUsed };
+  }
+
+  function calc() {
+    var age = document.getElementById("age").value;
+    var pay = parseFloat(document.getElementById("pay").value || "0");
+    var rate = parseFloat(document.getElementById("rate").value);
+    var useTasu = document.getElementById("tasu").checked;
+    var r, nyuin = true;
+    if (age === "u70") r = U70[document.getElementById("k70").value];
+    else { r = O75[document.getElementById("k75").value]; nyuin = document.getElementById("nyuin").checked; }
+    var total = pay / rate;
+    var c = capOf(r, total, useTasu, nyuin);
+    var self = Math.min(pay, c.cap), back = Math.max(0, pay - c.cap);
+    var box = document.getElementById("cards"); box.innerHTML = "";
+    var cards = [
+      ["自己負担の上限（この月）", yen(c.cap), "区分：" + r.name + (c.tasu ? "（4回目以降の上限）" : "") + "／医療費の総額 約" + yen(total)],
+      ["実際の自己負担（目安）", yen(self), pay > c.cap ? "窓口で払った額のうち、上限を超えた分が戻ります" : "上限に届いていないので、払い戻しはありません"],
+      ["戻ってくる額（目安）", yen(back), "申請してから3か月ほどかかることが多いです"],
+      ["1年間の上限（8月〜翌7月）", yen(r.year), (r.outYear ? "外来だけなら年" + yen(r.outYear) + "まで。" : "") + "この額を超えた分は、年単位でも戻ります"]
+    ];
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      box.appendChild(d);
+    });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  sync();
+  window.__k = { capOf: capOf, U70: U70, O75: O75 };
+  if (location.search.indexOf("demo") >= 0) calc();
+})();
+</script>
+</body>
+</html>
