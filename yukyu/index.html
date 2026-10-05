@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>有給休暇の日数と期限の計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  label.f:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .95rem; }
+  ol.timeline { list-style: none; padding: 0; margin: 4px 0 0; }
+  ol.timeline li { border-left: 3px solid var(--accent); padding: 4px 0 10px 12px; margin-left: 4px; }
+  ol.timeline li.past { border-left-color: var(--line); color: var(--sub); }
+  ol.timeline .d { font-weight: 700; }
+  ol.timeline .t { color: var(--sub); font-size: .9rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>有給休暇の日数と期限の計算</h1>
+  <p class="lead">入社日と働き方を入れると、有給休暇が「いつ・何日もらえるか」「いつ消えるか」と、今使える日数の目安がわかります。パート・アルバイトの日数（比例付与）にも対応しています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="join">入社日（働き始めた日）</label>
+    <input type="date" id="join">
+    <label class="f" for="work">働き方
+      <span class="hint">1週間に30時間以上働く人は、日数に関係なく「週5日以上」を選んでください</span></label>
+    <select id="work">
+      <option value="5">週5日以上（または週30時間以上）</option>
+      <option value="4">週4日（週30時間未満）</option>
+      <option value="3">週3日（週30時間未満）</option>
+      <option value="2">週2日（週30時間未満）</option>
+      <option value="1">週1日（週30時間未満）</option>
+    </select>
+    <label class="f" for="used">今、期限が残っている有給のうち、使った日数<span class="hint">わからなければ0のまま。給与明細や勤怠システムで確認できます</span></label>
+    <input type="number" id="used" min="0" max="80" value="0" inputmode="numeric">
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h2 style="margin-top:12px">もらえる日と、消える日</h2>
+    <ol class="timeline" id="timeline"></ol>
+  </div>
+
+  <p class="note">※労働基準法で決まっている最低限の日数をもとにした目安です。出勤した日が8割以上あることが条件です。会社によっては、法律より多く付与していたり、付与日を全員でそろえていたりします。<br>
+  ※有給休暇は、もらった日から2年で消えます（時効）。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  // 勤続 0.5,1.5,2.5,3.5,4.5,5.5,6.5年以上 の付与日数
+  var TABLE = {
+    5: [10, 11, 12, 14, 16, 18, 20],
+    4: [7, 8, 9, 10, 12, 13, 15],
+    3: [5, 6, 6, 8, 9, 10, 11],
+    2: [3, 4, 4, 5, 6, 6, 7],
+    1: [1, 2, 2, 2, 3, 3, 3]
+  };
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function addM(d, n) {
+    var x = new Date(d.getFullYear(), d.getMonth() + n, 1);
+    var last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+    x.setDate(Math.min(d.getDate(), last)); return x;
+  }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  document.getElementById("join").value = key(new Date(today.getFullYear() - 3, 3, 1));
+
+  function grants(join, w, upto) {
+    var list = [], i = 0;
+    while (true) {
+      var d = addM(join, 6 + 12 * i);
+      if (d > upto) break;
+      list.push({ date: d, days: TABLE[w][Math.min(i, 6)], expire: add(addM(d, 24), -1) });
+      i++;
+      if (i > 60) break;
+    }
+    return list;
+  }
+  function calc() {
+    var join = parse(document.getElementById("join").value);
+    var w = document.getElementById("work").value;
+    var used = Math.max(0, parseInt(document.getElementById("used").value || "0", 10));
+    var all = grants(join, w, addM(today, 12));
+    var valid = all.filter(function (g) { return g.date <= today && g.expire >= today; });
+    var next = all.filter(function (g) { return g.date > today; })[0];
+    var total = valid.reduce(function (s, g) { return s + g.days; }, 0);
+    var remain = Math.max(0, total - used);
+    // 古いほうから使う前提で、次に消える日数
+    var oldest = valid[0], soonLose = 0;
+    if (oldest) soonLose = Math.max(0, oldest.days - used);
+    var box = document.getElementById("cards"); box.innerHTML = "";
+    var cards = [
+      ["今使える日数（目安）", remain + "日", "期限が残っている" + total + "日から、使った" + used + "日を引いた日数"],
+      ["次に消える日数と日付", oldest ? soonLose + "日" : "なし", oldest ? fmt(oldest.expire) + "まで。古い分から使うのが一般的です" : "まだ有給休暇がもらえていません"],
+      ["次にもらえる日と日数", next ? next.days + "日" : "―", next ? fmt(next.date) : ""]
+    ];
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      box.appendChild(d);
+    });
+    var warn = document.getElementById("warn"), msgs = [];
+    if (oldest && soonLose > 0 && (oldest.expire - today) / 86400000 < 90) msgs.push(fmt(oldest.expire) + "に、" + soonLose + "日分が消えます。それまでに使う予定を立てておきましょう。");
+    var cur = valid[valid.length - 1];
+    if (cur && cur.days >= 10) msgs.push("1回に10日以上もらう人は、もらった日から1年以内に5日以上使うことが、会社の義務になっています。");
+    warn.hidden = !msgs.length; warn.innerHTML = msgs.join("<br>");
+    var tl = document.getElementById("timeline"); tl.innerHTML = "";
+    var shown = all.filter(function (g) { return g.expire >= addM(today, -12); });
+    shown.forEach(function (g) {
+      var li = document.createElement("li");
+      if (g.expire < today) li.className = "past";
+      var state = g.date > today ? "（これから）" : g.expire < today ? "（消えた）" : "（使える）";
+      li.innerHTML = '<div class="d">' + fmt(g.date) + "に" + g.days + "日" + state + '</div><div class="t">' + fmt(g.expire) + "まで使える</div>";
+      tl.appendChild(li);
+    });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  window.__y = { grants: grants };
+  if (location.search.indexOf("demo") >= 0) {
+    document.getElementById("join").value = "2023-04-01";
+    document.getElementById("used").value = "6";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
