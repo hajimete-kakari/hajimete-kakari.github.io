@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>自己PRの作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select, textarea { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  textarea { min-height: 64px; resize: vertical; line-height: 1.6; }
+  textarea::placeholder, input::placeholder { color: var(--sub); opacity: .8; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .out { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .out:last-child { border-bottom: 0; }
+  .out .q { font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 8px; }
+  .out .n { font-weight: 400; font-size: .85rem; color: var(--sub); white-space: nowrap; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: .92rem; }
+  .qa { border-left: 3px solid var(--accent); padding: 2px 0 8px 12px; margin-bottom: 6px; }
+  .qa .qq { font-weight: 700; }
+  .qa .hh { font-size: .9rem; color: var(--sub); }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>自己PRの作成ページ</h1>
+  <p class="lead">強みを1つ選び、それを示す出来事を3行で書くと、自己PRの下書きが3種類できます（履歴書の欄用・面接で話す用・応募フォーム用の短い版）。面接で深掘りされやすい質問もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="target">応募する仕事<span class="hint">例：一般事務、販売スタッフ、介護スタッフ</span></label>
+    <input type="text" id="target" value="一般事務">
+    <label class="f" for="pattern">今の状況</label>
+    <select id="pattern">
+      <option value="work">働いている（働いていた）経験から書く</option>
+      <option value="blank">ブランクがあり、以前の仕事から書く</option>
+      <option value="few">働いた経験が少なく、学校・家庭・地域の活動から書く</option>
+    </select>
+    <label class="f" for="strength">強み（1つ）<span class="hint">迷ったら、人からほめられたこと・頼まれることが多いものを選びます</span></label>
+    <select id="strength"></select>
+  </div>
+
+  <div class="card">
+    <h2>強みを示す出来事（3行）</h2>
+    <p class="hint" style="margin:0 0 6px">「〜ました」の形で書きます。空欄のままだと、例文が入ります。</p>
+    <label class="f" for="scene">どこで<span class="hint">例：スーパーのレジの仕事、PTAの係、学校の部活動</span></label>
+    <input type="text" id="scene" placeholder="スーパーのレジの仕事">
+    <label class="f" for="kadai">① 困っていたこと・課題</label>
+    <textarea id="kadai"></textarea>
+    <label class="f" for="koudou">② 自分がしたこと</label>
+    <textarea id="koudou"></textarea>
+    <label class="f" for="kekka">③ その結果<span class="hint">数字があれば入れると伝わりやすくなります（例：半分に、〇件から〇件に）</span></label>
+    <textarea id="kekka"></textarea>
+    <button id="make" type="button">自己PRを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>あなたの自己PRの下書き</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="outs"></div>
+    <h2 style="margin-top:16px">面接で深掘りされやすい質問</h2>
+    <div id="qas"></div>
+  </div>
+
+  <p class="note">※できあがる文章は、書き始めるための下書きです。自分の経験に合わせて、言葉を足したり削ったりして仕上げてください。実際になかったことは書かないようにしましょう。<br>最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  // [名前, 強みの言い方, 課題の例, 行動の例, 結果の例, 大切にしていること, 活かし方, 深掘り質問, 答え方のヒント]
+  var S = [
+    ["正確さ", "正確に仕事を進める力", "締めのときに、レジの金額が合わない日がありました", "金額を数える手順を見直し、締めの前にもう一度確かめるようにしました", "金額の違いが出る日が、ほとんどなくなりました", "確認の手順を省かないこと", "確認を省かず、ミスの少ない仕事をしたい",
+      "ミスをしてしまったときは、どうしますか？", "隠さずすぐに報告し、同じミスを防ぐ手順を考える、と答えます。実際の例があれば添えます。"],
+    ["段取り", "段取りよく仕事を進める力", "夕方の忙しい時間に、作業が終わらないことがよくありました", "その日にやることを書き出し、順番を決めてから動くようにしました", "時間内に終えられる日が増え、残業がほとんどなくなりました", "先に全体を見て、順番を決めること", "優先順位を考えながら、仕事を効率よく進めたい",
+      "仕事が重なったとき、どう優先順位をつけますか？", "期限と影響の大きさで決め、迷ったら上司に確認する、と答えます。"],
+    ["気配り", "相手の立場に立って動く力", "お客様から、商品の場所を何度も聞かれていました", "よく聞かれる商品の場所をメモにまとめ、スタッフで共有しました", "お客様をお待たせすることが減り、お礼を言われることが増えました", "相手が困っていることに先に気づくこと", "周りの人が困っていることに気づき、先回りして動きたい",
+      "対応が難しいお客様（相手）には、どうしますか？", "まず話を最後まで聞き、自分で判断できないことは上の人に相談する、と答えます。"],
+    ["協力", "周りと協力して働く力", "人が少ない日に、一部の人に仕事がかたよっていました", "手が空いたら声をかけて、ほかの担当の仕事も手伝うようにしました", "職場全体の作業が早く終わるようになり、休憩も取りやすくなりました", "自分の担当だけでなく、全体を見ること", "周りと声をかけ合いながら、チームで仕事を進めたい",
+      "職場で意見が合わない人がいたら、どうしますか？", "相手の考えを聞いたうえで、目的（お客様や仕事の結果）に立ち返って話す、と答えます。"],
+    ["続ける力", "1つのことをコツコツ続ける力", "入ったばかりのころは、仕事を覚えるのに時間がかかりました", "毎日メモを見返し、わからないことはその日のうちに聞くようにしました", "長く続けるうちに任される仕事が増え、新人に教える役も任されました", "毎日少しずつ積み重ねること", "1つずつ着実に覚えて、長く働き続けたい",
+      "これまでで、いちばん大変だったことは何ですか？", "大変だったことと、それをどう乗り越えたかをセットで話します。"],
+    ["改善", "やり方を工夫して改善する力", "同じような書類を、毎回手で一から書いていました", "ひな形を作って、書く量を減らすようにしました", "作業の時間が、半分ほどになりました", "「もっとよいやり方はないか」と考えること", "今のやり方を大切にしながら、より良い方法を工夫したい",
+      "前の職場のやり方と違ったら、どうしますか？", "まずは今の職場のやり方を覚え、慣れてから改善を提案する、と答えます。"],
+    ["学ぶ力", "新しいことを進んで学ぶ力", "職場に、新しいレジ（システム）が入りました", "説明書を読み込み、空いた時間に操作を練習しました", "早く使いこなせるようになり、周りの人に使い方を教えられるようになりました", "わからないことを、そのままにしないこと", "新しい仕事も早く覚えて、できることを増やしたい",
+      "未経験の仕事ですが、大丈夫ですか？", "これまで新しいことをどう覚えてきたかを話し、入社までに準備することを添えます。"],
+    ["臨機応変", "急な変化にも落ち着いて対応する力", "急な欠勤で、人が足りなくなる日がありました", "優先する仕事を決めて、ほかの人と役割を分け直しました", "お客様をお待たせすることなく、その日を乗り切れました", "あわてずに、まず優先順位を決めること", "急な変更があっても、落ち着いて対応したい",
+      "予定どおりに進まないとき、どうしますか？", "まず状況を確認して上司に報告し、できることから進める、と答えます。"],
+    ["責任感", "任された仕事を最後までやり切る責任感", "商品の発注を任されることになりました", "毎日売れ行きを確かめ、欠品や余りが出ないよう数を調整しました", "欠品が減り、任される範囲が広がりました", "引き受けたことは最後までやること", "任された仕事に責任を持ち、最後までやり切りたい",
+      "自分の手に負えない仕事を頼まれたら、どうしますか？", "無理に抱えず、早めに状況を伝えて相談する、と答えます。責任感の強さと両立できます。"],
+    ["伝える力", "わかりやすく伝える力", "新人に仕事を教える役になりました", "手順を紙にまとめ、実際にやって見せてから任せるようにしました", "新人が早く一人で仕事ができるようになりました", "相手の立場で、わかりやすく伝えること", "周りの人とこまめに情報を共有し、仕事をスムーズに進めたい",
+      "報告・連絡・相談で、気をつけていることは？", "結論から先に伝えることと、早めに相談することを、例と一緒に話します。"]
+  ];
+  var sel = document.getElementById("strength");
+  S.forEach(function (s, i) { var o = document.createElement("option"); o.value = i; o.textContent = s[0] + "（" + s[1] + "）"; sel.appendChild(o); });
+  function ph() {
+    var s = S[+sel.value];
+    document.getElementById("kadai").placeholder = s[2];
+    document.getElementById("koudou").placeholder = s[3];
+    document.getElementById("kekka").placeholder = s[4];
+  }
+  sel.addEventListener("change", ph); ph();
+
+  function clean(t) { return t.trim().replace(/[。．\.\s]+$/, ""); }
+  function make() {
+    var s = S[+sel.value];
+    var target = document.getElementById("target").value.trim() || "〇〇";
+    var pattern = document.getElementById("pattern").value;
+    var used = [];
+    function get(id, ex, label) { var v = clean(document.getElementById(id).value); if (!v) { used.push(label); return clean(ex); } return v; }
+    var scene = get("scene", "スーパーのレジの仕事", "どこで");
+    var kadai = get("kadai", s[2], "①");
+    var koudou = get("koudou", s[3], "②");
+    var kekka = get("kekka", s[4], "③");
+    var pre = pattern === "blank" ? "以前の" : "";
+    var gap = pattern === "blank" ? "仕事から離れていた期間はありますが、" : "";
+    var place = pre + scene;
+
+    var doc = "私の強みは、" + s[1] + "です。" + place + "では、" + kadai + "。そこで、" + koudou + "。その結果、" + kekka + "。" +
+      gap + target + "の仕事でも、この力を活かして、" + s[6] + "と考えています。";
+    var talk = "私の強みは、" + s[1] + "です。\n" +
+      place + "では、" + kadai + "。\n" +
+      "そこで私は、" + koudou + "。\n" +
+      "その結果、" + kekka + "。\n" +
+      "この経験から、" + s[5] + "を大切にしています。\n" +
+      gap + target + "の仕事でも、" + s[6] + "と考えています。";
+    var short = "私の強みは、" + s[1] + "です。" + place + "で身につけたこの力を活かし、" + s[6] + "です。";
+    short = short.replace(/たいです。$/, "たいと考えています。");
+
+    var outs = [["履歴書の欄用", doc], ["面接で話す用（約40秒）", talk], ["応募フォーム用の短い版", short]];
+    var box = document.getElementById("outs"); box.innerHTML = "";
+    outs.forEach(function (o) {
+      var d = document.createElement("div"); d.className = "out";
+      var len = o[1].replace(/\s/g, "").length;
+      d.innerHTML = '<div class="q"><span></span><span class="n"></span></div><div class="a"></div><button type="button">この文章をコピー</button>';
+      d.querySelector(".q span").textContent = o[0];
+      d.querySelector(".n").textContent = len + "字";
+      d.querySelector(".a").textContent = o[1];
+      d.querySelector("button").addEventListener("click", function (e) {
+        var b = e.target, txt = o[1];
+        var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文章をコピー"; }, 1500); };
+        function fallback() {
+          var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+          t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+        }
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+      });
+      box.appendChild(d);
+    });
+    var w = document.getElementById("warn");
+    w.hidden = !used.length;
+    w.textContent = used.length ? "空欄だった「" + used.join("」「") + "」には、例文が入っています。自分の実際の経験に書きかえてください。" : "";
+
+    var qa = [
+      [s[7], s[8]],
+      ["その強みを、当社（当店）でどう活かせますか？", "応募先の仕事内容を1つ挙げて、「〇〇の場面で、△△のように活かせる」と具体的に答えます。"],
+      ["反対に、あなたの弱みは何ですか？", "強みの裏返し（例：正確さ→時間をかけすぎる）を挙げ、気をつけていることを添えます。"]
+    ];
+    var qb = document.getElementById("qas"); qb.innerHTML = "";
+    qa.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "qa";
+      d.innerHTML = '<div class="qq"></div><div class="hh"></div>';
+      d.querySelector(".qq").textContent = "Q. " + x[0]; d.querySelector(".hh").textContent = x[1];
+      qb.appendChild(d);
+    });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("scene").value = "スーパーのレジの仕事";
+    document.getElementById("kadai").value = S[0][2];
+    document.getElementById("koudou").value = S[0][3];
+    document.getElementById("kekka").value = S[0][4];
+    make();
+  }
+})();
+</script>
+</body>
+</html>
