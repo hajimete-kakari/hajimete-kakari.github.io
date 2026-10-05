@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>固定費の見直し計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .item { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .item:last-child { border-bottom: 0; }
+  .item .t { font-weight: 600; }
+  .item .h { font-size: .8rem; color: var(--sub); margin: 2px 0 6px; }
+  .row { display: flex; gap: 8px; align-items: center; } .row > div { flex: 1; min-width: 0; }
+  .row label { font-size: .8rem; color: var(--sub); display: block; }
+  input[type=number], input[type=text] { width: 100%; font-size: 1rem; padding: 8px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 16px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 8px; padding: 8px; font-size: .9rem; }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .grid .big .v { font-size: 1.05rem; }
+  ol.rank { padding-left: 1.3em; margin: 8px 0 0; }
+  ol.rank li { margin-bottom: 8px; }
+  ol.rank .s { color: var(--sub); font-size: .85rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>固定費の見直し計算</h1>
+  <p class="lead">今の支払いと、見直したあとの金額（調べた金額や目標）を入れると、月・年・10年でいくら浮くかと、「効果が大きく、手間が少ない順」の見直しの順番がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>毎月の固定費</h2>
+    <p class="note">わかるものだけで大丈夫です。年払いのものは、12で割って入れてください。見直したあとが未定なら、空欄のままにしてください。</p>
+    <div id="items"></div>
+    <h2 style="margin-top:14px">サブスク（定額サービス）</h2>
+    <p class="note">使っていないものは、見直し後を0にします。</p>
+    <div id="subs"></div>
+    <button class="sub" id="addSub" type="button">＋ サブスクを追加する</button>
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div class="grid">
+      <div class="big"><div class="k">1か月</div><div class="v" id="m"></div></div>
+      <div class="big"><div class="k">1年</div><div class="v" id="y"></div></div>
+      <div class="big"><div class="k">10年</div><div class="v" id="t"></div></div>
+    </div>
+    <p class="note" id="now"></p>
+    <h2 style="margin-top:12px">見直しの順番（効果が大きく、手間が少ない順）</h2>
+    <ol class="rank" id="rank"></ol>
+    <button class="sub" id="copy" type="button">結果をコピーする</button>
+    <p class="note" id="copied" hidden>コピーしました。</p>
+  </div>
+
+  <p class="note">※見直したあとの金額は、ご自身で調べた料金を入れてください。料金やサービスの内容は、会社やプラン、時期によって変わります。<br>
+  ※保険の見直しは、保障がなくなる期間が出ないよう、新しい契約が始まってから古い契約を解約するのが一般的です。<br>
+  ※入力した数字は、このスマホ・パソコンのブラウザにだけ保存されます。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  // [名前, ヒント, 手間(1=小,3=大)]
+  var ITEMS = [
+    ["スマホの通信費（家族全員分）", "使っているデータ量に合うプランか。家族割・光回線とのセット割も確認", 1],
+    ["インターネット回線", "スマホとのセット割、使っていないオプション", 2],
+    ["電気", "契約しているアンペア・料金プラン。電力会社の切り替え", 1],
+    ["ガス", "都市ガス・プロパンガス。プロパンは会社によって差が大きいことも", 2],
+    ["生命保険・医療保険", "保障が今の家族に合っているか。重複している保障はないか", 3],
+    ["自動車保険", "補償の範囲・運転する人の条件・年間の走る距離", 2],
+    ["車関係（駐車場・ローンなど）", "車が本当に必要か。台数を減らせないか", 3],
+    ["家賃・住宅ローン", "更新のときの交渉、ローンの借り換え（手数料も含めて比べる）", 3],
+    ["銀行・カードの手数料", "振込・引き出しの手数料、年会費", 1],
+    ["習い事・ジムなどの月謝", "通う回数に合ったコースか", 1]
+  ];
+  var SUBS = ["動画配信", "音楽配信", "クラウド保存", "雑誌・新聞", "ゲーム・アプリ"];
+  function load() { try { return JSON.parse(localStorage.getItem("kotei") || "{}"); } catch (e) { return {}; } }
+  function save(o) { try { localStorage.setItem("kotei", JSON.stringify(o)); } catch (e) {} }
+  var saved = load();
+
+  function row(box, name, hint, eff, editable, idx) {
+    var d = document.createElement("div"); d.className = "item"; d.dataset.eff = eff;
+    var title = editable ? '<input type="text" class="nm" placeholder="サービス名">' : '<div class="t"></div>';
+    d.innerHTML = title + (hint ? '<div class="h"></div>' : "") +
+      '<div class="row"><div><label>今（月額・円）</label><input type="number" class="now" min="0" inputmode="numeric"></div>' +
+      '<div><label>見直し後（月額・円）</label><input type="number" class="aft" min="0" inputmode="numeric"></div></div>';
+    if (editable) d.querySelector(".nm").value = name; else d.querySelector(".t").textContent = name;
+    if (hint) d.querySelector(".h").textContent = hint;
+    var k = (editable ? "s" : "i") + idx, v = saved[k];
+    if (v) { d.querySelector(".now").value = v[0]; d.querySelector(".aft").value = v[1]; if (editable && v[2]) d.querySelector(".nm").value = v[2]; }
+    d.dataset.key = k;
+    box.appendChild(d);
+  }
+  var items = document.getElementById("items"), subs = document.getElementById("subs");
+  ITEMS.forEach(function (it, i) { row(items, it[0], it[1], it[2], false, i); });
+  var nSub = Math.max(SUBS.length, saved._subs || 0);
+  for (var i = 0; i < nSub; i++) row(subs, SUBS[i] || "", "", 1, true, i);
+  document.getElementById("addSub").addEventListener("click", function () { row(subs, "", "", 1, true, subs.children.length); });
+
+  function yen(n) { return Math.round(n).toLocaleString("ja-JP") + "円"; }
+  var lastText = "";
+  function calc() {
+    var rows = document.querySelectorAll(".item"), sumNow = 0, sumCut = 0, list = [], st = { _subs: subs.children.length };
+    rows.forEach(function (d) {
+      var now = parseFloat(d.querySelector(".now").value), aft = d.querySelector(".aft").value;
+      var nmEl = d.querySelector(".nm"), name = nmEl ? (nmEl.value.trim() || "サブスク") : d.querySelector(".t").textContent;
+      st[d.dataset.key] = [d.querySelector(".now").value, aft, nmEl ? nmEl.value : ""];
+      if (isNaN(now)) return;
+      sumNow += now;
+      if (aft === "") return;
+      var cut = now - parseFloat(aft);
+      if (cut > 0) { sumCut += cut; list.push({ name: name, cut: cut, eff: +d.dataset.eff }); }
+    });
+    if (location.search.indexOf("demo") < 0) save(st);
+    list.sort(function (a, b) { return (b.cut / b.eff) - (a.cut / a.eff); });
+    document.getElementById("m").textContent = yen(sumCut);
+    document.getElementById("y").textContent = yen(sumCut * 12);
+    document.getElementById("t").textContent = yen(sumCut * 120);
+    document.getElementById("now").textContent = "今の固定費の合計：月" + yen(sumNow) + "（見直し後：月" + yen(sumNow - sumCut) + "）";
+    var ol = document.getElementById("rank"); ol.innerHTML = "";
+    var lines = ["【固定費の見直し】", "1か月 " + yen(sumCut) + "／1年 " + yen(sumCut * 12) + "／10年 " + yen(sumCut * 120), "", "見直しの順番"];
+    var effTxt = ["", "手間：小", "手間：中", "手間：大"];
+    if (!list.length) { var li = document.createElement("li"); li.textContent = "「見直し後」の金額を入れると、ここに順番が出ます"; ol.appendChild(li); }
+    list.forEach(function (x, i) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div></div><div class="s"></div>';
+      li.children[0].textContent = x.name;
+      li.children[1].textContent = "月" + yen(x.cut) + "・年" + yen(x.cut * 12) + "　" + effTxt[x.eff];
+      ol.appendChild(li);
+      lines.push((i + 1) + ". " + x.name + "　月" + yen(x.cut) + "（" + effTxt[x.eff] + "）");
+    });
+    lastText = lines.join("\n");
+    document.getElementById("result").hidden = false;
+    document.getElementById("copied").hidden = true;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (location.search.indexOf("demo") < 0) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  document.getElementById("copy").addEventListener("click", function () {
+    if (!lastText) return;
+    var done = function () { document.getElementById("copied").hidden = false; };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = lastText; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(lastText).then(done, fallback); else fallback();
+  });
+  if (location.search.indexOf("demo") >= 0) {
+    var demo = { 0: [14000, 6000], 1: [5500, 4500], 2: [9000, 8000], 4: [18000, 11000], 8: [800, 0] };
+    var its = items.children;
+    Object.keys(demo).forEach(function (k) { its[k].querySelector(".now").value = demo[k][0]; its[k].querySelector(".aft").value = demo[k][1]; });
+    var ss = subs.children;
+    ss[0].querySelector(".now").value = 1500; ss[0].querySelector(".aft").value = 1500;
+    ss[1].querySelector(".now").value = 1100; ss[1].querySelector(".aft").value = 0;
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
