@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>賃貸の初期費用チェックと交渉メール｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mid: #8a6d1f; --mid-soft: #f6efdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mid: #e3c578; --mid-soft: #37311f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  .row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .row:last-child { border-bottom: 0; }
+  .row label { flex: 1; min-width: 0; font-size: .95rem; }
+  label.f { display: block; font-weight: 600; margin: 12px 0 6px; }
+  input[type=number], input[type=text] { width: 100%; font-size: 1rem; padding: 8px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; text-align: right; }
+  input[type=text] { text-align: left; }
+  .row input[type=number] { width: 110px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 16px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .it { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .it:last-child { border-bottom: 0; }
+  .it input { width: 20px; height: 20px; margin-top: 4px; flex: none; accent-color: var(--accent); }
+  .it .body { flex: 1; }
+  .it .nm { font-weight: 700; }
+  .tag { display: inline-block; font-size: .75rem; padding: 0 8px; border-radius: 99px; margin-left: 6px; font-weight: 700; vertical-align: 1px; }
+  .t1 { background: var(--accent-soft); color: var(--accent); }
+  .t2 { background: var(--mid-soft); color: var(--mid); }
+  .t3 { background: var(--line); color: var(--sub); }
+  .it .why { font-size: .88rem; color: var(--sub); }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>賃貸の初期費用チェックと交渉メール</h1>
+  <p class="lead">不動産会社の見積書の金額を入れると、項目ごとに「交渉しやすい」「相談の余地あり」「基本は必要」に色分けし、下げられるかもしれない金額と、そのまま送れる相談メールを作ります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 見積書の金額（円）</h2>
+    <p class="hint" style="margin:0 0 6px">見積書にない項目は0のまま。税込の金額を入れます。</p>
+    <div id="rows"></div>
+    <label class="f" for="bukken">物件名（メールに入ります。空欄でも可）</label>
+    <input type="text" id="bukken" placeholder="例：〇〇マンション 203号室">
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div id="cards"></div>
+    <h3>項目ごとのチェック</h3>
+    <p class="hint" style="margin:0 0 4px">チェックを入れた項目が、相談メールに入ります。</p>
+    <div id="items"></div>
+    <h3>そのまま送れる相談メール</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" id="copy">メールの文章をコピー</button>
+  </div>
+
+  <p class="note">※一般的な目安です。交渉が通るかどうかは、物件や時期、貸主の考えによります。<br>
+  ※仲介手数料は、居住用の賃貸では原則として家賃の0.5か月分（税別）で、借りる人が承諾した場合は1か月分（税別）までとされています（国土交通省の告示）。<br>
+  ※鍵交換費用は、国土交通省のガイドラインでは貸主の負担が妥当とされていますが、契約の特約で借りる人の負担になっていることが多いです。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  // t: 1=交渉しやすい 2=外せることがある/相談の余地 3=基本は必要
+  var ITEMS = [
+    ["yachin", "家賃（月額）", 0],
+    ["kanri", "管理費・共益費（月額）", 0],
+    ["shiki", "敷金", 3],
+    ["rei", "礼金", 1],
+    ["chukai", "仲介手数料", 1],
+    ["mae", "前家賃・日割り家賃", 3],
+    ["kagi", "鍵交換費用", 2],
+    ["shodoku", "室内消毒・抗菌・消臭", 2],
+    ["support", "24時間サポート・安心サポート", 2],
+    ["shoka", "消火器・防虫などの備品", 2],
+    ["jimu", "書類作成費・事務手数料", 2],
+    ["kasai", "火災保険", 2],
+    ["hosho", "保証会社の初回保証料", 3],
+    ["other", "その他", 2]
+  ];
+  var rows = document.getElementById("rows");
+  ITEMS.forEach(function (it) {
+    var d = document.createElement("div"); d.className = "row";
+    d.innerHTML = '<label for="v_' + it[0] + '"></label><input type="number" id="v_' + it[0] + '" min="0" step="100" inputmode="numeric" value="0">';
+    d.querySelector("label").textContent = it[1];
+    rows.appendChild(d);
+  });
+  function v(k) { return Math.max(0, parseInt(document.getElementById("v_" + k).value || "0", 10)); }
+  function yen(n) { return n.toLocaleString() + "円"; }
+
+  var lastMail = "";
+  function calc() {
+    var yachin = v("yachin");
+    var total = 0;
+    ITEMS.forEach(function (it) { if (it[0] !== "yachin" && it[0] !== "kanri") total += v(it[0]); });
+    var half = Math.floor(yachin * 0.5 * 1.1);
+    var list = [];
+    var max = 0;
+    function push(k, nm, t, why, cut, ask) { list.push({ k: k, nm: nm, t: t, why: why, cut: cut, ask: ask }); if (cut > 0) max += cut; }
+
+    if (v("rei") > 0) push("rei", "礼金 " + yen(v("rei")), 1, "貸主へのお礼で、返ってきません。空室が長い物件や閑散期は、減額や0になることがあります。", v("rei"),
+      "礼金：減額、または無しにしていただくことは可能でしょうか。");
+    if (v("chukai") > 0) {
+      if (yachin > 0 && v("chukai") > half) push("chukai", "仲介手数料 " + yen(v("chukai")), 1,
+        "家賃の0.5か月分（税込" + yen(half) + "）を超えています。居住用の賃貸では、借りる人の承諾がなければ0.5か月分までが原則です。", v("chukai") - half,
+        "仲介手数料：家賃の0.5か月分（税込" + yen(half) + "）でお願いすることは可能でしょうか。");
+      else push("chukai", "仲介手数料 " + yen(v("chukai")), 3, yachin > 0 ? "家賃の0.5か月分（税込" + yen(half) + "）以内です。" : "家賃を入れると、0.5か月分を超えているかがわかります。", 0, "");
+    }
+    if (v("kagi") > 0) push("kagi", "鍵交換費用 " + yen(v("kagi")), 2, "国のガイドラインでは貸主の負担が妥当とされています。特約で借りる人の負担になっていることが多いですが、相談の余地があります。", v("kagi"),
+      "鍵交換費用：貸主様のご負担にしていただくことは可能でしょうか。");
+    var opt = [];
+    if (v("shodoku") > 0) opt.push(["shodoku", "室内消毒・抗菌・消臭", v("shodoku")]);
+    if (v("support") > 0) opt.push(["support", "24時間サポート", v("support")]);
+    if (v("shoka") > 0) opt.push(["shoka", "消火器・防虫などの備品", v("shoka")]);
+    opt.forEach(function (o) {
+      push(o[0], o[1] + " " + yen(o[2]), 2, "入居の条件ではない「任意の項目」のことが多く、外せることがあります。", o[2],
+        o[1] + "：任意の項目でしたら、外していただけますでしょうか。");
+    });
+    if (v("jimu") > 0) push("jimu", "書類作成費・事務手数料 " + yen(v("jimu")), 2, "仲介手数料とは別の費用です。何の費用か確認し、外せないか相談できます。", v("jimu"),
+      "書類作成費（事務手数料）：どのような費用か教えていただけますでしょうか。可能であれば外していただきたいです。");
+    if (v("kasai") > 0) push("kasai", "火災保険 " + yen(v("kasai")), 2, "加入は条件のことが多いですが、指定の保険でなく自分で選んだ保険でよい場合があります。比べると安くなることがあります。", 0,
+      "火災保険：指定のものではなく、自分で選んだ保険（同等の補償）に加入してもよろしいでしょうか。");
+    if (v("other") > 0) push("other", "その他 " + yen(v("other")), 2, "何の費用か、外せるかを確認します。", v("other"),
+      "見積書の「その他」の費用（" + yen(v("other")) + "）：内容を教えていただけますでしょうか。");
+    if (v("shiki") > 0) push("shiki", "敷金 " + yen(v("shiki")), 3, "退去時の修繕費などを差し引いて返ってくるお金です。下げると、退去時に別に払う額が増えることがあります。", 0, "");
+    if (v("mae") > 0) push("mae", "前家賃・日割り家賃 " + yen(v("mae")), 3, "入居月（と翌月）の家賃です。入居日を遅らせる「フリーレント」を相談できる場合があります。", 0, "");
+    if (v("hosho") > 0) push("hosho", "保証会社の初回保証料 " + yen(v("hosho")), 3, "保証会社の利用が条件のことが多いです。プランが複数あるか聞いてみる価値はあります。", 0, "");
+
+    var box = document.getElementById("cards"); box.innerHTML = "";
+    [["初期費用の合計", yen(total), yachin > 0 ? "家賃の約" + (Math.round(total / yachin * 10) / 10) + "か月分" : ""],
+     ["下げられるかもしれない額（最大）", yen(max), "「交渉しやすい」「相談の余地あり」の項目の合計（火災保険を除く）。全部が通るとは限りません"]].forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      box.appendChild(d);
+    });
+
+    var ib = document.getElementById("items"); ib.innerHTML = "";
+    var TAG = { 1: ["交渉しやすい", "t1"], 2: ["相談の余地あり", "t2"], 3: ["基本は必要", "t3"] };
+    list.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "it";
+      d.innerHTML = '<input type="checkbox"><div class="body"><div class="nm"><span></span><span class="tag"></span></div><div class="why"></div></div>';
+      var c = d.querySelector("input"); c.checked = !!x.ask; c.disabled = !x.ask; c.dataset.ask = x.ask;
+      d.querySelector(".nm span").textContent = x.nm;
+      var tg = d.querySelector(".tag"); tg.textContent = TAG[x.t][0]; tg.className = "tag " + TAG[x.t][1];
+      d.querySelector(".why").textContent = x.why + (x.cut > 0 ? "（最大 " + yen(x.cut) + "）" : "");
+      c.addEventListener("change", mail);
+      ib.appendChild(d);
+    });
+    if (!list.length) ib.innerHTML = '<p class="hint">見積書の金額を入れてください。</p>';
+    mail();
+    document.getElementById("result").hidden = false;
+  }
+  function mail() {
+    var asks = [];
+    document.querySelectorAll("#items input:checked").forEach(function (c) { if (c.dataset.ask) asks.push("・" + c.dataset.ask); });
+    var name = document.getElementById("bukken").value.trim() || "〇〇（物件名）";
+    var t = "件名：" + name + " 初期費用のご相談\n\n" +
+      "〇〇不動産　〇〇様\n\nお世話になっております。〇〇（自分の名前）です。\n" + name + "の見積書をお送りいただき、ありがとうございます。\n\n" +
+      "前向きに入居を検討しております。申込の前に、初期費用について" + (asks.length ? asks.length + "点" : "") + "ご相談させてください。\n\n" +
+      (asks.length ? asks.join("\n") : "・（相談したい項目を選んでください）") + "\n\n" +
+      "条件が合えば、すぐに申込をしたいと考えております。\nお手数をおかけしますが、ご確認のほどよろしくお願いいたします。\n\n〇〇（自分の名前）";
+    lastMail = t;
+    document.getElementById("mail").textContent = t;
+  }
+  document.getElementById("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = lastMail;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "メールの文章をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  document.getElementById("bukken").addEventListener("input", function () { if (!document.getElementById("result").hidden) mail(); });
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+
+  if (DEMO) {
+    var dv = { yachin: 70000, kanri: 3000, shiki: 70000, rei: 70000, chukai: 77000, mae: 73000, kagi: 22000, shodoku: 16500, support: 16500, kasai: 20000, hosho: 36500 };
+    Object.keys(dv).forEach(function (k) { document.getElementById("v_" + k).value = dv[k]; });
+    document.getElementById("bukken").value = "〇〇ハイツ 203号室";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
