@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職の切り出し方 作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .chk { display: flex; gap: 10px; align-items: flex-start; padding: 5px 0; }
+  .chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.2rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .out { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .out:last-child { border-bottom: 0; }
+  .out .q { font-weight: 700; margin-bottom: 4px; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .route { border-left: 3px solid var(--accent); padding: 2px 0 6px 12px; }
+  .route .n { font-weight: 700; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職の切り出し方 作成ページ</h1>
+  <p class="lead">辞めたい日と状況を選ぶと、いつまでに言えばいいか、上司に時間をもらう連絡、切り出すときの台本、引き止められたときの返し方、退職届の文面がまとめてできます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="koyo">働き方</label>
+    <select id="koyo">
+      <option value="mu">正社員・期間の定めのないパートなど</option>
+      <option value="yu">契約社員・期間の定めのあるパートなど</option>
+    </select>
+    <label class="f" for="day">辞めたい日（退職日）</label>
+    <input type="date" id="day">
+    <label class="f" for="rule">就業規則の「退職の申し出」の決まり<span class="hint">就業規則に「退職日の〇か月前までに申し出る」などと書かれています</span></label>
+    <select id="rule">
+      <option value="0.5">2週間前まで（または決まりがない）</option>
+      <option value="1" selected>1か月前まで</option>
+      <option value="2">2か月前まで</option>
+      <option value="3">3か月前まで</option>
+      <option value="x">わからない</option>
+    </select>
+    <label class="f" for="riyu">本当の理由に近いもの<span class="hint">伝える理由は、角が立たない言い方に変えます</span></label>
+    <select id="riyu">
+      <option value="next">次の仕事が決まった</option>
+      <option value="health">体調がよくない</option>
+      <option value="family">家庭の事情（介護・子育て・引越しなど）</option>
+      <option value="ningen">職場の人間関係がつらい</option>
+      <option value="taigu">仕事内容・給料・働き方が合わない</option>
+    </select>
+    <label class="f">心配なこと（いくつでも）</label>
+    <div id="worry"></div>
+    <button id="make" type="button">切り出し方を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>あなたに合う進め方</h3>
+    <div id="route"></div>
+    <h3>そのまま使える文面</h3>
+    <div id="outs"></div>
+  </div>
+
+  <p class="note">※期間の定めのない雇用は、法律（民法）では退職を申し出てから2週間で終了するとされています。円満に辞めるために、就業規則の決まりに合わせるのが一般的です。<br>
+  ※期間の定めのある契約は、原則として期間の途中では辞められません（やむを得ない事情がある場合や、1年を超える契約で1年が過ぎた場合などを除く）。契約の終わりの日に合わせるのが基本です。<br>
+  ※会社とのトラブルが心配なときは、労働基準監督署の総合労働相談コーナーに相談できます。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var WORRY = [
+    ["kowai", "上司が怖い・言い出しにくい"],
+    ["hikitome", "引き止められそう"],
+    ["hitode", "「人が足りない」と言われそう"],
+    ["yukyu", "残っている有給休暇を使いたい"],
+    ["ukenai", "退職を認めてもらえない・退職届を受け取ってもらえない"],
+    ["taicho", "体調が悪く、出社するのがつらい"],
+    ["kane", "未払いの残業代などを請求したい"]
+  ];
+  var wb = document.getElementById("worry");
+  WORRY.forEach(function (w) {
+    var l = document.createElement("label"); l.className = "chk";
+    l.innerHTML = '<input type="checkbox" id="w_' + w[0] + '"><span></span>';
+    l.querySelector("span").textContent = w[1]; wb.appendChild(l);
+  });
+  var WD = ["日","月","火","水","木","金","土"];
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function key(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function fmt(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function wa(d) { return "令和" + (d.getFullYear() - 2018) + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addM(d, n) {
+    var x = new Date(d.getFullYear(), d.getMonth() + n, 1);
+    var last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+    x.setDate(Math.min(d.getDate(), last)); return x;
+  }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function parse(v) { var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  document.getElementById("day").value = key(new Date(today.getFullYear(), today.getMonth() + 2, 0));
+  function w(k) { return document.getElementById("w_" + k).checked; }
+
+  var REASON = {
+    next: "次の仕事が決まり、新しい職場で働くことになりました",
+    health: "体調を崩しがちで、しばらく体を休めることに専念したいと考えています",
+    family: "家庭の事情で、今の働き方を続けるのが難しくなりました",
+    ningen: "自分なりに考えた結果、新しい環境で働きたいと決めました",
+    taigu: "自分なりに考えた結果、別の分野に挑戦したいと決めました"
+  };
+
+  function make() {
+    var koyo = document.getElementById("koyo").value;
+    var dayV = document.getElementById("day").value;
+    var day = dayV ? parse(dayV) : addM(today, 1);
+    var rule = document.getElementById("rule").value;
+    var riyu = document.getElementById("riyu").value;
+    var msgs = [];
+
+    // いつまでに言うか
+    var legal = add(day, -14);
+    var ruleDay = rule === "0.5" ? legal : rule === "x" ? addM(day, -1) : addM(day, -parseInt(rule, 10));
+    var left = Math.round((ruleDay - today) / 86400000);
+    var legalLeft = Math.round((legal - today) / 86400000);
+    var cards = [];
+    cards.push(["就業規則に合わせて伝える日", fmt(ruleDay) + "まで",
+      left >= 0 ? "今日からあと" + left + "日" + (rule === "x" ? "（わからないので1か月前で計算）" : "") : "もう過ぎています"]);
+    if (koyo === "mu") cards.push(["法律上の最短（申し出から2週間）", fmt(legal) + "まで", legalLeft >= 0 ? "今日からあと" + legalLeft + "日" : "もう過ぎています"]);
+    if (koyo === "yu") msgs.push("期間の定めのある契約は、原則として契約の終わりの日に合わせて辞めます。途中で辞めたい場合は、まず会社に相談してください（体調などやむを得ない事情がある場合は、途中でも辞められることがあります）。");
+    if (left < 0 && koyo === "mu") msgs.push(legalLeft >= 0 ? "就業規則の日は過ぎていますが、法律上は申し出から2週間で辞められます。できるだけ早く伝え、引き継ぎの相談をしましょう。" : "この退職日だと、申し出から2週間ありません。退職日を後ろにずらすか、会社と相談して日を決めましょう。");
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+
+    // 進め方
+    var routes = [];
+    if (w("kane")) routes.push(["弁護士に相談する", "未払いの残業代などを請求したいときは、交渉や請求ができる弁護士に相談します。退職の連絡もまとめて頼めます。"]);
+    else if (w("taicho") || w("ukenai")) routes.push(["退職代行も選択肢に入れる", "体調が悪い・受け取ってもらえない場合は、無理に自分で言わなくても大丈夫です。有給休暇の相談など、会社とのやりとりが必要なら、弁護士か労働組合が運営するところを選びます。"]);
+    if (w("kowai") && !w("taicho")) routes.push(["直属の上司以外に先に伝える", "上司が怖いときは、メールで先に要件を伝えておく、人事や上司の上の人に相談する、という方法もあります。"]);
+    if (!routes.length || (!w("kane") && !w("taicho") && !w("ukenai"))) routes.unshift(["自分で伝える", "下の文面を使えば、自分で伝えられる状況です。直属の上司に、対面（難しければ電話）で伝えるのが基本です。"]);
+    var rb = document.getElementById("route"); rb.innerHTML = "";
+    routes.forEach(function (r) {
+      var d = document.createElement("div"); d.className = "route";
+      d.innerHTML = '<div class="n"></div><div class="hint"></div>';
+      d.querySelector(".n").textContent = r[0]; d.querySelector(".hint").textContent = r[1];
+      rb.appendChild(d);
+    });
+
+    // 文面
+    var lastWork = w("yukyu") ? "〇月〇日" : fmt(day).replace(/（.）/, "");
+    var outs = [];
+    outs.push(["① 上司に時間をもらう連絡（チャット・メール・口頭）",
+      "お疲れさまです。\nご相談したいことがあり、今日か明日、10分ほどお時間をいただけますでしょうか。\nできれば、ほかの方のいないところでお話しできると助かります。"]);
+    outs.push(["② 切り出すときの台本",
+      "お忙しいところ、お時間をいただきありがとうございます。\n突然で申し訳ないのですが、" + wa(day) + "で退職させていただきたいと考えています。\n" +
+      REASON[riyu] + "。\nこれまで大変お世話になりました。引き継ぎは、最後まで責任を持って行います。"]);
+    if (w("hikitome")) outs.push(["③ 引き止められたとき",
+      "ありがたいお話ですが、よく考えて決めたことなので、気持ちは変わりません。\n残りの期間、引き継ぎはしっかりやりますので、退職の手続きを進めていただけますか。"]);
+    if (w("hitode")) outs.push(["③ 「人が足りない」と言われたとき",
+      "ご迷惑をおかけして申し訳ありません。\n退職日までに引き継ぎの資料を作り、後任の方に教えられるようにします。\n退職日は変えずに、引き継ぎの進め方をご相談させてください。"]);
+    if (w("yukyu")) outs.push(["③ 有給休暇を使いたいと伝える",
+      "残っている有給休暇を、引き継ぎを終えたあとに使わせていただきたいと考えています。\n最後の出勤日は" + lastWork + "、退職日は" + wa(day) + "でいかがでしょうか。"]);
+    if (w("kowai")) outs.push(["③ 対面が難しいときの、先に送るメール",
+      "お疲れさまです。\n大切なご相談のため、先にメールでお伝えさせてください。\n一身上の都合により、" + wa(day) + "で退職させていただきたいと考えています。\n改めて、直接ご説明するお時間をいただけますでしょうか。"]);
+    if (w("ukenai")) outs.push(["③ 退職届を受け取ってもらえないとき",
+      "退職の意思は変わりませんので、退職届を受け取っていただけますでしょうか。\n難しい場合は、人事の担当の方にお渡しします。"]);
+    outs.push(["④ 退職届（会社の書式がなければ）",
+      "退職届\n\n私儀\nこのたび、一身上の都合により、" + wa(day) + "をもって退職いたします。\n\n" + wa(today) + "\n〇〇部　〇〇課\n氏名　〇〇〇〇　印\n\n株式会社〇〇\n代表取締役　〇〇〇〇　殿"]);
+
+    var ob = document.getElementById("outs"); ob.innerHTML = "";
+    outs.forEach(function (o) {
+      var d = document.createElement("div"); d.className = "out";
+      d.innerHTML = '<div class="q"></div><div class="a"></div><button type="button">この文面をコピー</button>';
+      d.querySelector(".q").textContent = o[0]; d.querySelector(".a").textContent = o[1];
+      d.querySelector("button").addEventListener("click", function (e) {
+        var b = e.target, txt = o[1];
+        var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+        function fallback() {
+          var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+          t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+        }
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+      });
+      ob.appendChild(d);
+    });
+    var wn = document.getElementById("warn"); wn.hidden = !msgs.length; wn.textContent = "";
+    msgs.forEach(function (m, i) { if (i) wn.appendChild(document.createElement("br")); wn.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  window.__i = { addM: addM };
+  if (DEMO) {
+    document.getElementById("day").value = "2026-12-31";
+    document.getElementById("riyu").value = "taigu";
+    ["hikitome", "hitode", "yukyu"].forEach(function (k) { document.getElementById("w_" + k).checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
