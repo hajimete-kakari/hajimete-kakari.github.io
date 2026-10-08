@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>自転車の青切符 反則金チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --blue: #2b5c9e; --blue-soft: #e5edf8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --blue: #9cbdf0; --blue-soft: #1f2a3a;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .chk { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .chk:last-child { border-bottom: 0; }
+  .chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
+  .grp { font-weight: 700; font-size: .9rem; color: var(--sub); margin: 12px 0 2px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 16px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .res { border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .res.blue { background: var(--blue-soft); }
+  .res.red { background: var(--warn-soft); }
+  .res .nm { font-weight: 700; }
+  .res .v { font-size: 1.25rem; font-weight: 700; }
+  .res.blue .v { color: var(--blue); } .res.red .v { color: var(--warn); }
+  .res .s { font-size: .88rem; color: var(--sub); }
+  .tl { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tl li { border-left: 3px solid var(--accent); padding: 2px 0 10px 12px; }
+  .tl .d { font-weight: 700; }
+  .tl .t { font-size: .9rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>自転車の青切符 反則金チェック</h1>
+  <p class="lead">2026年4月から、16歳以上の自転車の交通違反に「青切符」が使われるようになりました。違反を選ぶと、反則金の額と、青切符か刑事手続（赤切符）か、講習の対象かがわかります。切符を切られた日を入れると、納める期限もわかります。</p>
+
+  <div class="card">
+    <h2>1. 違反を選ぶ（いくつでも）</h2>
+    <div id="list"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. 自分のこと</h2>
+    <label class="f" for="age">年齢</label>
+    <select id="age"><option value="16">16歳以上</option><option value="15">16歳未満（中学生など）</option></select>
+    <label class="f" for="menkyo">車やバイクの運転免許</label>
+    <select id="menkyo"><option value="yes">持っている</option><option value="no">持っていない</option></select>
+    <label class="f" for="day">青切符を切られた日<span class="hint">切られていなければ、空欄のままにします</span></label>
+    <input type="date" id="day">
+    <button id="check" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="res"></div>
+    <div id="flow" hidden>
+      <h2 style="margin-top:14px">納める期限</h2>
+      <ol class="tl" id="tl"></ol>
+    </div>
+  </div>
+
+  <p class="note">※反則金の額は、警察庁「自転車ルールブック」（令和7年9月）の資料をもとにしています。<br>
+  ※違反をしても、多くは「指導警告」です。事故の危険があるなど、悪質・危険な違反のときに検挙され、青切符や赤切符になります。<br>
+  ※傘差し・イヤホンなどは、都道府県の公安委員会の決まりによります。住んでいる都道府県の決まりを確認してください。<br>
+  ※期限は原則の日数で計算した目安です。土日・祝日の扱いなどは、切符や納付書の記載で確認してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  // [キー, 違反, 反則金(0=刑事手続), 講習の対象, グループ, 補足]
+  var V = [
+    ["sumaho", "スマホを手に持って通話・画面を見ながら走る", 12000, true, "とくに重い違反", "携帯電話使用等（保持）"],
+    ["fumikiri", "遮断機が下りている踏切に入る", 7000, true, "とくに重い違反", "遮断踏切立入り"],
+    ["brake", "ブレーキのない（効かない）自転車に乗る", 5000, true, "とくに重い違反", "自転車制動装置不良"],
+    ["shingo", "信号無視", 6000, true, "よくある違反", "点滅信号の無視は5,000円"],
+    ["gyakuso", "逆走（車道の右側を走る）", 6000, true, "よくある違反", "通行区分違反"],
+    ["hodo", "走ってはいけない歩道を走る", 6000, true, "よくある違反", "通行区分違反。多くは指導警告"],
+    ["teishi", "「止まれ」の標識で止まらない", 5000, true, "よくある違反", "指定場所一時不停止等"],
+    ["hokousha", "横断歩道を渡る人の邪魔をする", 6000, false, "よくある違反", "横断歩行者等妨害等"],
+    ["hodojoko", "歩道で徐行しない・歩行者の邪魔をする", 3000, true, "よくある違反", "歩道徐行等義務違反"],
+    ["mutouka", "夜にライトをつけない（無灯火）", 5000, false, "よくある違反", "無灯火"],
+    ["kasa", "傘差し・イヤホンで周りの音が聞こえない", 5000, false, "よくある違反", "公安委員会遵守事項違反（都道府県による）"],
+    ["futari", "二人乗り", 3000, false, "よくある違反", "軽車両乗車積載制限違反（認められた幼児用座席などを除く）"],
+    ["heishin", "横に並んで走る（並進）", 3000, false, "よくある違反", "並進禁止違反（並進可の標識がある場所を除く）"],
+    ["sake", "お酒を飲んで乗る（酒気帯び・酒酔い）", 0, true, "青切符ではなく刑事手続", "酒気帯びは3年以下の拘禁刑または50万円以下の罰金など"],
+    ["kiken", "スマホを見ながら走って、歩行者とぶつかりそうになるなど危険を生じさせる", 0, true, "青切符ではなく刑事手続", "携帯電話使用等（交通の危険）"],
+    ["aori", "あおり運転（妨害運転）", 0, true, "青切符ではなく刑事手続", "妨害運転"],
+    ["jiko", "違反をして、実際に事故を起こした", 0, false, "青切符ではなく刑事手続", "事故の内容によって処理が変わる"]
+  ];
+  var box = document.getElementById("list"), last = "";
+  V.forEach(function (v) {
+    if (v[4] !== last) { var g = document.createElement("div"); g.className = "grp"; g.textContent = v[4]; box.appendChild(g); last = v[4]; }
+    var l = document.createElement("label"); l.className = "chk";
+    l.innerHTML = '<input type="checkbox"><span></span>';
+    l.querySelector("input").id = "v_" + v[0]; l.querySelector("span").textContent = v[1];
+    box.appendChild(l);
+  });
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function yen(n) { return n.toLocaleString() + "円"; }
+
+  function check() {
+    var sel = V.filter(function (v) { return document.getElementById("v_" + v[0]).checked; });
+    var under = document.getElementById("age").value === "15", menkyo = document.getElementById("menkyo").value === "yes";
+    var rb = document.getElementById("res"); rb.innerHTML = "";
+    var msgs = [];
+    if (!sel.length) msgs.push("違反を1つ以上選んでください。");
+    if (under) msgs.push("16歳未満は青切符の対象ではなく、原則として指導警告です。ただし、刑事手続になる重大な違反や事故は別です。14歳以上は、講習の対象にもなります。");
+    var red = sel.some(function (v) { return !v[2]; });
+    var kosyu = sel.filter(function (v) { return v[3]; });
+    sel.forEach(function (v) {
+      var d = document.createElement("div"); d.className = "res " + (v[2] ? "blue" : "red");
+      d.innerHTML = '<div class="nm"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".nm").textContent = v[1];
+      d.querySelector(".v").textContent = v[2] ? (under ? "（16歳以上なら）" : "") + "反則金 " + yen(v[2]) : "刑事手続（赤切符など）";
+      d.querySelector(".s").textContent = v[5] + (v[3] ? "。3年以内にくり返すと講習の対象" : "");
+      rb.appendChild(d);
+    });
+    if (kosyu.length) msgs.push("講習の対象になる違反が含まれています。3年以内に2回以上検挙されるなどすると、自転車運転者講習（3時間・受講料あり）を受けるよう命じられます。");
+    if (red) msgs.push("刑事手続になる違反が含まれています。反則金では終わらず、裁判になると前科がつくことがあります。" + (menkyo ? "運転免許を持っている人は、免許の停止処分を受けることもあります。" : ""));
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+
+    var day = document.getElementById("day").value, fl = document.getElementById("flow");
+    if (day && !under && sel.some(function (v) { return v[2]; })) {
+      var d0 = parse(day), tl = document.getElementById("tl"); tl.innerHTML = "";
+      [[d0, "青切符と納付書を受け取る", "反則金の額と、違反の内容が書いてあります"],
+       [add(d0, 7), "この日までに、銀行か郵便局で仮納付する（翌日から原則7日以内）", "納付書を持って窓口へ。納めれば手続きは終わり、前科もつきません"],
+       [null, "仮納付しなかったとき", "切符に書かれた日に交通反則通告センターへ行き、通告書と納付書を受け取ります（遠い人には郵送。送料が加わります）"],
+       [null, "通告を受けた翌日から原則10日以内に納付", "ここでも納めないと、刑事手続に移ります"]].forEach(function (x) {
+        var li = document.createElement("li");
+        li.innerHTML = '<div class="d"></div><div class="t"></div>';
+        li.querySelector(".d").textContent = (x[0] ? fmt(x[0]) + "　" : "") + x[1];
+        li.querySelector(".t").textContent = x[2];
+        tl.appendChild(li);
+      });
+      fl.hidden = false;
+    } else fl.hidden = true;
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("check").addEventListener("click", function () {
+    check();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    ["sumaho", "shingo", "kasa"].forEach(function (k) { document.getElementById("v_" + k).checked = true; });
+    document.getElementById("day").value = "2026-10-08";
+    check();
+  }
+})();
+</script>
+</body>
+</html>
