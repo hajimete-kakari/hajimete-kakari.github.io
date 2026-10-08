@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>60歳前後のお金と手続き｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .tl { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tl li { border-left: 3px solid var(--accent); padding: 2px 0 12px 12px; }
+  .tl li.past { border-left-color: var(--line); }
+  .tl .d { font-weight: 700; }
+  .tl .t { font-size: .92rem; }
+  .tl .t div { margin-top: 2px; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>60歳前後のお金と手続き</h1>
+  <p class="lead">生年月日と、60歳以降の働き方を入れると、年金・給料が下がったときの給付金・健康保険・失業保険などの手続きが、いつ何をするかの順に並びます。給付金の目安も計算します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 本人のこと</h2>
+    <div class="row">
+      <div><label class="f" for="birth">生年月日</label><input type="date" id="birth"></div>
+      <div><label class="f" for="sex">性別<span class="hint">年金の決まりが違うため</span></label><select id="sex"><option value="m">男性</option><option value="f">女性</option></select></div>
+    </div>
+    <label class="f" for="koyo">雇用保険に入って働いた期間（合計）</label>
+    <select id="koyo"><option value="5">5年以上</option><option value="1">1年以上5年未満</option><option value="0">1年未満</option></select>
+  </div>
+
+  <div class="card">
+    <h2>2. 60歳以降の働き方</h2>
+    <label class="f" for="plan">予定</label>
+    <select id="plan">
+      <option value="sai">60歳で定年→同じ会社で再雇用（65歳まで）</option>
+      <option value="sai70">60歳で定年→再雇用して65歳以降も働く</option>
+      <option value="taishoku">60代前半で退職して、働かない（または転職先を探す）</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="w60">60歳前の月給（額面・円）</label><input type="number" id="w60" min="0" step="1000" inputmode="numeric" placeholder="例：400000"></div>
+      <div><label class="f" for="wNew">再雇用後の月給（額面・円）</label><input type="number" id="wNew" min="0" step="1000" inputmode="numeric" placeholder="例：250000"></div>
+    </div>
+    <p class="hint">残業代なども含めた、毎月の給料の額面です。60歳前は、60歳になる前の6か月の平均が目安です。</p>
+    <label class="f" for="retire">会社を辞める日（決まっていれば）</label>
+    <input type="date" id="retire">
+    <button id="calc" type="button">一覧を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h2 style="margin-top:14px">いつ、何をするか</h2>
+    <ol class="tl" id="tl"></ol>
+  </div>
+
+  <p class="note">※給料が下がったときの給付金（高年齢雇用継続基本給付金）は、令和8年8月からの上限額（397,369円）などをもとにした目安です。上限額は毎年8月に見直されます。<br>
+  ※年金の受け取りが始まる年齢や額は、ねんきん定期便や「ねんきんネット」、年金事務所で確認してください。<br>
+  ※働きながら年金を受け取る場合、給料と年金の合計が月65万円（令和8年度）を超えると、厚生年金の一部が止まります。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var LIMIT = 397369, MINPAY = 2562, W_MAX = 522000, W_MIN = 96090;
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function ym(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d.getFullYear(), d.getMonth() + n, 1); var l = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(d.getDate(), l)); return x; }
+  function yen(n) { return Math.round(n).toLocaleString() + "円"; }
+  // 法律上、年齢は誕生日の前日に1つ増える
+  function reach(b, age) { return add(new Date(b.getFullYear() + age, b.getMonth(), b.getDate()), -1); }
+  function bk(y, m, d) { return new Date(y, m - 1, d); }
+  // 特別支給の老齢厚生年金（報酬比例部分）の開始年齢。なしは0
+  function tokubetsu(b, sex) {
+    var T = sex === "m"
+      ? [[bk(1957, 4, 2), bk(1959, 4, 1), 63], [bk(1959, 4, 2), bk(1961, 4, 1), 64]]
+      : [[bk(1958, 4, 2), bk(1960, 4, 1), 61], [bk(1960, 4, 2), bk(1962, 4, 1), 62], [bk(1962, 4, 2), bk(1964, 4, 1), 63], [bk(1964, 4, 2), bk(1966, 4, 1), 64]];
+    var lastNone = sex === "m" ? bk(1961, 4, 2) : bk(1966, 4, 2);
+    if (b >= lastNone) return 0;
+    for (var i = 0; i < T.length; i++) if (b >= T[i][0] && b <= T[i][1]) return T[i][2];
+    return -1; // それより前に生まれた人（すでに受け取り中のはず）
+  }
+  // 高年齢雇用継続基本給付金の月額
+  function kyufu(w60, w, oldRule) {
+    var W = Math.min(Math.max(w60, W_MIN), W_MAX);
+    if (w >= LIMIT) return 0;
+    var r = w / W, lo = oldRule ? 0.61 : 0.64, rate = oldRule ? 0.15 : 0.10, g;
+    if (r >= 0.75) return 0;
+    if (r <= lo) g = w * rate;
+    else { var a = lo * W * rate; g = a * (0.75 * W - w) / (0.75 * W - lo * W); }
+    if (w + g > LIMIT) g = LIMIT - w;
+    return g <= MINPAY ? 0 : Math.floor(g);
+  }
+  window.__t = { kyufu: kyufu, tokubetsu: tokubetsu };
+
+  function calc() {
+    var bs = document.getElementById("birth").value;
+    if (!bs) { alert("生年月日を入れてください。"); return; }
+    var b = parse(bs), sex = document.getElementById("sex").value, koyo = +document.getElementById("koyo").value;
+    var plan = document.getElementById("plan").value;
+    var w60 = +document.getElementById("w60").value || 0, wNew = +document.getElementById("wNew").value || 0;
+    var rs = document.getElementById("retire").value, retire = rs ? parse(rs) : null;
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var r60 = reach(b, 60), r65 = reach(b, 65), r70 = reach(b, 70);
+    var oldRule = r60 < bk(2025, 4, 1);
+    var tk = tokubetsu(b, sex);
+    var msgs = [], cards = [], ev = [];
+
+    // 給付金
+    var working = plan !== "taishoku";
+    if (working && koyo >= 5 && w60 && wNew) {
+      var g = kyufu(w60, wNew, oldRule), ratio = Math.round(wNew / Math.min(Math.max(w60, W_MIN), W_MAX) * 1000) / 10;
+      cards.push(["給料が下がったときの給付金（月）", g ? yen(g) : "対象外", g ? "給料が60歳前の" + ratio + "%に下がるため。60歳から65歳になる月まで、2か月ごとに申請" : "給料が60歳前の75%以上（" + ratio + "%）か、上限額を超えるため"]);
+      if (g) cards.push(["65歳になる月までの合計（目安）", yen(g * 60), "60歳から5年間、同じ給料で働いた場合"]);
+    } else if (working && koyo < 5) msgs.push("雇用保険に入って働いた期間が5年未満のため、給料が下がったときの給付金（高年齢雇用継続基本給付金）は対象外です。");
+    if (tk > 0) cards.push(["年金を一部受け取り始める年齢", tk + "歳", "特別支給の老齢厚生年金（報酬比例部分）。" + fmt(reach(b, tk)) + "から"]);
+    else if (tk === 0) cards.push(["年金を受け取り始める年齢", "65歳", "生年月日により、65歳前に受け取る年金（特別支給）はありません"]);
+    var box = document.getElementById("cards"); box.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      box.appendChild(d);
+    });
+
+    // いつ何をするか
+    ev.push([addM(r60, -6), "60歳の半年前", ["会社に、定年後の働き方（再雇用の条件・給料）を確かめる", "ねんきん定期便（59歳のときは封書で届く）で、年金の見込み額と加入記録を確かめる"]]);
+    var at60 = ["60歳になる（定年）"];
+    if (working && koyo >= 5) at60.push("給料が下がる場合は、会社を通じてハローワークに「高年齢雇用継続基本給付金」を申請する（その後は2か月ごと）");
+    at60.push("国民年金の加入期間が40年に足りない人は、65歳まで「任意加入」して年金を増やせる（会社員として働く人は不要）");
+    ev.push([r60, "60歳", at60]);
+    if (tk > 0) ev.push([addM(reach(b, tk), -3), tk + "歳の3か月前", ["年金請求書が届く。" + tk + "歳になったら年金事務所に提出する（特別支給の老齢厚生年金）", "働きながら受け取る場合、給料と年金の合計が月65万円を超えると一部が止まる。給付金を受け取っている間は、年金がさらに一部止まる"]]);
+    if (retire) {
+      var r = retire, ag = Math.floor(((r - b) / 86400000) / 365.25);
+      var after = add(r, 1), items = ["健康保険を選ぶ：会社の健康保険を続ける「任意継続」は退職日の翌日から20日以内（" + fmt(add(r, 20)) + "まで）、国民健康保険は14日以内、家族の扶養に入る（60歳以上は年収180万円未満が目安）"];
+      if (r < r65) items.push("失業保険（基本手当）：ハローワークで手続き。※65歳前の年金（特別支給）とは同時に受け取れず、年金が止まる");
+      else items.push("65歳以上で辞めたので、失業保険は一時金の「高年齢求職者給付金」（雇用保険1年以上で基本手当の50日分）");
+      if (plan !== "taishoku" && r < r65 && add(r65, -60) < r) items.push("65歳の誕生日の前日以降に辞めると、65歳以上の扱い（一時金）になる。辞める日で受け取れる額が変わるので、ハローワークで確認する");
+      ev.push([r, "退職日（" + ag + "歳）", items]);
+    }
+    ev.push([addM(r65, -3), "65歳の3か月前", ["年金請求書が届く。65歳の誕生日の前日以降に提出する（老齢基礎年金・老齢厚生年金）", "受け取りを遅らせる（繰下げ）と、1か月ごとに0.7%増える。遅らせる場合は請求書を出さない"]]);
+    ev.push([r65, "65歳", ["介護保険料が、年金からの天引きに切りかわる（しばらくは納付書で届くことがある）", plan === "sai" ? "再雇用の契約が終わる時期。続けて働くか、会社と相談する" : (plan === "sai70" ? "働きながら年金を受け取る場合、給料と年金の合計が月65万円を超えると、厚生年金の一部が止まる" : "働く場合は、ハローワークに求職の申し込みができる")]]);
+    if (plan === "sai70") ev.push([r70, "70歳", ["厚生年金の加入が終わる。年金の受け取りを遅らせていた人は、この時期までに請求を考える（最大75歳まで遅らせられる）"]]);
+
+    ev.sort(function (a, c) { return a[0] - c[0]; });
+    var tl = document.getElementById("tl"); tl.innerHTML = "";
+    ev.forEach(function (e) {
+      var li = document.createElement("li"); if (e[0] < today) li.className = "past";
+      li.innerHTML = '<div class="d"></div><div class="t"></div>';
+      li.querySelector(".d").textContent = fmt(e[0]) + "　" + e[1] + (e[0] < today ? "（過ぎています）" : "");
+      e[2].forEach(function (t) { var d = document.createElement("div"); d.textContent = "・" + t; li.querySelector(".t").appendChild(d); });
+      tl.appendChild(li);
+    });
+    if (oldRule && working) msgs.push("60歳になったのが2025年3月31日以前なので、給付金は改正前の決まり（給料の最大15%）で計算しています。");
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("birth").value = "1967-06-15";
+    document.getElementById("w60").value = "400000";
+    document.getElementById("wNew").value = "250000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
