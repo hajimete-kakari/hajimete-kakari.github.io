@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>払われないお金の催促と回収の手順｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], input[type=text], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .tl { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tl li { border-left: 3px solid var(--accent); padding: 2px 0 12px 12px; }
+  .tl li.past { border-left-color: var(--line); }
+  .tl .d { font-weight: 700; }
+  .tl .t { font-size: .92rem; }
+  .out { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .out:last-child { border-bottom: 0; }
+  .out .q { font-weight: 700; margin-bottom: 4px; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; font-size: .92rem; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>払われないお金の催促と回収の手順</h1>
+  <p class="lead">報酬や代金が期日を過ぎても払われないときに、金額と約束の支払日を入れると、遅れている日数と遅延損害金の目安、段階ごとの催促の文面、内容証明郵便・支払督促・少額訴訟の費用の目安と、いつ何をするかがわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="kind">何のお金？</label>
+    <select id="kind">
+      <option value="hoshu">仕事の報酬（業務委託・フリーランス・副業）</option>
+      <option value="daikin">売った商品・サービスの代金</option>
+      <option value="kashi">個人に貸したお金</option>
+    </select>
+    <label class="f" for="aite">相手は</label>
+    <select id="aite"><option value="corp">会社・お店</option><option value="person">個人</option></select>
+    <div class="row">
+      <div><label class="f" for="amount">金額（円）</label><input type="number" id="amount" min="1" step="1" inputmode="numeric" placeholder="例：220000"></div>
+      <div><label class="f" for="due">約束の支払日</label><input type="date" id="due"></div>
+    </div>
+    <label class="f" for="what">何の代金か（文面に入ります）<span class="hint">例：9月分のWebサイト更新作業、〇月〇日納品のデザイン</span></label>
+    <input type="text" id="what">
+    <label class="f" for="rate">遅れたときの利息（遅延損害金）の約束<span class="hint">契約書に「年〇%」と書いてあれば、その数字。なければ空欄（法律の年3%で計算）</span></label>
+    <input type="number" id="rate" min="0" max="14.6" step="0.1" inputmode="decimal" placeholder="空欄なら3">
+    <button id="calc" type="button">手順と文面を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>いつ、何をするか</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>そのまま使える文面</h3>
+    <div id="outs"></div>
+  </div>
+
+  <p class="note">※遅延損害金は、契約に約束がなければ法律の利率（2026年4月以降も年3%）で計算した目安です。<br>
+  ※内容証明郵便は、1枚・一般書留・配達証明つきの定形郵便で約1,420円（2枚目から1枚ごとに290円）。裁判所の手数料のほかに、郵便切手代（数千円）がかかります。料金は出す前に確かめてください。<br>
+  ※このページは、催促と手続きの流れを整理するためのものです。相手と争いがある場合や、請求できるかどうかの判断は、弁護士や相談窓口に確認してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function yen(n) { return Math.floor(n).toLocaleString() + "円"; }
+  // 裁判所の手数料（訴額100万円までは10万円ごとに1,000円）。100万円超は目安を出さない
+  function inshi(a) { return a <= 1000000 ? Math.ceil(a / 100000) * 1000 : 0; }
+
+  function calc() {
+    var amount = +document.getElementById("amount").value || 0, ds = document.getElementById("due").value;
+    if (!amount || !ds) { alert("金額と約束の支払日を入れてください。"); return; }
+    var due = parse(ds), kind = document.getElementById("kind").value, corp = document.getElementById("aite").value === "corp";
+    var what = document.getElementById("what").value.trim() || "〇〇の代金";
+    var rv = document.getElementById("rate").value, rate = rv === "" ? 3 : +rv;
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var late = Math.max(0, Math.round((today - due) / 86400000));
+    var songai = amount * rate / 100 * late / 365;
+    var jiko = new Date(due.getFullYear() + 5, due.getMonth(), due.getDate());
+    var msgs = [];
+    if (!late) msgs.push("まだ支払日を過ぎていません。支払日の翌日以降に、まず確認の連絡をします。");
+    if (kind === "hoshu" && corp) msgs.push("従業員のいる会社からの業務委託なら、フリーランス新法で、納品から60日以内に払うことが決まっています。払われないときは、フリーランス・トラブル110番（0120-532-110）で無料で相談でき、話し合いの仲立ち（和解あっせん）も利用できます。");
+
+    var cards = [
+      ["遅れている日数", late + "日", "約束の支払日 " + fmt(due) + " から"],
+      ["遅延損害金の目安（今日まで）", yen(songai), "年" + rate + "%で計算。請求するかは状況による"],
+      ["請求できる期限の目安（時効）", fmt(jiko), "支払日から5年（2020年4月以降の約束の場合）。催促だけでは止まらないので、早めに動く"]
+    ];
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+
+    var s1 = late ? today : add(due, 1), s2 = add(s1, 7), s3 = add(s2, 14), s4 = add(s3, 14);
+    var tsu = Math.floor(inshi(amount) / 2), sho = inshi(amount);
+    var ev = [
+      [s1, "① やわらかく確認する（メール・電話）", "「行き違いかもしれませんが」と、入金がまだのことを伝える。単なる処理漏れのことも多い"],
+      [s2, "② はっきり催促する（期限を決める）", "支払期限（1週間後）を決めて、メールで送る。電話で話した内容もメールで残す"],
+      [s3, "③ 最後の通知を内容証明郵便で送る", "いつ・どんな内容を送ったかが証明として残る。1枚なら約1,420円（配達証明つき）。電子で出せる「e内容証明」もある"],
+      [s4, "④ 裁判所の手続きを考える", amount <= 600000
+        ? "60万円以下なら「少額訴訟」（原則1回の審理で終わる。手数料 " + yen(sho) + "＋切手代）か、書類だけで進む「支払督促」（手数料 " + yen(tsu) + "＋切手代。相手が異議を出すと通常の裁判へ）。相手の住所の簡易裁判所が窓口"
+        : (amount <= 1400000 ? "60万円を超えるので少額訴訟は使えない。「支払督促」か、簡易裁判所での通常の裁判（140万円まで）。弁護士への相談も考える" : "140万円を超えるので、地方裁判所の手続き。弁護士に相談する")]
+    ];
+    var tl = document.getElementById("tl"); tl.innerHTML = "";
+    ev.forEach(function (e) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div class="d"></div><div class="t"></div>';
+      li.querySelector(".d").textContent = fmt(e[0]) + "ごろ　" + e[1]; li.querySelector(".t").textContent = e[2];
+      tl.appendChild(li);
+    });
+
+    var name = corp ? "〇〇株式会社　〇〇様" : "〇〇様";
+    var am = amount.toLocaleString() + "円";
+    var outs = [
+      ["① やわらかい確認", name + "\n\nお世話になっております。〇〇です。\n" + what + "（" + am + "）のお支払いについて、" + md(due) + "のお支払い予定と伺っておりましたが、本日時点でまだ確認できておりません。\n行き違いでしたら申し訳ありません。お手数ですが、ご確認いただけますでしょうか。\n\n〇〇"],
+      ["② はっきりした催促", name + "\n\nお世話になっております。〇〇です。\n" + what + "（" + am + "）について、お支払い予定日の" + md(due) + "を過ぎておりますが、まだお振り込みが確認できておりません。\n誠に恐れ入りますが、" + md(add(s2, 7)) + "までにお支払いいただけますよう、お願いいたします。\nすでにお手続きいただいている場合は、ご容赦ください。\n\n〇〇"],
+      ["③ 最後の通知（内容証明郵便のひな形）", "通知書\n\n" + (corp ? "〇〇株式会社\n代表取締役　〇〇〇〇　殿" : "〇〇〇〇　殿") + "\n\n私は、貴" + (corp ? "社" : "殿") + "に対し、" + what + "の代金として金" + am + "を請求しておりますが、支払期日である" + fmt(due).replace(/（.）/, "") + "を過ぎても、お支払いがありません。\nつきましては、本書面到達後7日以内に、下記の口座にお支払いください。\n期限内にお支払いがない場合は、法的手続きをとることを申し添えます。\n\n振込先：〇〇銀行　〇〇支店　普通　〇〇〇〇〇〇〇　〇〇〇〇\n\n令和〇年〇月〇日\n住所　〇〇〇〇\n氏名　〇〇〇〇"]
+    ];
+    var ob = document.getElementById("outs"); ob.innerHTML = "";
+    outs.forEach(function (o) {
+      var d = document.createElement("div"); d.className = "out";
+      d.innerHTML = '<div class="q"></div><div class="a"></div><button type="button">この文面をコピー</button>';
+      d.querySelector(".q").textContent = o[0]; d.querySelector(".a").textContent = o[1];
+      d.querySelector("button").addEventListener("click", function (e) {
+        var b = e.target, txt = o[1];
+        var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+        function fallback() {
+          var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+          t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+        }
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+      });
+      ob.appendChild(d);
+    });
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("amount").value = "220000";
+    document.getElementById("due").value = "2026-08-31";
+    document.getElementById("what").value = "8月分のWebサイト更新作業";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
