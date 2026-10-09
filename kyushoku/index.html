@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>休職の手続きとお金｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .money { font-size: .95rem; }
+  .money div { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+  .money div:last-child { border-bottom: 0; font-weight: 700; }
+  .tl { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tl li { border-left: 3px solid var(--accent); padding: 2px 0 12px 12px; }
+  .tl .d { font-weight: 700; }
+  .tl .t { font-size: .92rem; }
+  .out { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .out:last-child { border-bottom: 0; }
+  .out .q { font-weight: 700; margin-bottom: 4px; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; font-size: .92rem; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>休職の手続きとお金</h1>
+  <p class="lead">心や体の不調で仕事を休むときに、休み始める日と月給、会社の休職の決まりを入れると、傷病手当金の目安、休職中に払い続けるお金、手元に残るお金、いつ何をするかと、会社への連絡の文面がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="start">休み始める日（仕事をしなくなった最初の日）</label>
+    <input type="date" id="start">
+    <div class="row">
+      <div><label class="f" for="pay">月給（額面・円）<span class="hint">残業代なども含めた平均</span></label><input type="number" id="pay" min="0" step="1000" inputmode="numeric" placeholder="例：300000"></div>
+      <div><label class="f" for="jumin">住民税（月・円）<span class="hint">給与明細に書いてある額</span></label><input type="number" id="jumin" min="0" step="100" inputmode="numeric" placeholder="例：15000"></div>
+    </div>
+    <label class="f" for="rule">会社の休職期間の決まり<span class="hint">就業規則に「勤続〇年以上は〇か月」などと書かれています</span></label>
+    <select id="rule">
+      <option value="1">1か月</option><option value="3">3か月</option><option value="6" selected>6か月</option><option value="12">1年</option><option value="18">1年6か月</option><option value="24">2年</option><option value="0">わからない・決まりがない</option>
+    </select>
+    <label class="f" for="yukyu">有給休暇を先に使う日数<span class="hint">使わなければ0。有給の日は給料が出るので、傷病手当金は出ません</span></label>
+    <input type="number" id="yukyu" min="0" max="40" value="0" inputmode="numeric">
+    <button id="calc" type="button">手続きとお金を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>休職中の1か月のお金（目安）</h3>
+    <div class="money" id="money"></div>
+    <h3>いつ、何をするか</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>会社への連絡の文面</h3>
+    <div id="outs"></div>
+  </div>
+
+  <p class="note">※傷病手当金は、会社員などが入っている健康保険の制度です（国民健康保険には原則ありません）。1日あたりの額は「支給開始日以前12か月の標準報酬月額の平均÷30×3分の2」で、ここでは月給をそのまま使った目安です。<br>
+  ※社会保険料は、健康保険・厚生年金の本人負担を月給の約15%として計算した目安です。正確な額は給与明細で確かめてください。<br>
+  ※このページは、手続きとお金を整理するためのものです。体調のことは、主治医に相談してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d.getFullYear(), d.getMonth() + n, 1); var l = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(d.getDate(), l)); return x; }
+  function yen(n) { return Math.round(n).toLocaleString() + "円"; }
+
+  function calc() {
+    var ss = document.getElementById("start").value, pay = +document.getElementById("pay").value || 0;
+    if (!ss || !pay) { alert("休み始める日と月給を入れてください。"); return; }
+    var start = parse(ss), jumin = +document.getElementById("jumin").value || 0;
+    var rule = +document.getElementById("rule").value, yukyu = Math.max(0, +document.getElementById("yukyu").value || 0);
+    // 標準報酬日額（10円未満を四捨五入）×3分の2（1円未満を四捨五入）
+    var nichi = Math.round(pay / 30 / 10) * 10, teate = Math.round(nichi * 2 / 3);
+    var taiki = add(start, 2), firstPay = add(start, Math.max(3, yukyu));
+    var end18 = add(addM(firstPay, 18), -1);
+    var kyuEnd = rule ? add(addM(start, rule), -1) : null;
+    var month = teate * 30, shaho = Math.round(pay * 0.15);
+    var left = month - shaho - jumin;
+    var msgs = [];
+    if (yukyu > 3) msgs.push("有給休暇を" + yukyu + "日使うと、その間は給料が満額出る代わりに、傷病手当金は出ません。傷病手当金は有給休暇のあと、" + fmt(firstPay) + "からの分になります。");
+    if (kyuEnd && kyuEnd < end18) msgs.push("休職期間の終わり（" + fmt(kyuEnd) + "）が、傷病手当金の終わりより先です。休職期間が終わって退職になっても、条件を満たせば、退職後も傷病手当金を受け取り続けられます（健康保険に1年以上入っていて、退職日に出勤しないことなど）。");
+    if (!rule) msgs.push("休職期間の決まりがわからない場合は、就業規則を見るか、人事に確かめてください。休職の制度がない会社もあります。");
+
+    var cards = [
+      ["傷病手当金（1日あたり）", yen(teate), "月30日分で約" + yen(month) + "。" + fmt(firstPay) + "の分から"],
+      ["傷病手当金を受け取れる最後の日（目安）", fmt(end18), "支給が始まった日から通算1年6か月。途中で働いた期間は数えない"],
+      ["会社の休職期間の終わり", kyuEnd ? fmt(kyuEnd) : "就業規則で確認", kyuEnd ? "この日までに、復職するか、退職するかを決める" : ""]
+    ];
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+    var mb = document.getElementById("money"); mb.innerHTML = "";
+    [["傷病手当金（30日分）", "＋" + yen(month)], ["社会保険料（本人分の目安）", "−" + yen(shaho)], ["住民税", "−" + yen(jumin)], ["手元に残る目安", yen(left)]].forEach(function (r) {
+      var d = document.createElement("div"); d.innerHTML = "<span></span><span></span>";
+      d.children[0].textContent = r[0]; d.children[1].textContent = r[1]; mb.appendChild(d);
+    });
+
+    var ev = [
+      [start, "休み始める", "上司に連絡し、診断書を出す（会社が求める場合）。主治医に、仕事を休む必要があることを確かめる"],
+      [taiki, "待期の3日間が終わる", "連続して3日休むと「待期」が終わる。有給休暇や土日でも、仕事をしていなければ数えられる"],
+      [firstPay, "傷病手当金の対象になる最初の日", "この日からの休みが、傷病手当金の対象になる"],
+      [addM(start, 1), "最初の申請（1か月分ごとが多い）", "申請書を会社と主治医に書いてもらい、健康保険に出す。振り込みまで、1か月ほどかかることがある"],
+      [addM(start, 1), "休職中の連絡（月1回くらい）", "会社と決めた方法で、体調と通院の様子を短く伝える。社会保険料と住民税の払い方（振り込みか、会社の立て替えか）も確かめる"]
+    ];
+    if (kyuEnd) ev.push([addM(kyuEnd, -1), "休職期間が終わる1か月前", "復職するか、休職を延ばせるか、退職するかを、主治医と会社に相談する。復職するなら、主治医の診断書を用意する"]);
+    if (kyuEnd) ev.push([kyuEnd, "休職期間の終わり", "復職できない場合、就業規則によっては退職になる。退職後も傷病手当金を続けるには、退職日に出勤しないこと"]);
+    ev.push([end18, "傷病手当金の終わり（通算1年6か月）", "まだ働けない場合は、失業保険の受給期間の延長や、ほかの制度を相談する"]);
+    ev.sort(function (a, b) { return a[0] - b[0]; });
+    var tl = document.getElementById("tl"); tl.innerHTML = "";
+    ev.forEach(function (e) {
+      var li = document.createElement("li");
+      li.innerHTML = '<div class="d"></div><div class="t"></div>';
+      li.querySelector(".d").textContent = fmt(e[0]) + "　" + e[1]; li.querySelector(".t").textContent = e[2];
+      tl.appendChild(li);
+    });
+
+    var outs = [
+      ["① 休みたいと伝える（上司へ）", "お疲れさまです。〇〇です。\n体調が悪く、病院を受診したところ、しばらく仕事を休んで療養するよう言われました。\n" + md(start) + "からお休みをいただきたく、ご相談させてください。\n診断書が必要でしたら、お送りします。\n急なことでご迷惑をおかけし、申し訳ありません。"],
+      ["② 休職中の定期連絡", "お疲れさまです。〇〇です。\n今月の様子をご報告します。\n・通院：〇週に1回、続けています\n・体調：〇〇（例：少しずつ眠れるようになってきました）\n・次の受診：〇月〇日\n引き続き、療養に専念します。よろしくお願いいたします。"],
+      ["③ 復職の相談", "お疲れさまです。〇〇です。\n主治医から、〇月〇日ごろから仕事に戻れそうだと言われました。\n復職に向けて、必要な手続きや面談の日程について、ご相談させてください。\n最初は〇〇（例：短い時間から）始められると助かります。"]
+    ];
+    var ob = document.getElementById("outs"); ob.innerHTML = "";
+    outs.forEach(function (o) {
+      var d = document.createElement("div"); d.className = "out";
+      d.innerHTML = '<div class="q"></div><div class="a"></div><button type="button">この文面をコピー</button>';
+      d.querySelector(".q").textContent = o[0]; d.querySelector(".a").textContent = o[1];
+      d.querySelector("button").addEventListener("click", function (e) {
+        var b = e.target, txt = o[1];
+        var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+        function fallback() {
+          var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+          t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+        }
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+      });
+      ob.appendChild(d);
+    });
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("start").value = "2026-10-13";
+    document.getElementById("pay").value = "300000";
+    document.getElementById("jumin").value = "15000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
