@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>再就職手当の計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .chk { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.35rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .line { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 6px 0; font-size: .95rem; gap: 8px; }
+  .line:last-child { border-bottom: 0; }
+  .line b { white-space: nowrap; }
+  .ok { color: var(--accent); font-weight: 700; } .ng { color: var(--warn); font-weight: 700; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>再就職手当の計算</h1>
+  <p class="lead">失業保険を受け取っている途中で就職すると、残りの日数に応じて「再就職手当」をまとめて受け取れることがあります。失業保険の1日あたりの額・日数と、就職する日を入れると、もらえる額の目安と、多くもらえる就職日の期限がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <label class="f" for="age">会社を辞めたときの年齢</label>
+    <select id="age"><option value="u60">60歳未満</option><option value="o60">60歳以上65歳未満</option></select>
+    <div class="row">
+      <div><label class="f" for="nichi">失業保険の1日あたりの額（円）<span class="hint">受給資格者証の「基本手当日額」</span></label><input type="number" id="nichi" min="0" step="1" inputmode="numeric" placeholder="例：6000"></div>
+      <div><label class="f" for="shotei">もらえる日数（所定給付日数）</label>
+        <select id="shotei"><option>90</option><option>120</option><option>150</option><option>180</option><option>210</option><option>240</option><option>270</option><option>300</option><option>330</option><option>360</option></select></div>
+    </div>
+    <label class="f" for="first">失業保険の対象になった最初の日<span class="hint">待期7日（と、自己都合なら給付制限）が明けた日。まだ給付制限中なら空欄</span></label>
+    <input type="date" id="first">
+    <label class="f" for="job">就職する日（働き始める日）</label>
+    <input type="date" id="job">
+    <label class="f">当てはまるもの</label>
+    <label class="chk"><input type="checkbox" id="c_year"><span>1年以上働く見込みの仕事（雇用保険に入る）</span></label>
+    <label class="chk"><input type="checkbox" id="c_hw"><span>ハローワークか、許可を受けた職業紹介（転職エージェントなど）の紹介で決まった</span></label>
+    <label class="chk"><input type="checkbox" id="c_mae"><span>前の会社や、その関連会社に戻る</span></label>
+    <label class="chk"><input type="checkbox" id="c_naitei"><span>失業保険の手続きをする前から、内定が決まっていた</span></label>
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>多くもらえる就職日の期限</h3>
+    <div id="dates"></div>
+    <h3>くらべてみる</h3>
+    <div id="cmp"></div>
+  </div>
+
+  <p class="note">※計算に使う1日あたりの額には上限があります（2026年8月1日から、60歳未満は6,745円、60歳以上65歳未満は5,454円）。上限は毎年8月に見直されます。<br>
+  ※残りの日数は「就職日の前日まで、毎日失業保険の対象だった」として数えた目安です。実際の日数は、受給資格者証や、ハローワークの認定の日数で確かめてください。<br>
+  ※受け取れるかどうかは、ハローワークが判断します。過去3年以内に再就職手当などを受け取っている場合は対象外です。申請は、就職した日の翌日から1か月以内です。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var CAP = { u60: 6745, o60: 5454 };
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addM(d, n) { var x = new Date(d.getFullYear(), d.getMonth() + n, 1); var l = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(d.getDate(), l)); return x; }
+  function yen(n) { return Math.floor(n).toLocaleString() + "円"; }
+  function c(id) { return document.getElementById(id).checked; }
+
+  function calc() {
+    var nichi = +document.getElementById("nichi").value || 0, js = document.getElementById("job").value;
+    if (!nichi || !js) { alert("1日あたりの額と、就職する日を入れてください。"); return; }
+    var age = document.getElementById("age").value, shotei = +document.getElementById("shotei").value;
+    var fs = document.getElementById("first").value, first = fs ? parse(fs) : null, job = parse(js);
+    var used = first ? Math.max(0, Math.round((job - first) / 86400000)) : 0;
+    var zan = Math.max(0, shotei - used);
+    var rate = zan * 3 >= shotei * 2 ? 0.7 : (zan * 3 >= shotei ? 0.6 : 0);
+    var calcNichi = Math.min(nichi, CAP[age]);
+    var teate = Math.floor(calcNichi * zan * Math.round(rate * 100) / 100);
+    var msgs = [];
+    if (!rate) msgs.push("残りの日数が、もらえる日数の3分の1より少ないため、再就職手当の対象になりません。");
+    if (nichi > CAP[age]) msgs.push("1日あたりの額が上限（" + yen(CAP[age]) + "）を超えているため、上限の額で計算しています。");
+    if (!c("c_year")) msgs.push("1年以上働く見込みの仕事であることが条件です。短期の仕事や、雇用保険に入らない働き方は対象外です。");
+    if (!first && !c("c_hw")) msgs.push("自己都合で辞めて給付制限中の場合、待期が明けてから1か月の間は、ハローワークか許可を受けた職業紹介の紹介で決まった仕事でないと対象外です。");
+    if (c("c_mae")) msgs.push("前の会社や、その関連会社に戻る場合は対象外です。");
+    if (c("c_naitei")) msgs.push("失業保険の手続き（受給資格の決定）の前から内定が決まっていた場合は対象外です。");
+
+    var cards = [
+      ["再就職手当の目安", rate ? yen(teate) : "対象外", rate ? yen(calcNichi) + " × 残り" + zan + "日 × " + (rate * 100) + "%" : "残り" + zan + "日（もらえる日数" + shotei + "日の3分の1未満）"],
+      ["残りの日数", zan + "日", "もらえる日数" + shotei + "日のうち、" + used + "日分を使った目安"],
+      ["申請の期限", fmt(add(addM(job, 1), -1)), "就職した日の翌日から1か月以内に、ハローワークへ"]
+    ];
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+
+    var db = document.getElementById("dates"); db.innerHTML = "";
+    var rows = [];
+    if (first) {
+      var d70 = add(first, Math.floor(shotei / 3)), d60 = add(first, Math.floor(shotei * 2 / 3));
+      rows.push(["70%（残り" + Math.ceil(shotei * 2 / 3) + "日以上）", fmt(d70) + "まで", job <= d70]);
+      rows.push(["60%（残り" + Math.ceil(shotei / 3) + "日以上）", fmt(d60) + "まで", job <= d60]);
+    } else {
+      rows.push(["70%", "給付制限中に就職すれば、残りはすべて", true]);
+    }
+    rows.forEach(function (r) {
+      var d = document.createElement("div"); d.className = "line";
+      d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = r[0]; d.children[1].textContent = r[1];
+      if (r[2]) d.children[1].className = "ok";
+      db.appendChild(d);
+    });
+    var cmp = document.getElementById("cmp"); cmp.innerHTML = "";
+    [["就職せず、残りの失業保険を全部受け取る", yen(nichi * zan)], ["就職して、再就職手当を受け取る", rate ? yen(teate) + "＋給料" : "給料のみ"]].forEach(function (r) {
+      var d = document.createElement("div"); d.className = "line";
+      d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = r[0]; d.children[1].textContent = r[1];
+      cmp.appendChild(d);
+    });
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  window.__s = { calc: calc };
+  if (DEMO) {
+    document.getElementById("nichi").value = "6000";
+    document.getElementById("first").value = "2026-09-24";
+    document.getElementById("job").value = "2026-10-20";
+    document.getElementById("c_year").checked = true;
+    document.getElementById("c_hw").checked = true;
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
