@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>別居を決めたら やることリスト｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 4px; color: var(--accent); }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  input[type=date] { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .chk { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .chk:last-child { border-bottom: 0; }
+  .chk input { width: 20px; height: 20px; margin-top: 3px; flex: none; accent-color: var(--accent); }
+  .chk .d { font-size: .82rem; color: var(--sub); }
+  .chk .w { font-size: .88rem; color: var(--sub); }
+  .chk.done span.t { text-decoration: line-through; color: var(--sub); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; font-size: .92rem; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>別居を決めたら やることリスト</h1>
+  <p class="lead">別居する日と、当てはまるものを選ぶと、別居の前・別居してすぐ・できるだけ早く・落ち着いたら、に分けて、自分に必要なことだけが期限つきで並びます。生活費（婚姻費用）を求めるメールの文面もできます。チェックは、使っているスマホ・パソコンのブラウザに保存され、ページの外には送られません。</p>
+  <div class="warn" id="dv">身の危険を感じるときは、手続きより先に安全を確保してください。警察（110番）、DV相談ナビ（#8008）、配偶者暴力相談支援センターに相談できます。</div>
+
+  <div class="card">
+    <label class="f" for="day">別居する日（予定）</label>
+    <input type="date" id="day">
+    <label class="f">当てはまるもの</label>
+    <div id="conds"></div>
+    <button id="make" type="button">リストを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>あなたのやることリスト</h2>
+    <div id="list"></div>
+    <h2 style="margin-top:16px">生活費（婚姻費用）を求めるメール</h2>
+    <div class="out"><div class="a" id="mail"></div><button type="button" id="copy">この文面をコピー</button></div>
+  </div>
+
+  <p class="note">※婚姻費用は、原則として「請求した時」からの分が認められます。別居したら、メールなど記録に残る形で早めに求め、話し合いがつかなければ家庭裁判所に調停を申し立てます（収入印紙1,200円と郵便切手代）。<br>
+  ※2026年4月からの改正民法では、子どもの利益のため急迫の事情（DVや虐待からの避難など）がある場合を除き、子どもに関わる大事なことは父母が話し合って決めるのが基本です。子どもを連れて別居する前に、弁護士や相談窓口に相談してください。<br>
+  ※手続きの細かい条件は、市区町村や家庭裁判所によって違うことがあります。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var KEY = "kakari_bekkyo";
+  var C = [
+    ["ko", "子どもと一緒に暮らす（連れて出る・残る）"],
+    ["fuyo", "相手の健康保険の扶養に入っている"],
+    ["shunyu", "自分の収入は相手より少ない"],
+    ["hikkoshi", "自分が引越して、住所が変わる"],
+    ["dv", "暴力・モラハラがある"],
+    ["hoikuen", "子どもが保育園・学校に通っている"]
+  ];
+  var cb = document.getElementById("conds");
+  C.forEach(function (c) {
+    var l = document.createElement("label"); l.className = "chk";
+    l.innerHTML = '<input type="checkbox"><span></span>';
+    l.querySelector("input").id = "c_" + c[0]; l.querySelector("span").textContent = c[1]; cb.appendChild(l);
+  });
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function c(k) { return document.getElementById("c_" + k).checked; }
+  var saved = {};
+  function load() { if (DEMO) return; try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; } }
+  function save() { if (DEMO) return; try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} }
+
+  function make() {
+    var ds = document.getElementById("day").value;
+    if (!ds) { alert("別居する日を入れてください。"); return; }
+    var d0 = parse(ds);
+    var G = [["別居する前", []], ["別居してすぐ（14日以内）", []], ["できるだけ早く", []], ["落ち着いたら", []]];
+    function p(g, k, t, due, w) { G[g][1].push([k, t, due, w]); }
+    // 別居する前
+    p(0, "shiryo", "相手と自分の収入・財産の資料を控える", add(d0, -1), "給与明細・源泉徴収票・通帳・保険証券などを、写真やコピーで残す。生活費の請求や、財産を分けるときの手がかりになる");
+    p(0, "koza", "自分名義の口座と、当面の生活費を用意する", add(d0, -1), "家族の口座のキャッシュカードは使えなくなることがある");
+    if (c("dv")) p(0, "dvsodan", "DV相談窓口に相談し、記録を残す", add(d0, -1), "#8008（DV相談ナビ）、配偶者暴力相談支援センター。けがの写真・診断書・メッセージなど");
+    if (c("ko")) p(0, "kobengo", "子どもを連れて出る場合は、先に弁護士や相談窓口に相談する", add(d0, -1), "2026年4月からの改正で、急迫の事情（DVや虐待からの避難など）がなければ、子どもに関わることは父母で決めるのが基本");
+    if (c("hikkoshi")) p(0, "tensou", "郵便局に転居届（郵便の転送）を出す", add(d0, -1), "1年間、新しい住所に郵便が届く。ネットでも出せる");
+    // 別居してすぐ
+    if (c("hikkoshi")) p(1, "jumin", "住民票を移す（転居届・転出入届）", add(d0, 14), c("dv") ? "相手に住所を知られたくない場合は、同時に「DV等支援措置」を申し出る" : "引越した日から14日以内");
+    if (c("ko")) p(1, "teate", "児童手当の受取人を、子どもと暮らす人に変える", add(d0, 14), "別居中で離婚の話し合いをしている場合などは、子どもと一緒に住んでいる人に支給される。申請した翌月分からなので早めに");
+    if (c("ko") && c("hoikuen")) p(1, "gakko", "保育園・学校に事情を伝える（転園・転校の手続き）", add(d0, 14), "お迎えの人の変更や、相手に知らせてほしくないことがあれば、あわせて伝える");
+    // できるだけ早く
+    if (c("shunyu") || c("ko")) {
+      p(2, "seikyu", "生活費（婚姻費用）を、メールなど記録に残る形で求める", add(d0, 7), "原則として、請求した時からの分が認められる。下の文面を使える");
+      p(2, "chotei", "話し合いがつかなければ、家庭裁判所に婚姻費用の調停を申し立てる", add(d0, 30), "収入印紙1,200円と郵便切手代。金額は裁判所の「算定表」が目安になる");
+    }
+    if (c("fuyo")) p(2, "hoken", "健康保険をどうするか決める", add(d0, 30), "別居しても、すぐに相手の扶養から外れるわけではない。自分の勤め先の保険や国民健康保険に切りかえる場合は、相手の会社が出す「資格喪失」の書類が必要になる");
+    p(2, "kakei", "別居後の毎月の生活費を書き出す", add(d0, 30), "家賃・食費・子どもの費用など。生活費を求めるときや、調停で役に立つ");
+    // 落ち着いたら
+    if (c("ko")) p(3, "koryu", "子どもと相手が会う方法（親子交流）を話し合う", null, "子どもの気持ちと安全を第一に。DVがある場合は、無理に会わせる必要はない");
+    p(3, "mirai", "離婚するか、やり直すかを考える", null, "離婚する場合は、離婚後の手続き（別の記事）を。財産を分けるときは、原則として別居した時点の財産が基準になる");
+    p(3, "sodan", "弁護士・法テラス・自治体の相談窓口に相談する", null, "収入が少ない場合は、法テラスで無料の法律相談を受けられることがある");
+
+    var lb = document.getElementById("list"); lb.innerHTML = "";
+    G.forEach(function (g) {
+      if (!g[1].length) return;
+      var h = document.createElement("h3"); h.textContent = g[0]; lb.appendChild(h);
+      g[1].forEach(function (it) {
+        var l = document.createElement("label"); l.className = "chk" + (saved[it[0]] ? " done" : "");
+        l.innerHTML = '<input type="checkbox"><div><span class="t"></span><div class="d"></div><div class="w"></div></div>';
+        var cbx = l.querySelector("input"); cbx.checked = !!saved[it[0]];
+        cbx.addEventListener("change", function () { saved[it[0]] = cbx.checked; l.className = "chk" + (cbx.checked ? " done" : ""); save(); });
+        l.querySelector(".t").textContent = it[1];
+        l.querySelector(".d").textContent = it[2] ? fmt(it[2]) + "まで" : "";
+        l.querySelector(".w").textContent = it[3];
+        lb.appendChild(l);
+      });
+    });
+    document.getElementById("mail").textContent =
+      "〇〇さん\n\n別居にあたり、生活費（婚姻費用）についてお願いします。\n" + fmt(d0).replace(/（.）/, "") + "から別居しています。" + (c("ko") ? "子どもは私と暮らしています。" : "") + "\n夫婦はお互いの生活を支える義務があるため、別居中の生活費として、毎月〇万円を、毎月〇日までに下記の口座に振り込んでください。\n金額について話し合いが必要であれば、〇月〇日までに返事をください。\n\n振込先：〇〇銀行　〇〇支店　普通　〇〇〇〇〇〇〇\n\n〇〇";
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = document.getElementById("mail").textContent;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  document.getElementById("make").addEventListener("click", function () {
+    make();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  load();
+  if (DEMO) {
+    document.getElementById("day").value = "2026-11-01";
+    ["ko", "fuyo", "shunyu", "hikkoshi", "hoikuen"].forEach(function (k) { document.getElementById("c_" + k).checked = true; });
+    document.getElementById("dv").hidden = true;
+    make();
+  }
+})();
+</script>
+</body>
+</html>
