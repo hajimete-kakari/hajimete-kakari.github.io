@@ -146,7 +146,7 @@
     if (who !== "none") {
       var line = age === "young" ? 1500000 : (age === "senior" ? 1800000 : 1300000);
       if (shaho[1] === "加入の対象") msgs.push("週20時間以上で従業員51人以上の会社に勤めているため、勤め先の社会保険に入る対象です。この場合、健康保険の扶養には入れません（扶養の" + man(line) + "の壁は関係なくなります）。");
-      else W.push(["健康保険の扶養（" + man(line) + "）", line, "kei", "契約上の年収の見込みで判定。超える見込みなら、扶養から外れて自分で国民健康保険などに入る"]);
+      else W.push(["健康保険の扶養", line, "kei", "契約上の年収の見込みで判定。超える見込みなら、扶養から外れて自分で国民健康保険などに入る"]);
     }
     W.sort(function (a, b) { return a[1] - b[1]; });
     var wb = document.getElementById("walls"); wb.innerHTML = "";
