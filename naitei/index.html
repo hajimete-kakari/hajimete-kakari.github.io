@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>内定が出たら 承諾前のチェックと返事｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mid: #8a6d1f; --mid-soft: #f6efdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mid: #e3c578; --mid-soft: #37311f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .it { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .it:last-child { border-bottom: 0; }
+  .it span { flex: 1; min-width: 0; font-size: .95rem; }
+  .it select { width: 140px; flex: none; padding: 8px; font-size: .92rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.25rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .q { padding: 8px 0 8px 12px; border-left: 4px solid var(--mid); margin-bottom: 8px; }
+  .q.ng { border-left-color: var(--warn); }
+  .q .nm { font-weight: 700; }
+  .q .w { font-size: .9rem; color: var(--sub); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .tabs button { width: auto; margin: 0; padding: 6px 12px; font-size: .88rem; background: var(--accent-soft); color: var(--accent); }
+  .tabs button.on { background: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .tabs button.on { color: #10231d; } }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .copy { margin-top: 8px; padding: 9px; font-size: .92rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>内定が出たら 承諾前のチェックと返事</h1>
+  <p class="lead">内定の通知（労働条件通知書）を、求人票や面接で聞いた条件とくらべて選ぶと、承諾の前に確かめることがわかります。年収の交渉、条件の確認、承諾、辞退、返事を待ってもらう、のメール文面も作れます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 年収と返事の期限</h2>
+    <div class="row">
+      <div><label class="f" for="teiji">提示された年収（万円）</label><input type="number" id="teiji" min="0" inputmode="numeric" placeholder="例：420"></div>
+      <div><label class="f" for="kibou">希望の年収（万円）</label><input type="number" id="kibou" min="0" inputmode="numeric" placeholder="例：450"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="genzai">今（前）の年収（万円）</label><input type="number" id="genzai" min="0" inputmode="numeric" placeholder="例：430"></div>
+      <div><label class="f" for="kigen">返事の期限</label><input type="date" id="kigen"></div>
+    </div>
+    <label class="f" for="other">ほかの会社の選考</label>
+    <select id="other"><option value="no">ない</option><option value="yes">結果待ちの会社がある</option></select>
+  </div>
+
+  <div class="card">
+    <h2>2. 通知書と、求人票・面接で聞いた条件をくらべる</h2>
+    <p class="hint" style="margin:0 0 6px">通知書の各項目が、聞いていた内容と同じか選びます。</p>
+    <div id="items"></div>
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>承諾の前に確かめること</h3>
+    <div id="qs"></div>
+    <h3>メールの文面</h3>
+    <div class="tabs" id="tabs"></div>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" id="copy">この文面をコピー</button>
+  </div>
+
+  <p class="note">※会社は、働く人を雇うときに、給料・働く時間・休日・働く場所と仕事の内容（変更の範囲を含む）などを、書面などで示すことが法律で決まっています。2026年10月からは、パート・有期の人には「正社員との待遇の差について説明を求められること」も示すことになりました。<br>
+  ※年収の交渉が通るかどうかは、会社の決まりや状況によります。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  // [キー, 項目, 違うときに聞くこと, 書いていないときに聞くこと]
+  var I = [
+    ["kyuyo", "給料（基本給・手当）", "給料が、面接で伺った額と違うように見えます。内訳（基本給・手当）を教えていただけますか。", "給料の内訳（基本給・手当）を教えていただけますか。"],
+    ["zangyo", "残業代（固定残業代の有無・時間）", "固定残業代が含まれているようです。何時間分で、超えた分は別に支払われるか教えていただけますか。", "残業代の扱い（固定残業代の有無、何時間分か）を教えていただけますか。"],
+    ["shoyo", "賞与（ボーナス）", "賞与の条件が、伺っていた内容と違うように見えます。支給の時期と、昨年の実績を教えていただけますか。", "賞与の有無と、支給の時期・昨年の実績を教えていただけますか。"],
+    ["basho", "働く場所（変更の範囲を含む）", "勤務地が、伺っていた場所と違うように見えます。転勤の可能性も含めて教えていただけますか。", "勤務地と、将来の転勤の可能性（変更の範囲）を教えていただけますか。"],
+    ["shigoto", "仕事の内容（変更の範囲を含む）", "仕事の内容が、伺っていた内容と違うように見えます。入社後の担当業務を教えていただけますか。", "入社後の担当業務と、将来変わる可能性（変更の範囲）を教えていただけますか。"],
+    ["jikan", "働く時間・休憩", "勤務時間が、伺っていた時間と違うように見えます。確認させていただけますか。", "勤務時間と休憩時間を教えていただけますか。"],
+    ["kyujitsu", "休日（年間休日・曜日）", "休日の日数や曜日が、伺っていた内容と違うように見えます。確認させていただけますか。", "年間休日の日数と、休みの曜日を教えていただけますか。"],
+    ["shiyo", "試用期間（期間・その間の条件）", "試用期間の長さや、その間の条件が違うように見えます。確認させていただけますか。", "試用期間の有無と、その間の給料などの条件を教えていただけますか。"],
+    ["keiyaku", "雇用形態・契約期間", "雇用形態（正社員・契約社員など）が、伺っていた内容と違うように見えます。確認させていただけますか。", "雇用形態と、契約期間（期間の定めの有無・更新の上限）を教えていただけますか。"],
+    ["nyusha", "入社日", "入社日が、お伝えしていた日と違うようです。調整は可能でしょうか。", "入社日を確認させていただけますか。"]
+  ];
+  var box = document.getElementById("items");
+  I.forEach(function (x) {
+    var d = document.createElement("div"); d.className = "it";
+    d.innerHTML = '<span></span><select><option value="same">同じ</option><option value="diff">違う</option><option value="none">書いていない</option></select>';
+    d.querySelector("span").textContent = x[1]; d.querySelector("select").id = "i_" + x[0];
+    box.appendChild(d);
+  });
+  var WD = ["日","月","火","水","木","金","土"];
+  function fmt(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function n(id) { return +document.getElementById(id).value || 0; }
+
+  var mails = {}, cur = "";
+  function calc() {
+    var teiji = n("teiji"), kibou = n("kibou"), genzai = n("genzai"), ks = document.getElementById("kigen").value;
+    var kigen = ks ? parse(ks) : null, other = document.getElementById("other").value === "yes";
+    var msgs = [], qs = [];
+    I.forEach(function (x) {
+      var v = document.getElementById("i_" + x[0]).value;
+      if (v === "diff") qs.push([x[1], x[2], "ng"]);
+      else if (v === "none") qs.push([x[1], x[3], ""]);
+    });
+    var allNone = I.every(function (x) { return document.getElementById("i_" + x[0]).value === "none"; });
+    if (allNone) msgs.push("条件がほとんど書かれていない場合は、労働条件通知書（または雇用契約書）を出してもらうよう頼みます。会社は、給料や働く時間などの条件を、書面などで示すことが法律で決まっています。");
+    var cards = [];
+    var gap = kibou && teiji ? kibou - teiji : 0;
+    if (teiji) cards.push(["提示された年収", teiji + "万円", genzai ? "今（前）の年収より" + (teiji - genzai >= 0 ? (teiji - genzai) + "万円多い" : (genzai - teiji) + "万円少ない") : ""]);
+    if (gap > 0) {
+      var ask = Math.round((teiji + gap) / 5) * 5;
+      cards.push(["交渉するなら", ask + "万円を目安に", "希望との差は" + gap + "万円。理由（今の年収・経験・ほかの会社の提示）を添えて、1回で伝える"]);
+      if (gap > teiji * 0.15) msgs.push("希望と提示の差が大きめです（" + Math.round(gap / teiji * 100) + "%）。年収だけでなく、入社時期・手当・賞与の評価など、ほかの条件で相談する方法もあります。");
+    }
+    if (kigen) cards.push(["返事の期限", fmt(kigen), other ? "ほかの会社の結果を待つなら、期限の2〜3日前までに相談する" : "迷っている点は、期限より前に質問しておく"]);
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+    var qb = document.getElementById("qs"); qb.innerHTML = "";
+    if (!qs.length) qb.innerHTML = '<p class="hint">通知書の内容は、聞いていた条件と同じです。</p>';
+    qs.forEach(function (q) {
+      var d = document.createElement("div"); d.className = "q " + q[2];
+      d.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      d.querySelector(".nm").textContent = q[0] + (q[2] ? "（違う）" : "（書いていない）"); d.querySelector(".w").textContent = q[1];
+      qb.appendChild(d);
+    });
+
+    var head = "〇〇株式会社\n人事部　〇〇様\n\nお世話になっております。〇〇（自分の名前）です。\n";
+    var foot = "\n\nどうぞよろしくお願いいたします。\n\n〇〇（名前）\n電話：〇〇　メール：〇〇";
+    mails = {};
+    if (qs.length) mails["条件の確認"] = head + "このたびは内定のご連絡をいただき、誠にありがとうございます。\nお送りいただいた労働条件を拝見し、お返事の前に、いくつか確認させていただきたい点がございます。\n\n" + qs.map(function (q, i) { return (i + 1) + ". " + q[1]; }).join("\n") + "\n\nお忙しいところ恐れ入りますが、ご確認いただけますと幸いです。" + foot;
+    if (gap > 0) mails["年収の相談"] = head + "このたびは内定のご連絡をいただき、誠にありがとうございます。\n貴社で働きたいという気持ちは変わらず、前向きに考えております。\n\nそのうえで、一点ご相談がございます。\nご提示いただいた年収" + teiji + "万円について、" + (genzai ? "現在の年収が" + genzai + "万円であることや、" : "") + "これまでの〇〇の経験を活かせることをふまえ、" + Math.round((teiji + gap) / 5) * 5 + "万円程度でご検討いただくことは可能でしょうか。\n難しい場合は、その理由や、入社後の昇給の見込みについて教えていただけますと幸いです。" + foot;
+    mails["承諾"] = head + "このたびは内定のご連絡をいただき、誠にありがとうございます。\nお送りいただいた条件を確認し、内定をお受けいたします。\n" + "入社日の〇月〇日に向けて、必要な書類や手続きがございましたら、ご案内いただけますでしょうか。\n貴社の一員として力を尽くしてまいります。" + foot;
+    mails["返事を待ってもらう"] = head + "このたびは内定のご連絡をいただき、誠にありがとうございます。\n大変ありがたく、前向きに考えております。\n誠に恐れ入りますが、" + (other ? "選考中の会社の結果がまもなく出るため、" : "家族とも相談したく、") + "お返事を" + (kigen ? fmt(add(kigen, 7)) : "〇月〇日") + "まで、お待ちいただくことは可能でしょうか。\nご無理を申し上げますが、ご検討いただけますと幸いです。" + foot;
+    mails["辞退"] = head + "このたびは内定のご連絡をいただき、誠にありがとうございました。\n大変ありがたいお話でしたが、慎重に考えた結果、今回は内定を辞退させていただきたく、ご連絡いたしました。\n選考にお時間を割いていただいたにもかかわらず、このようなお返事となり、誠に申し訳ございません。\n貴社のますますのご発展をお祈りいたします。" + foot;
+    var tb = document.getElementById("tabs"); tb.innerHTML = "";
+    Object.keys(mails).forEach(function (k, i) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = k;
+      b.addEventListener("click", function () { show(k); });
+      tb.appendChild(b);
+    });
+    show(Object.keys(mails)[0]);
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  function show(k) {
+    cur = k; document.getElementById("mail").textContent = mails[k];
+    document.querySelectorAll("#tabs button").forEach(function (b) { b.className = b.textContent === k ? "on" : ""; });
+  }
+  document.getElementById("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = mails[cur] || "";
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("teiji").value = "420";
+    document.getElementById("kibou").value = "450";
+    document.getElementById("genzai").value = "430";
+    document.getElementById("kigen").value = "2026-10-23";
+    document.getElementById("other").value = "yes";
+    document.getElementById("i_zangyo").value = "diff";
+    document.getElementById("i_basho").value = "none";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
