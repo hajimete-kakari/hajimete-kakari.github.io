@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>家賃の値上げへの返事｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .tl { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tl li { border-left: 3px solid var(--accent); padding: 2px 0 10px 12px; }
+  .tl .d { font-weight: 700; }
+  .tl .t { font-size: .92rem; }
+  .out .a { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; font-size: .92rem; }
+  .out button { margin-top: 8px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>家賃の値上げへの返事</h1>
+  <p class="lead">大家さんや管理会社から家賃の値上げを知らされたときに、今の家賃と値上げ後の家賃、どうしたいかを選ぶと、値上げで増える金額、進め方、そのまま送れる返事の文面がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <div class="row">
+      <div><label class="f" for="now">今の家賃（月・円）<span class="hint">管理費・共益費を除く</span></label><input type="number" id="now" min="0" step="100" inputmode="numeric" placeholder="例：70000"></div>
+      <div><label class="f" for="new">値上げ後の家賃（月・円）</label><input type="number" id="new" min="0" step="100" inputmode="numeric" placeholder="例：75000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="start">値上げの開始日</label><input type="date" id="start"></div>
+      <div><label class="f" for="years">契約の期間</label><select id="years"><option value="2">2年</option><option value="1">1年</option><option value="3">3年</option></select></div>
+    </div>
+    <label class="f" for="kind">契約の種類<span class="hint">契約書に「定期建物賃貸借」と書いてあれば定期借家</span></label>
+    <select id="kind"><option value="futsu">普通の賃貸契約（更新がある）</option><option value="teiki">定期借家（期間が来たら終わる）</option><option value="x">わからない</option></select>
+    <label class="f" for="soba">近くの似た部屋の家賃（月・円・わかれば）<span class="hint">同じくらいの広さ・築年数・駅からの距離の部屋</span></label>
+    <input type="number" id="soba" min="0" step="100" inputmode="numeric" placeholder="空欄でも可">
+    <label class="f" for="want">どうしたい？</label>
+    <select id="want">
+      <option value="sodan">理由を聞いて、額を相談したい</option>
+      <option value="keep">今の家賃のままにしてほしい</option>
+      <option value="ok">値上げを受け入れる</option>
+    </select>
+    <button id="calc" type="button">進め方と文面を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>進め方</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>そのまま使える返事</h3>
+    <div class="out"><div class="a" id="mail"></div><button type="button" id="copy">この文面をコピー</button></div>
+  </div>
+
+  <p class="note">※大家さんは、税金の増加や物価・地価の変動、周りの家賃との差などを理由に、家賃の値上げを求めることができます。ただし、借りる人が合意しなければ、すぐに家賃が上がるわけではありません。<br>
+  ※話し合いがまとまらない間は、今の家賃（自分が相当と考える額）を払い続ければよいとされています。あとで裁判で値上げが認められた場合は、差額に年1割の利息をつけて払います。<br>
+  ※このページは、話し合いの進め方を整理するためのものです。判断が必要なときは、消費生活センター（188）や法テラス、弁護士に相談してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function yen(n) { return Math.round(n).toLocaleString() + "円"; }
+  function n(id) { return +document.getElementById(id).value || 0; }
+
+  function calc() {
+    var now = n("now"), nw = n("new"), ss = document.getElementById("start").value;
+    if (!now || !nw) { alert("今の家賃と、値上げ後の家賃を入れてください。"); return; }
+    var start = ss ? parse(ss) : null, years = +document.getElementById("years").value, soba = n("soba");
+    var kind = document.getElementById("kind").value, want = document.getElementById("want").value;
+    var diff = nw - now, pct = Math.round(diff / now * 1000) / 10;
+    var msgs = [];
+    if (diff <= 0) msgs.push("値上げ後の家賃が、今の家賃以下になっています。金額を確かめてください。");
+    if (kind === "teiki") msgs.push("定期借家の場合、契約の期間が来ると契約は終わり、続けて住むには新しい条件で再契約することになります。普通の賃貸契約とは扱いが違うので、早めに相談窓口に確かめてください。");
+    if (kind === "x") msgs.push("契約書で、契約の種類（定期借家かどうか）と、「家賃を一定期間上げない」という約束（特約）がないかを確かめてください。");
+    if (want === "keep") msgs.push("今の家賃のままを求める場合も、家賃を払わずにためるのは避けてください。今の家賃を払い続けることが大切です。");
+    var cards = [
+      ["値上げで増える額（月）", yen(diff), "今の家賃の" + pct + "%の値上げ"],
+      ["契約の期間（" + years + "年）で増える合計", yen(diff * 12 * years), "1年で" + yen(diff * 12)]
+    ];
+    if (soba) {
+      var gap = nw - soba;
+      cards.push(["近くの似た部屋とくらべると", gap > 0 ? yen(gap) + "高い" : (gap < 0 ? yen(-gap) + "安い" : "同じ"), "値上げ後の家賃 " + yen(nw) + " ／ 近くの部屋 " + yen(soba)]);
+    }
+    if (want === "keep") cards.push(["もし裁判で値上げが認められたら（1年後の精算の目安）", "約" + yen(diff * 12 * 1.05), "1年分の差額 " + yen(diff * 12) + "に、年1割の利息（平均して約半年分）を足した目安"]);
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+
+    var S;
+    if (want === "ok") S = [["返事をする", "受け入れることを伝え、いつから・いくらになるかを書面（更新の契約書や合意書）で確かめる"], ["新しい金額で払う", "自動引き落としや振込の金額が変わるか確かめる"], ["次の更新のために", "周りの家賃を、ときどき調べておく"]];
+    else if (want === "sodan") S = [["理由と根拠を聞く", "なぜ値上げするのか（税金・物価・周りの家賃など）を、書面で教えてもらう"], ["周りの家賃を調べる", "不動産のサイトで、同じくらいの広さ・築年数・駅からの距離の部屋の家賃を調べ、画面を保存する"], ["額を相談する", "根拠をもとに、値上げの幅を小さくできないか、時期を遅らせられないかを相談する"], ["まとまったら書面に", "決まった家賃と、いつからかを、合意書や更新の契約書で残す"], ["まとまらなければ", "今の家賃を払い続けながら話し合う。消費生活センター（188）や法テラスに相談する"]];
+    else S = [["合意しないことを伝える", "今の家賃のままにしてほしいと、メールや書面で伝える（記録を残す）"], ["今の家賃を払い続ける", "いつもどおりの日に、今の家賃を払う。払った記録を残す"], ["受け取りを断られたら", "法務局に今の家賃を預ける「供託」ができる。払っていない扱いにならないようにするため"], ["大家さんが調停を申し立てたら", "家賃の値上げは、裁判の前に調停で話し合うことになっている。呼び出しが来たら、相談窓口や弁護士に相談する"]];
+    var tl = document.getElementById("tl"); tl.innerHTML = "";
+    S.forEach(function (s, i) {
+      var li = document.createElement("li"); li.innerHTML = '<div class="d"></div><div class="t"></div>';
+      li.querySelector(".d").textContent = (i + 1) + ". " + s[0]; li.querySelector(".t").textContent = s[1]; tl.appendChild(li);
+    });
+
+    var when = start ? md(start) + "からの" : "";
+    var head = "〇〇管理会社　〇〇様（または大家の〇〇様）\n\nいつもお世話になっております。〇〇号室の〇〇です。\n" + when + "家賃を" + yen(now) + "から" + yen(nw) + "に改定されるとのご連絡をいただき、ありがとうございます。\n\n";
+    var body;
+    if (want === "ok") body = "内容を確認し、改定を了承いたします。\n新しい家賃の開始日と、契約書（または合意書）の取り交わしについて、ご案内いただけますでしょうか。";
+    else if (want === "sodan") body = "これからも長く住みたいと考えておりますが、急な値上げで家計への影響が大きく、ご相談させてください。\n恐れ入りますが、今回の改定の理由と、金額の根拠（周りの家賃など）を教えていただけますでしょうか。\nあわせて、" + (soba && soba < nw && soba > now ? "近くの似た部屋と同じくらいの" + yen(soba) + "程度に" : "値上げの幅を小さく") + "していただくことや、時期を遅らせていただくことが可能か、ご検討いただけますと幸いです。";
+    else body = "大変申し訳ありませんが、今回の家賃の改定には同意いたしかねます。\nこれまでどおりの家賃" + yen(now) + "で、引き続き住まわせていただきたく存じます。\n家賃は、これまでどおりお支払いいたします。\nご事情があれば、理由と根拠をお聞かせいただけますでしょうか。";
+    document.getElementById("mail").textContent = head + body + "\n\nどうぞよろしくお願いいたします。\n\n〇〇（名前）\n連絡先：〇〇";
+    var w = document.getElementById("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = document.getElementById("mail").textContent;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("now").value = "70000";
+    document.getElementById("new").value = "75000";
+    document.getElementById("start").value = "2026-12-01";
+    document.getElementById("soba").value = "72000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
