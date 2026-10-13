@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>年収の壁 年末まであと何時間｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .wall { border-left: 4px solid var(--accent); padding: 6px 0 8px 12px; margin-bottom: 10px; }
+  .wall.over { border-left-color: var(--warn); }
+  .wall .nm { font-weight: 700; }
+  .wall .r { font-size: 1.05rem; font-weight: 700; }
+  .wall.over .r { color: var(--warn); }
+  .wall .w { font-size: .88rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>年収の壁 年末まであと何時間</h1>
+  <p class="lead">パート・アルバイトで働く人が、時給と働く時間、今年ここまでの収入を入れると、税金や扶養の「壁」まで、あといくら・あと何時間働けるかがわかります。2026年10月の社会保険の変更（106万円の条件がなくなった）と、2026年分の税金の壁に対応しています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 働き方</h2>
+    <div class="row">
+      <div><label class="f" for="jikyu">時給（円）</label><input type="number" id="jikyu" min="0" inputmode="numeric" placeholder="例：1150"></div>
+      <div><label class="f" for="shu">契約の週の時間</label><input type="number" id="shu" min="0" max="40" step="0.5" inputmode="decimal" placeholder="例：18"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="kotsu">交通費（月・円）</label><input type="number" id="kotsu" min="0" inputmode="numeric" value="0"></div>
+      <div><label class="f" for="size">勤め先の従業員数</label><select id="size"><option value="big">51人以上</option><option value="small">50人以下</option><option value="x">わからない</option></select></div>
+    </div>
+    <label class="f" for="sofar">今年1月から先月までの収入（額面・円）<span class="hint">給与明細の支給額の合計。交通費は除く</span></label>
+    <input type="number" id="sofar" min="0" inputmode="numeric" placeholder="例：950000">
+  </div>
+
+  <div class="card">
+    <h2>2. 自分のこと</h2>
+    <label class="f" for="who">誰の扶養に入っている？</label>
+    <select id="who"><option value="spouse">配偶者（夫・妻）</option><option value="parent">親</option><option value="none">扶養に入っていない</option></select>
+    <label class="f" for="age">今年12月31日の年齢</label>
+    <select id="age"><option value="mid">23〜59歳</option><option value="young">19〜22歳</option><option value="teen">18歳以下</option><option value="senior">60歳以上</option></select>
+    <button id="calc" type="button">計算する</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>壁ごとの残り</h3>
+    <div id="walls"></div>
+  </div>
+
+  <p class="note">※税金の壁は、1月〜12月に実際に受け取った給与（交通費を除く）で判定します。2026年分は、扶養の控除の上限が年収136万円、本人に所得税がかからない目安が年収178万円などになりました。<br>
+  ※健康保険の扶養（130万円など）は、2026年4月から、契約上の時給・時間などから計算した年収の見込みで判定します（契約にない残業代は含めない。交通費は含める）。<br>
+  ※勤め先の社会保険は、2026年10月から月8.8万円（年106万円）の条件がなくなり、従業員51人以上の会社で週20時間以上働くと加入します（学生を除く）。<br>
+  ※住民税がかかり始める年収は、自治体や年度によって違います（およそ110万円前後から）。会社の家族手当の条件も、会社ごとに確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function n(id) { return +document.getElementById(id).value || 0; }
+  function v(id) { return document.getElementById(id).value; }
+  function man(x) { return (Math.round(x / 1000) / 10).toLocaleString() + "万円"; }
+  function yen(x) { return Math.round(x).toLocaleString() + "円"; }
+
+  function calc() {
+    var jikyu = n("jikyu"), shu = n("shu"), kotsu = n("kotsu"), sofar = n("sofar");
+    if (!jikyu || !shu) { alert("時給と週の時間を入れてください。"); return; }
+    var who = v("who"), age = v("age"), size = v("size");
+    var now = new Date(), left = 12 - now.getMonth(); // 今月から12月までの月数
+    var month = jikyu * shu * 52 / 12;
+    var weeksLeft = Math.round((new Date(now.getFullYear(), 11, 31) - new Date(now.getFullYear(), now.getMonth(), 1)) / 86400000 / 7 * 10) / 10;
+    var proj = sofar + month * left;
+    var keiyaku = jikyu * shu * 52 + kotsu * 12;
+    var msgs = [];
+
+    var cards = [
+      ["今のペースで働いたときの今年の収入", man(proj), "先月まで " + man(sofar) + " ＋ 今月から12月まで約" + left + "か月 × 月 " + man(month)],
+      ["契約上の年収の見込み（健康保険の扶養の判定用）", man(keiyaku), "時給×週の時間×52週＋交通費×12か月"]
+    ];
+    // 勤め先の社会保険
+    var shaho;
+    if (shu >= 20 && size === "big") shaho = ["勤め先の社会保険", "加入の対象", "週20時間以上・従業員51人以上。2026年10月から年収（106万円）に関係なく加入。扶養から外れて、自分で保険料を払う"];
+    else if (shu >= 20 && size === "x") shaho = ["勤め先の社会保険", "勤め先に確認", "週20時間以上なので、従業員51人以上の会社なら加入の対象（2027年10月からは36人以上）"];
+    else shaho = ["勤め先の社会保険", "今は対象外", shu < 20 ? "週20時間未満のため" : "従業員50人以下のため（2027年10月から36人以上の会社も対象になる）"];
+    cards.push(shaho);
+    var cb = document.getElementById("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      d.querySelector(".k").textContent = x[0]; d.querySelector(".v").textContent = x[1]; d.querySelector(".s").textContent = x[2];
+      cb.appendChild(d);
+    });
+
+    // 壁（税金は1〜12月の実収入、健康保険の扶養は契約上の見込み）
+    var W = [];
+    if (who === "spouse") {
+      W.push(["配偶者控除（配偶者の税金）", 1360000, "tax", "超えると配偶者特別控除に切りかわる（207万円まで段階的に減る）。世帯の手取りが急に減るわけではない"]);
+      W.push(["配偶者特別控除の終わり", 2070000, "tax", "ここを超えると、配偶者の税金の控除がなくなる"]);
+    } else if (who === "parent") {
+      if (age === "young") {
+        W.push(["扶養控除（親の税金・特定扶養）", 1360000, "tax", "超えると特定親族特別控除に切りかわる（197万円まで段階的に減る）"]);
+        W.push(["特定親族特別控除の終わり", 1970000, "tax", "ここを超えると、親の税金の控除がなくなる"]);
+      } else W.push(["扶養控除（親の税金）", 1360000, "tax", "超えると、親の税金の扶養控除（16〜18歳は38万円）がなくなる"]);
+    }
+    W.push(["自分の所得税がかかり始める", 1780000, "tax", "2026年分は年収178万円まで所得税がかからない（基礎控除と給与所得控除の目安）"]);
+    if (who !== "none") {
+      var line = age === "young" ? 1500000 : (age === "senior" ? 1800000 : 1300000);
+      if (shaho[1] === "加入の対象") msgs.push("週20時間以上で従業員51人以上の会社に勤めているため、勤め先の社会保険に入る対象です。この場合、健康保険の扶養には入れません（扶養の" + man(line) + "の壁は関係なくなります）。");
+      else W.push(["健康保険の扶養（" + man(line) + "）", line, "kei", "契約上の年収の見込みで判定。超える見込みなら、扶養から外れて自分で国民健康保険などに入る"]);
+    }
+    W.sort(function (a, b) { return a[1] - b[1]; });
+    var wb = document.getElementById("walls"); wb.innerHTML = "";
+    W.forEach(function (w) {
+      var base = w[2] === "kei" ? keiyaku : sofar;
+      var rest = w[1] - base, over = w[2] === "kei" ? keiyaku > w[1] : proj > w[1];
+      var d = document.createElement("div"); d.className = "wall" + (over ? " over" : "");
+      d.innerHTML = '<div class="nm"></div><div class="r"></div><div class="w"></div>';
+      d.querySelector(".nm").textContent = w[0] + "　" + man(w[1]);
+      var r;
+      if (w[2] === "kei") r = over ? "契約の見込みが超えています（" + man(keiyaku) + "）" : "契約の見込みはあと " + man(rest) + " 余裕あり";
+      else if (rest <= 0) r = "すでに超えています";
+      else {
+        var hrs = Math.floor(rest / jikyu), perWeek = weeksLeft ? Math.floor(hrs / weeksLeft * 10) / 10 : 0;
+        r = "12月まであと " + yen(rest) + "（" + hrs + "時間・週" + perWeek + "時間まで）" + (over ? "　今のペースだと超える" : "");
+      }
+      d.querySelector(".r").textContent = r; d.querySelector(".w").textContent = w[3];
+      wb.appendChild(d);
+    });
+    if (W.some(function (w) { return w[2] === "tax" && proj > w[1] && sofar < w[1]; })) msgs.push("今のペースで働くと、12月までに税金の壁を超えます。シフトを減らすか、超えても手取りが減らないかを確かめてください。");
+    var wn = document.getElementById("warn"); wn.hidden = !msgs.length; wn.textContent = "";
+    msgs.forEach(function (m, i) { if (i) wn.appendChild(document.createElement("br")); wn.appendChild(document.createTextNode(m)); });
+    document.getElementById("result").hidden = false;
+  }
+  document.getElementById("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) document.getElementById("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    document.getElementById("jikyu").value = "1150";
+    document.getElementById("shu").value = "18";
+    document.getElementById("kotsu").value = "5000";
+    document.getElementById("sofar").value = "950000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
