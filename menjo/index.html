@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>国民年金の免除チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  .sub { font-weight: 700; margin: 18px 0 0; padding-top: 12px; border-top: 1px dashed var(--line); }
+  input[type=number], input[type=month], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .lv { border-left: 4px solid var(--line); padding: 4px 0 6px 12px; margin-bottom: 8px; }
+  .lv.ok { border-color: var(--accent); }
+  .lv .nm { font-weight: 700; }
+  .lv .w { font-size: .88rem; color: var(--sub); }
+  .lv.ok .nm::after { content: " ○ 基準内"; color: var(--accent); font-size: .85rem; }
+  .lv.ng .nm::after { content: " × 基準を超える"; color: var(--sub); font-size: .85rem; font-weight: 400; }
+  .q { border-left: 4px solid var(--mus); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .q .nm { font-weight: 700; }
+  .q .w { font-size: .88rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>国民年金の免除チェック</h1>
+  <p class="lead">国民年金の保険料が払えないときに、免除・納付猶予がどの段階まで通りそうか、毎月いくらになるか、将来の年金への影響、子育て中の免除（2026年10月〜）の期間と金額がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. あなたのこと</h2>
+    <div class="row">
+      <div><label class="f" for="age">年齢</label><input type="number" id="age" min="20" max="64" inputmode="numeric" placeholder="例：32"></div>
+      <div><label class="f" for="gaku">学生？</label><select id="gaku"><option value="no">いいえ</option><option value="yes">はい（大学・専門学校など）</option></select></div>
+    </div>
+    <label class="f" for="shitsu">去年か今年、会社を辞めた（失業・廃業した）？</label>
+    <select id="shitsu"><option value="no">いいえ</option><option value="yes">はい（離職票などがある）</option></select>
+
+    <p class="sub">去年1年間の収入</p>
+    <div class="row">
+      <div><label class="f" for="t0">本人</label><select id="t0"><option value="kyu">給料（年収）</option><option value="jie">自営業の所得</option><option value="none">収入なし</option></select></div>
+      <div><label class="f" for="a0">金額（円）</label><input type="number" id="a0" min="0" inputmode="numeric" placeholder="例：1200000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="d0">税金で扶養している家族</label><select id="d0"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div><label class="f" for="sh">去年払った社会保険料<span class="hint">国保・年金など（わからなければ空欄）</span></label><input type="number" id="sh" min="0" inputmode="numeric"></div>
+    </div>
+
+    <label class="f" for="hai">配偶者は？</label>
+    <select id="hai"><option value="no">いない</option><option value="yes">いる</option></select>
+    <div class="row" id="bxHai" hidden>
+      <div><label class="f" for="t1">配偶者の収入</label><select id="t1"><option value="kyu">給料（年収）</option><option value="jie">自営業の所得</option><option value="none">収入なし</option></select></div>
+      <div><label class="f" for="a1">金額（円）</label><input type="number" id="a1" min="0" inputmode="numeric"></div>
+    </div>
+
+    <label class="f" for="nushi">住民票の世帯主は？</label>
+    <select id="nushi"><option value="me">自分か配偶者</option><option value="oya">親など、ほかの人</option></select>
+    <div class="row" id="bxNushi" hidden>
+      <div><label class="f" for="t2">世帯主の収入</label><select id="t2"><option value="kyu">給料（年収）</option><option value="jie">自営業の所得</option><option value="nen">年金だけ</option><option value="none">収入なし</option></select></div>
+      <div><label class="f" for="a2">金額（円）</label><input type="number" id="a2" min="0" inputmode="numeric"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 子どものこと</h2>
+    <label class="f" for="ko">出産・子育て</label>
+    <select id="ko">
+      <option value="no">あてはまらない</option>
+      <option value="yotei">出産の予定がある</option>
+      <option value="ikuji">1歳になっていない子がいる</option>
+    </select>
+    <div class="row" id="bxKo" hidden>
+      <div><label class="f" for="kym">出産予定日・生まれた月</label><input type="month" id="kym"></div>
+      <div><label class="f" for="oya">あなたは</label><select id="oya"><option value="haha">母</option><option value="chichi">父</option></select></div>
+    </div>
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>段階ごとの判定</h3>
+    <div id="lvs"></div>
+    <h3>知っておきたいこと</h3>
+    <div id="qs"></div>
+  </div>
+
+  <p class="note">※国民年金保険料は、2026年度（2026年4月〜2027年3月）は月17,920円、2027年度は月18,290円です。<br>
+  ※免除の判定は、前年（1〜6月分は前々年）の所得で、本人・配偶者・世帯主のそれぞれが基準内かを見ます（納付猶予と学生納付特例は世帯主を見ません）。このページでは、扶養している家族1人あたり38万円、社会保険料は本人の分だけで計算しています。16〜22歳や70歳以上の家族を扶養している場合、障害者・ひとり親などの場合は、基準がもう少し広くなります。<br>
+  ※給料は、2025年分の給与所得控除（最低65万円）で所得に直しています。<br>
+  ※年金への影響は、2026年度の老齢基礎年金の満額（年847,300円）で計算した目安です。<br>
+  ※最終的な判定は、市区町村の国民年金の窓口か年金事務所で行います。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var MANGAKU = 847300;
+  function $(id) { return document.getElementById(id); }
+  function n(id) { return +$(id).value || 0; }
+  function v(id) { return $(id).value; }
+  function yen(x) { return Math.round(x).toLocaleString() + "円"; }
+  function man(x) { return (Math.round(x / 1000) / 10).toLocaleString() + "万円"; }
+  function fee(y, m) { return (y > 2027 || (y === 2027 && m >= 4)) ? 18290 : 17920; }
+  function ymStr(y, m) { return y + "年" + m + "月"; }
+  // 給与所得（2025年分〜）
+  function kyuyo(x) {
+    if (x <= 1900000) return Math.max(0, x - 650000);
+    if (x <= 3600000) return x - (x * 0.3 + 80000);
+    if (x <= 6600000) return x - (x * 0.2 + 440000);
+    if (x <= 8500000) return x - (x * 0.1 + 1100000);
+    return x - 1950000;
+  }
+  // 公的年金の所得（65歳以上・年金のみの目安）
+  function nenkin(x) { return x <= 3300000 ? Math.max(0, x - 1100000) : x * 0.75 - 275000; }
+  function shotoku(t, a) { return t === "kyu" ? kyuyo(a) : t === "jie" ? a : t === "nen" ? nenkin(a) : 0; }
+
+  function toggle() {
+    $("bxHai").hidden = v("hai") !== "yes";
+    $("bxNushi").hidden = v("nushi") !== "oya";
+    $("bxKo").hidden = v("ko") === "no";
+  }
+  ["hai", "nushi", "ko"].forEach(function (id) { $(id).addEventListener("change", toggle); });
+
+  function calc() {
+    var age = n("age");
+    if (!age) { alert("年齢を入れてください。"); return; }
+    var msgs = [], cards = [], qs = [];
+    var shitsu = v("shitsu") === "yes";
+    var d0 = +v("d0"), sh = n("sh");
+    var s0 = shitsu ? 0 : shotoku(v("t0"), n("a0"));
+    var people = [{ who: "本人", s: s0, d: d0, sh: sh }];
+    if (v("hai") === "yes") people.push({ who: "配偶者", s: shotoku(v("t1"), n("a1")), d: 0, sh: 0 });
+    if (v("nushi") === "oya") people.push({ who: "世帯主", s: shotoku(v("t2"), n("a2")), d: 0, sh: 0 });
+    function zengaku(p) { return (p.d + 1) * 350000 + 320000; }
+    function part(base, p) { return base + p.d * 380000 + p.sh; }
+    var LV = [
+      { nm: "全額免除", pay: 0, ref: 4 / 8, th: zengaku },
+      { nm: "4分の3免除", pay: 0.25, ref: 5 / 8, th: function (p) { return part(880000, p); } },
+      { nm: "半額免除", pay: 0.5, ref: 6 / 8, th: function (p) { return part(1280000, p); } },
+      { nm: "4分の1免除", pay: 0.75, ref: 7 / 8, th: function (p) { return part(1680000, p); } }
+    ];
+    var best = null;
+    var lvb = $("lvs"); lvb.innerHTML = "";
+    LV.forEach(function (L) {
+      var ok = people.every(function (p) { return p.s <= L.th(p); });
+      if (ok && !best) best = L;
+      var el = document.createElement("div"); el.className = "lv " + (ok ? "ok" : "ng");
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = L.nm;
+      el.querySelector(".w").textContent = people.map(function (p) { return p.who + "：所得 約" + man(p.s) + "／基準 " + man(L.th(p)); }).join("　") +
+        "。保険料 月" + yen(17920 * L.pay) + "、年金への反映 " + (L.ref === 0.5 ? "1/2" : (L.ref * 8) + "/8");
+      lvb.appendChild(el);
+    });
+    // 納付猶予・学生納付特例（世帯主を見ない）
+    var yuyo = null;
+    var core = people.filter(function (p) { return p.who !== "世帯主"; });
+    if (v("gaku") === "yes") {
+      if (s0 <= part(1280000, people[0])) yuyo = "学生納付特例";
+    } else if (age < 50 && core.every(function (p) { return p.s <= zengaku(p); })) yuyo = "納付猶予";
+    if (yuyo) {
+      var el = document.createElement("div"); el.className = "lv ok";
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = yuyo;
+      el.querySelector(".w").textContent = (yuyo === "学生納付特例" ? "本人の所得だけで判定。" : "50歳未満。本人と配偶者の所得で判定（世帯主は見ない）。") + "保険料は0円になるが、年金額には反映されない（受給資格の期間には数える）";
+      lvb.appendChild(el);
+    }
+    if (shitsu) msgs.push("失業・廃業の特例で、本人の所得を0円として判定しています。申請のときに、離職票や雇用保険受給資格者証のコピーが必要です。配偶者や世帯主の所得は、ふだんどおり見られます。");
+
+    // 結果カード
+    if (best) {
+      var monthly = 17920 * best.pay;
+      cards.push(["通りそうな免除（目安）", best.nm, "保険料は月" + yen(monthly) + "（1年で" + yen(monthly * 12) + "）。いつもは月17,920円"]);
+      var loss = MANGAKU / 480 * 12 * (1 - best.ref);
+      cards.push(["1年間（12か月）免除を受けた場合の将来の年金", "年 約" + yen(Math.round(loss / 10) * 10) + "減る",
+        "免除された期間も年金の" + (best.ref === 0.5 ? "1/2" : (best.ref * 8) + "/8") + "は受け取れる。10年以内に追納すれば、満額に戻せる"]);
+    } else if (yuyo) {
+      cards.push(["通りそうな制度（目安）", yuyo, "保険料は月0円。ただし年金額には反映されないので、余裕ができたら10年以内に追納するとよい"]);
+      cards.push(["1年間（12か月）猶予を受けて追納しなかった場合", "年 約" + yen(Math.round(MANGAKU / 480 * 12 / 10) * 10) + "減る", "未納とちがい、障害年金・遺族年金の条件の期間には数えられる"]);
+    } else {
+      cards.push(["通りそうな免除（目安）", "基準を超えています", "所得が基準を超えるため、免除は難しい見込み。失業・廃業した場合は、特例で通ることがある"]);
+    }
+
+    // 子育ての免除
+    if (v("ko") !== "no") {
+      var ym = v("kym");
+      if (!ym) { alert("出産予定日・生まれた月を入れてください。"); return; }
+      var by = +ym.split("-")[0], bm = +ym.split("-")[1];
+      var months = [];
+      function add(off, kind) {
+        var d = new Date(by, bm - 1 + off, 1), y = d.getFullYear(), m = d.getMonth() + 1;
+        if (kind === "ikuji" && (y < 2026 || (y === 2026 && m < 10))) return;
+        months.push({ y: y, m: m, kind: kind });
+      }
+      if (v("oya") === "haha") { for (var i = -1; i <= 2; i++) add(i, "san"); for (var j = 3; j <= 11; j++) add(j, "ikuji"); }
+      else { for (var k = 0; k <= 11; k++) add(k, "ikuji"); }
+      var tot = months.reduce(function (s, x) { return s + fee(x.y, x.m); }, 0);
+      if (months.length) {
+        var f = months[0], l = months[months.length - 1];
+        var san = months.filter(function (x) { return x.kind === "san"; }).length;
+        cards.push(["出産・子育ての免除（所得に関係なく）", ymStr(f.y, f.m) + "〜" + ymStr(l.y, l.m) + "（" + months.length + "か月）",
+          "保険料 約" + yen(tot) + "が免除。払ったものとして年金額に入るので、将来の年金は減らない" + (san ? "（産前産後" + san + "か月＋育児" + (months.length - san) + "か月）" : "")]);
+        qs.push(["子育ての免除は、ほかの免除より先に", "この期間は、所得の審査なしで、年金も満額のまま。届け出は市区町村の窓口・年金事務所・マイナポータルで。すでに払った分は戻ってくる"]);
+      } else {
+        msgs.push("育児期間の免除は、2026年10月以降の月が対象です。入力した月では、対象になる期間がありません。");
+      }
+    }
+
+    // 知っておきたいこと
+    var now = new Date(), back = new Date(now.getFullYear(), now.getMonth() - 25, 1);
+    qs.push(["過去の分も、さかのぼって申請できる", "申請した月から2年1か月前まで。今なら" + ymStr(back.getFullYear(), back.getMonth() + 1) + "分ごろから。未納のままにしている月があれば、早めに"]);
+    qs.push(["未納のままにしない", "未納の期間があると、けがや病気で障害が残ったときの障害年金や、亡くなったときの遺族年金がもらえないことがある。免除・猶予を受けていれば、その心配は小さくなる"]);
+    qs.push(["免除は毎年7月から翌年6月の1年ごと", "全額免除・納付猶予が通った人は、翌年も続けて審査を申し込める（申請書で選ぶ）。それ以外は毎年申請する"]);
+    if (age >= 50 && !best) qs.push(["50歳以上は納付猶予が使えない", "免除の基準に当てはまらないときは、分割での支払いなど、年金事務所に相談する"]);
+
+    var cb = $("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = x[0]; el.querySelector(".v").textContent = x[1]; el.querySelector(".s").textContent = x[2];
+      cb.appendChild(el);
+    });
+    var qb = $("qs"); qb.innerHTML = "";
+    qs.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "q";
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = x[0]; el.querySelector(".w").textContent = x[1];
+      qb.appendChild(el);
+    });
+    var w = $("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    $("result").hidden = false;
+  }
+  $("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    $("age").value = "32";
+    $("t0").value = "jie"; $("a0").value = "1200000"; $("d0").value = "1"; $("sh").value = "300000";
+    $("ko").value = "ikuji"; toggle(); $("kym").value = "2026-08"; $("oya").value = "chichi";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
