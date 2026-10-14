@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>解雇・雇い止めチェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .q { border-left: 4px solid var(--accent); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .q .nm { font-weight: 700; }
+  .q .w { font-size: .9rem; color: var(--sub); }
+  .dl { border-left: 4px solid var(--mus); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .dl .d { font-weight: 700; }
+  .dl .w { font-size: .88rem; color: var(--sub); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .tabs button { width: auto; margin: 0; padding: 6px 12px; font-size: .88rem; background: var(--accent-soft); color: var(--accent); }
+  .tabs button.on { background: var(--accent); color: #fff; }
+  @media (prefers-color-scheme: dark) { .tabs button.on { color: #10231d; } }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .copy { margin-top: 8px; padding: 9px; font-size: .92rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>解雇・雇い止めチェック</h1>
+  <p class="lead">会社から「辞めてほしい」「次の契約は更新しない」と言われたときに、もらえるお金の目安（解雇予告手当・失業保険の日数）、会社都合になるか、確かめること、期限、そのまま使える文面がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 言われたこと</h2>
+    <label class="f" for="type">会社から言われたのは？</label>
+    <select id="type">
+      <option value="kaiko">解雇（「〇日で辞めてもらう」と一方的に）</option>
+      <option value="kansho">退職勧奨（「辞めてくれないか」と頼まれた）</option>
+      <option value="tome">雇い止め（「次の契約は更新しない」）</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="said">言われた日</label><input type="date" id="said"></div>
+      <div><label class="f" for="last">最後の日（辞める日）</label><input type="date" id="last"></div>
+    </div>
+    <div id="bxTome" hidden>
+      <div class="row">
+        <div><label class="f" for="koshin">契約を更新した回数</label><select id="koshin"><option value="0">0回</option><option value="1">1〜2回</option><option value="3">3回以上</option></select></div>
+        <div><label class="f" for="kibou">自分は更新を希望した？</label><select id="kibou"><option value="yes">希望した</option><option value="no">希望していない</option></select></div>
+      </div>
+      <label class="f" for="kakikata">今の契約書の「更新」の書き方</label>
+      <select id="kakikata">
+        <option value="maybe">「更新する場合がある」</option>
+        <option value="will">「自動的に更新する」「更新する」</option>
+        <option value="none">「更新しない」と書いてあった</option>
+        <option value="unk">わからない</option>
+      </select>
+    </div>
+    <label class="f" for="jokyo">今の状況</label>
+    <select id="jokyo">
+      <option value="none">とくになし</option>
+      <option value="rosai">仕事中のけが・病気で休んでいる</option>
+      <option value="san">産休中・育休中、または妊娠中</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 給料と働いた年数</h2>
+    <label class="f" for="pay">直前3か月の給料の合計（円）<span class="hint">税金や保険料を引く前の額。交通費も含める</span></label>
+    <input type="number" id="pay" min="0" inputmode="numeric" placeholder="例：780000">
+    <div class="row">
+      <div><label class="f" for="kei">給料の形</label><select id="kei"><option value="m">月給</option><option value="h">時給・日給</option></select></div>
+      <div id="bxDays" hidden><label class="f" for="days">3か月で働いた日数</label><input type="number" id="days" min="0" inputmode="numeric" placeholder="例：50"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="age">辞める日の年齢</label><select id="age"><option value="0">29歳以下</option><option value="1">30〜34歳</option><option value="2" selected>35〜44歳</option><option value="3">45〜59歳</option><option value="4">60〜64歳</option><option value="5">65歳以上</option></select></div>
+      <div><label class="f" for="years">その会社で働いた年数<span class="hint">雇用保険に入っていた期間</span></label><select id="years"><option value="a">1年未満</option><option value="b">1〜3年</option><option value="c">3〜5年</option><option value="d" selected>5〜10年</option><option value="e">10〜20年</option><option value="f">20年以上</option></select></div>
+    </div>
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>辞める前に確かめること</h3>
+    <div id="qs"></div>
+    <h3>辞めたあとの期限</h3>
+    <div id="dls"></div>
+    <h3>そのまま使える文面</h3>
+    <div class="tabs" id="tabs"></div>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" id="copy">この文面をコピー</button>
+  </div>
+
+  <p class="note">※解雇予告手当は、30日前までに予告がなかった場合に、足りない日数分の平均賃金が支払われるものです。平均賃金は、直前3か月の給料の合計を暦の日数（ここでは92日）で割った目安です。正確には、給料の締め日から数えます。<br>
+  ※会社都合（特定受給資格者・特定理由離職者）になるかは、ハローワークが離職票と本人の話をもとに決めます。<br>
+  ※このページは、解雇や雇い止めが法律上認められるかの判断はしません。納得できないときは、労働局の総合労働相談コーナーなどに相談してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function $(id) { return document.getElementById(id); }
+  function n(id) { return +$(id).value || 0; }
+  function v(id) { return $(id).value; }
+  function yen(x) { return Math.round(x).toLocaleString() + "円"; }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(d, k) { var x = new Date(d); x.setDate(x.getDate() + k); return x; }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  // 失業保険の給付日数（会社都合：年数×年齢）
+  var SPEC = { a: [90, 90, 90, 90, 90], b: [90, 120, 150, 180, 150], c: [90, 120, 150, 180, 150],
+    d: [120, 180, 180, 240, 180], e: [180, 210, 240, 270, 210], f: [180, 240, 270, 330, 240] };
+  var GEN = { a: 0, b: 90, c: 90, d: 90, e: 120, f: 150 };
+  var mails = {}, cur = "";
+
+  function toggle() {
+    $("bxTome").hidden = v("type") !== "tome";
+    $("bxDays").hidden = v("kei") !== "h";
+  }
+  $("type").addEventListener("change", toggle);
+  $("kei").addEventListener("change", toggle);
+
+  function calc() {
+    var type = v("type"), said = pd(v("said")), last = pd(v("last"));
+    if (!said || !last) { alert("言われた日と、最後の日を入れてください。"); return; }
+    var pay = n("pay"), age = +v("age"), yrs = v("years");
+    var msgs = [], cards = [], qs = [], dls = [];
+    var notice = Math.round((last - said) / 86400000);
+    if (notice < 0) { alert("最後の日は、言われた日より後の日付にしてください。"); return; }
+
+    // 平均賃金
+    var avg = pay / 92;
+    if (v("kei") === "h" && n("days") > 0) avg = Math.max(avg, pay / n("days") * 0.6);
+
+    if (v("jokyo") === "rosai") msgs.push("仕事中のけが・病気で休んでいる間と、その後30日間は、原則として解雇できないと法律で決まっています。すぐに労働基準監督署に相談してください。");
+    if (v("jokyo") === "san") msgs.push("産休中とその後30日間は、原則として解雇できないと法律で決まっています。妊娠・出産・育休を理由にした解雇や雇い止めも禁止されています。労働局の雇用環境・均等部（室）に相談してください。");
+
+    // 解雇予告手当
+    if (type === "kaiko") {
+      var short = Math.max(0, 30 - notice);
+      cards.push(["解雇予告手当の目安", short ? "約" + yen(Math.floor(avg) * short) : "なし（30日以上前の予告）",
+        short ? "予告が" + notice + "日前だったため、足りない" + short + "日分 × 平均賃金 約" + yen(Math.floor(avg)) + "（1日）" : "最後の日の" + notice + "日前に言われているため、手当の対象にならない"]);
+    }
+
+    // 失業保険の区分
+    var kubun, seigen = "なし（7日の待期のあと支給）", spec = false;
+    if (type === "kaiko") { kubun = "会社都合（特定受給資格者）"; spec = true; }
+    else if (type === "kansho") { kubun = "会社都合（特定受給資格者）※勧奨に応じて辞めた場合"; spec = true; }
+    else {
+      var kk = v("kakikata"), kb = v("kibou") === "yes", three = yrs !== "a" && yrs !== "b";
+      if (kb && (three || kk === "will")) { kubun = "会社都合（特定受給資格者）"; spec = true; }
+      else if (kb && kk !== "none") { kubun = "特定理由離職者（会社都合と同じ日数）"; spec = true; }
+      else { kubun = "一般（期間満了）"; }
+      if ((v("koshin") === "3" || yrs !== "a") && notice < 30 && kk !== "none")
+        msgs.push("3回以上更新しているか、1年を超えて働いている場合、会社は契約が終わる30日前までに更新しないことを伝えることになっています（あらかじめ「更新しない」と決めていた場合を除く）。言われたのが" + notice + "日前でした。");
+      if (yrs === "d" || yrs === "e" || yrs === "f") msgs.push("同じ会社で有期契約が通算5年を超えている場合、無期契約への切りかえ（無期転換）を申し込めます。申し込んだあとに契約を切られた場合は、すぐに相談してください。");
+    }
+    var days = age === 5 ? 0 : (spec ? SPEC[yrs][age] : GEN[yrs]);
+    var genDays = age === 5 ? 0 : GEN[yrs];
+    if (age === 5) {
+      cards.push(["失業保険", "高年齢求職者給付金（一時金）", "65歳以上は、30日分または50日分の一時金になる。区分：" + kubun]);
+    } else {
+      cards.push(["失業保険の区分", kubun, "給付制限：" + seigen + "。離職票の離職理由を確かめる"]);
+      cards.push(["失業保険の日数の目安", days ? days + "日" : "対象外の可能性", days ?
+        (spec && days > genDays ? "自己都合で辞めた場合（" + (genDays || "対象外") + (genDays ? "日、給付制限1か月" : "") + "）より" + (days - genDays) + "日多い" : "1日あたりの金額は、失業保険の計算ページで確かめられる")
+        : "自己都合・期間満了の場合は、辞める前の2年間に雇用保険に12か月以上入っていることが条件"]);
+    }
+
+    // 確かめること
+    if (type === "kaiko") {
+      qs.push(["解雇の理由を、書面でもらう", "「解雇理由証明書」は、辞める前でも請求できる。理由がわからないと、相談も進まない"]);
+      qs.push(["退職届は出さない", "「自分から辞めた（自己都合）」扱いになることがある。会社から求められても、その場で書かない"]);
+    }
+    if (type === "kansho") {
+      qs.push(["応じる義務はない。その場で返事をしない", "退職勧奨は「お願い」。断ってもよい。家族と相談してから返事をすると伝える"]);
+      qs.push(["応じるなら、条件を書面で", "辞める日、上乗せの退職金、有給休暇の残りの扱い、離職理由を「退職勧奨による」とすること"]);
+      qs.push(["退職届に「一身上の都合」と書かない", "書くなら「退職勧奨に応じたため」。自己都合と扱われると、失業保険の日数や開始が変わる"]);
+    }
+    if (type === "tome") {
+      qs.push(["更新を希望していることを、はっきり伝える", "希望したのに更新されなかったかどうかで、失業保険の区分が変わる。メールなど記録が残る形で"]);
+      qs.push(["更新しない理由を、書面でもらう", "雇い止めの理由の証明書は、請求すれば会社が出すことになっている"]);
+    }
+    qs.push(["有給休暇の残りを使う", "辞める日までに使い切れるように、早めに申し出る"]);
+    qs.push(["最後の給料・退職金の支払い日", "辞めたあとに請求すれば、7日以内に支払うことになっている（退職金は会社の決まりによる）"]);
+
+    // 期限
+    var nextDay = addDays(last, 1);
+    dls.push([md(addDays(last, 14)) + "ごろまで", "国民健康保険・国民年金の手続き（14日以内）", "会社都合・特定理由離職者で65歳未満なら、国民健康保険料が軽くなる（前年の給与所得を3割として計算）。市区町村の窓口で"]);
+    dls.push([md(addDays(last, 20)) + "ごろまで", "健康保険の任意継続を選ぶなら（20日以内）", "今の健康保険を最長2年続けられる。国民健康保険とどちらが安いかくらべる"]);
+    dls.push(["離職票が届いたらすぐ", "ハローワークで失業保険の手続き", "離職票の「離職理由」が違っていたら、その場で伝える。異議を申し立てられる"]);
+
+    $("cards").innerHTML = "";
+    cards.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = x[0]; el.querySelector(".v").textContent = x[1]; el.querySelector(".s").textContent = x[2];
+      $("cards").appendChild(el);
+    });
+    $("qs").innerHTML = "";
+    qs.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "q";
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = x[0]; el.querySelector(".w").textContent = x[1];
+      $("qs").appendChild(el);
+    });
+    $("dls").innerHTML = "";
+    dls.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "dl";
+      el.innerHTML = '<div class="d"></div><div></div><div class="w"></div>';
+      el.querySelector(".d").textContent = x[0]; el.children[1].textContent = x[1]; el.querySelector(".w").textContent = x[2];
+      $("dls").appendChild(el);
+    });
+
+    // 文面
+    var sd = (said.getFullYear()) + "年" + md(said), ld = last.getFullYear() + "年" + md(last);
+    mails = {};
+    if (type === "kaiko") mails["解雇理由証明書の請求"] = "〇〇部 〇〇様\n\n" + sd + "に、" + ld + "付けでの解雇のお話をいただきました。\nつきましては、労働基準法第22条にもとづき、解雇の理由を記載した証明書の交付をお願いいたします。\n\nあわせて、次の点を書面で教えてください。\n・最後の給料と、解雇予告手当の有無・金額\n・有給休暇の残りの日数と、その扱い\n・離職票の離職理由\n\nよろしくお願いいたします。\n氏名";
+    if (type === "kansho") {
+      mails["勧奨への返事（保留）"] = "〇〇部 〇〇様\n\n" + sd + "にお話のあった退職の件について、\n家族とも相談したうえでお返事したいと考えています。\n" + "〇月〇日までにお返事いたします。\n\nあわせて、検討のために、次の条件を書面でいただけますでしょうか。\n・退職日\n・退職金（上乗せの有無と金額）\n・有給休暇の残りの扱い\n・離職票の離職理由（退職勧奨によること）\n\nよろしくお願いいたします。\n氏名";
+      mails["勧奨をお断りする"] = "〇〇部 〇〇様\n\n" + sd + "にお話のあった退職の件について、\n検討いたしましたが、今後もこの会社で働き続けたいと考えています。\nそのため、退職のお申し出はお受けいたしかねます。\n\n引き続き、よろしくお願いいたします。\n氏名";
+    }
+    if (type === "tome") {
+      mails["更新の希望を伝える"] = "〇〇部 〇〇様\n\n" + sd + "に、" + ld + "で契約を更新しないとのお話をいただきました。\n私としては、契約の更新を希望しております。\n今後も働き続けたいと考えていますので、\nご検討いただけますでしょうか。\n\nよろしくお願いいたします。\n氏名";
+      mails["雇い止めの理由の請求"] = "〇〇部 〇〇様\n\n" + ld + "で契約を更新しないとのお話について、\n更新しない理由を記載した証明書の交付をお願いいたします。\n\nあわせて、離職票の離職理由と、\n有給休暇の残りの扱いを教えてください。\n\nよろしくお願いいたします。\n氏名";
+    }
+    $("tabs").innerHTML = "";
+    Object.keys(mails).forEach(function (k) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = k;
+      b.addEventListener("click", function () { show(k); });
+      $("tabs").appendChild(b);
+    });
+    show(Object.keys(mails)[0]);
+
+    var w = $("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    $("result").hidden = false;
+  }
+  function show(k) {
+    cur = k; $("mail").textContent = mails[k];
+    document.querySelectorAll("#tabs button").forEach(function (b) { b.className = b.textContent === k ? "on" : ""; });
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = mails[cur] || "";
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "この文面をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" });
+  });
+  var t = new Date(); $("said").value = t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2);
+  if (DEMO) {
+    $("said").value = "2026-10-14"; $("last").value = "2026-10-31";
+    $("pay").value = "780000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
