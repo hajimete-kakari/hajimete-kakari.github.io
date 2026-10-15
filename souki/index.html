@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>早期退職のお金チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .q { border-left: 4px solid var(--accent); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .q .nm { font-weight: 700; }
+  .q .w { font-size: .88rem; color: var(--sub); }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+  .ln span:last-child { font-weight: 700; white-space: nowrap; }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>早期退職のお金チェック</h1>
+  <p class="lead">早期退職・希望退職に応じた場合に、退職金と失業保険で何年分の生活費になるか、辞めたあとに毎月出ていくお金（年金・健康保険・住民税）、次の仕事が決まった場合に65歳でいくら残るかの目安がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今の会社と給料</h2>
+    <div class="row">
+      <div><label class="f" for="age">年齢</label><input type="number" id="age" min="20" max="64" inputmode="numeric" placeholder="例：52"></div>
+      <div><label class="f" for="kinzoku">勤続年数</label><input type="number" id="kinzoku" min="1" max="50" inputmode="numeric" placeholder="例：28"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="gaku">月給（額面）<span class="hint">直近6か月の平均。残業代・手当を含む</span></label><input type="number" id="gaku" min="0" inputmode="numeric" placeholder="例：450000"></div>
+      <div><label class="f" for="tedori">月の手取り</label><input type="number" id="tedori" min="0" inputmode="numeric" placeholder="例：330000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="kenpo">健康保険料の天引き（月）<span class="hint">介護保険料も含む</span></label><input type="number" id="kenpo" min="0" inputmode="numeric" placeholder="例：22000"></div>
+      <div><label class="f" for="jumin">住民税の天引き（月）</label><input type="number" id="jumin" min="0" inputmode="numeric" placeholder="例：25000"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 会社から示された条件</h2>
+    <div class="row">
+      <div><label class="f" for="taishoku">ふつうの退職金（円）</label><input type="number" id="taishoku" min="0" inputmode="numeric" placeholder="例：18000000"></div>
+      <div><label class="f" for="uwanose">上乗せ（割増）の額（円）</label><input type="number" id="uwanose" min="0" inputmode="numeric" placeholder="例：8000000"></div>
+    </div>
+    <label class="f" for="boshu">募集の種類</label>
+    <select id="boshu">
+      <option value="kaisha">人員整理のための希望退職（期間を区切った募集）</option>
+      <option value="jojo">いつでも使える早期退職制度（常設）</option>
+      <option value="kansho">個別に「辞めてほしい」と言われた（退職勧奨）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 家計とこれから</h2>
+    <div class="row">
+      <div><label class="f" for="seikatsu">毎月の生活費<span class="hint">税金・保険料を除く</span></label><input type="number" id="seikatsu" min="0" inputmode="numeric" placeholder="例：280000"></div>
+      <div><label class="f" for="chokin">今の貯金（円）</label><input type="number" id="chokin" min="0" inputmode="numeric" placeholder="例：5000000"></div>
+    </div>
+    <label class="f" for="fuyo">配偶者は？</label>
+    <select id="fuyo"><option value="3go">いる（自分の扶養に入っている・60歳未満）</option><option value="tomo">いる（自分で働いて保険に入っている）</option><option value="no">いない</option></select>
+    <label class="f" for="hoken">辞めたあとの健康保険</label>
+    <select id="hoken"><option value="nini">今の健康保険を続ける（任意継続）</option><option value="kazoku">家族の扶養に入る</option></select>
+    <div class="row">
+      <div><label class="f" for="mitsukaru">次の仕事まで（か月）<span class="hint">働かない場合は0</span></label><input type="number" id="mitsukaru" min="0" max="120" inputmode="numeric" placeholder="例：6"></div>
+      <div><label class="f" for="tsugi">次の仕事の手取り（月）</label><input type="number" id="tsugi" min="0" inputmode="numeric" placeholder="例：240000"></div>
+    </div>
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>仕事がない間に、毎月出ていくお金</h3>
+    <div id="lines"></div>
+    <h3>手を挙げる前に確かめること</h3>
+    <div id="qs"></div>
+  </div>
+
+  <p class="note">※失業保険は、2026年8月1日以降の計算式（厚生労働省）で、月給×6÷180を1日の賃金として計算した目安です。<br>
+  ※任意継続の保険料は、今の天引き額のおよそ2倍（会社が払っていた分も自分で払う）としています。実際は上限があるため、これより安いことがあります。国民健康保険にする場合の額は、市区町村で確かめてください。<br>
+  ※国民年金は2026年度の月17,920円で計算し、60歳になったら払わないものとしています。住民税は、辞めてから1年間は今の月額と同じとしています。<br>
+  ※退職金にかかる税金の額は計算しません。退職所得控除を超える場合は、税金が引かれる分、手元に入る額は少なくなります。<br>
+  ※物価の上がり方や、運用の増減は入れていません。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var NENKIN = 17920;
+  // 失業保険の日額（2026年8月1日以降）
+  var MIN_W = 3203, MIN_Y = 2562, B1 = 5480;
+  var CAP = { u30: [14900, 7450], "30": [16540, 8270], "45": [18220, 9110], "60": [17400, 7830] };
+  function ageGroup(a) { return a < 30 ? "u30" : a < 45 ? "30" : a < 60 ? "45" : "60"; }
+  function daily(w, g) {
+    var y;
+    if (w < MIN_W) return MIN_Y;
+    if (w > CAP[g][0]) return CAP[g][1];
+    if (w < B1) y = 0.8 * w;
+    else if (g === "60") {
+      if (w <= 12120) y = Math.min(0.8 * w - 0.35 * ((w - B1) / (12120 - B1)) * w, 0.05 * w + 12120 * 0.4);
+      else y = 0.45 * w;
+    } else {
+      if (w <= 13490) y = 0.8 * w - 0.3 * ((w - B1) / (13490 - B1)) * w;
+      else y = 0.5 * w;
+    }
+    return Math.floor(y);
+  }
+  function benefitDays(age, years, self) {
+    if (self) return years < 1 ? 0 : years < 10 ? 90 : years < 20 ? 120 : 150;
+    if (years < 1) return 90;
+    var col = years < 5 ? 0 : years < 10 ? 1 : years < 20 ? 2 : 3;
+    var t = age < 30 ? [90, 120, 180, 180] : age < 35 ? [120, 180, 210, 240] : age < 45 ? [150, 180, 240, 270]
+          : age < 60 ? [180, 240, 270, 330] : [150, 180, 210, 240];
+    return t[col];
+  }
+  function $(id) { return document.getElementById(id); }
+  function n(id) { return +$(id).value || 0; }
+  function v(id) { return $(id).value; }
+  function yen(x) { return Math.round(x).toLocaleString() + "円"; }
+  function man(x) { return Math.round(x / 10000).toLocaleString() + "万円"; }
+  function ym(m) { var y = Math.floor(m / 12), r = m % 12; return (y ? y + "年" : "") + (r ? r + "か月" : (y ? "" : "0か月")); }
+
+  function calc() {
+    var age = n("age"), kin = n("kinzoku"), gaku = n("gaku"), tedori = n("tedori");
+    var sei = n("seikatsu");
+    if (!age || !kin || !sei) { alert("年齢・勤続年数・毎月の生活費を入れてください。"); return; }
+    var taishoku = n("taishoku"), uwa = n("uwanose"), total = taishoku + uwa, chokin = n("chokin");
+    var self = v("boshu") === "jojo";
+    var msgs = [], cards = [], qs = [];
+
+    // 退職所得控除
+    var kojo = kin <= 20 ? Math.max(800000, 400000 * kin) : 8000000 + 700000 * (kin - 20);
+    var taxNote = total <= kojo ? "退職所得控除（" + man(kojo) + "）の範囲内なので、税金はかからない見込み"
+      : "退職所得控除（" + man(kojo) + "）を超える" + man(total - kojo) + "の半分に、所得税・住民税がかかる（会社が差し引く）。手元に入る額は、その分少なくなる";
+
+    // 失業保険
+    var wage = gaku * 6 / 180, d = gaku ? daily(wage, ageGroup(age)) : 0;
+    var days = age >= 65 ? 0 : benefitDays(age, kin, self);
+    var benefitTotal = d * days;
+
+    // 毎月の支出（仕事がない間）
+    var nenkin = age < 60 ? NENKIN * (v("fuyo") === "3go" ? 2 : 1) : 0;
+    var kenpo = v("hoken") === "nini" ? n("kenpo") * 2 : 0;
+    var jumin = n("jumin");
+    var out = sei + nenkin + kenpo + jumin;
+
+    // 毎月のシミュレーション（65歳まで）
+    var N = n("mitsukaru"), tsugi = n("tsugi"), months = Math.max(1, (65 - age) * 12);
+    var bal = chokin + total, left = days, wait = 7 + (self ? 30 : 0), runOut = -1, paid = 0;
+    var noWork = N === 0 || !tsugi;
+    for (var m = 0; m < months; m++) {
+      var working = !noWork && m >= N;
+      if (!working) {
+        // 失業保険（待期・給付制限のあと30日ずつ）
+        var dayStart = m * 30, dayEnd = dayStart + 30;
+        var usable = Math.max(0, dayEnd - Math.max(dayStart, wait));
+        var get = Math.min(usable, left); left -= get; paid += get * d; bal += get * d;
+        var curAge = age + m / 12;
+        bal -= sei + (curAge < 60 ? nenkin : 0) + kenpo + (m < 12 ? jumin : 0);
+      } else {
+        bal += tsugi - sei - (m < 12 ? jumin : 0);
+      }
+      if (bal < 0 && runOut < 0) runOut = m;
+    }
+    // 働かない場合に持つ期間
+    var keep = (chokin + total + benefitTotal) / out;
+
+    cards.push(["退職金（上乗せを含む）", man(total), "上乗せの" + man(uwa) + "は、今の手取りの約" + (tedori ? Math.round(uwa / tedori) : "—") + "か月分。" + taxNote]);
+    cards.push(["失業保険の目安", d ? "日額 " + yen(d) + " × " + days + "日" : "給料を入れると計算",
+      d ? "合計 約" + man(benefitTotal) + "。" + (self ? "自己都合の扱い：7日＋1か月の給付制限のあとから" : "会社都合の扱い：7日の待期のあとから") : ""]);
+    cards.push(["仕事をしない場合、お金が持つ期間", "約" + ym(Math.floor(keep)), "貯金＋退職金＋失業保険 ÷ 毎月の出費 約" + yen(out) + "（" + (age + Math.floor(keep / 12)) + "歳ごろまで）"]);
+    if (!noWork) {
+      cards.push([N + "か月後に手取り" + yen(tsugi) + "の仕事に就いた場合", runOut < 0 ? "65歳で 約" + man(bal) + " 残る" : (age + Math.floor(runOut / 12)) + "歳ごろに足りなくなる",
+        "仕事に就いてからは、毎月 " + (tsugi - sei >= 0 ? "約" + yen(tsugi - sei) + " 貯まる" : "約" + yen(sei - tsugi) + " 取り崩す") + "（生活費 " + yen(sei) + " との差）。失業保険は就職までの分（約" + man(paid) + "）"]);
+    }
+
+    // 内訳
+    var L = [["生活費", sei], ["国民年金" + (v("fuyo") === "3go" ? "（夫婦2人分）" : "") + (age >= 60 ? "（60歳以上は不要）" : ""), nenkin],
+      [v("hoken") === "nini" ? "健康保険（任意継続・天引きの約2倍）" : "健康保険（家族の扶養）", kenpo], ["住民税（辞めてから1年）", jumin]];
+    $("lines").innerHTML = "";
+    L.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "ln";
+      el.innerHTML = "<span></span><span></span>"; el.children[0].textContent = x[0]; el.children[1].textContent = yen(x[1]);
+      $("lines").appendChild(el);
+    });
+    var tl = document.createElement("div"); tl.className = "ln"; tl.innerHTML = "<span>合計</span><span></span>"; tl.children[1].textContent = yen(out) + "／月";
+    $("lines").appendChild(tl);
+
+    // 確かめること
+    if (v("boshu") === "jojo") msgs.push("いつでも使える早期退職制度に自分から応じた場合、失業保険は自己都合の扱いになることが多く、日数が少なく、1か月の給付制限があります。人員整理のための募集かどうかを、会社に確かめてください。");
+    qs.push(["離職票の離職理由を、どう書くか", "人員整理のための期間を区切った希望退職なら、会社都合（特定受給資格者）になりやすい。会社に、離職票の離職理由をどう書くかを先に確かめる"]);
+    qs.push(["退職金の内訳と、受け取り方", "ふつうの退職金と上乗せ分、企業年金・確定拠出年金（DC）の扱い、一時金か年金かを選べるか。税金がどれくらい引かれるかを、会社の担当者に聞く"]);
+    qs.push(["辞める日と、有給休暇・賞与", "辞める日によって、賞与の支給や、有給休暇の消化、社会保険料の月数が変わる"]);
+    qs.push(["再就職支援の内容", "再就職支援会社のサービスが付くか、いつまで使えるか"]);
+    qs.push(["健康保険は、任意継続か国民健康保険か", "任意継続は辞めた日の翌日から20日以内に申し込む。国民健康保険は、会社都合なら保険料が軽くなることがあるので、両方の額を市区町村と健康保険組合に聞いてくらべる"]);
+    if (age >= 55) qs.push(["年金の見込み額", "ねんきん定期便やねんきんネットで、65歳からの年金の見込みを確かめる。辞めると厚生年金に入る期間が短くなり、見込み額が少し減る"]);
+    if (runOut >= 0) msgs.push("入力した条件では、" + (age + Math.floor(runOut / 12)) + "歳ごろにお金が足りなくなる見込みです。次の仕事の手取り、生活費、退職の時期をもう一度考えてみてください。");
+
+    var cb = $("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = x[0]; el.querySelector(".v").textContent = x[1]; el.querySelector(".s").textContent = x[2];
+      cb.appendChild(el);
+    });
+    var qb = $("qs"); qb.innerHTML = "";
+    qs.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "q";
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = x[0]; el.querySelector(".w").textContent = x[1];
+      qb.appendChild(el);
+    });
+    var w = $("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    $("result").hidden = false;
+  }
+  $("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    $("age").value = "52"; $("kinzoku").value = "28"; $("gaku").value = "450000"; $("tedori").value = "330000";
+    $("kenpo").value = "22000"; $("jumin").value = "25000";
+    $("taishoku").value = "18000000"; $("uwanose").value = "8000000";
+    $("seikatsu").value = "280000"; $("chokin").value = "5000000";
+    $("mitsukaru").value = "6"; $("tsugi").value = "240000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
