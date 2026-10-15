@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>借金の返済計画チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  .loan { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 12px; }
+  .loan:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .loan .t { font-weight: 700; font-size: .92rem; }
+  .loan label { display: block; font-size: .82rem; color: var(--sub); margin: 6px 0 4px; }
+  input[type=number], input[type=text], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.add { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; padding: 9px; font-size: .92rem; }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln span:last-child { font-weight: 700; text-align: right; }
+  .q { border-left: 4px solid var(--accent); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .q .nm { font-weight: 700; }
+  .q .r { font-weight: 700; color: var(--accent); }
+  .q .w { font-size: .88rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>借金の返済計画チェック</h1>
+  <p class="lead">借入先ごとの残高・金利・毎月の返済額を入れると、いつ終わるか、利息を合計いくら払うか、どこから返すと利息が減るか、返済が苦しいときの3つの方法（任意整理・個人再生・自己破産）で毎月の返済がどう変わるかの目安がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 借入先ごとの残高</h2>
+    <div id="loans"></div>
+    <button type="button" class="add" id="add">借入先を追加する</button>
+  </div>
+
+  <div class="card">
+    <h2>2. 家計</h2>
+    <div class="row">
+      <div><label class="f" for="tedori">月の手取り</label><input type="number" id="tedori" min="0" inputmode="numeric" placeholder="例：240000"></div>
+      <div><label class="f" for="extra">増やせる返済額（月）<span class="hint">なければ0</span></label><input type="number" id="extra" min="0" inputmode="numeric" placeholder="例：10000"></div>
+    </div>
+    <label class="f" for="ie">持ち家（住宅ローン）は？</label>
+    <select id="ie"><option value="no">ない</option><option value="yes">ある（住み続けたい）</option></select>
+    <label class="f" for="mukashi">2010年6月より前から借りている先は？</label>
+    <select id="mukashi"><option value="no">ない</option><option value="yes">ある</option><option value="unk">わからない</option></select>
+    <button id="calc" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>借入先ごと（今の返済のまま）</h3>
+    <div id="lines"></div>
+    <h3>返済が苦しいときの3つの方法（目安）</h3>
+    <div id="qs"></div>
+  </div>
+
+  <p class="note">※毎月の返済額が一定（元利均等）で、金利が変わらないとして計算した目安です。リボ払いの「残高スライド方式」などでは、実際の返済額や回数とずれることがあります。<br>
+  ※任意整理は「これからの利息をなくし、元金を3〜5年で返す」、個人再生は「最低弁済額を3年（最長5年）で返す」として計算した目安です。実際の結果は、借入先との話し合いや裁判所の判断で決まります。<br>
+  ※利息制限法の上限金利は、元金10万円未満は年20%、100万円未満は年18%、100万円以上は年15%です。<br>
+  ※このページは、どの方法を選ぶべきかの判断はしません。法テラスや自治体の多重債務の相談窓口に相談してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function $(id) { return document.getElementById(id); }
+  function n(id) { return +$(id).value || 0; }
+  function yen(x) { return Math.round(x).toLocaleString() + "円"; }
+  function man(x) { return (Math.round(x / 1000) / 10).toLocaleString() + "万円"; }
+  function ym(m) { var y = Math.floor(m / 12), r = m % 12; return (y ? y + "年" : "") + (r ? r + "か月" : (y ? "" : "0か月")); }
+  function endYm(m) { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + m); return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  var count = 0;
+  function addLoan(name, bal, rate, pay) {
+    count++;
+    var el = document.createElement("div"); el.className = "loan";
+    el.innerHTML = '<div class="t">借入先' + count + '</div>' +
+      '<label>名前（メモ）</label><input type="text" class="nm" placeholder="例：カードローンA">' +
+      '<div class="row"><div><label>残高（円）</label><input type="number" class="bal" min="0" inputmode="numeric"></div>' +
+      '<div><label>年利（%）</label><input type="number" class="rate" min="0" max="30" step="0.1" inputmode="decimal"></div>' +
+      '<div><label>毎月の返済</label><input type="number" class="pay" min="0" inputmode="numeric"></div></div>';
+    el.querySelector(".nm").value = name || ""; el.querySelector(".bal").value = bal || "";
+    el.querySelector(".rate").value = rate || ""; el.querySelector(".pay").value = pay || "";
+    $("loans").appendChild(el);
+  }
+  for (var i = 0; i < 3; i++) addLoan();
+  $("add").addEventListener("click", function () { addLoan(); });
+
+  function readLoans() {
+    var out = [];
+    document.querySelectorAll(".loan").forEach(function (el, i) {
+      var b = +el.querySelector(".bal").value || 0;
+      if (!b) return;
+      out.push({ name: el.querySelector(".nm").value || "借入先" + (i + 1), bal: b,
+        rate: (+el.querySelector(".rate").value || 0) / 100, pay: +el.querySelector(".pay").value || 0 });
+    });
+    return out;
+  }
+  // 1件ずつ（今のまま）
+  function single(l) {
+    var b = l.bal, r = l.rate / 12, m = 0, intr = 0;
+    if (l.pay <= b * r) return { months: Infinity, interest: Infinity };
+    while (b > 0 && m < 600) { var i = b * r; intr += i; b = b + i - l.pay; m++; }
+    if (b < 0) intr += b; // 最後の月の払いすぎを戻す
+    return { months: m, interest: intr };
+  }
+  // まとめて：金利の高い順に、余った分を回す
+  function avalanche(ls, extra) {
+    var L = ls.map(function (l) { return { bal: l.bal, r: l.rate / 12, pay: l.pay }; });
+    var budget = L.reduce(function (s, l) { return s + l.pay; }, 0) + extra, m = 0, intr = 0;
+    var order = L.slice().sort(function (a, b) { return b.r - a.r; });
+    while (L.some(function (l) { return l.bal > 0.5; }) && m < 600) {
+      var left = budget;
+      L.forEach(function (l) { if (l.bal > 0) { var i = l.bal * l.r; intr += i; l.bal += i; } });
+      L.forEach(function (l) { if (l.bal > 0) { var p = Math.min(l.pay, l.bal, left); l.bal -= p; left -= p; } });
+      order.forEach(function (l) { if (l.bal > 0 && left > 0) { var p = Math.min(l.bal, left); l.bal -= p; left -= p; } });
+      m++;
+      if (left === budget) break;
+    }
+    return { months: m, interest: intr, done: !L.some(function (l) { return l.bal > 0.5; }) };
+  }
+  function limitRate(b) { return b < 100000 ? 0.20 : b < 1000000 ? 0.18 : 0.15; }
+
+  function calc() {
+    var ls = readLoans();
+    if (!ls.length) { alert("借入先の残高を入れてください。"); return; }
+    var msgs = [], cards = [], lines = [], qs = [];
+    var total = ls.reduce(function (s, l) { return s + l.bal; }, 0);
+    var payAll = ls.reduce(function (s, l) { return s + l.pay; }, 0);
+    var tedori = n("tedori"), extra = n("extra");
+    var maxM = 0, sumI = 0, never = false;
+    ls.forEach(function (l) {
+      var s = single(l);
+      if (!isFinite(s.months)) { never = true; lines.push([l.name, "終わらない（返済が利息以下）"]); msgs.push(l.name + "は、毎月の返済額が利息（月" + yen(l.bal * l.rate / 12) + "）以下のため、元金が減りません。"); }
+      else { maxM = Math.max(maxM, s.months); sumI += s.interest; lines.push([l.name + "（" + man(l.bal) + "・年" + (l.rate * 100).toFixed(1) + "%）", ym(s.months) + "・利息 " + yen(s.interest)]); }
+      if (l.rate > limitRate(l.bal) + 0.0001) msgs.push(l.name + "の金利（年" + (l.rate * 100).toFixed(1) + "%）は、利息制限法の上限（年" + limitRate(l.bal) * 100 + "%）を超えています。払いすぎの可能性があるので、相談窓口で確かめてください。");
+    });
+    cards.push(["借金の合計", man(total), "毎月の返済の合計 " + yen(payAll) + (tedori ? "（手取りの " + Math.round(payAll / tedori * 100) + "%）" : "")]);
+    cards.push(["今の返済のままだと", never ? "終わらない借入先がある" : ym(maxM) + "で完済（" + endYm(maxM) + "）", never ? "返済額を増やすか、下の方法を考える" : "利息の合計 約" + yen(sumI)]);
+    if (extra > 0 || ls.length > 1) {
+      var a = avalanche(ls, extra);
+      if (a.done) {
+        var diff = sumI - a.interest;
+        cards.push([(extra ? "月" + yen(extra) + "増やして、" : "") + "金利の高い借入先から先に返すと", ym(a.months) + "で完済（" + endYm(a.months) + "）",
+          "利息の合計 約" + yen(a.interest) + (isFinite(diff) && !never ? "。今のままより 約" + yen(diff) + " 少ない" : "") + "。返し終わった借入先の返済額を、次に金利の高いところへ回す"]);
+      }
+    }
+    var ratio = tedori ? payAll / tedori : 0;
+    if (ratio >= 1 / 3) msgs.push("毎月の返済が手取りの3分の1を超えています。返済だけで生活が苦しくなりやすい目安です。早めに相談窓口に相談してください。");
+
+    // 3つの方法
+    var nini36 = total / 36, nini60 = total / 60;
+    qs.push(["任意整理", "月 約" + yen(nini60) + "〜" + yen(nini36), "借入先と話し合い、これからの利息をなくして、元金を3〜5年で返す。裁判所を通さない。整理する借入先を選べる（車のローンなどを外せる）。信用情報に約5年記録が残る"]);
+    var base = ls.reduce(function (s, l) { return s + l.bal; }, 0);
+    var saitei = base < 1000000 ? base : base <= 5000000 ? 1000000 : base <= 15000000 ? base / 5 : base <= 30000000 ? 3000000 : base / 10;
+    qs.push(["個人再生", "返す総額 約" + man(saitei) + "（月 約" + yen(saitei / 60) + "〜" + yen(saitei / 36) + "）", "裁判所を通して、借金を大きく減らし、原則3年（最長5年）で返す。" + ($("ie").value === "yes" ? "住宅ローンの特則を使うと、家を残せることがある。" : "") + "安定した収入が必要。財産の価値より少なくはならない。信用情報に5〜10年記録が残る"]);
+    qs.push(["自己破産", "返済 0円（免責が認められた場合）", "裁判所を通して、借金の支払いを免除してもらう。一定以上の財産（家など）は手放す。ギャンブルや浪費の借金は、認められないことがある。手続き中は一部の仕事に就けない。信用情報に5〜10年記録が残る"]);
+    if ($("mukashi").value !== "no") qs.push(["過払い金の確認", "払いすぎた利息が戻ることがある", "2010年6月より前に、上限を超える金利で借りていた場合。最後に返した日から10年で請求できなくなる"]);
+    qs.push(["まず相談するところ", "法テラス・自治体の相談窓口", "法テラスは、収入と資産が一定以下なら無料で相談でき、費用の立て替えもある（単身なら手取り月18.2万円以下・資産180万円以下が目安）。財務局や自治体の多重債務の相談窓口も無料"]);
+
+    var cb = $("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = x[0]; el.querySelector(".v").textContent = x[1]; el.querySelector(".s").textContent = x[2];
+      cb.appendChild(el);
+    });
+    $("lines").innerHTML = "";
+    lines.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "ln";
+      el.innerHTML = "<span></span><span></span>"; el.children[0].textContent = x[0]; el.children[1].textContent = x[1];
+      $("lines").appendChild(el);
+    });
+    var qb = $("qs"); qb.innerHTML = "";
+    qs.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "q";
+      el.innerHTML = '<div class="nm"></div><div class="r"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = x[0]; el.querySelector(".r").textContent = x[1]; el.querySelector(".w").textContent = x[2];
+      qb.appendChild(el);
+    });
+    var w = $("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    $("result").hidden = false;
+  }
+  $("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    var rows = document.querySelectorAll(".loan");
+    [["カードローンA", 1200000, 15, 30000], ["クレジットのリボ", 600000, 15, 15000], ["消費者金融B", 500000, 18, 15000]].forEach(function (d, i) {
+      rows[i].querySelector(".nm").value = d[0]; rows[i].querySelector(".bal").value = d[1];
+      rows[i].querySelector(".rate").value = d[2]; rows[i].querySelector(".pay").value = d[3];
+    });
+    $("tedori").value = "240000"; $("extra").value = "10000";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
