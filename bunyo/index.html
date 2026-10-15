@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>財産分与と養育費の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type, .card > .row:first-of-type label.f { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  .sub { font-weight: 700; margin: 18px 0 0; padding-top: 12px; border-top: 1px dashed var(--line); }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.3rem; font-weight: 700; }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+  .ln span:last-child { font-weight: 700; white-space: nowrap; }
+  .dl { border-left: 4px solid var(--mus); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .dl .d { font-weight: 700; }
+  .dl .w { font-size: .88rem; color: var(--sub); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>財産分与と養育費の目安</h1>
+  <p class="lead">結婚してから二人で築いた財産と、二人の年収、子どものことを入れると、財産分与で受け取る（払う）額の目安、養育費の月額の目安、2026年4月の改正後の期限がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 結婚してから築いた財産</h2>
+    <p class="hint" style="margin:0 0 4px">結婚前からの貯金や、親からの相続・贈与で得た財産は入れません。別居した日の時点の額で入れます。</p>
+    <div class="row">
+      <div><label class="f" for="ym">預貯金（自分名義）</label><input type="number" id="ym" min="0" inputmode="numeric" placeholder="例：3000000"></div>
+      <div><label class="f" for="ya">預貯金（相手名義）</label><input type="number" id="ya" min="0" inputmode="numeric" placeholder="例：5000000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="hm">保険・株・投資信託（自分）<span class="hint">解約したときの額</span></label><input type="number" id="hm" min="0" inputmode="numeric"></div>
+      <div><label class="f" for="ha">保険・株・投資信託（相手）<span class="hint">解約したときの額</span></label><input type="number" id="ha" min="0" inputmode="numeric" placeholder="例：1500000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="kuruma">車（売ったときの額）</label><input type="number" id="kuruma" min="0" inputmode="numeric" placeholder="例：800000"></div>
+      <div><label class="f" for="kurumaN">車の名義</label><select id="kurumaN"><option value="a">相手</option><option value="m">自分</option></select></div>
+    </div>
+    <p class="sub">家（持ち家の場合）</p>
+    <div class="row">
+      <div><label class="f" for="ie">今売ったときの額</label><input type="number" id="ie" min="0" inputmode="numeric" placeholder="例：30000000"></div>
+      <div><label class="f" for="loan">住宅ローンの残り</label><input type="number" id="loan" min="0" inputmode="numeric" placeholder="例：24000000"></div>
+    </div>
+    <label class="f" for="ieN">家の名義</label>
+    <select id="ieN"><option value="a">相手</option><option value="m">自分</option><option value="k">二人の共有（半分ずつ）</option></select>
+    <p class="sub">退職金（会社員の場合）</p>
+    <div class="row">
+      <div><label class="f" for="tm">自分の見込み額<span class="hint">今辞めたらもらえる額</span></label><input type="number" id="tm" min="0" inputmode="numeric"></div>
+      <div><label class="f" for="ta">相手の見込み額</label><input type="number" id="ta" min="0" inputmode="numeric" placeholder="例：6000000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="kekkon">結婚していた年数</label><input type="number" id="kekkon" min="0" inputmode="numeric" placeholder="例：12"></div>
+      <div><label class="f" for="kinzoku">相手の勤続年数<span class="hint">自分の分は同じ割合で計算</span></label><input type="number" id="kinzoku" min="0" inputmode="numeric" placeholder="例：18"></div>
+    </div>
+    <label class="f" for="debt">生活のための借金（二人合計）<span class="hint">ギャンブルなど一人の都合の借金は入れない</span></label>
+    <input type="number" id="debt" min="0" inputmode="numeric">
+  </div>
+
+  <div class="card">
+    <h2>2. 年収と子ども</h2>
+    <div class="row">
+      <div><label class="f" for="nm">自分の年収（額面）</label><input type="number" id="nm" min="0" inputmode="numeric" placeholder="例：2000000"></div>
+      <div><label class="f" for="na">相手の年収（額面）</label><input type="number" id="na" min="0" inputmode="numeric" placeholder="例：6000000"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="k1">子ども（0〜14歳）</label><select id="k1"><option>0</option><option selected>1</option><option>2</option><option>3</option></select></div>
+      <div><label class="f" for="k2">子ども（15歳以上）</label><select id="k2"><option>0</option><option>1</option><option>2</option><option>3</option></select></div>
+    </div>
+    <label class="f" for="miru">子どもを育てるのは</label>
+    <select id="miru"><option value="m">自分</option><option value="a">相手</option></select>
+    <label class="f" for="rikon">離婚した日（まだなら予定日）</label>
+    <input type="date" id="rikon">
+    <button id="calc" type="button">目安を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果（目安）</h2>
+    <div class="warn" id="warn" hidden></div>
+    <div id="cards"></div>
+    <h3>分ける財産の内訳</h3>
+    <div id="lines"></div>
+    <h3>期限</h3>
+    <div id="dls"></div>
+  </div>
+
+  <p class="note">※財産分与は、結婚してから二人で築いた財産を、原則として半分ずつに分けるという考え方で計算した目安です。2026年4月の改正で、婚姻期間や生活水準、それぞれの年齢・収入なども考える要素として示されました。実際の割合は話し合いや家庭裁判所で決まります。<br>
+  ※家は「売ったときの額−ローンの残り」で計算し、ローンの方が多いときは0円としています。退職金は「見込み額×結婚していた年数÷勤続年数」で計算しています。<br>
+  ※養育費は、裁判所が公表している標準算定方式（令和元年版）の考え方で、二人とも給与所得者として計算した目安です。自営業の場合や、私立学校の学費・高い医療費などは別に話し合います。<br>
+  ※このページは法的な判断をしません。具体的なことは、弁護士や法テラス、自治体のひとり親の相談窓口に相談してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function $(id) { return document.getElementById(id); }
+  function n(id) { return +$(id).value || 0; }
+  function v(id) { return $(id).value; }
+  function man(x) { var s = x < 0 ? "−" : ""; return s + (Math.round(Math.abs(x) / 10000)).toLocaleString() + "万円"; }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addYears(d, k) { var x = new Date(d); x.setFullYear(x.getFullYear() + k); return x; }
+  // 基礎収入割合（給与・令和元年）
+  var KISO = [[750000, .54], [1000000, .50], [1250000, .46], [1750000, .44], [2750000, .43], [5250000, .42], [7250000, .41], [13250000, .40], [14750000, .39], [20000000, .38]];
+  function kiso(y) { y = Math.min(y, 20000000); for (var i = 0; i < KISO.length; i++) if (y <= KISO[i][0]) return y * KISO[i][1]; return y * .38; }
+
+  function calc() {
+    var msgs = [], cards = [], lines = [], dls = [];
+    // 財産分与
+    var kekkon = n("kekkon"), kin = n("kinzoku");
+    var rate = kin > 0 ? Math.min(1, kekkon / kin) : 0;
+    var ie = Math.max(0, n("ie") - n("loan")), ieN = v("ieN");
+    if (n("ie") && n("loan") > n("ie")) msgs.push("家は、ローンの残りの方が多い（オーバーローン）ため、0円として計算しました。ローンを誰が払い続けるか、家を売るか住み続けるかは、別に話し合う必要があります。");
+    var mine = n("ym") + n("hm") + (v("kurumaN") === "m" ? n("kuruma") : 0) + (ieN === "m" ? ie : ieN === "k" ? ie / 2 : 0) + n("tm") * rate;
+    var theirs = n("ya") + n("ha") + (v("kurumaN") === "a" ? n("kuruma") : 0) + (ieN === "a" ? ie : ieN === "k" ? ie / 2 : 0) + n("ta") * rate;
+    var debt = n("debt");
+    var total = mine + theirs - debt;
+    var half = total / 2;
+    // 借金は名義に関係なく半分ずつ負担するものとして、自分の取り分との差を出す
+    var get = half - (mine - debt / 2);
+    lines.push(["預貯金", n("ym") + n("ya")], ["保険・株・投資信託", n("hm") + n("ha")], ["車", n("kuruma")], ["家（売った額−ローン）", ie],
+      ["退職金（結婚していた期間の分）", (n("tm") + n("ta")) * rate], ["生活のための借金", -debt]);
+    if (total <= 0) {
+      cards.push(["財産分与", "分ける財産がない見込み", "財産より借金の方が多い場合、借金そのものは原則として分けない。話し合いで決める"]);
+    } else {
+      cards.push(["分ける財産の合計（二人分）", man(total), "その半分は " + man(half) + "。今、自分の名義にあるのは " + man(mine) + "、相手の名義は " + man(theirs)]);
+      cards.push([get >= 0 ? "財産分与で受け取る額の目安" : "財産分与で渡す額の目安", man(Math.abs(get)),
+        get >= 0 ? "相手の名義の財産から、この額を受け取ると半分ずつになる" : "自分の名義の財産から、この額を渡すと半分ずつになる"]);
+    }
+
+    // 養育費
+    var k1 = +v("k1"), k2 = +v("k2");
+    if (k1 + k2 > 0) {
+      var miru = v("miru"), pay = miru === "m" ? n("na") : n("nm"), recv = miru === "m" ? n("nm") : n("na");
+      var X = kiso(pay), Y = kiso(recv);
+      var idx = k1 * 62 + k2 * 85;
+      var child = X * idx / (100 + idx);
+      var yearly = (X + Y) > 0 ? child * X / (X + Y) : 0;
+      var monthly = Math.floor(yearly / 12 / 1000) * 1000;
+      var lo = Math.floor(monthly / 20000) * 2, hi = lo + 2;
+      if (monthly < 20000) { lo = monthly < 10000 ? 0 : 1; hi = 2; }
+      cards.push([miru === "m" ? "受け取る養育費の目安（月）" : "払う養育費の目安（月）", "約" + man(monthly),
+        "算定表では「" + lo + "〜" + hi + "万円」の幅に入る見込み（子ども" + (k1 + k2) + "人分）。取り決めがなくても、子ども1人あたり月2万円は請求できる（法定養育費・2026年4月以降に離婚した場合）"]);
+      if (!pay) msgs.push("払う側の年収を入れると、養育費の目安が出ます。");
+    }
+
+    // 期限
+    var rd = pd(v("rikon"));
+    if (rd) {
+      var newLaw = rd >= new Date(2026, 3, 1);
+      var lim = addYears(rd, newLaw ? 5 : 2);
+      dls.push([fmt(lim) + "ごろまで", "財産分与の請求（家庭裁判所）", newLaw ? "2026年4月の改正で、離婚から5年に延びた" : "2026年3月31日までに離婚した場合は、これまでどおり2年と考えられる。早めに確かめる"]);
+      dls.push([fmt(lim) + "ごろまで", "年金分割の請求（年金事務所）", newLaw ? "2026年4月1日以降の離婚は5年" : "2026年3月31日までの離婚は2年"]);
+      dls.push([fmt(addYears(rd, 3)) + "ごろまで", "慰謝料（不貞やDVなどがある場合）", "原則として、損害と相手を知ったときから3年"]);
+      if (k1 + k2 > 0) dls.push(["離婚のときに決める", "養育費・親子交流・親権", "取り決めは書面にしておく。2026年4月から、取り決めの文書があれば、子ども1人月8万円までは、公正証書がなくても差押えの手続きができるようになった"]);
+    } else {
+      msgs.push("離婚した日（予定日）を入れると、財産分与・年金分割の期限がわかります。");
+    }
+
+    var cb = $("cards"); cb.innerHTML = "";
+    cards.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = x[0]; el.querySelector(".v").textContent = x[1]; el.querySelector(".s").textContent = x[2];
+      cb.appendChild(el);
+    });
+    $("lines").innerHTML = "";
+    lines.filter(function (x) { return x[1]; }).forEach(function (x) {
+      var el = document.createElement("div"); el.className = "ln";
+      el.innerHTML = "<span></span><span></span>"; el.children[0].textContent = x[0]; el.children[1].textContent = man(x[1]);
+      $("lines").appendChild(el);
+    });
+    var t = document.createElement("div"); t.className = "ln"; t.innerHTML = "<span>合計</span><span></span>"; t.children[1].textContent = man(total);
+    $("lines").appendChild(t);
+    $("dls").innerHTML = "";
+    dls.forEach(function (x) {
+      var el = document.createElement("div"); el.className = "dl";
+      el.innerHTML = '<div class="d"></div><div></div><div class="w"></div>';
+      el.querySelector(".d").textContent = x[0]; el.children[1].textContent = x[1]; el.querySelector(".w").textContent = x[2];
+      $("dls").appendChild(el);
+    });
+    var w = $("warn"); w.hidden = !msgs.length; w.textContent = "";
+    msgs.forEach(function (m, i) { if (i) w.appendChild(document.createElement("br")); w.appendChild(document.createTextNode(m)); });
+    $("result").hidden = false;
+  }
+  $("calc").addEventListener("click", function () {
+    calc();
+    if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" });
+  });
+  if (DEMO) {
+    $("ym").value = "3000000"; $("ya").value = "5000000"; $("ha").value = "1500000";
+    $("kuruma").value = "800000"; $("ie").value = "30000000"; $("loan").value = "24000000";
+    $("ta").value = "6000000"; $("kekkon").value = "12"; $("kinzoku").value = "18";
+    $("nm").value = "2000000"; $("na").value = "6000000"; $("rikon").value = "2026-12-31";
+    calc();
+  }
+})();
+</script>
+</body>
+</html>
