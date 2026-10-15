@@ -1,0 +1,378 @@
+/**
+ * 請求書の自動管理（Googleスプレッドシート＋Apps Script）
+ * はじめての係　最終更新：2026年10月
+ * 使い方：https://hajimete-kakari.github.io/seikyu/
+ *
+ * できること
+ *  1. フォルダに入れた請求書（PDF・画像）を読み取って、台帳に自動で入力する
+ *  2. 台帳の期限を自動で色分けする（期限切れ＝赤、期限間近＝黄、済み＝灰）
+ *  3. 未入金・未払いを、取引先ごと・月ごとに自動で集計する
+ *  4. 期限が近いもの・過ぎたものを、毎朝メールで知らせる（自分あて）
+ *  5. 台帳の1行から、請求書のPDFを作る
+ *
+ * 準備：エディタ左の「サービス」の＋から「Drive API」を追加してください（1のため）。
+ */
+
+const SHEET_LEDGER = '請求台帳';
+const SHEET_SETTINGS = '設定';
+const SHEET_SUMMARY = '集計';
+const SHEET_TEMPLATE = '請求書ひな形';
+
+const HEADERS = ['区分', '請求書番号', '取引先', '件名', '金額（税込）', '税率', '発行日', '支払期限', '入金・支払日', '状態', 'ファイル', '確認'];
+const COL = { kubun: 1, no: 2, torihiki: 3, kenmei: 4, kingaku: 5, zeiritsu: 6, hakko: 7, kigen: 8, kesai: 9, jotai: 10, file: 11, kakunin: 12 };
+
+const KUBUN_OUT = '請求した（入金待ち）';
+const KUBUN_IN = '請求された（支払い）';
+
+const SETTING_ITEMS = [
+  ['自社名', ''],
+  ['自社の住所', ''],
+  ['自社の電話番号', ''],
+  ['登録番号（インボイス）', ''],
+  ['振込先', ''],
+  ['お知らせメールの宛先', ''],
+  ['何日前から知らせるか', 3],
+  ['読み込むフォルダのID', ''],
+  ['請求書PDFを保存するフォルダのID', '']
+];
+
+/* ───────── メニュー ───────── */
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('請求書')
+    .addItem('① 初期設定（最初に1回）', 'setup')
+    .addSeparator()
+    .addItem('フォルダの請求書を読み込む', 'importInvoices')
+    .addItem('選んだ行の請求書PDFを作る', 'makeInvoicePdf')
+    .addItem('お知らせメールを今すぐ送る（テスト）', 'notifyDue')
+    .addSeparator()
+    .addItem('毎朝のお知らせをオンにする', 'enableDailyNotice')
+    .addItem('毎朝のお知らせをオフにする', 'disableDailyNotice')
+    .addToUi();
+}
+
+/* ───────── 1回だけ：シートを作る ───────── */
+
+function setup() {
+  const ss = SpreadsheetApp.getActive();
+
+  // 設定シート
+  let st = ss.getSheetByName(SHEET_SETTINGS);
+  if (!st) {
+    st = ss.insertSheet(SHEET_SETTINGS);
+    st.getRange(1, 1, 1, 2).setValues([['項目', '内容']]).setFontWeight('bold').setBackground('#e6f0ec');
+    st.getRange(2, 1, SETTING_ITEMS.length, 2).setValues(SETTING_ITEMS);
+    const me = Session.getActiveUser().getEmail();
+    if (me) st.getRange(7, 2).setValue(me); // お知らせメールの宛先
+    st.setColumnWidth(1, 260);
+    st.setColumnWidth(2, 420);
+  }
+
+  // 台帳シート
+  let lg = ss.getSheetByName(SHEET_LEDGER);
+  if (!lg) lg = ss.insertSheet(SHEET_LEDGER, 0);
+  lg.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#e6f0ec');
+  lg.setFrozenRows(1);
+  const n = lg.getMaxRows() - 1;
+  lg.getRange(2, COL.kubun, n).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList([KUBUN_OUT, KUBUN_IN], true).build());
+  lg.getRange(2, COL.zeiritsu, n).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(['10%', '8%'], true).build());
+  lg.getRange(2, COL.kingaku, n).setNumberFormat('#,##0');
+  lg.getRange(2, COL.hakko, n, 3).setNumberFormat('yyyy/mm/dd');
+  // 状態は自動（この列には何も書かない）
+  lg.getRange(2, COL.jotai, n).clearContent();
+  lg.getRange(2, COL.jotai).setFormula(
+    '=ARRAYFORMULA(IF(C2:C="","",IF(I2:I<>"","済",IF(H2:H="","期限なし",' +
+    'IF(H2:H<TODAY(),"期限切れ",IF(H2:H-TODAY()<=\'' + SHEET_SETTINGS + '\'!$B$8,"期限間近","未"))))))');
+  // 色分け
+  const all = lg.getRange(2, 1, n, HEADERS.length);
+  const rule = (f, color) => SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied(f).setBackground(color).setRanges([all]).build();
+  lg.setConditionalFormatRules([
+    rule('=$J2="期限切れ"', '#f8d7d0'),
+    rule('=$J2="期限間近"', '#fff1c2'),
+    rule('=$J2="済"', '#eeeeee'),
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=$L2="要確認"').setBackground('#ffe08a')
+      .setRanges([lg.getRange(2, COL.kakunin, n)]).build()
+  ]);
+  [170, 120, 200, 200, 110, 60, 100, 100, 110, 80, 160, 70].forEach((w, i) => lg.setColumnWidth(i + 1, w));
+
+  // 集計シート
+  let sm = ss.getSheetByName(SHEET_SUMMARY);
+  if (!sm) sm = ss.insertSheet(SHEET_SUMMARY);
+  sm.clear();
+  const L = "'" + SHEET_LEDGER + "'!A:L";
+  sm.getRange('A1').setValue('入金待ち（取引先ごと）').setFontWeight('bold');
+  sm.getRange('A2').setFormula('=IFERROR(QUERY(' + L + ',"select C, count(C), sum(E) where A=\'' + KUBUN_OUT +
+    '\' and I is null and C is not null group by C order by sum(E) desc label count(C) \'件数\', sum(E) \'未入金\'",1),"なし")');
+  sm.getRange('E1').setValue('支払い待ち（取引先ごと）').setFontWeight('bold');
+  sm.getRange('E2').setFormula('=IFERROR(QUERY(' + L + ',"select C, count(C), sum(E) where A=\'' + KUBUN_IN +
+    '\' and I is null and C is not null group by C order by sum(E) desc label count(C) \'件数\', sum(E) \'未払い\'",1),"なし")');
+  sm.getRange('I1').setValue('入金待ち（支払期限の月ごと）').setFontWeight('bold');
+  sm.getRange('I2').setFormula('=IFERROR(QUERY(' + L + ',"select year(H), month(H)+1, sum(E) where A=\'' + KUBUN_OUT +
+    '\' and I is null and H is not null group by year(H), month(H)+1 label year(H) \'年\', month(H)+1 \'月\', sum(E) \'未入金\'",1),"なし")');
+  sm.getRange('M1').setValue('入金待ちの一覧（期限の早い順）').setFontWeight('bold');
+  sm.getRange('M2').setFormula('=IFERROR(QUERY(' + L + ',"select B, C, D, E, H, J where A=\'' + KUBUN_OUT +
+    '\' and I is null and C is not null order by H",1),"なし")');
+  sm.getRange('C:C').setNumberFormat('#,##0');
+  sm.getRange('G:G').setNumberFormat('#,##0');
+  sm.getRange('K:K').setNumberFormat('#,##0');
+  sm.getRange('P:P').setNumberFormat('#,##0');
+  sm.getRange('Q:Q').setNumberFormat('yyyy/mm/dd');
+
+  // 請求書ひな形
+  makeTemplate_(ss);
+
+  ss.setActiveSheet(lg);
+  alert_('初期設定ができました。「設定」シートに、自社名・振込先・フォルダのIDなどを入れてください。');
+}
+
+function makeTemplate_(ss) {
+  let tp = ss.getSheetByName(SHEET_TEMPLATE);
+  if (!tp) tp = ss.insertSheet(SHEET_TEMPLATE);
+  tp.clear();
+  tp.getRange('A1:F1').merge().setValue('請求書').setFontSize(20).setFontWeight('bold').setHorizontalAlignment('center');
+  tp.getRange('A3:C3').merge().setFontSize(13).setFontWeight('bold');
+  tp.getRange('E3').setValue('請求書番号');
+  tp.getRange('E4').setValue('発行日');
+  tp.getRange('F4').setNumberFormat('yyyy年m月d日');
+  tp.getRange('A5:C5').merge().setValue('下記のとおりご請求申し上げます。');
+  tp.getRange('A6').setValue('ご請求金額（税込）');
+  tp.getRange('B6:C6').merge().setFontSize(16).setFontWeight('bold').setNumberFormat('"¥"#,##0');
+  tp.getRange('A7').setValue('お支払期限');
+  tp.getRange('B7:C7').merge().setNumberFormat('yyyy年m月d日');
+  ['E6:F6', 'E7:F7', 'E8:F8', 'E9:F9'].forEach(a => tp.getRange(a).merge());
+  tp.getRange('A11:F11').setValues([['件名', '', '', '税率', '金額（税込）', '']]).setFontWeight('bold').setBackground('#e6f0ec');
+  tp.getRange('A12:C12').merge();
+  tp.getRange('E12:F12').merge().setNumberFormat('#,##0');
+  tp.getRange('A14:D14').merge();
+  tp.getRange('E14:F14').merge().setNumberFormat('#,##0');
+  tp.getRange('A15:D15').merge().setValue('うち消費税');
+  tp.getRange('E15:F15').merge().setNumberFormat('#,##0');
+  tp.getRange('A17').setValue('お振込先');
+  tp.getRange('B17:F17').merge();
+  tp.getRange('A19').setValue('備考');
+  tp.getRange('B19:F19').merge();
+  [130, 110, 110, 60, 110, 110].forEach((w, i) => tp.setColumnWidth(i + 1, w));
+}
+
+/* ───────── 1. 請求書を読み込む ───────── */
+
+function importInvoices() {
+  const ss = SpreadsheetApp.getActive();
+  const set = getSettings_();
+  const folderId = String(set['読み込むフォルダのID'] || '').trim();
+  if (!folderId) { alert_('「設定」シートに「読み込むフォルダのID」を入れてください。'); return; }
+  const lg = ss.getSheetByName(SHEET_LEDGER);
+  const done = doneIds_(lg);
+  const files = DriveApp.getFolderById(folderId).getFiles();
+  let added = 0, skipped = 0;
+  while (files.hasNext()) {
+    const f = files.next();
+    if (done[f.getId()]) continue;
+    const type = f.getMimeType();
+    if (type !== MimeType.PDF && type.indexOf('image/') !== 0) { skipped++; continue; }
+    const d = parseInvoice_(ocr_(f), String(set['自社名'] || ''));
+    const r = lastRow_(lg) + 1;
+    lg.getRange(r, 1, 1, 9).setValues([[KUBUN_IN, d.no, d.torihiki, d.kenmei || f.getName(), d.kingaku, '10%', d.hakko, d.kigen, '']]);
+    lg.getRange(r, COL.file, 1, 2).setValues([[f.getUrl(), '要確認']]);
+    added++;
+  }
+  alert_(added + '件を読み込みました。' + (skipped ? '（PDF・画像以外の' + skipped + '件は飛ばしました）' : '') +
+    '\n読み取りまちがいがあるので、「要確認」の行を、元の請求書と見くらべて直し、「確認」の欄を消してください。');
+}
+
+function ocr_(file) {
+  const tmp = Drive.Files.create({ name: 'tmp_ocr_' + file.getName(), mimeType: MimeType.GOOGLE_DOCS }, file.getBlob(), { ocrLanguage: 'ja' });
+  try {
+    return DocumentApp.openById(tmp.id).getBody().getText();
+  } finally {
+    DriveApp.getFileById(tmp.id).setTrashed(true);
+  }
+}
+
+function parseInvoice_(text, myName) {
+  const t = String(text)
+    .replace(/[０-９Ａ-Ｚａ-ｚ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[，]/g, ',').replace(/[￥]/g, '¥').replace(/[．]/g, '.').replace(/\r/g, '');
+  const lines = t.split('\n').map(s => s.trim()).filter(s => s);
+  const out = { no: '', torihiki: '', kenmei: '', kingaku: '', hakko: '', kigen: '' };
+
+  out.kingaku = amountNear_(lines, [/ご請求金額|御請求金額|請求金額/, /お支払金額|お支払い金額|お振込金額/, /税込合計|合計金額|総合計/, /合計/]);
+  out.kigen = dateNear_(lines, /支払期限|お支払期限|お支払い期限|支払期日|お支払期日|振込期限|お振込期限|振込期日|お支払日/);
+  out.hakko = dateNear_(lines, /請求日|発行日|請求年月日|発行年月日/) || parseDate_(t) || '';
+
+  const no = t.match(/(請求書番号|請求番号|請求書No|請求書NO|No)\s*[.:：#]?\s*([A-Za-z0-9][A-Za-z0-9\-_]*)/);
+  if (no) out.no = no[2];
+
+  const corp = /株式会社|有限会社|合同会社|合資会社|一般社団法人|\(株\)|（株）|\(有\)|（有）/;
+  for (const l of lines) {
+    if (!corp.test(l) || /御中|様/.test(l)) continue;
+    if (myName && l.indexOf(myName) >= 0) continue;
+    out.torihiki = l.replace(/\s+/g, ' ').slice(0, 40);
+    break;
+  }
+  const k = t.match(/(件名|ご請求内容|品名)\s*[:：]?\s*(.+)/);
+  if (k) out.kenmei = k[2].trim().slice(0, 40);
+  return out;
+}
+
+function amountNear_(lines, keys) {
+  for (const kw of keys) {
+    for (let i = 0; i < lines.length; i++) {
+      const p = lines[i].search(kw);
+      if (p < 0) continue;
+      for (let j = i; j < Math.min(i + 3, lines.length); j++) {
+        const seg = j === i ? lines[j].slice(p) : lines[j];
+        const m = seg.match(/(\d{1,3}(?:,\d{3})+|\d{3,})/);
+        if (m) return Number(m[1].replace(/,/g, ''));
+      }
+    }
+  }
+  return '';
+}
+
+function dateNear_(lines, kw) {
+  for (let i = 0; i < lines.length; i++) {
+    const p = lines[i].search(kw);
+    if (p < 0) continue;
+    for (let j = i; j < Math.min(i + 3, lines.length); j++) {
+      const d = parseDate_(j === i ? lines[j].slice(p) : lines[j]);
+      if (d) return d;
+    }
+  }
+  return '';
+}
+
+function parseDate_(s) {
+  let m = String(s).match(/(\d{4})\s*[年\/.\-]\s*(\d{1,2})\s*[月\/.\-]\s*(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  m = String(s).match(/(令和|R)\s*(\d{1,2}|元)\s*[年\/.\-]\s*(\d{1,2})\s*[月\/.\-]\s*(\d{1,2})/);
+  if (m) return new Date((m[2] === '元' ? 1 : +m[2]) + 2018, +m[3] - 1, +m[4]);
+  return null;
+}
+
+/* ───────── 4. お知らせメール ───────── */
+
+function notifyDue() {
+  const ss = SpreadsheetApp.getActive();
+  const set = getSettings_();
+  const to = String(set['お知らせメールの宛先'] || '').trim();
+  if (!to) { alert_('「設定」シートに「お知らせメールの宛先」を入れてください。'); return; }
+  const days = Number(set['何日前から知らせるか']) || 3;
+  const lg = ss.getSheetByName(SHEET_LEDGER);
+  const last = lastRow_(lg);
+  if (last < 2) { alert_('台帳にまだ何も入っていません。'); return; }
+  const rows = lg.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const over = [], soon = [];
+  rows.forEach(r => {
+    const kigen = r[COL.kigen - 1];
+    if (!r[COL.torihiki - 1] || r[COL.kesai - 1] || !(kigen instanceof Date)) return;
+    const diff = Math.floor((kigen - today) / 86400000);
+    const line = Utilities.formatDate(kigen, 'Asia/Tokyo', 'M/d') + '　' +
+      (r[COL.kubun - 1] === KUBUN_IN ? '支払い' : '入金待ち') + '　' + r[COL.torihiki - 1] + '　' +
+      Number(r[COL.kingaku - 1] || 0).toLocaleString() + '円';
+    if (diff < 0) over.push(line); else if (diff <= days) soon.push(line);
+  });
+  if (!over.length && !soon.length) { alert_('期限が近いもの・過ぎたものはありません。'); return; }
+  const body = (over.length ? '■期限を過ぎたもの\n' + over.join('\n') + '\n\n' : '') +
+    (soon.length ? '■' + days + '日以内に期限が来るもの\n' + soon.join('\n') + '\n\n' : '') +
+    '台帳：' + ss.getUrl();
+  MailApp.sendEmail(to, '【請求書】期限のお知らせ（' + (over.length + soon.length) + '件）', body);
+  alert_('お知らせメールを送りました（' + to + '）。');
+}
+
+function enableDailyNotice() {
+  disableDailyNotice(true);
+  ScriptApp.newTrigger('notifyDue').timeBased().everyDays(1).atHour(8).create();
+  alert_('毎朝8時ごろに、お知らせメールを送るようにしました。');
+}
+
+function disableDailyNotice(silent) {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'notifyDue').forEach(t => ScriptApp.deleteTrigger(t));
+  if (silent !== true) alert_('毎朝のお知らせを止めました。');
+}
+
+/* ───────── 5. 請求書PDFを作る ───────── */
+
+function makeInvoicePdf() {
+  const ss = SpreadsheetApp.getActive();
+  const lg = ss.getSheetByName(SHEET_LEDGER);
+  const sh = ss.getActiveSheet();
+  const r = sh.getActiveRange().getRow();
+  if (sh.getName() !== SHEET_LEDGER || r < 2) { alert_('「請求台帳」で、PDFにしたい行のどこかを選んでから使ってください。'); return; }
+  const v = lg.getRange(r, 1, 1, HEADERS.length).getValues()[0];
+  if (v[COL.kubun - 1] !== KUBUN_OUT) { alert_('「' + KUBUN_OUT + '」の行を選んでください。'); return; }
+  if (!v[COL.torihiki - 1] || !v[COL.kingaku - 1]) { alert_('取引先と金額を入れてください。'); return; }
+  const set = getSettings_();
+  const hakko = v[COL.hakko - 1] instanceof Date ? v[COL.hakko - 1] : new Date();
+  let no = v[COL.no - 1];
+  if (!no) { no = 'INV-' + Utilities.formatDate(hakko, 'Asia/Tokyo', 'yyyyMMdd') + '-' + r; lg.getRange(r, COL.no).setValue(no); }
+  if (!(v[COL.hakko - 1] instanceof Date)) lg.getRange(r, COL.hakko).setValue(hakko);
+  const rate = v[COL.zeiritsu - 1] === '8%' ? 0.08 : 0.10;
+  const amount = Number(v[COL.kingaku - 1]);
+  const tax = Math.floor(amount * rate / (1 + rate));
+
+  const tp = ss.getSheetByName(SHEET_TEMPLATE) || (makeTemplate_(ss), ss.getSheetByName(SHEET_TEMPLATE));
+  tp.getRange('A3').setValue(v[COL.torihiki - 1] + '　御中');
+  tp.getRange('F3').setValue(no);
+  tp.getRange('F4').setValue(hakko);
+  tp.getRange('B6').setValue(amount);
+  tp.getRange('B7').setValue(v[COL.kigen - 1] || '');
+  tp.getRange('E6').setValue(set['自社名'] || '');
+  tp.getRange('E7').setValue(set['自社の住所'] || '');
+  tp.getRange('E8').setValue(set['自社の電話番号'] || '');
+  tp.getRange('E9').setValue(set['登録番号（インボイス）'] ? '登録番号　' + set['登録番号（インボイス）'] : '');
+  tp.getRange('A12').setValue(v[COL.kenmei - 1] || '');
+  tp.getRange('D12').setValue(rate === 0.08 ? '8%' : '10%');
+  tp.getRange('E12').setValue(amount);
+  tp.getRange('A14').setValue('税率' + (rate === 0.08 ? '8%' : '10%') + '対象　合計（税込）');
+  tp.getRange('E14').setValue(amount);
+  tp.getRange('E15').setValue(tax);
+  tp.getRange('B17').setValue(set['振込先'] || '');
+  SpreadsheetApp.flush();
+
+  const url = 'https://docs.google.com/spreadsheets/d/' + ss.getId() + '/export?format=pdf&gid=' + tp.getSheetId() +
+    '&size=A4&portrait=true&fitw=true&gridlines=false&printtitle=false&sheetnames=false&pagenum=UNDEFINED&fzr=false' +
+    '&top_margin=0.6&bottom_margin=0.6&left_margin=0.6&right_margin=0.6';
+  const blob = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() } })
+    .getBlob().setName('請求書_' + v[COL.torihiki - 1] + '_' + no + '.pdf');
+  const folderId = String(set['請求書PDFを保存するフォルダのID'] || '').trim();
+  const file = (folderId ? DriveApp.getFolderById(folderId) : DriveApp.getRootFolder()).createFile(blob);
+  lg.getRange(r, COL.file).setValue(file.getUrl());
+  alert_('請求書のPDFを作りました。\n' + file.getName() + '\n送る前に、PDFを開いて中身を確かめてください。');
+}
+
+/* ───────── 共通 ───────── */
+
+function getSettings_() {
+  const st = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTINGS);
+  const map = {};
+  if (!st || st.getLastRow() < 2) return map;
+  st.getRange(2, 1, st.getLastRow() - 1, 2).getValues().forEach(r => { if (r[0]) map[r[0]] = r[1]; });
+  return map;
+}
+
+function lastRow_(lg) {
+  const n = lg.getLastRow();
+  if (n < 2) return 1;
+  const a = lg.getRange(2, COL.kubun, n - 1).getValues();
+  for (let i = a.length - 1; i >= 0; i--) if (a[i][0] !== '') return i + 2;
+  return 1;
+}
+
+function doneIds_(lg) {
+  const ids = {};
+  const n = lastRow_(lg);
+  if (n < 2) return ids;
+  lg.getRange(2, COL.file, n - 1).getValues().forEach(r => {
+    const m = String(r[0]).match(/[-\w]{25,}/);
+    if (m) ids[m[0]] = true;
+  });
+  return ids;
+}
+
+function alert_(msg) {
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+}

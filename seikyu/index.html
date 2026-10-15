@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>請求書の自動管理｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+    --red: #f8d7d0; --yellow: #fff1c2; --gray: #eeeeee; --check: #ffe08a; --code: #f4f1ea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+      --red: #4a2a25; --yellow: #4a4220; --gray: #34343a; --check: #5a4a18; --code: #202024;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .feat { border-left: 4px solid var(--accent); padding: 2px 0 4px 12px; margin-bottom: 10px; }
+  .feat b { display: block; }
+  .feat span { font-size: .88rem; color: var(--sub); }
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; font-size: .78rem; width: 100%; min-width: 520px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 6px; text-align: left; white-space: nowrap; }
+  th { background: var(--accent-soft); font-weight: 700; }
+  td.n { text-align: right; }
+  tr.red td { background: var(--red); } tr.yellow td { background: var(--yellow); } tr.gray td { background: var(--gray); }
+  td.chk { background: var(--check); }
+  .sum { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .sum div { flex: 1 1 150px; background: var(--accent-soft); border-radius: 8px; padding: 8px 10px; font-size: .85rem; }
+  .sum b { display: block; font-size: 1.05rem; }
+  ol.steps { padding-left: 1.3em; margin: 0; }
+  ol.steps li { margin-bottom: 8px; }
+  ol.steps .w { display: block; font-size: .86rem; color: var(--sub); }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: .74rem; line-height: 1.5;
+    max-height: 320px; overflow: auto; white-space: pre; margin: 0; }
+  label.f { display: block; font-weight: 600; margin: 12px 0 6px; }
+  select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .9rem; }
+  button { width: 100%; font-size: .95rem; font-weight: 700; padding: 10px; border-radius: 10px; margin-top: 8px; cursor: pointer; font-family: inherit;
+    background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  code { background: var(--code); padding: 0 4px; border-radius: 4px; font-size: .88em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>請求書の自動管理（Googleスプレッドシート）</h1>
+  <p class="lead">Googleスプレッドシートに、下のコード（AIに書いてもらったもの）を貼るだけで、請求書の台帳・期限の色分け・未入金の集計・期限のお知らせメール・請求書PDFの作成・受け取った請求書の読み込みができるようになります。無料のGoogleアカウントで使えます。</p>
+
+  <div class="card">
+    <h2>できること</h2>
+    <div class="feat"><b>1. 受け取った請求書を、読み込んで自動入力</b><span>Googleドライブのフォルダに請求書のPDFや写真を入れて、メニューの「読み込む」を押すと、取引先・金額・発行日・支払期限・請求書番号を読み取って台帳に入れます。読み取った行には「要確認」が付きます。</span></div>
+    <div class="feat"><b>2. 台帳と、期限の自動色分け</b><span>期限切れは赤、期限間近（設定した日数以内）は黄、入金・支払いが済んだものは灰色になります。</span></div>
+    <div class="feat"><b>3. 未入金・未払いの一覧と集計</b><span>「集計」シートに、取引先ごと・月ごとの未入金、支払い待ち、入金待ちの一覧が自動で出ます。</span></div>
+    <div class="feat"><b>4. 期限前のお知らせメール</b><span>毎朝8時ごろ、期限が近いもの・過ぎたものを、自分あてにメールで知らせます。</span></div>
+    <div class="feat"><b>5. 請求書PDFの自動作成</b><span>台帳の行を選んでメニューを押すと、自社名・登録番号・振込先・税率ごとの金額と消費税を入れた請求書のPDFを作り、ドライブに保存します。</span></div>
+  </div>
+
+  <div class="card" id="mihon">
+    <h2>見本（できあがりのイメージ）</h2>
+    <h3>請求台帳</h3>
+    <div class="tblwrap">
+      <table>
+        <tr><th>区分</th><th>取引先</th><th>金額</th><th>支払期限</th><th>入金・支払日</th><th>状態</th><th>確認</th></tr>
+        <tr class="red"><td>請求した</td><td>株式会社みどり商会</td><td class="n">165,000</td><td>2026/10/10</td><td></td><td>期限切れ</td><td></td></tr>
+        <tr class="yellow"><td>請求した</td><td>合同会社さくら企画</td><td class="n">88,000</td><td>2026/10/17</td><td></td><td>期限間近</td><td></td></tr>
+        <tr class="yellow"><td>請求された</td><td>株式会社あおば印刷</td><td class="n">33,000</td><td>2026/10/18</td><td></td><td>期限間近</td><td class="chk">要確認</td></tr>
+        <tr><td>請求した</td><td>株式会社みどり商会</td><td class="n">220,000</td><td>2026/11/30</td><td></td><td>未</td><td></td></tr>
+        <tr class="gray"><td>請求した</td><td>有限会社ひかり工房</td><td class="n">55,000</td><td>2026/09/30</td><td>2026/09/29</td><td>済</td><td></td></tr>
+      </table>
+    </div>
+    <h3>集計（自動）</h3>
+    <div class="sum">
+      <div>入金待ち（みどり商会）<b>385,000円・2件</b></div>
+      <div>入金待ち（さくら企画）<b>88,000円・1件</b></div>
+      <div>支払い待ち（あおば印刷）<b>33,000円・1件</b></div>
+    </div>
+    <h3>毎朝のお知らせメール</h3>
+    <div class="mail">件名：【請求書】期限のお知らせ（3件）
+■期限を過ぎたもの
+10/10　入金待ち　株式会社みどり商会　165,000円
+■3日以内に期限が来るもの
+10/17　入金待ち　合同会社さくら企画　88,000円
+10/18　支払い　株式会社あおば印刷　33,000円</div>
+  </div>
+
+  <div class="card">
+    <h2>準備（15分ほど・パソコンで）</h2>
+    <ol class="steps">
+      <li>Googleドライブで、新しいスプレッドシートを作る。<span class="w">名前は「請求書の管理」など</span></li>
+      <li>メニューの「拡張機能」→「Apps Script」を開く。</li>
+      <li>最初からある文字を全部消して、下の「コードをコピー」で写したコードを貼り、保存（フロッピーの印）する。</li>
+      <li>左の「サービス」の＋を押し、「Drive API」を選んで追加する。<span class="w">受け取った請求書の読み込みに使います</span></li>
+      <li>スプレッドシートに戻って、ページを再読み込みすると、メニューに「請求書」が出る。</li>
+      <li>「請求書」→「① 初期設定」を押す。最初の1回だけ、Googleの許可の画面が出るので、自分のアカウントを選んで許可する。<span class="w">「このアプリはGoogleで確認されていません」と出たら、「詳細」→「（安全ではないページ）に移動」で進みます。自分で作ったコードなので、自分のアカウントだけで動きます</span></li>
+      <li>「設定」シートに、自社名・住所・登録番号・振込先・お知らせの宛先を入れる。</li>
+      <li>ドライブに「受け取った請求書」と「作った請求書」のフォルダを作り、それぞれのIDを「設定」シートに入れる。<span class="w">IDは、フォルダを開いたときのURLの <code>folders/</code> の後ろの英数字です</span></li>
+      <li>毎朝のお知らせを使うなら、「請求書」→「毎朝のお知らせをオンにする」を押す。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>コード</h2>
+    <pre id="code">読み込み中…</pre>
+    <button type="button" id="copyCode">コードをコピー</button>
+    <p class="note">コードは、Apps Script（Googleのプログラム）で書いています。このページからは、どこにも送られません。</p>
+  </div>
+
+  <div class="card">
+    <h2>自分の会社に合わせて、AIに直してもらう</h2>
+    <p class="note" style="margin-top:0">ClaudeやChatGPTなどのAIに、下の依頼文と、上のコードを一緒に貼ると、直したコードを作ってくれます。</p>
+    <label class="f" for="want">変えたいこと</label>
+    <select id="want">
+      <option value="col">台帳に列を足したい（担当者・部署など）</option>
+      <option value="meisai">請求書PDFに、明細を何行も入れたい</option>
+      <option value="csv">銀行の入金明細（CSV）から、入金日を自動で入れたい</option>
+      <option value="ocr">請求書の読み取りが、うまくいかない</option>
+      <option value="error">エラーが出て動かない</option>
+      <option value="mail">取引先への請求書メールの「下書き」を作りたい</option>
+    </select>
+    <div class="mail" id="prompt" style="margin-top:10px"></div>
+    <button type="button" id="copyPrompt">依頼文をコピー</button>
+  </div>
+
+  <div class="card">
+    <h2>使う前に確かめること</h2>
+    <div class="warn">会社のパソコン・アカウントで使う場合は、会社のルール（外部サービスやプログラムの利用）を先に確かめてください。</div>
+    <ul>
+      <li>読み込みは、文字の読み取り（OCR）なので、読みまちがいがあります。「要確認」の行は、元の請求書と見くらべて直してください。</li>
+      <li>お知らせメールは、自分（設定した宛先）にだけ送ります。取引先には送りません。</li>
+      <li>作ったPDFは、送る前に中身を開いて確かめてください。</li>
+      <li>インボイス（適格請求書）や電子帳簿保存法の要件を満たしているかは、国税庁の案内や税理士で確かめてください。</li>
+      <li>AIに直してもらったコードは、まずコピーしたスプレッドシートで試してから使います。</li>
+    </ul>
+  </div>
+
+  <p class="note">最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CODE = "";
+  fetch("code.txt").then(function (r) { return r.text(); }).then(function (t) { CODE = t; $("code").textContent = t; })
+    .catch(function () { $("code").textContent = "コードを読み込めませんでした。ページを再読み込みしてください。"; });
+  var P = {
+    col: "台帳に「担当者」と「部署」の列を、「件名」の右に足したいです。列が増えても、色分け・集計・お知らせメール・請求書PDFが正しく動くように直してください。",
+    meisai: "請求書PDFに、明細（品名・数量・単価・金額）を最大10行まで入れられるようにしたいです。明細は「明細」という別のシートに、請求書番号ごとに入れる形にしてください。税率ごとの合計と消費税も出してください。",
+    csv: "銀行のネットバンキングからダウンロードした入金明細のCSV（日付・振込人名・金額）を「入金明細」シートに貼ったら、台帳の「請求した」の行と、金額と振込人名（カタカナ）で照らし合わせて、入金日を自動で入れる機能を足してください。一致しないものは一覧にしてください。",
+    ocr: "請求書の読み込みで、【うまく取れない項目（例：取引先名）】が正しく入りません。下に、読み取った文字の例（個人情報は〇〇に置き換え済み）を貼ります。この形の請求書でも取れるように、parseInvoice_ を直してください。\n\n【読み取った文字の例】\n（ここに貼る）",
+    error: "このコードを動かすと、エラーが出ます。原因と、直し方を教えてください。直したコード全体も出してください。\n\n【エラーの文】\n（ここに貼る）\n【押したメニュー】\n（例：フォルダの請求書を読み込む）",
+    mail: "台帳の「請求した」の行を選んでメニューを押すと、作った請求書PDFを添付した、取引先あてのGmailの「下書き」を作る機能を足してください。送信はせず、下書きだけにしてください。宛先は台帳に「メール」の列を足して入れます。"
+  };
+  function show() {
+    $("prompt").textContent = "あなたは、Googleスプレッドシートの Apps Script にくわしいプログラマーです。\n下のコードは、請求書の台帳を管理するコードです。\n\n【してほしいこと】\n" + P[$("want").value] +
+      "\n\n【守ってほしいこと】\n・はじめての人でもわかるように、どこを変えたかを説明してください\n・直したコードは、全体をそのまま貼れる形で出してください\n・個人情報やパスワードは、コードに書かないでください\n・わからないことがあれば、先に質問してください\n\n【今のコード】\n（ここに、このページのコードを貼る）";
+  }
+  $("want").addEventListener("change", show); show();
+  function copy(txt, b, label) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("copyCode").addEventListener("click", function (e) { copy(CODE, e.target, "コードをコピー"); });
+  $("copyPrompt").addEventListener("click", function (e) { copy($("prompt").textContent, e.target, "依頼文をコピー"); });
+})();
+</script>
+</body>
+</html>
