@@ -1,0 +1,341 @@
+/**
+ * 在庫と発注の自動管理（Googleスプレッドシート＋Apps Script）
+ * はじめての係　最終更新：2026年10月
+ * 使い方：https://hajimete-kakari.github.io/zaiko/
+ *
+ * できること
+ *  1. 入庫・出庫を1行ずつ入れると、商品ごとの「今の在庫」を自動で計算する
+ *  2. 在庫が「発注点」を下回ったら色分けし、毎朝メールで知らせる（すでに発注中のものは除く）
+ *  3. 発注が必要な商品を仕入先ごとにまとめて、発注書のPDFを作り、Gmailに下書きを作る（送信はしない）
+ *  4. 届いたら「入荷済みにする」を押すだけで、入庫の行が自動で入る
+ *  5. 月ごと・商品ごとの入庫と出庫を自動で集計する
+ */
+
+const SHEET_ITEM = '商品';
+const SHEET_MOVE = '入出庫';
+const SHEET_SUP = '仕入先';
+const SHEET_ORDER = '発注履歴';
+const SHEET_SUMMARY = '集計';
+const SHEET_TPL = '発注書ひな形';
+const SHEET_SETTINGS = '設定';
+
+const ITEM_HEADERS = ['商品コード', '商品名', '単位', '仕入先', '単価（税抜）', '発注点', '発注する数', '今の在庫（自動）', '最初の在庫', '状態（自動）', '保管場所'];
+const MOVE_HEADERS = ['日付', '区分', '商品コード', '商品名（自動）', '数量', '担当', 'メモ', '（集計用）'];
+const SUP_HEADERS = ['仕入先', 'ご担当者', 'メール', '電話', '住所'];
+const ORDER_HEADERS = ['発注日', '発注書番号', '仕入先', '商品コード', '商品名', '数量', '単価（税抜）', '金額（税抜）', '状態', '入荷日', 'PDF'];
+const KUBUN = ['入庫', '出庫', '棚卸の調整'];
+const TPL_ROWS = 15; // 発注書1枚に入る商品の数
+
+const SETTING_ITEMS = [
+  ['自社名', ''],
+  ['自社の住所', ''],
+  ['自社の電話番号', ''],
+  ['ご担当（発注書に書く名前）', ''],
+  ['お知らせメールの宛先', ''],
+  ['発注書PDFを保存するフォルダのID', ''],
+  ['発注メールの下書きを作る（はい／いいえ）', 'はい']
+];
+
+/* ───────── メニュー ───────── */
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('在庫')
+    .addItem('① 初期設定（最初に1回）', 'setup')
+    .addSeparator()
+    .addItem('発注が必要なものを見る', 'showNeeded')
+    .addItem('発注書を作る（仕入先ごと）', 'makeOrders')
+    .addItem('選んだ発注を入荷済みにする', 'receiveOrder')
+    .addItem('お知らせメールを今すぐ送る（テスト）', 'notifyNeeded')
+    .addSeparator()
+    .addItem('毎朝のお知らせをオンにする', 'enableDaily')
+    .addItem('毎朝のお知らせをオフにする', 'disableDaily')
+    .addToUi();
+}
+
+/* ───────── 1回だけ：シートを作る ───────── */
+
+function setup() {
+  const ss = SpreadsheetApp.getActive();
+
+  let st = ss.getSheetByName(SHEET_SETTINGS);
+  if (!st) {
+    st = ss.insertSheet(SHEET_SETTINGS);
+    st.getRange(1, 1, 1, 2).setValues([['項目', '内容']]).setFontWeight('bold').setBackground('#e6f0ec');
+    st.getRange(2, 1, SETTING_ITEMS.length, 2).setValues(SETTING_ITEMS);
+    const me = Session.getActiveUser().getEmail();
+    if (me) st.getRange(6, 2).setValue(me); // お知らせメールの宛先
+    st.setColumnWidth(1, 320); st.setColumnWidth(2, 400);
+  }
+
+  const sup = ss.getSheetByName(SHEET_SUP) || ss.insertSheet(SHEET_SUP);
+  header_(sup, SUP_HEADERS, [180, 120, 220, 130, 280]);
+
+  const it = ss.getSheetByName(SHEET_ITEM) || ss.insertSheet(SHEET_ITEM, 0);
+  header_(it, ITEM_HEADERS, [100, 200, 60, 160, 100, 70, 90, 120, 90, 110, 110]);
+  const ni = it.getMaxRows() - 1;
+  it.getRange(2, 4, ni).setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInRange(sup.getRange('A2:A200'), true).setAllowInvalid(true).build());
+  it.getRange(2, 5, ni).setNumberFormat('#,##0');
+  it.getRange(2, 8, ni, 1).clearContent();
+  it.getRange(2, 10, ni, 1).clearContent();
+  const M = "'" + SHEET_MOVE + "'";
+  // 今の在庫＝最初の在庫＋入庫－出庫＋棚卸の調整
+  it.getRange('H2').setFormula('=ARRAYFORMULA(IF(A2:A="","",N(I2:I)' +
+    '+SUMIF(' + M + '!H:H,A2:A&"|入庫",' + M + '!E:E)' +
+    '-SUMIF(' + M + '!H:H,A2:A&"|出庫",' + M + '!E:E)' +
+    '+SUMIF(' + M + '!H:H,A2:A&"|棚卸の調整",' + M + '!E:E)))');
+  it.getRange('J2').setFormula('=ARRAYFORMULA(IF(A2:A="","",IF(F2:F="","",IF(H2:H<=F2:F,"発注が必要",IF(H2:H<=F2:F*1.5,"少なめ","OK")))))');
+  const ai = it.getRange(2, 1, ni, ITEM_HEADERS.length);
+  const rule = (rng, f, c) => SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied(f).setBackground(c).setRanges([rng]).build();
+  it.setConditionalFormatRules([
+    rule(ai, '=$J2="発注が必要"', '#f8d7d0'),
+    rule(ai, '=$J2="少なめ"', '#fff1c2')
+  ]);
+
+  const mv = ss.getSheetByName(SHEET_MOVE) || ss.insertSheet(SHEET_MOVE, 1);
+  header_(mv, MOVE_HEADERS, [100, 100, 100, 200, 70, 90, 200, 40]);
+  const nm = mv.getMaxRows() - 1;
+  mv.getRange(2, 1, nm).setNumberFormat('yyyy/mm/dd');
+  mv.getRange(2, 2, nm).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(KUBUN, true).build());
+  mv.getRange(2, 3, nm).setDataValidation(SpreadsheetApp.newDataValidation()
+    .requireValueInRange(it.getRange('A2:A1000'), true).setAllowInvalid(true).build());
+  mv.getRange(2, 4, nm, 1).clearContent();
+  mv.getRange(2, 8, nm, 1).clearContent();
+  const I = "'" + SHEET_ITEM + "'";
+  mv.getRange('D2').setFormula('=ARRAYFORMULA(IF(C2:C="","",IFERROR(VLOOKUP(C2:C,' + I + '!A:B,2,FALSE),"コードなし")))');
+  mv.getRange('H2').setFormula('=ARRAYFORMULA(IF(C2:C="","",C2:C&"|"&B2:B))');
+  mv.hideColumns(8);
+  mv.setConditionalFormatRules([
+    rule(mv.getRange(2, 1, nm, MOVE_HEADERS.length), '=$B2="入庫"', '#e6f0ec'),
+    rule(mv.getRange(2, 1, nm, MOVE_HEADERS.length), '=$D2="コードなし"', '#f8d7d0')
+  ]);
+
+  const od = ss.getSheetByName(SHEET_ORDER) || ss.insertSheet(SHEET_ORDER);
+  header_(od, ORDER_HEADERS, [100, 140, 160, 100, 200, 70, 100, 110, 80, 100, 160]);
+  const no = od.getMaxRows() - 1;
+  od.getRange(2, 1, no).setNumberFormat('yyyy/mm/dd');
+  od.getRange(2, 10, no).setNumberFormat('yyyy/mm/dd');
+  od.getRange(2, 7, no, 2).setNumberFormat('#,##0');
+  od.getRange(2, 9, no).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(['発注済', '入荷済', '取消'], true).build());
+  od.setConditionalFormatRules([
+    rule(od.getRange(2, 1, no, ORDER_HEADERS.length), '=$I2="発注済"', '#fff1c2'),
+    rule(od.getRange(2, 1, no, ORDER_HEADERS.length), '=OR($I2="入荷済",$I2="取消")', '#eeeeee')
+  ]);
+
+  const sm = ss.getSheetByName(SHEET_SUMMARY) || ss.insertSheet(SHEET_SUMMARY);
+  sm.clear();
+  sm.getRange('A1').setValue('月ごと・商品ごとの入庫と出庫').setFontWeight('bold');
+  sm.getRange('A2').setFormula('=IFERROR(QUERY(' + M + '!A:E,"select year(A), month(A)+1, C, D, sum(E) where A is not null and (B=\'入庫\' or B=\'出庫\') ' +
+    'group by year(A), month(A)+1, C, D pivot B order by year(A) desc, month(A)+1 desc label year(A) \'年\', month(A)+1 \'月\'",1),"なし")');
+  sm.getRange('I1').setValue('発注中（まだ届いていないもの）').setFontWeight('bold');
+  sm.getRange('I2').setFormula('=IFERROR(QUERY(\'' + SHEET_ORDER + '\'!A:K,"select A, C, E, F where I=\'発注済\' order by A",1),"なし")');
+
+  makeTemplate_(ss);
+  ss.setActiveSheet(it);
+  alert_('初期設定ができました。\n「仕入先」と「商品」に、仕入先と商品（発注点・発注する数・最初の在庫）を入れてください。\n「設定」シートに、自社名とお知らせの宛先も入れてください。');
+}
+
+function header_(sh, headers, widths) {
+  sh.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold').setBackground('#e6f0ec');
+  sh.setFrozenRows(1);
+  widths.forEach((w, i) => sh.setColumnWidth(i + 1, w));
+}
+
+function makeTemplate_(ss) {
+  const tp = ss.getSheetByName(SHEET_TPL) || ss.insertSheet(SHEET_TPL);
+  tp.clear();
+  tp.getRange('A1:F1').merge().setValue('発注書').setFontSize(20).setFontWeight('bold').setHorizontalAlignment('center');
+  tp.getRange('A3:C3').merge().setFontSize(13).setFontWeight('bold');
+  tp.getRange('E3').setValue('発注書番号');
+  tp.getRange('E4').setValue('発注日');
+  tp.getRange('F4').setNumberFormat('yyyy年m月d日');
+  tp.getRange('A5:C5').merge().setValue('下記のとおり発注いたします。');
+  ['E6:F6', 'E7:F7', 'E8:F8', 'E9:F9'].forEach(a => tp.getRange(a).merge());
+  tp.getRange('A11:F11').setValues([['商品コード', '商品名', '', '数量', '単価（税抜）', '金額（税抜）']]).setFontWeight('bold').setBackground('#e6f0ec');
+  for (let i = 0; i < TPL_ROWS; i++) tp.getRange(12 + i, 2, 1, 2).merge();
+  tp.getRange(12, 5, TPL_ROWS, 2).setNumberFormat('#,##0');
+  const t = 12 + TPL_ROWS + 1;
+  tp.getRange(t, 1, 1, 5).merge().setValue('合計（税抜）').setHorizontalAlignment('right').setFontWeight('bold');
+  tp.getRange(t, 6).setNumberFormat('#,##0').setFontWeight('bold');
+  tp.getRange(t + 2, 1).setValue('備考');
+  tp.getRange(t + 2, 2, 1, 5).merge().setValue('納品の際は、発注書番号をお知らせください。');
+  [100, 120, 120, 60, 110, 110].forEach((w, i) => tp.setColumnWidth(i + 1, w));
+}
+
+/* ───────── 2. 発注が必要なもの ───────── */
+
+function neededItems_() {
+  const ss = SpreadsheetApp.getActive();
+  const it = ss.getSheetByName(SHEET_ITEM);
+  const n = lastRow_(it, 1);
+  if (n < 2) return [];
+  const pending = {};
+  const od = ss.getSheetByName(SHEET_ORDER);
+  const on = lastRow_(od, 1);
+  if (on >= 2) od.getRange(2, 1, on - 1, ORDER_HEADERS.length).getValues().forEach(r => { if (r[8] === '発注済') pending[r[3]] = true; });
+  return it.getRange(2, 1, n - 1, ITEM_HEADERS.length).getValues()
+    .filter(r => r[0] && r[9] === '発注が必要' && !pending[r[0]])
+    .map(r => ({ code: r[0], name: r[1], unit: r[2], sup: r[3] || '（仕入先なし）', price: Number(r[4]) || 0,
+      point: r[5], qty: Number(r[6]) || 0, now: r[7] }));
+}
+
+function groupBySupplier_(items) {
+  const g = {};
+  items.forEach(x => { (g[x.sup] = g[x.sup] || []).push(x); });
+  return g;
+}
+
+function showNeeded() {
+  const items = neededItems_();
+  if (!items.length) { alert_('発注が必要なものはありません（発注中のものは除いています）。'); return; }
+  const g = groupBySupplier_(items);
+  alert_('発注が必要なもの（' + items.length + '件）\n\n' + Object.keys(g).map(s => '■' + s + '\n' +
+    g[s].map(x => x.name + '　在庫' + x.now + x.unit + '（発注点' + x.point + '）→ ' + x.qty + x.unit).join('\n')).join('\n\n'));
+}
+
+function notifyNeeded(fromTrigger) {
+  const ss = SpreadsheetApp.getActive();
+  const to = String(getSettings_()['お知らせメールの宛先'] || '').trim();
+  if (!to) { alert_('「設定」シートに「お知らせメールの宛先」を入れてください。'); return; }
+  const items = neededItems_();
+  if (!items.length) { if (fromTrigger !== true) alert_('発注が必要なものはありません。'); return; }
+  const g = groupBySupplier_(items);
+  const body = Object.keys(g).map(s => '■' + s + '\n' +
+    g[s].map(x => x.name + '　在庫' + x.now + x.unit + '（発注点' + x.point + '）→ ' + x.qty + x.unit + 'の発注').join('\n')).join('\n\n') +
+    '\n\nスプレッドシートのメニュー「在庫」→「発注書を作る」で、仕入先ごとの発注書を作れます。\n' + ss.getUrl();
+  MailApp.sendEmail(to, '【在庫】発注が必要なもの（' + items.length + '件）', body);
+  if (fromTrigger !== true) alert_('お知らせメールを送りました（' + to + '）。');
+}
+
+function dailyJob() { notifyNeeded(true); }
+
+function enableDaily() {
+  disableDaily(true);
+  ScriptApp.newTrigger('dailyJob').timeBased().everyDays(1).atHour(8).create();
+  alert_('毎朝8時ごろに、発注が必要なものをお知らせするようにしました（ないときは送りません）。');
+}
+
+function disableDaily(silent) {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'dailyJob').forEach(t => ScriptApp.deleteTrigger(t));
+  if (silent !== true) alert_('毎朝のお知らせを止めました。');
+}
+
+/* ───────── 3. 発注書を作る ───────── */
+
+function makeOrders() {
+  const ss = SpreadsheetApp.getActive();
+  const ui = SpreadsheetApp.getUi();
+  const items = neededItems_();
+  if (!items.length) { alert_('発注が必要なものはありません（発注中のものは除いています）。'); return; }
+  const g = groupBySupplier_(items);
+  const ok = ui.alert('発注書を作ります', Object.keys(g).map(s => s + '（' + g[s].length + '品）').join('\n') +
+    '\n\n発注書のPDFを作り、発注履歴に「発注済」で記録します。よろしいですか？', ui.ButtonSet.OK_CANCEL);
+  if (ok !== ui.Button.OK) return;
+  const set = getSettings_();
+  const sups = suppliers_();
+  const od = ss.getSheetByName(SHEET_ORDER);
+  const today = new Date();
+  const results = [];
+  Object.keys(g).forEach((s, si) => {
+    const list = g[s].slice(0, TPL_ROWS);
+    const no = 'PO-' + Utilities.formatDate(today, 'Asia/Tokyo', 'yyyyMMdd') + '-' + (si + 1);
+    const file = makePdf_(ss, set, s, no, today, list);
+    const r = lastRow_(od, 1) + 1;
+    od.getRange(r, 1, list.length, ORDER_HEADERS.length).setValues(list.map(x =>
+      [today, no, s, x.code, x.name, x.qty, x.price, x.qty * x.price, '発注済', '', file.getUrl()]));
+    let draft = '';
+    const mail = sups[s] && sups[s].mail;
+    if (mail && /^はい/.test(String(set['発注メールの下書きを作る（はい／いいえ）'] || 'はい'))) {
+      GmailApp.createDraft(mail, '【発注書】' + (set['自社名'] || '') + '　' + no,
+        (sups[s].person ? sups[s].person + ' 様\n\n' : s + ' ご担当者様\n\n') +
+        'いつもお世話になっております。' + (set['自社名'] || '') + 'の' + (set['ご担当（発注書に書く名前）'] || '') + 'です。\n' +
+        '添付の発注書のとおり、発注いたします。\nご確認のほど、よろしくお願いいたします。\n\n' +
+        list.map(x => '・' + x.name + '　' + x.qty + x.unit).join('\n'),
+        { attachments: [file.getBlob()] });
+      draft = '（メールの下書きあり）';
+    }
+    results.push(s + '：' + no + draft + (g[s].length > TPL_ROWS ? '　※' + TPL_ROWS + '品を超えた分は、もう一度押すと次の発注書になります' : ''));
+  });
+  alert_('発注書を作りました。\n\n' + results.join('\n') + '\n\nPDFとメールの下書きを確かめて、自分で送ってください。');
+}
+
+function suppliers_() {
+  const sh = SpreadsheetApp.getActive().getSheetByName(SHEET_SUP);
+  const map = {};
+  const n = lastRow_(sh, 1);
+  if (n < 2) return map;
+  sh.getRange(2, 1, n - 1, SUP_HEADERS.length).getValues().forEach(r => { if (r[0]) map[r[0]] = { person: r[1], mail: String(r[2]).trim(), tel: r[3], addr: r[4] }; });
+  return map;
+}
+
+function makePdf_(ss, set, sup, no, date, list) {
+  const tp = ss.getSheetByName(SHEET_TPL) || (makeTemplate_(ss), ss.getSheetByName(SHEET_TPL));
+  tp.getRange('A3').setValue(sup + '　御中');
+  tp.getRange('F3').setValue(no);
+  tp.getRange('F4').setValue(date);
+  tp.getRange('E6').setValue(set['自社名'] || '');
+  tp.getRange('E7').setValue(set['自社の住所'] || '');
+  tp.getRange('E8').setValue(set['自社の電話番号'] || '');
+  tp.getRange('E9').setValue(set['ご担当（発注書に書く名前）'] ? '担当　' + set['ご担当（発注書に書く名前）'] : '');
+  const rows = [];
+  for (let i = 0; i < TPL_ROWS; i++) {
+    const x = list[i];
+    rows.push(x ? [x.code, x.name, '', x.qty + (x.unit ? ' ' + x.unit : ''), x.price || '', x.price ? x.qty * x.price : ''] : ['', '', '', '', '', '']);
+  }
+  tp.getRange(12, 1, TPL_ROWS, 6).setValues(rows);
+  tp.getRange(12 + TPL_ROWS + 1, 6).setValue(list.reduce((s, x) => s + x.qty * x.price, 0));
+  SpreadsheetApp.flush();
+  const url = 'https://docs.google.com/spreadsheets/d/' + ss.getId() + '/export?format=pdf&gid=' + tp.getSheetId() +
+    '&size=A4&portrait=true&fitw=true&gridlines=false&printtitle=false&sheetnames=false&pagenum=UNDEFINED&fzr=false' +
+    '&top_margin=0.6&bottom_margin=0.6&left_margin=0.6&right_margin=0.6';
+  const blob = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() } })
+    .getBlob().setName('発注書_' + sup + '_' + no + '.pdf');
+  const folderId = String(set['発注書PDFを保存するフォルダのID'] || '').trim();
+  return (folderId ? DriveApp.getFolderById(folderId) : DriveApp.getRootFolder()).createFile(blob);
+}
+
+/* ───────── 4. 入荷済みにする ───────── */
+
+function receiveOrder() {
+  const ss = SpreadsheetApp.getActive();
+  const sh = ss.getActiveSheet();
+  if (sh.getName() !== SHEET_ORDER) { alert_('「' + SHEET_ORDER + '」で、届いた発注の行を選んでから使ってください（複数行もOK）。'); return; }
+  const rng = sh.getActiveRange();
+  const top = Math.max(2, rng.getRow()), bottom = rng.getRow() + rng.getNumRows() - 1;
+  if (bottom < 2) { alert_('届いた発注の行を選んでください。'); return; }
+  const mv = ss.getSheetByName(SHEET_MOVE);
+  const today = new Date();
+  let n = 0;
+  for (let r = top; r <= bottom; r++) {
+    const v = sh.getRange(r, 1, 1, ORDER_HEADERS.length).getValues()[0];
+    if (v[8] !== '発注済') continue;
+    const m = lastRow_(mv, 1) + 1;
+    mv.getRange(m, 1, 1, 3).setValues([[today, '入庫', v[3]]]);
+    mv.getRange(m, 5, 1, 3).setValues([[v[5], '', '発注 ' + v[1] + ' の入荷']]);
+    sh.getRange(r, 9, 1, 2).setValues([['入荷済', today]]);
+    n++;
+  }
+  alert_(n ? n + '件を入荷済みにして、「' + SHEET_MOVE + '」に入庫を入れました。\n届いた数が違うときは、入出庫の数量を直してください。' : '「発注済」の行が選ばれていません。');
+}
+
+/* ───────── 共通 ───────── */
+
+function getSettings_() {
+  const st = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTINGS);
+  const map = {};
+  if (!st || st.getLastRow() < 2) return map;
+  st.getRange(2, 1, st.getLastRow() - 1, 2).getValues().forEach(r => { if (r[0]) map[r[0]] = r[1]; });
+  return map;
+}
+
+function lastRow_(sh, col) {
+  const n = sh.getLastRow();
+  if (n < 2) return 1;
+  const a = sh.getRange(2, col, n - 1, 1).getValues();
+  for (let i = a.length - 1; i >= 0; i--) if (a[i][0] !== '') return i + 2;
+  return 1;
+}
+
+function alert_(msg) {
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>在庫と発注の自動管理｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+    --red: #f8d7d0; --yellow: #fff1c2; --gray: #eeeeee; --code: #f4f1ea; --paper: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+      --red: #4a2a25; --yellow: #4a4220; --gray: #34343a; --code: #202024; --paper: #2c2c30;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .feat { border-left: 4px solid var(--accent); padding: 2px 0 4px 12px; margin-bottom: 10px; }
+  .feat b { display: block; }
+  .feat span { font-size: .88rem; color: var(--sub); }
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; font-size: .78rem; width: 100%; min-width: 480px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 6px; text-align: left; white-space: nowrap; }
+  th { background: var(--accent-soft); font-weight: 700; }
+  td.n { text-align: right; }
+  tr.red td { background: var(--red); } tr.yellow td { background: var(--yellow); }
+  .paper { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 12px; font-size: .8rem; }
+  .paper .t { text-align: center; font-weight: 700; font-size: 1.1rem; letter-spacing: .3em; }
+  .paper table { min-width: 0; font-size: .76rem; }
+  .row2 { display: flex; gap: 8px; flex-wrap: wrap; }
+  .row2 > div { flex: 1 1 260px; min-width: 0; }
+  ol.steps { padding-left: 1.3em; margin: 0; }
+  ol.steps li { margin-bottom: 8px; }
+  ol.steps .w { display: block; font-size: .86rem; color: var(--sub); }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: .74rem; line-height: 1.5;
+    max-height: 320px; overflow: auto; white-space: pre; margin: 0; }
+  label.f { display: block; font-weight: 600; margin: 12px 0 6px; }
+  select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .9rem; }
+  button { width: 100%; font-size: .95rem; font-weight: 700; padding: 10px; border-radius: 10px; margin-top: 8px; cursor: pointer; font-family: inherit;
+    background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  code { background: var(--code); padding: 0 4px; border-radius: 4px; font-size: .88em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>在庫と発注の自動管理（Googleスプレッドシート）</h1>
+  <p class="lead">Googleスプレッドシートに、下のコード（AIに書いてもらったもの）を貼るだけで、入庫・出庫から今の在庫を自動で計算し、足りなくなりそうなものを色分けとメールで知らせ、仕入先ごとの発注書PDFとメールの下書きまで作れるようになります。無料のGoogleアカウントで使えます。</p>
+
+  <div class="card">
+    <h2>できること</h2>
+    <div class="feat"><b>1. 今の在庫を、自動で計算</b><span>「入出庫」シートに、日付・入庫か出庫か・商品コード・数量を1行ずつ入れるだけ。商品ごとの今の在庫が、自動で出ます。棚卸で数が合わないときは「棚卸の調整」で直します。</span></div>
+    <div class="feat"><b>2. 足りなくなりそうなものを、色分けとメールで</b><span>商品ごとに「発注点（これを下回ったら発注する数）」を決めておくと、下回ったものは赤、近いものは黄色になります。毎朝、発注が必要なものをメールで知らせます。すでに発注中のものは知らせません。</span></div>
+    <div class="feat"><b>3. 仕入先ごとの発注書と、メールの下書き</b><span>メニューを押すと、発注が必要なものを仕入先ごとにまとめて、発注書のPDFを作り、PDFを付けたメールの下書きをGmailに作ります。送るのは自分です。</span></div>
+    <div class="feat"><b>4. 届いたら、ボタン1つで入庫</b><span>「発注履歴」で届いた行を選んで「入荷済みにする」を押すと、入庫の行が自動で入り、在庫に足されます。</span></div>
+    <div class="feat"><b>5. 月ごとの入庫・出庫の集計</b><span>「集計」シートに、月ごと・商品ごとの入庫と出庫、まだ届いていない発注の一覧が自動で出ます。</span></div>
+  </div>
+
+  <div class="card" id="mihon">
+    <h2>見本（できあがりのイメージ）</h2>
+    <h3>商品（今の在庫と状態は自動）</h3>
+    <div class="tblwrap">
+      <table>
+        <tr><th>商品名</th><th>仕入先</th><th>発注点</th><th>今の在庫</th><th>状態</th></tr>
+        <tr class="red"><td>コピー用紙A4</td><td>〇〇紙業</td><td class="n">10</td><td class="n">6 箱</td><td>発注が必要</td></tr>
+        <tr class="red"><td>梱包用の箱（中）</td><td>〇〇パッケージ</td><td class="n">50</td><td class="n">32 枚</td><td>発注が必要</td></tr>
+        <tr class="yellow"><td>ガムテープ</td><td>〇〇パッケージ</td><td class="n">12</td><td class="n">16 巻</td><td>少なめ</td></tr>
+        <tr><td>トナー（黒）</td><td>〇〇事務機</td><td class="n">2</td><td class="n">5 本</td><td>OK</td></tr>
+      </table>
+    </div>
+    <div class="row2">
+      <div>
+        <h3>作られる発注書（PDF）</h3>
+        <div class="paper">
+          <div class="t">発注書</div>
+          <div>〇〇パッケージ　御中　　PO-20261016-2</div>
+          <table>
+            <tr><th>商品名</th><th>数量</th><th>金額（税抜）</th></tr>
+            <tr><td>梱包用の箱（中）</td><td>200 枚</td><td class="n">16,000</td></tr>
+            <tr><td colspan="2" style="text-align:right">合計（税抜）</td><td class="n"><b>16,000</b></td></tr>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3>毎朝のお知らせメール</h3>
+        <div class="mail">件名：【在庫】発注が必要なもの（2件）
+■〇〇紙業
+コピー用紙A4　在庫6箱（発注点10）→ 20箱の発注
+■〇〇パッケージ
+梱包用の箱（中）　在庫32枚（発注点50）→ 200枚の発注</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>準備（20分ほど・パソコンで）</h2>
+    <ol class="steps">
+      <li>Googleドライブで、新しいスプレッドシートを作る。<span class="w">名前は「在庫の管理」など</span></li>
+      <li>メニューの「拡張機能」→「Apps Script」を開く。</li>
+      <li>最初からある文字を全部消して、下の「コードをコピー」で写したコードを貼り、保存（フロッピーの印）する。</li>
+      <li>スプレッドシートに戻って、ページを再読み込みすると、メニューに「在庫」が出る。</li>
+      <li>「在庫」→「① 初期設定」を押す。最初の1回だけ、Googleの許可の画面が出るので、自分のアカウントを選んで許可する。<span class="w">発注メールの下書きを作るため、Gmailの許可も求められます。「このアプリはGoogleで確認されていません」と出たら、「詳細」→「（プロジェクト名）に移動」で進みます。自分で貼ったコードなので、自分のアカウントの中だけで動きます</span></li>
+      <li>「仕入先」シートに、仕入先の名前・ご担当者・メールを入れる。</li>
+      <li>「商品」シートに、商品コード・商品名・単位・仕入先・単価・発注点・発注する数・最初の在庫を入れる。<span class="w">最初の在庫は、使い始める日に数えた数です</span></li>
+      <li>「設定」シートに、自社名・住所・お知らせの宛先、発注書を保存するフォルダのIDを入れる。<span class="w">IDは、フォルダを開いたときのURLの <code>folders/</code> の後ろの英数字です</span></li>
+      <li>「在庫」→「毎朝のお知らせをオンにする」を押す。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>コード</h2>
+    <pre id="code">読み込み中…</pre>
+    <button type="button" id="copyCode">コードをコピー</button>
+    <p class="note">コードは、Apps Script（Googleのプログラム）で書いています。このページからは、どこにも送られません。</p>
+  </div>
+
+  <div class="card">
+    <h2>自分の会社に合わせて、AIに直してもらう</h2>
+    <p class="note" style="margin-top:0">ClaudeやChatGPTなどのAIに、下の依頼文と、上のコードを一緒に貼ると、直したコードを作ってくれます。</p>
+    <label class="f" for="want">変えたいこと</label>
+    <select id="want">
+      <option value="form">スマホから、入庫・出庫を入れられるようにしたい</option>
+      <option value="place">置き場所（倉庫・店舗）ごとに在庫を分けたい</option>
+      <option value="lot">賞味期限・ロットも管理したい</option>
+      <option value="sales">売上のデータ（CSV）から、出庫を自動で入れたい</option>
+      <option value="error">エラーが出て動かない</option>
+      <option value="tax">発注書に、消費税と税込の合計も入れたい</option>
+    </select>
+    <div class="mail" id="prompt" style="margin-top:10px"></div>
+    <button type="button" id="copyPrompt">依頼文をコピー</button>
+  </div>
+
+  <div class="card">
+    <h2>使う前に確かめること</h2>
+    <div class="warn">会社のパソコン・アカウントで使う場合は、会社のルール（外部サービスやプログラムの利用）を先に確かめてください。</div>
+    <ul>
+      <li>在庫の数は、入出庫を入れたとおりに計算されます。入れ忘れがあると、実物と合わなくなります。月に1回くらい棚卸をして、「棚卸の調整」で合わせます。</li>
+      <li>発注書とメールは、下書きを作るだけで、自動では送りません。数量と宛先を確かめてから、自分で送ってください。</li>
+      <li>「状態」と「今の在庫」の列は自動で計算しています。この列には書き込まないでください。</li>
+      <li>AIに直してもらったコードは、まずコピーしたスプレッドシートで試してから使います。</li>
+    </ul>
+  </div>
+
+  <p class="note">最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CODE = "";
+  fetch("code.txt").then(function (r) { return r.text(); }).then(function (t) { CODE = t; $("code").textContent = t; })
+    .catch(function () { $("code").textContent = "コードを読み込めませんでした。ページを再読み込みしてください。"; });
+  var P = {
+    form: "スマホから、Googleフォームで「日付・入庫か出庫か・商品・数量・担当」を送ると、「入出庫」シートに1行入るようにしたいです。商品は、「商品」シートの商品名から選べるようにしてください。フォームの作り方と、コードを教えてください。",
+    place: "在庫を、置き場所（例：本社倉庫・A店・B店）ごとに分けて計算したいです。「入出庫」に「置き場所」の列を足し、商品ごと・置き場所ごとの今の在庫を出すシートを作ってください。置き場所の間の移動も入れられるようにしてください。",
+    lot: "食品を扱うので、入庫のときに「ロット番号」と「賞味期限」を入れ、出庫は賞味期限の古いものから出したことにしたいです。賞味期限が30日以内のものを、毎朝のお知らせメールに入れてください。",
+    sales: "ネットショップの注文のCSV（注文日・商品コード・数量）を「注文データ」シートに貼ったら、まだ入っていない注文だけを「入出庫」に「出庫」として足す機能を作ってください。同じ注文が二重に入らないようにしてください。",
+    error: "このコードを動かすと、エラーが出ます。原因と、直し方を教えてください。直したコード全体も出してください。\n\n【エラーの文】\n（ここに貼る）\n【押したメニュー】\n（例：発注書を作る（仕入先ごと））",
+    tax: "発注書のPDFに、消費税（10%、端数は切り捨て）と、税込の合計の行を足してください。商品によって8%のものもあるので、「商品」シートに税率の列を足して、税率ごとに合計を出してください。"
+  };
+  function show() {
+    $("prompt").textContent = "あなたは、Googleスプレッドシートの Apps Script にくわしいプログラマーです。\n下のコードは、在庫と発注を管理するコードです。\n\n【してほしいこと】\n" + P[$("want").value] +
+      "\n\n【守ってほしいこと】\n・仕入先にメールを自動で送る機能は作らないでください（下書きまで）\n・はじめての人でもわかるように、どこを変えたかを説明してください\n・直したコードは、全体をそのまま貼れる形で出してください\n・わからないことがあれば、先に質問してください\n\n【今のコード】\n（ここに、このページのコードを貼る）";
+  }
+  $("want").addEventListener("change", show); show();
+  function copy(txt, b, label) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("copyCode").addEventListener("click", function (e) { copy(CODE, e.target, "コードをコピー"); });
+  $("copyPrompt").addEventListener("click", function (e) { copy($("prompt").textContent, e.target, "依頼文をコピー"); });
+})();
+</script>
+</body>
+</html>
