@@ -1,0 +1,358 @@
+/**
+ * 経費の自動管理（Googleスプレッドシート＋Apps Script）
+ * はじめての係　最終更新：2026年10月
+ * 使い方：https://hajimete-kakari.github.io/keihi/
+ *
+ * できること
+ *  1. フォルダに入れた領収書・レシートの写真（PDF・画像）を読み取って、経費一覧に自動で入力する
+ *  2. 支払先の名前から、勘定科目の候補を自動で入れる（ルールは「科目ルール」シートで変えられる）
+ *  3. 月ごと・科目ごとの合計と、立て替えた人ごとの未精算を自動で集計する
+ *  4. 毎月の締め日に、今月の合計・要確認・未精算を自分あてにメールで知らせる
+ *  5. 選んだ月の経費を、会計ソフトに取り込みやすいCSVにして保存する
+ *
+ * 準備：エディタ左の「サービス」の＋から「Drive API」を追加してください（1のため）。
+ */
+
+const SHEET_LIST = '経費一覧';
+const SHEET_RULE = '科目ルール';
+const SHEET_SUMMARY = '集計';
+const SHEET_SETTINGS = '設定';
+
+const HEADERS = ['日付', '支払先', '金額（税込）', '税率', '勘定科目', '支払方法', '立て替えた人', '内容メモ', '登録番号', '精算日', 'ファイル', '確認'];
+const COL = { hiduke: 1, saki: 2, kingaku: 3, zeiritsu: 4, kamoku: 5, hoho: 6, tatekae: 7, memo: 8, toroku: 9, seisan: 10, file: 11, kakunin: 12 };
+
+const KAMOKU = ['旅費交通費', '車両費', '会議費', '接待交際費', '通信費', '新聞図書費', '消耗品費', '事務用品費', '水道光熱費', '支払手数料', '雑費'];
+const HOHO = ['立て替え（現金）', '会社のカード', '会社の現金', 'その他'];
+
+const SETTING_ITEMS = [
+  ['読み込むフォルダのID', ''],
+  ['CSVを保存するフォルダのID', ''],
+  ['お知らせメールの宛先', ''],
+  ['締め日（毎月何日に知らせるか）', 25],
+  ['CSVの文字コード（Shift_JIS か UTF-8）', 'Shift_JIS']
+];
+
+const DEFAULT_RULES = [
+  ['JR', '旅費交通費'], ['乗車', '旅費交通費'], ['鉄道', '旅費交通費'], ['地下鉄', '旅費交通費'], ['バス', '旅費交通費'],
+  ['タクシー', '旅費交通費'], ['交通', '旅費交通費'], ['駐車', '旅費交通費'], ['高速', '旅費交通費'],
+  ['ガソリン', '車両費'], ['給油', '車両費'], ['石油', '車両費'], ['ENEOS', '車両費'], ['出光', '車両費'],
+  ['カフェ', '会議費'], ['珈琲', '会議費'], ['コーヒー', '会議費'], ['喫茶', '会議費'],
+  ['居酒屋', '接待交際費'], ['酒場', '接待交際費'], ['寿司', '接待交際費'], ['焼肉', '接待交際費'],
+  ['郵便', '通信費'], ['切手', '通信費'], ['レターパック', '通信費'], ['宅急便', '通信費'], ['運輸', '通信費'],
+  ['書店', '新聞図書費'], ['書房', '新聞図書費'], ['ブックス', '新聞図書費'],
+  ['文具', '事務用品費'], ['事務用品', '事務用品費'], ['コピー用紙', '事務用品費'],
+  ['ホームセンター', '消耗品費'], ['ダイソー', '消耗品費'], ['セリア', '消耗品費'], ['ロフト', '消耗品費']
+];
+
+/* ───────── メニュー ───────── */
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('経費')
+    .addItem('① 初期設定（最初に1回）', 'setup')
+    .addSeparator()
+    .addItem('フォルダの領収書を読み込む', 'importReceipts')
+    .addItem('勘定科目の候補を入れ直す（空欄だけ）', 'fillKamoku')
+    .addItem('月を選んでCSVを作る', 'exportCsv')
+    .addItem('締めのお知らせを今すぐ送る（テスト）', 'notifyMonthly')
+    .addSeparator()
+    .addItem('毎月のお知らせをオンにする', 'enableMonthlyNotice')
+    .addItem('毎月のお知らせをオフにする', 'disableMonthlyNotice')
+    .addToUi();
+}
+
+/* ───────── 1回だけ：シートを作る ───────── */
+
+function setup() {
+  const ss = SpreadsheetApp.getActive();
+
+  let st = ss.getSheetByName(SHEET_SETTINGS);
+  if (!st) {
+    st = ss.insertSheet(SHEET_SETTINGS);
+    st.getRange(1, 1, 1, 2).setValues([['項目', '内容']]).setFontWeight('bold').setBackground('#e6f0ec');
+    st.getRange(2, 1, SETTING_ITEMS.length, 2).setValues(SETTING_ITEMS);
+    const me = Session.getActiveUser().getEmail();
+    if (me) st.getRange(4, 2).setValue(me); // お知らせメールの宛先
+    st.setColumnWidth(1, 300);
+    st.setColumnWidth(2, 400);
+  }
+
+  let rl = ss.getSheetByName(SHEET_RULE);
+  if (!rl) {
+    rl = ss.insertSheet(SHEET_RULE);
+    rl.getRange(1, 1, 1, 2).setValues([['支払先にこの言葉があれば', 'この勘定科目にする']]).setFontWeight('bold').setBackground('#e6f0ec');
+    rl.getRange(2, 1, DEFAULT_RULES.length, 2).setValues(DEFAULT_RULES);
+    rl.setColumnWidth(1, 240);
+    rl.setColumnWidth(2, 200);
+  }
+
+  let ls = ss.getSheetByName(SHEET_LIST);
+  if (!ls) ls = ss.insertSheet(SHEET_LIST, 0);
+  ls.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#e6f0ec');
+  ls.setFrozenRows(1);
+  const n = ls.getMaxRows() - 1;
+  ls.getRange(2, COL.hiduke, n).setNumberFormat('yyyy/mm/dd');
+  ls.getRange(2, COL.seisan, n).setNumberFormat('yyyy/mm/dd');
+  ls.getRange(2, COL.kingaku, n).setNumberFormat('#,##0');
+  const list = (arr) => SpreadsheetApp.newDataValidation().requireValueInList(arr, true).setAllowInvalid(true).build();
+  ls.getRange(2, COL.zeiritsu, n).setDataValidation(list(['10%', '8%', '10%と8%', '対象外']));
+  ls.getRange(2, COL.kamoku, n).setDataValidation(list(KAMOKU));
+  ls.getRange(2, COL.hoho, n).setDataValidation(list(HOHO));
+  const all = ls.getRange(2, 1, n, HEADERS.length);
+  ls.setConditionalFormatRules([
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=AND($A2<>"",$F2="立て替え（現金）",$J2="")')
+      .setBackground('#fff1c2').setRanges([all]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=$L2="要確認"')
+      .setBackground('#ffe08a').setRanges([ls.getRange(2, COL.kakunin, n)]).build()
+  ]);
+  [100, 200, 110, 80, 120, 140, 110, 180, 140, 100, 160, 70].forEach((w, i) => ls.setColumnWidth(i + 1, w));
+
+  let sm = ss.getSheetByName(SHEET_SUMMARY);
+  if (!sm) sm = ss.insertSheet(SHEET_SUMMARY);
+  sm.clear();
+  const L = "'" + SHEET_LIST + "'!A:L";
+  sm.getRange('A1').setValue('月ごと・科目ごとの合計').setFontWeight('bold');
+  sm.getRange('A2').setFormula('=IFERROR(QUERY(' + L + ',"select year(A), month(A)+1, E, count(A), sum(C) where A is not null ' +
+    'group by year(A), month(A)+1, E order by year(A) desc, month(A)+1 desc, sum(C) desc ' +
+    'label year(A) \'年\', month(A)+1 \'月\', count(A) \'件数\', sum(C) \'合計\'",1),"なし")');
+  sm.getRange('G1').setValue('月ごとの合計').setFontWeight('bold');
+  sm.getRange('G2').setFormula('=IFERROR(QUERY(' + L + ',"select year(A), month(A)+1, count(A), sum(C) where A is not null ' +
+    'group by year(A), month(A)+1 order by year(A) desc, month(A)+1 desc ' +
+    'label year(A) \'年\', month(A)+1 \'月\', count(A) \'件数\', sum(C) \'合計\'",1),"なし")');
+  sm.getRange('L1').setValue('立て替えた人ごとの未精算').setFontWeight('bold');
+  sm.getRange('L2').setFormula('=IFERROR(QUERY(' + L + ',"select G, count(G), sum(C) where F=\'立て替え（現金）\' and J is null and A is not null ' +
+    'group by G label G \'立て替えた人\', count(G) \'件数\', sum(C) \'未精算\'",1),"なし")');
+  ['E:E', 'J:J', 'N:N'].forEach(a => sm.getRange(a).setNumberFormat('#,##0'));
+
+  ss.setActiveSheet(ls);
+  alert_('初期設定ができました。「設定」シートに、フォルダのIDとお知らせの宛先を入れてください。');
+}
+
+/* ───────── 1. 領収書を読み込む ───────── */
+
+function importReceipts() {
+  const ss = SpreadsheetApp.getActive();
+  const set = getSettings_();
+  const folderId = String(set['読み込むフォルダのID'] || '').trim();
+  if (!folderId) { alert_('「設定」シートに「読み込むフォルダのID」を入れてください。'); return; }
+  const ls = ss.getSheetByName(SHEET_LIST);
+  const rules = getRules_();
+  const done = doneIds_(ls);
+  const files = DriveApp.getFolderById(folderId).getFiles();
+  let added = 0, skipped = 0;
+  while (files.hasNext()) {
+    const f = files.next();
+    if (done[f.getId()]) continue;
+    const type = f.getMimeType();
+    if (type !== MimeType.PDF && type.indexOf('image/') !== 0) { skipped++; continue; }
+    const d = parseReceipt_(ocr_(f));
+    const r = lastRow_(ls) + 1;
+    ls.getRange(r, 1, 1, HEADERS.length).setValues([[
+      d.hiduke, d.saki || f.getName(), d.kingaku, d.zeiritsu, guessKamoku_(d.saki + ' ' + d.text, rules),
+      '', '', '', d.toroku, '', f.getUrl(), '要確認'
+    ]]);
+    added++;
+  }
+  alert_(added + '件を読み込みました。' + (skipped ? '（PDF・画像以外の' + skipped + '件は飛ばしました）' : '') +
+    '\n読み取りまちがいがあるので、「要確認」の行を、元の領収書と見くらべて直し、「確認」の欄を消してください。' +
+    '\n支払方法と、立て替えた人も入れてください。');
+}
+
+function ocr_(file) {
+  const tmp = Drive.Files.create({ name: 'tmp_ocr_' + file.getName(), mimeType: MimeType.GOOGLE_DOCS }, file.getBlob(), { ocrLanguage: 'ja' });
+  try {
+    return DocumentApp.openById(tmp.id).getBody().getText();
+  } finally {
+    DriveApp.getFileById(tmp.id).setTrashed(true);
+  }
+}
+
+function parseReceipt_(text) {
+  const t = String(text)
+    .replace(/[０-９Ａ-Ｚａ-ｚ％]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[，]/g, ',').replace(/[￥]/g, '¥').replace(/[．]/g, '.').replace(/\r/g, '');
+  const lines = t.split('\n').map(s => s.trim()).filter(s => s);
+  const out = { hiduke: '', saki: '', kingaku: '', zeiritsu: '10%', toroku: '', text: t.slice(0, 300) };
+
+  out.kingaku = amountNear_(lines, [/合計|お買上げ|お買上|お買い上げ|ご利用金額|領収金額|お支払金額|お支払い金額/, /金額/, /計/]);
+  out.hiduke = parseDate_(t) || '';
+  const tr = t.match(/T\s?(\d{13})/);
+  if (tr) out.toroku = 'T' + tr[1];
+  // 「8%対象 0」のように金額が0の行は数えない
+  const rateLine = (re) => lines.some(l => re.test(l) && /[1-9]/.test(l.replace(/\d+\s?%/g, '')));
+  const has8 = rateLine(/(^|[^\d])8\s?%|軽減/), has10 = rateLine(/10\s?%/);
+  out.zeiritsu = has8 && has10 ? '10%と8%' : has8 ? '8%' : '10%';
+
+  const skip = /領収|レシート|receipt|TEL|電話|登録番号|〒|^\d|¥|円|年|月|日|様|御中|No\.|番号/i;
+  for (const l of lines.slice(0, 6)) {
+    if (skip.test(l) || l.length < 2) continue;
+    if (!/[ぁ-んァ-ヶ一-龠A-Za-z]/.test(l)) continue;
+    out.saki = l.replace(/\s+/g, ' ').slice(0, 40);
+    break;
+  }
+  return out;
+}
+
+function amountNear_(lines, keys) {
+  for (const kw of keys) {
+    for (let i = 0; i < lines.length; i++) {
+      const p = lines[i].search(kw);
+      if (p < 0) continue;
+      if (/小計|お預|預り|お釣|釣銭|対象/.test(lines[i]) && !/合計/.test(lines[i])) continue;
+      for (let j = i; j < Math.min(i + 2, lines.length); j++) {
+        const seg = j === i ? lines[j].slice(p) : lines[j];
+        const m = seg.match(/(\d{1,3}(?:,\d{3})+|\d+)/);
+        if (m && Number(m[1].replace(/,/g, '')) > 0) return Number(m[1].replace(/,/g, ''));
+      }
+    }
+  }
+  return '';
+}
+
+function parseDate_(s) {
+  s = String(s);
+  let m = s.match(/(20\d{2})\s*[年\/.\-]\s*(\d{1,2})\s*[月\/.\-]\s*(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  m = s.match(/(令和|R)\s*(\d{1,2}|元)\s*[年\/.\-]\s*(\d{1,2})\s*[月\/.\-]\s*(\d{1,2})/);
+  if (m) return new Date((m[2] === '元' ? 1 : +m[2]) + 2018, +m[3] - 1, +m[4]);
+  m = s.match(/(?:^|[^\d])(\d{2})\/(\d{1,2})\/(\d{1,2})(?:[^\d]|$)/);
+  if (m) return new Date(2000 + +m[1], +m[2] - 1, +m[3]);
+  return null;
+}
+
+/* ───────── 2. 勘定科目の候補 ───────── */
+
+function getRules_() {
+  const rl = SpreadsheetApp.getActive().getSheetByName(SHEET_RULE);
+  if (!rl || rl.getLastRow() < 2) return DEFAULT_RULES;
+  return rl.getRange(2, 1, rl.getLastRow() - 1, 2).getValues().filter(r => r[0] && r[1]);
+}
+
+function guessKamoku_(s, rules) {
+  s = String(s || '');
+  for (const r of rules) if (s.indexOf(String(r[0])) >= 0) return r[1];
+  return '雑費';
+}
+
+function fillKamoku() {
+  const ls = SpreadsheetApp.getActive().getSheetByName(SHEET_LIST);
+  const last = lastRow_(ls);
+  if (last < 2) { alert_('経費一覧にまだ何も入っていません。'); return; }
+  const rules = getRules_();
+  const rng = ls.getRange(2, 1, last - 1, HEADERS.length);
+  const v = rng.getValues();
+  let n = 0;
+  v.forEach(r => { if (r[COL.hiduke - 1] && !r[COL.kamoku - 1]) { r[COL.kamoku - 1] = guessKamoku_(r[COL.saki - 1] + ' ' + r[COL.memo - 1], rules); n++; } });
+  ls.getRange(2, COL.kamoku, v.length).setValues(v.map(r => [r[COL.kamoku - 1]]));
+  alert_(n + '件の勘定科目に、候補を入れました。');
+}
+
+/* ───────── 4. 締めのお知らせ ───────── */
+
+function notifyMonthly() {
+  const ss = SpreadsheetApp.getActive();
+  const set = getSettings_();
+  const to = String(set['お知らせメールの宛先'] || '').trim();
+  if (!to) { alert_('「設定」シートに「お知らせメールの宛先」を入れてください。'); return; }
+  const ls = ss.getSheetByName(SHEET_LIST);
+  const last = lastRow_(ls);
+  if (last < 2) { alert_('経費一覧にまだ何も入っていません。'); return; }
+  const rows = ls.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  const byKamoku = {}, byPerson = {};
+  let total = 0, count = 0, check = 0;
+  rows.forEach(r => {
+    const d = r[COL.hiduke - 1];
+    if (r[COL.kakunin - 1] === '要確認') check++;
+    if (r[COL.hoho - 1] === '立て替え（現金）' && !r[COL.seisan - 1] && r[COL.tatekae - 1]) {
+      byPerson[r[COL.tatekae - 1]] = (byPerson[r[COL.tatekae - 1]] || 0) + Number(r[COL.kingaku - 1] || 0);
+    }
+    if (!(d instanceof Date) || d.getFullYear() !== y || d.getMonth() !== m) return;
+    const k = r[COL.kamoku - 1] || '（未入力）';
+    byKamoku[k] = (byKamoku[k] || 0) + Number(r[COL.kingaku - 1] || 0);
+    total += Number(r[COL.kingaku - 1] || 0); count++;
+  });
+  const yen = x => Math.round(x).toLocaleString() + '円';
+  let body = '■' + y + '年' + (m + 1) + '月の経費（' + count + '件・' + yen(total) + '）\n' +
+    Object.keys(byKamoku).sort((a, b) => byKamoku[b] - byKamoku[a]).map(k => k + '　' + yen(byKamoku[k])).join('\n') + '\n\n';
+  const ps = Object.keys(byPerson);
+  body += '■立て替えの未精算\n' + (ps.length ? ps.map(p => p + '　' + yen(byPerson[p])).join('\n') : 'なし') + '\n\n';
+  body += '■要確認（読み込んだまま確かめていない行）：' + check + '件\n\n経費一覧：' + ss.getUrl();
+  MailApp.sendEmail(to, '【経費】' + (m + 1) + '月の締めのお知らせ', body);
+  alert_('締めのお知らせを送りました（' + to + '）。');
+}
+
+function enableMonthlyNotice() {
+  disableMonthlyNotice(true);
+  const day = Math.min(28, Math.max(1, Number(getSettings_()['締め日（毎月何日に知らせるか）']) || 25));
+  ScriptApp.newTrigger('notifyMonthly').timeBased().onMonthDay(day).atHour(9).create();
+  alert_('毎月' + day + '日の9時ごろに、締めのお知らせを送るようにしました。');
+}
+
+function disableMonthlyNotice(silent) {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'notifyMonthly').forEach(t => ScriptApp.deleteTrigger(t));
+  if (silent !== true) alert_('毎月のお知らせを止めました。');
+}
+
+/* ───────── 5. CSVを作る ───────── */
+
+function exportCsv() {
+  const ui = SpreadsheetApp.getUi();
+  const now = new Date();
+  const def = Utilities.formatDate(now, 'Asia/Tokyo', 'yyyy-MM');
+  const res = ui.prompt('CSVを作る月', '例：' + def + '（年-月）', ui.ButtonSet.OK_CANCEL);
+  if (res.getSelectedButton() !== ui.Button.OK) return;
+  const mm = String(res.getResponseText() || def).trim().match(/^(\d{4})\D+(\d{1,2})$/);
+  if (!mm) { alert_('「2026-10」のように、年-月で入れてください。'); return; }
+  const y = +mm[1], m = +mm[2] - 1;
+  const ss = SpreadsheetApp.getActive();
+  const ls = ss.getSheetByName(SHEET_LIST);
+  const last = lastRow_(ls);
+  const rows = last < 2 ? [] : ls.getRange(2, 1, last - 1, HEADERS.length).getValues()
+    .filter(r => r[0] instanceof Date && r[0].getFullYear() === y && r[0].getMonth() === m);
+  if (!rows.length) { alert_('その月の経費はありません。'); return; }
+  const q = s => '"' + String(s == null ? '' : s).replace(/"/g, '""') + '"';
+  const csv = [['日付', '勘定科目', '金額（税込）', '税率', '支払先', '内容', '登録番号'].map(q).join(',')]
+    .concat(rows.map(r => [Utilities.formatDate(r[0], 'Asia/Tokyo', 'yyyy/MM/dd'), r[COL.kamoku - 1], r[COL.kingaku - 1],
+      r[COL.zeiritsu - 1], r[COL.saki - 1], r[COL.memo - 1], r[COL.toroku - 1]].map(q).join(','))).join('\r\n');
+  const set = getSettings_();
+  const enc = /utf/i.test(String(set['CSVの文字コード（Shift_JIS か UTF-8）'] || '')) ? 'UTF-8' : 'Shift_JIS';
+  const name = '経費_' + y + '-' + ('0' + (m + 1)).slice(-2) + '.csv';
+  const blob = Utilities.newBlob('', 'text/csv', name).setDataFromString(csv, enc);
+  const folderId = String(set['CSVを保存するフォルダのID'] || '').trim();
+  const file = (folderId ? DriveApp.getFolderById(folderId) : DriveApp.getRootFolder()).createFile(blob);
+  const checks = rows.filter(r => r[COL.kakunin - 1] === '要確認').length;
+  alert_(rows.length + '件のCSVを作りました。\n' + file.getName() + (checks ? '\n※「要確認」のままの行が' + checks + '件あります。確かめてから使ってください。' : ''));
+}
+
+/* ───────── 共通 ───────── */
+
+function getSettings_() {
+  const st = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTINGS);
+  const map = {};
+  if (!st || st.getLastRow() < 2) return map;
+  st.getRange(2, 1, st.getLastRow() - 1, 2).getValues().forEach(r => { if (r[0]) map[r[0]] = r[1]; });
+  return map;
+}
+
+function lastRow_(ls) {
+  const n = ls.getLastRow();
+  if (n < 2) return 1;
+  const a = ls.getRange(2, 1, n - 1, 3).getValues();
+  for (let i = a.length - 1; i >= 0; i--) if (a[i][0] !== '' || a[i][1] !== '' || a[i][2] !== '') return i + 2;
+  return 1;
+}
+
+function doneIds_(ls) {
+  const ids = {};
+  const n = lastRow_(ls);
+  if (n < 2) return ids;
+  ls.getRange(2, COL.file, n - 1).getValues().forEach(r => {
+    const m = String(r[0]).match(/[-\w]{25,}/);
+    if (m) ids[m[0]] = true;
+  });
+  return ids;
+}
+
+function alert_(msg) {
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+}
