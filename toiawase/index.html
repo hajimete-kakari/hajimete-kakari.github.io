@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>問い合わせの自動管理｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+    --red: #f8d7d0; --red2: #f2b8ad; --yellow: #fff1c2; --gray: #eeeeee; --code: #f4f1ea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+      --red: #4a2a25; --red2: #5c2c24; --yellow: #4a4220; --gray: #34343a; --code: #202024;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 640px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 16px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .feat { border-left: 4px solid var(--accent); padding: 2px 0 4px 12px; margin-bottom: 10px; }
+  .feat b { display: block; }
+  .feat span { font-size: .88rem; color: var(--sub); }
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+  table { border-collapse: collapse; font-size: .78rem; width: 100%; min-width: 500px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 6px 6px; text-align: left; white-space: nowrap; }
+  th { background: var(--accent-soft); font-weight: 700; }
+  tr.red td { background: var(--red); } tr.red2 td { background: var(--red2); } tr.yellow td { background: var(--yellow); } tr.gray td { background: var(--gray); }
+  ol.steps { padding-left: 1.3em; margin: 0; }
+  ol.steps li { margin-bottom: 8px; }
+  ol.steps .w { display: block; font-size: .86rem; color: var(--sub); }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: .74rem; line-height: 1.5;
+    max-height: 320px; overflow: auto; white-space: pre; margin: 0; }
+  label.f { display: block; font-weight: 600; margin: 12px 0 6px; }
+  select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .9rem; }
+  .row2 { display: flex; gap: 8px; flex-wrap: wrap; }
+  .row2 > div { flex: 1 1 260px; min-width: 0; }
+  button { width: 100%; font-size: .95rem; font-weight: 700; padding: 10px; border-radius: 10px; margin-top: 8px; cursor: pointer; font-family: inherit;
+    background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .warn { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  code { background: var(--code); padding: 0 4px; border-radius: 4px; font-size: .88em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>問い合わせの自動管理（Googleスプレッドシート）</h1>
+  <p class="lead">Googleスプレッドシートに、下のコード（AIに書いてもらったもの）を貼るだけで、Googleフォームやメールの問い合わせが自動で台帳に入り、対応状況の色分け、返信の下書きづくり、未対応のお知らせができるようになります。無料のGoogleアカウントで使えます。</p>
+
+  <div class="card">
+    <h2>できること</h2>
+    <div class="feat"><b>1. フォームの問い合わせを、すぐ台帳に</b><span>ホームページなどに置いたGoogleフォームから送られた問い合わせが、送られた瞬間に「問い合わせ台帳」に入ります。質問の名前（お名前・メール・お問い合わせ内容など）から、どの欄かを自動で見分けます。</span></div>
+    <div class="feat"><b>2. メールの問い合わせも、台帳に</b><span>Gmailで「問い合わせ」などのラベルを付けたメールを、毎朝（またはメニューから）台帳に入れます。Gmailのフィルタで、自動でラベルが付くようにしておくと便利です。</span></div>
+    <div class="feat"><b>3. 対応状況の色分けと、返信の期限</b><span>未対応は赤、対応中は黄、完了は灰色。受け付けてから何日以内に返すか（土日を除く）を決めておくと、期限を過ぎたものは濃い赤になります。</span></div>
+    <div class="feat"><b>4. 返信の下書きを作る（送信はしない）</b><span>行を選んでメニューを押すと、ひな形にお名前や内容を入れた返信を、Gmailの「下書き」に作ります。内容を確かめて、自分で送ります。ひな形は自由に足せます。</span></div>
+    <div class="feat"><b>5. 未対応のお知らせ</b><span>毎朝8時ごろ、未対応・対応中・期限切れの問い合わせを、自分あてにメールで知らせます。</span></div>
+  </div>
+
+  <div class="card" id="mihon">
+    <h2>見本（できあがりのイメージ）</h2>
+    <h3>問い合わせ台帳</h3>
+    <div class="tblwrap">
+      <table>
+        <tr><th>受付</th><th>経路</th><th>お名前</th><th>件名</th><th>状態</th><th>担当</th><th>期限</th></tr>
+        <tr class="red2"><td>10/13</td><td>メール</td><td>〇〇様</td><td>見積もりのお願い</td><td>未対応</td><td></td><td>10/15</td></tr>
+        <tr class="red"><td>10/16</td><td>フォーム</td><td>〇〇様</td><td>サービスの料金について</td><td>未対応</td><td></td><td>10/20</td></tr>
+        <tr class="yellow"><td>10/15</td><td>フォーム</td><td>〇〇様</td><td>資料がほしい</td><td>対応中</td><td>田中</td><td>10/19</td></tr>
+        <tr class="gray"><td>10/10</td><td>メール</td><td>〇〇様</td><td>打ち合わせの日程</td><td>完了</td><td>鈴木</td><td>10/14</td></tr>
+      </table>
+    </div>
+    <div class="row2">
+      <div>
+        <h3>Gmailに作られる返信の下書き</h3>
+        <div class="mail">件名：お問い合わせありがとうございます
+〇〇 様
+
+このたびは〇〇株式会社にお問い合わせいただき、ありがとうございます。
+内容を確認のうえ、10月20日までに担当よりご連絡いたします。</div>
+      </div>
+      <div>
+        <h3>毎朝のお知らせメール</h3>
+        <div class="mail">件名：【問い合わせ】未対応のお知らせ（3件）
+■返信の期限を過ぎたもの
+10/13　未対応　〇〇様　見積もりのお願い
+■未対応・対応中
+10/16　未対応　〇〇様　サービスの料金について
+10/15　対応中　〇〇様　資料がほしい（担当：田中）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>準備（20分ほど・パソコンで）</h2>
+    <ol class="steps">
+      <li>Googleドライブで、新しいスプレッドシートを作る。<span class="w">名前は「問い合わせの管理」など</span></li>
+      <li>メニューの「拡張機能」→「Apps Script」を開く。</li>
+      <li>最初からある文字を全部消して、下の「コードをコピー」で写したコードを貼り、保存（フロッピーの印）する。</li>
+      <li>スプレッドシートに戻って、ページを再読み込みすると、メニューに「問い合わせ」が出る。</li>
+      <li>「問い合わせ」→「① 初期設定」を押す。最初の1回だけ、Googleの許可の画面が出るので、自分のアカウントを選んで許可する。<span class="w">Gmailの下書きを作るため、「メールの閲覧・作成」の許可を求められます。「このアプリはGoogleで確認されていません」と出たら、「詳細」→「（プロジェクト名）に移動」で進みます。自分で貼ったコードなので、自分のアカウントの中だけで動きます</span></li>
+      <li>「設定」シートに、自社名・署名・お知らせの宛先を入れる。</li>
+      <li><b>フォームを使う場合：</b>Googleフォームで問い合わせのフォームを作り（質問は「お名前」「会社名」「メールアドレス」「電話番号」「お問い合わせ内容」など）、フォームの「回答」→「スプレッドシートにリンク」で、このスプレッドシートを選ぶ。そのあと「問い合わせ」→「② フォームとつなぐ」を押す。</li>
+      <li><b>メールを使う場合：</b>Gmailで「問い合わせ」というラベルを作り、問い合わせの窓口のアドレスあてのメールに自動でラベルが付くよう、フィルタを作る。<span class="w">ラベル名は「設定」シートで変えられます</span></li>
+      <li>「問い合わせ」→「毎朝の取り込みとお知らせをオンにする」を押す。</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>コード</h2>
+    <pre id="code">読み込み中…</pre>
+    <button type="button" id="copyCode">コードをコピー</button>
+    <p class="note">コードは、Apps Script（Googleのプログラム）で書いています。このページからは、どこにも送られません。</p>
+  </div>
+
+  <div class="card">
+    <h2>自分の会社に合わせて、AIに直してもらう</h2>
+    <p class="note" style="margin-top:0">ClaudeやChatGPTなどのAIに、下の依頼文と、上のコードを一緒に貼ると、直したコードを作ってくれます。</p>
+    <label class="f" for="want">変えたいこと</label>
+    <select id="want">
+      <option value="tanto">問い合わせの種類で、担当者を自動で決めたい</option>
+      <option value="notice">新しい問い合わせが来たら、すぐ担当者に知らせたい</option>
+      <option value="hist">同じお客さんの、前の問い合わせも見られるようにしたい</option>
+      <option value="col">台帳に列を足したい（見込み度・金額など）</option>
+      <option value="error">エラーが出て動かない</option>
+      <option value="form">フォームの質問の名前が、うまく見分けられない</option>
+    </select>
+    <div class="mail" id="prompt" style="margin-top:10px"></div>
+    <button type="button" id="copyPrompt">依頼文をコピー</button>
+  </div>
+
+  <div class="card">
+    <h2>使う前に確かめること</h2>
+    <div class="warn">問い合わせには、お客さんの名前・メールアドレス・電話番号などの個人情報が入ります。スプレッドシートの共有の範囲と、会社のルール（個人情報の扱い・外部サービスの利用）を先に確かめてください。</div>
+    <ul>
+      <li>このコードは、返信を自動で送りません。Gmailの「下書き」を作るだけです。送る前に、宛先と内容を確かめてください。</li>
+      <li>スプレッドシートを人と共有するときは、「編集者」にする人を必要な人だけにします。</li>
+      <li>お知らせメールは、自分（設定した宛先）にだけ送ります。</li>
+      <li>フォームに「個人情報の使いみち（問い合わせへの返信のため、など）」を書いておくと安心です。</li>
+      <li>AIに直してもらったコードは、まずコピーしたスプレッドシートで試してから使います。</li>
+    </ul>
+  </div>
+
+  <p class="note">最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CODE = "";
+  fetch("code.txt").then(function (r) { return r.text(); }).then(function (t) { CODE = t; $("code").textContent = t; })
+    .catch(function () { $("code").textContent = "コードを読み込めませんでした。ページを再読み込みしてください。"; });
+  var P = {
+    tanto: "問い合わせの「件名」や「内容」に、決めた言葉（例：「見積」なら田中、「採用」なら鈴木）があれば、「担当」の列に自動で名前を入れる機能を足してください。言葉と担当の組み合わせは、「担当ルール」という新しいシートで変えられるようにしてください。",
+    notice: "フォームから新しい問い合わせが来たら、その場で担当者（「設定」シートに書いたメールアドレス）に、件名とお名前だけを書いたお知らせメールを送る機能を足してください。お客さんには何も送らないでください。",
+    hist: "台帳で行を選んでメニューを押すと、同じメールアドレスの過去の問い合わせを、受付日時・件名・状態の一覧で表示する機能を足してください。",
+    col: "台帳に「見込み度（高・中・低）」と「見積金額」の列を、「次にやること」の右に足したいです。列が増えても、色分け・集計・お知らせ・返信の下書きが正しく動くように直してください。集計に、見込み度ごとの件数と見積金額の合計も足してください。",
+    error: "このコードを動かすと、エラーが出ます。原因と、直し方を教えてください。直したコード全体も出してください。\n\n【エラーの文】\n（ここに貼る）\n【押したメニュー】\n（例：選んだ行の返信の下書きを作る）",
+    form: "Googleフォームの質問の名前が【質問の名前を全部書く】のときに、お名前・会社名・メール・電話・件名・内容の欄に、正しく振り分けられるように、mapAnswers_ を直してください。"
+  };
+  function show() {
+    $("prompt").textContent = "あなたは、Googleスプレッドシートの Apps Script にくわしいプログラマーです。\n下のコードは、問い合わせを台帳で管理するコードです。\n\n【してほしいこと】\n" + P[$("want").value] +
+      "\n\n【守ってほしいこと】\n・お客さんにメールを自動で送る機能は作らないでください（下書きまで）\n・はじめての人でもわかるように、どこを変えたかを説明してください\n・直したコードは、全体をそのまま貼れる形で出してください\n・個人情報やパスワードは、コードに書かないでください\n・わからないことがあれば、先に質問してください\n\n【今のコード】\n（ここに、このページのコードを貼る）";
+  }
+  $("want").addEventListener("change", show); show();
+  function copy(txt, b, label) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("copyCode").addEventListener("click", function (e) { copy(CODE, e.target, "コードをコピー"); });
+  $("copyPrompt").addEventListener("click", function (e) { copy($("prompt").textContent, e.target, "依頼文をコピー"); });
+})();
+</script>
+</body>
+</html>

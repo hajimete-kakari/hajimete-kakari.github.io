@@ -1,0 +1,350 @@
+/**
+ * 問い合わせの自動管理（Googleスプレッドシート＋Apps Script）
+ * はじめての係　最終更新：2026年10月
+ * 使い方：https://hajimete-kakari.github.io/toiawase/
+ *
+ * できること
+ *  1. Googleフォームの問い合わせを、送られてきたらすぐ台帳に入れる
+ *  2. Gmailで決めたラベルを付けた問い合わせメールを、台帳に入れる
+ *  3. 対応状況を色分けする（未対応＝赤、対応中＝黄、期限切れ＝濃い赤、完了＝灰）
+ *  4. 選んだ行の返信の「下書き」をGmailに作る（送信はしない。ひな形は自分で変えられる）
+ *  5. 毎朝、未対応・期限切れの問い合わせを自分あてにメールで知らせる
+ *  6. 状態ごと・月ごと・経路ごと・担当ごとに自動で集計する
+ */
+
+const SHEET_LIST = '問い合わせ台帳';
+const SHEET_TPL = '返信ひな形';
+const SHEET_SUMMARY = '集計';
+const SHEET_SETTINGS = '設定';
+
+const HEADERS = ['受付日時', '経路', 'お名前', '会社名', 'メール', '電話', '件名', '内容', '状態', '担当', '次にやること', '期限', '返信の種類', '下書き', '元のID', 'メモ'];
+const COL = { uketsuke: 1, keiro: 2, namae: 3, kaisha: 4, mail: 5, tel: 6, kenmei: 7, naiyo: 8, jotai: 9, tanto: 10, tsugi: 11, kigen: 12, henshin: 13, shitagaki: 14, motoid: 15, memo: 16 };
+const JOTAI = ['未対応', '対応中', '完了', '対応不要'];
+
+const SETTING_ITEMS = [
+  ['自社名', ''],
+  ['署名（返信の最後に入れる文）', ''],
+  ['お知らせメールの宛先', ''],
+  ['Gmailのラベル名（使わないなら空欄）', '問い合わせ'],
+  ['返信の期限（受け付けてから何日以内）', 2]
+];
+
+const DEFAULT_TPL = [
+  ['受付のお礼', 'お問い合わせありがとうございます', '{{お名前}} 様\n\nこのたびは{{自社名}}にお問い合わせいただき、ありがとうございます。\n内容を確認のうえ、{{期限}}までに担当よりご連絡いたします。\n\n【お問い合わせ内容】\n{{内容}}\n\n{{署名}}'],
+  ['資料のご案内', '資料をお送りします', '{{お名前}} 様\n\nお問い合わせいただき、ありがとうございます。\nご依頼の資料を添付いたしますので、ご確認ください。\nご不明な点がございましたら、お気軽にお知らせください。\n\n{{署名}}'],
+  ['日程のご相談', 'お打ち合わせの日程について', '{{お名前}} 様\n\nお問い合わせいただき、ありがとうございます。\n一度お話をお伺いできればと思います。\n以下の日程のご都合はいかがでしょうか。\n\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n\n{{署名}}']
+];
+
+/* ───────── メニュー ───────── */
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('問い合わせ')
+    .addItem('① 初期設定（最初に1回）', 'setup')
+    .addItem('② フォームとつなぐ（フォームを使う場合）', 'connectForm')
+    .addSeparator()
+    .addItem('フォームの回答をまとめて取り込む', 'importFormAll')
+    .addItem('Gmailの問い合わせを取り込む', 'importGmail')
+    .addItem('選んだ行の返信の下書きを作る', 'makeDraft')
+    .addItem('お知らせメールを今すぐ送る（テスト）', 'notifyOpen')
+    .addSeparator()
+    .addItem('毎朝の取り込みとお知らせをオンにする', 'enableDaily')
+    .addItem('毎朝の取り込みとお知らせをオフにする', 'disableDaily')
+    .addToUi();
+}
+
+/* ───────── 1回だけ：シートを作る ───────── */
+
+function setup() {
+  const ss = SpreadsheetApp.getActive();
+
+  let st = ss.getSheetByName(SHEET_SETTINGS);
+  if (!st) {
+    st = ss.insertSheet(SHEET_SETTINGS);
+    st.getRange(1, 1, 1, 2).setValues([['項目', '内容']]).setFontWeight('bold').setBackground('#e6f0ec');
+    st.getRange(2, 1, SETTING_ITEMS.length, 2).setValues(SETTING_ITEMS);
+    const me = Session.getActiveUser().getEmail();
+    if (me) st.getRange(4, 2).setValue(me); // お知らせメールの宛先
+    st.setColumnWidth(1, 300);
+    st.setColumnWidth(2, 420);
+  }
+
+  let tp = ss.getSheetByName(SHEET_TPL);
+  if (!tp) {
+    tp = ss.insertSheet(SHEET_TPL);
+    tp.getRange(1, 1, 1, 3).setValues([['返信の種類', '件名', '本文（{{お名前}} {{会社名}} {{件名}} {{内容}} {{自社名}} {{署名}} {{期限}} が入れかわる）']])
+      .setFontWeight('bold').setBackground('#e6f0ec');
+    tp.getRange(2, 1, DEFAULT_TPL.length, 3).setValues(DEFAULT_TPL).setVerticalAlignment('top').setWrap(true);
+    tp.setColumnWidth(1, 140); tp.setColumnWidth(2, 240); tp.setColumnWidth(3, 520);
+  }
+
+  let ls = ss.getSheetByName(SHEET_LIST);
+  if (!ls) ls = ss.insertSheet(SHEET_LIST, 0);
+  ls.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold').setBackground('#e6f0ec');
+  ls.setFrozenRows(1);
+  const n = ls.getMaxRows() - 1;
+  ls.getRange(2, COL.uketsuke, n).setNumberFormat('yyyy/mm/dd hh:mm');
+  ls.getRange(2, COL.kigen, n).setNumberFormat('yyyy/mm/dd');
+  const list = (arr) => SpreadsheetApp.newDataValidation().requireValueInList(arr, true).setAllowInvalid(true).build();
+  ls.getRange(2, COL.jotai, n).setDataValidation(list(JOTAI));
+  ls.getRange(2, COL.henshin, n).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInRange(tp.getRange('A2:A50'), true).setAllowInvalid(true).build());
+  ls.getRange(2, COL.naiyo, n).setWrap(false);
+  const all = ls.getRange(2, 1, n, HEADERS.length);
+  const rule = (f, color) => SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied(f).setBackground(color).setRanges([all]).build();
+  ls.setConditionalFormatRules([
+    rule('=AND($A2<>"",OR($I2="未対応",$I2="対応中"),$L2<>"",$L2<TODAY())', '#f2b8ad'),
+    rule('=AND($A2<>"",$I2="未対応")', '#f8d7d0'),
+    rule('=AND($A2<>"",$I2="対応中")', '#fff1c2'),
+    rule('=AND($A2<>"",OR($I2="完了",$I2="対応不要"))', '#eeeeee')
+  ]);
+  [130, 70, 110, 140, 180, 110, 180, 260, 80, 80, 160, 100, 110, 110, 120, 160].forEach((w, i) => ls.setColumnWidth(i + 1, w));
+
+  let sm = ss.getSheetByName(SHEET_SUMMARY);
+  if (!sm) sm = ss.insertSheet(SHEET_SUMMARY);
+  sm.clear();
+  const L = "'" + SHEET_LIST + "'!A:P";
+  sm.getRange('A1').setValue('状態ごと').setFontWeight('bold');
+  sm.getRange('A2').setFormula('=IFERROR(QUERY(' + L + ',"select I, count(A) where A is not null group by I label count(A) \'件数\'",1),"なし")');
+  sm.getRange('D1').setValue('月ごと・経路ごと').setFontWeight('bold');
+  sm.getRange('D2').setFormula('=IFERROR(QUERY(' + L + ',"select year(A), month(A)+1, B, count(A) where A is not null group by year(A), month(A)+1, B ' +
+    'order by year(A) desc, month(A)+1 desc label year(A) \'年\', month(A)+1 \'月\', count(A) \'件数\'",1),"なし")');
+  sm.getRange('I1').setValue('担当ごとの未完了').setFontWeight('bold');
+  sm.getRange('I2').setFormula('=IFERROR(QUERY(' + L + ',"select J, count(A) where A is not null and (I=\'未対応\' or I=\'対応中\') group by J label J \'担当\', count(A) \'未完了\'",1),"なし")');
+
+  ss.setActiveSheet(ls);
+  alert_('初期設定ができました。「設定」シートに、自社名・署名・お知らせの宛先を入れてください。\nフォームを使う場合は、次に「② フォームとつなぐ」を押します。');
+}
+
+/* ───────── 1. フォーム ───────── */
+
+function connectForm() {
+  const ss = SpreadsheetApp.getActive();
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'onFormSubmitHandler').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('onFormSubmitHandler').forSpreadsheet(ss).onFormSubmit().create();
+  alert_('フォームとつなぎました。フォームから送られた問い合わせは、すぐに「' + SHEET_LIST + '」に入ります。\n' +
+    '※フォームの「回答」→「スプレッドシートにリンク」で、このスプレッドシートを選んでおいてください。');
+}
+
+function onFormSubmitHandler(e) {
+  const nv = (e && e.namedValues) || {};
+  const flat = {};
+  Object.keys(nv).forEach(k => { flat[k] = (nv[k] || []).join(', '); });
+  const d = mapAnswers_(flat);
+  // 「まとめて取り込む」と同じ形の印にして、二重に入らないようにする
+  const ts = e && e.range ? e.range.getValues()[0][0] : null;
+  const date = ts instanceof Date ? ts : new Date();
+  const id = 'form:' + Utilities.formatDate(date, 'Asia/Tokyo', 'yyyy/MM/dd HH:mm:ss') + ':' + d.mail;
+  if (doneIds_()[id]) return;
+  addRow_(date, 'フォーム', d, id);
+}
+
+function importFormAll() {
+  const ss = SpreadsheetApp.getActive();
+  const sh = ss.getSheets().filter(s => /^フォームの回答|^Form Responses/.test(s.getName()))[0];
+  if (!sh) { alert_('「フォームの回答」のシートが見つかりません。フォームの「回答」→「スプレッドシートにリンク」で、このスプレッドシートを選んでください。'); return; }
+  const v = sh.getDataRange().getValues();
+  if (v.length < 2) { alert_('フォームの回答がまだありません。'); return; }
+  const head = v[0].map(String), done = doneIds_();
+  let added = 0;
+  for (let i = 1; i < v.length; i++) {
+    const flat = {};
+    head.forEach((h, j) => { flat[h] = v[i][j] instanceof Date ? Utilities.formatDate(v[i][j], 'Asia/Tokyo', 'yyyy/MM/dd HH:mm:ss') : String(v[i][j]); });
+    const d = mapAnswers_(flat);
+    const id = 'form:' + (flat['タイムスタンプ'] || flat['Timestamp'] || i) + ':' + d.mail;
+    if (done[id]) continue;
+    addRow_(v[i][0] instanceof Date ? v[i][0] : new Date(), 'フォーム', d, id);
+    added++;
+  }
+  alert_(added + '件を取り込みました。');
+}
+
+// 質問の名前から、どの欄かを見分ける
+function mapAnswers_(flat) {
+  const d = { namae: '', kaisha: '', mail: '', tel: '', kenmei: '', naiyo: '' };
+  const rest = [];
+  Object.keys(flat).forEach(k => {
+    const v = String(flat[k] || '').trim();
+    if (!v || /タイムスタンプ|Timestamp/i.test(k)) return;
+    if (/メール|mail/i.test(k)) d.mail = d.mail || v;
+    else if (/電話|TEL|phone/i.test(k)) d.tel = d.tel || v;
+    else if (/会社|法人|団体|店舗|屋号|company/i.test(k)) d.kaisha = d.kaisha || v;
+    else if (/名前|氏名|ご担当|name/i.test(k)) d.namae = d.namae || v;
+    else if (/件名|種類|ご用件|カテゴリ|subject/i.test(k)) d.kenmei = d.kenmei || v;
+    else if (/内容|お問い合わせ|ご質問|ご相談|詳細|message/i.test(k)) d.naiyo = d.naiyo ? d.naiyo + '\n' + v : v;
+    else rest.push(k + '：' + v);
+  });
+  if (rest.length) d.naiyo = (d.naiyo ? d.naiyo + '\n' : '') + rest.join('\n');
+  if (!d.kenmei) d.kenmei = d.naiyo.split('\n')[0].slice(0, 30);
+  return d;
+}
+
+/* ───────── 2. Gmail ───────── */
+
+function importGmail(silent) {
+  const set = getSettings_();
+  const label = String(set['Gmailのラベル名（使わないなら空欄）'] || '').trim();
+  if (!label) { if (silent !== true) alert_('「設定」シートに、Gmailのラベル名を入れてください。'); return; }
+  const threads = GmailApp.search('label:"' + label + '"', 0, 50);
+  const done = doneIds_();
+  let added = 0;
+  threads.forEach(th => {
+    const id = 'gmail:' + th.getId();
+    if (done[id]) return;
+    const m = th.getMessages()[0];
+    const from = parseFrom_(m.getFrom());
+    const body = String(m.getPlainBody() || '').replace(/\r/g, '').replace(/\n{3,}/g, '\n\n').trim().slice(0, 1500);
+    addRow_(m.getDate(), 'メール', { namae: from.name, kaisha: '', mail: from.mail, tel: findTel_(body), kenmei: m.getSubject(), naiyo: body }, id);
+    added++;
+  });
+  if (silent !== true) alert_(added + '件を取り込みました。（ラベル「' + label + '」）');
+}
+
+function parseFrom_(s) {
+  s = String(s || '').trim();
+  const m = s.match(/^\s*"?([^"<]*?)"?\s*<([^>]+)>\s*$/);
+  if (m) return { name: m[1].trim(), mail: m[2].trim() };
+  return { name: '', mail: s };
+}
+
+function findTel_(s) {
+  const m = String(s).match(/0\d{1,4}[-‐ー−\s]?\d{1,4}[-‐ー−\s]?\d{3,4}/);
+  return m ? m[0] : '';
+}
+
+/* ───────── 共通：台帳に1行足す ───────── */
+
+function addRow_(date, keiro, d, id) {
+  const ss = SpreadsheetApp.getActive();
+  const ls = ss.getSheetByName(SHEET_LIST);
+  const days = Number(getSettings_()['返信の期限（受け付けてから何日以内）']) || 2;
+  const kigen = addBusinessDays_(date, days);
+  const r = lastRow_(ls) + 1;
+  ls.getRange(r, 1, 1, HEADERS.length).setValues([[
+    date, keiro, d.namae, d.kaisha, d.mail, d.tel, d.kenmei, d.naiyo, '未対応', '', '', kigen, '受付のお礼', '', id, ''
+  ]]);
+}
+
+// 土日をとばして日数を足す
+function addBusinessDays_(date, days) {
+  const x = new Date(date); x.setHours(0, 0, 0, 0);
+  let n = 0;
+  while (n < days) { x.setDate(x.getDate() + 1); if (x.getDay() !== 0 && x.getDay() !== 6) n++; }
+  return x;
+}
+
+/* ───────── 4. 返信の下書き ───────── */
+
+function makeDraft() {
+  const ss = SpreadsheetApp.getActive();
+  const sh = ss.getActiveSheet();
+  const r = sh.getActiveRange().getRow();
+  if (sh.getName() !== SHEET_LIST || r < 2) { alert_('「' + SHEET_LIST + '」で、返信したい行のどこかを選んでから使ってください。'); return; }
+  const v = sh.getRange(r, 1, 1, HEADERS.length).getValues()[0];
+  const kind = v[COL.henshin - 1] || '受付のお礼';
+  const tpl = getTemplates_()[kind];
+  if (!tpl) { alert_('「返信ひな形」に「' + kind + '」が見つかりません。'); return; }
+  const set = getSettings_();
+  const vals = {
+    'お名前': v[COL.namae - 1] || 'ご担当者', '会社名': v[COL.kaisha - 1], '件名': v[COL.kenmei - 1], '内容': v[COL.naiyo - 1],
+    '自社名': set['自社名'], '署名': set['署名（返信の最後に入れる文）'],
+    '期限': v[COL.kigen - 1] instanceof Date ? Utilities.formatDate(v[COL.kigen - 1], 'Asia/Tokyo', 'M月d日') : '近日中'
+  };
+  const subject = fillTemplate_(tpl.subject, vals), body = fillTemplate_(tpl.body, vals);
+  const id = String(v[COL.motoid - 1] || '');
+  if (id.indexOf('gmail:') === 0) {
+    GmailApp.getThreadById(id.slice(6)).createDraftReply(body);
+  } else {
+    if (!v[COL.mail - 1]) { alert_('メールアドレスが入っていません。'); return; }
+    GmailApp.createDraft(v[COL.mail - 1], subject, body);
+  }
+  sh.getRange(r, COL.shitagaki).setValue('作成 ' + Utilities.formatDate(new Date(), 'Asia/Tokyo', 'M/d HH:mm'));
+  if (v[COL.jotai - 1] === '未対応') sh.getRange(r, COL.jotai).setValue('対応中');
+  alert_('Gmailの「下書き」に、返信を作りました（「' + kind + '」）。\n内容を確かめて、自分で送信してください。');
+}
+
+function getTemplates_() {
+  const tp = SpreadsheetApp.getActive().getSheetByName(SHEET_TPL);
+  const map = {};
+  const rows = !tp || tp.getLastRow() < 2 ? DEFAULT_TPL : tp.getRange(2, 1, tp.getLastRow() - 1, 3).getValues();
+  rows.forEach(r => { if (r[0]) map[r[0]] = { subject: String(r[1]), body: String(r[2]) }; });
+  return map;
+}
+
+function fillTemplate_(s, vals) {
+  return String(s).replace(/\{\{([^}]+)\}\}/g, (all, k) => vals[k.trim()] != null ? String(vals[k.trim()]) : '');
+}
+
+/* ───────── 5. 毎朝のお知らせ ───────── */
+
+function dailyJob() {
+  importGmail(true);
+  notifyOpen(true);
+}
+
+function notifyOpen(fromTrigger) {
+  const ss = SpreadsheetApp.getActive();
+  const set = getSettings_();
+  const to = String(set['お知らせメールの宛先'] || '').trim();
+  if (!to) { alert_('「設定」シートに「お知らせメールの宛先」を入れてください。'); return; }
+  const ls = ss.getSheetByName(SHEET_LIST);
+  const last = lastRow_(ls);
+  const rows = last < 2 ? [] : ls.getRange(2, 1, last - 1, HEADERS.length).getValues();
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const over = [], open = [];
+  rows.forEach(r => {
+    const j = r[COL.jotai - 1];
+    if (!r[0] || (j !== '未対応' && j !== '対応中')) return;
+    const k = r[COL.kigen - 1];
+    const line = (r[0] instanceof Date ? Utilities.formatDate(r[0], 'Asia/Tokyo', 'M/d') : '') + '　' + j + '　' +
+      (r[COL.kaisha - 1] ? r[COL.kaisha - 1] + '　' : '') + (r[COL.namae - 1] || r[COL.mail - 1]) + '　' + String(r[COL.kenmei - 1]).slice(0, 30) +
+      (r[COL.tanto - 1] ? '（担当：' + r[COL.tanto - 1] + '）' : '');
+    if (k instanceof Date && k < today) over.push(line); else open.push(line);
+  });
+  if (!over.length && !open.length) { if (fromTrigger !== true) alert_('未対応・対応中の問い合わせはありません。'); return; }
+  const body = (over.length ? '■返信の期限を過ぎたもの\n' + over.join('\n') + '\n\n' : '') +
+    (open.length ? '■未対応・対応中\n' + open.join('\n') + '\n\n' : '') + '問い合わせ台帳：' + ss.getUrl();
+  MailApp.sendEmail(to, '【問い合わせ】未対応のお知らせ（' + (over.length + open.length) + '件）', body);
+  if (fromTrigger !== true) alert_('お知らせメールを送りました（' + to + '）。');
+}
+
+function enableDaily() {
+  disableDaily(true);
+  ScriptApp.newTrigger('dailyJob').timeBased().everyDays(1).atHour(8).create();
+  alert_('毎朝8時ごろに、Gmailの取り込みとお知らせをするようにしました。');
+}
+
+function disableDaily(silent) {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'dailyJob').forEach(t => ScriptApp.deleteTrigger(t));
+  if (silent !== true) alert_('毎朝の取り込みとお知らせを止めました。');
+}
+
+/* ───────── 共通 ───────── */
+
+function getSettings_() {
+  const st = SpreadsheetApp.getActive().getSheetByName(SHEET_SETTINGS);
+  const map = {};
+  if (!st || st.getLastRow() < 2) return map;
+  st.getRange(2, 1, st.getLastRow() - 1, 2).getValues().forEach(r => { if (r[0]) map[r[0]] = r[1]; });
+  return map;
+}
+
+function lastRow_(ls) {
+  const n = ls.getLastRow();
+  if (n < 2) return 1;
+  const a = ls.getRange(2, 1, n - 1, 1).getValues();
+  for (let i = a.length - 1; i >= 0; i--) if (a[i][0] !== '') return i + 2;
+  return 1;
+}
+
+function doneIds_() {
+  const ls = SpreadsheetApp.getActive().getSheetByName(SHEET_LIST);
+  const ids = {};
+  const n = lastRow_(ls);
+  if (n < 2) return ids;
+  ls.getRange(2, COL.motoid, n - 1).getValues().forEach(r => { if (r[0]) ids[String(r[0])] = true; });
+  return ids;
+}
+
+function alert_(msg) {
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) { console.log(msg); }
+}
