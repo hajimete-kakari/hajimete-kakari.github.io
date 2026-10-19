@@ -49,6 +49,8 @@
   .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
   .note { font-size: .8rem; color: var(--sub); }
   [hidden] { display: none !important; }
+  /* 見本画像用：答えの中身をぼかす */
+  .mihon .qa .q, .mihon .qa .w, .mihon .qa .f2, .mihon #nomore, .mihon #work .w, .mihon #ng { filter: blur(6px); user-select: none; }
 </style>
 </head>
 <body>
@@ -220,6 +222,7 @@
     if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
   });
   $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
   if (DEMO) {
     $("who").value = "genba";
     document.querySelector('#want input[value="work"]').checked = true;

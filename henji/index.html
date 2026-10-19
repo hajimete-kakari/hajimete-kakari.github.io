@@ -49,6 +49,8 @@
   .q .w { font-size: .88rem; color: var(--sub); }
   .note { font-size: .8rem; color: var(--sub); }
   [hidden] { display: none !important; }
+  /* 見本画像用：本文の中身をぼかす */
+  .mihon #body, .mihon #qs .w { filter: blur(6px); user-select: none; }
 </style>
 </head>
 <body>
@@ -202,6 +204,7 @@
   $("copyS").addEventListener("click", function (e) { copy("subj", e.target, "件名をコピー"); });
   $("copyB").addEventListener("click", function (e) { copy("body", e.target, "本文をコピー"); });
   $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
   if (DEMO) {
     $("name").value = "佐藤"; $("me").value = "〇〇商事の田中"; $("first").value = "2026-10-12"; $("youken").value = "お見積もり";
     $("q").value = "ご契約のプラン"; $("a").value = "月額プラン"; $("b").value = "年額プラン";
