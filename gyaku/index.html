@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>逆質問の作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 8px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .checks label { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: .95rem; }
+  .checks input { margin-top: 5px; width: 18px; height: 18px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { margin-top: 8px; padding: 9px; font-size: .92rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .qa { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .qa .no { font-size: .8rem; color: var(--sub); }
+  .qa .q { font-weight: 700; font-size: 1.02rem; margin: 2px 0 6px; }
+  .qa .w { font-size: .86rem; color: var(--sub); }
+  .qa .f2 { font-size: .86rem; margin-top: 6px; border-top: 1px dashed var(--line); padding-top: 6px; }
+  .tip { border-left: 4px solid var(--mus); padding: 4px 0 6px 12px; margin-bottom: 10px; }
+  .tip .nm { font-weight: 700; }
+  .tip .w { font-size: .9rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>逆質問の作成ページ</h1>
+  <p class="lead">面接の最後の「何か質問はありますか？」で使える質問を、面接官と自分の状況に合わせて3つ選びます。答えを聞いたあとに返すひと言、聞きにくいこと（残業・休み）の聞き方、質問がもう残っていないときの言い方もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 面接のこと</h2>
+    <label class="f" for="who">面接官は？</label>
+    <select id="who">
+      <option value="jinji">人事・採用の担当</option>
+      <option value="genba">配属先の上司・先輩</option>
+      <option value="top">社長・役員（最終面接）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="kei">働き方</label><select id="kei"><option value="sei">正社員</option><option value="part">パート・アルバイト</option><option value="haken">契約・派遣</option></select></div>
+      <div><label class="f" for="exp">その仕事の経験</label><select id="exp"><option value="no">未経験</option><option value="yes">経験あり</option></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 知りたいこと（いくつでも）</h2>
+    <div class="checks" id="want">
+      <label><input type="checkbox" value="flow" checked>入社してから仕事を覚えるまでの流れ</label>
+      <label><input type="checkbox" value="day">1日の仕事の流れ・忙しい時期</label>
+      <label><input type="checkbox" value="eval">評価のされ方・任される仕事の増え方</label>
+      <label><input type="checkbox" value="team" checked>一緒に働く人・職場の雰囲気</label>
+      <label><input type="checkbox" value="work">残業・休みの取りやすさ（聞きにくいこと）</label>
+      <label><input type="checkbox" value="fit">活躍している人の共通点・求められること</label>
+      <label><input type="checkbox" value="future">会社のこれから</label>
+    </div>
+    <button id="make" type="button">質問を選ぶ</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>あなたにおすすめの逆質問</h2>
+    <div id="qs"></div>
+    <button type="button" class="copy" id="copy">3つの質問をメモにコピー</button>
+    <h3>質問がもう残っていないとき</h3>
+    <div class="tip"><div class="nm">「特にありません」の代わりに</div><div class="w" id="nomore"></div></div>
+    <h3 id="hdWork" hidden>聞きにくいことを聞くとき</h3>
+    <div id="work"></div>
+    <h3>避けたい質問</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※質問は、面接の流れで先に説明されたことと重ならないように、その場で選び直してください。メモを見ながら聞いても失礼にはなりません。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  function $(id) { return document.getElementById(id); }
+  // 質問の一覧：cat 種類, to 向いている面接官, q 質問, why 理由, after 答えを聞いたあとのひと言
+  var BANK = [
+    { cat: "flow", to: ["jinji", "genba", "unk"], q: "入社してから、一人で仕事を任されるまで、どのくらいの期間で、どのように覚えていくことが多いですか。",
+      why: "入ったあとのことを具体的に考えている、と伝わります。教え方の雰囲気もわかります。",
+      after: "ありがとうございます。〇か月で一人立ちできるよう、最初は〇〇から覚えたいと思います。" },
+    { cat: "flow", to: ["genba"], q: "最初の1か月で、とくに早く覚えてほしいことは何ですか。",
+      why: "現場の人が「最初に困ること」を聞けるので、答えから仕事の中身が見えます。",
+      after: "〇〇ですね。入社までに少しでも触れておきます。" },
+    { cat: "day", to: ["genba", "unk"], q: "このお仕事の、ある1日の流れを教えていただけますか。",
+      why: "働く姿を思い浮かべようとしている姿勢が伝わります。実際の忙しさも見えてきます。",
+      after: "思っていたより〇〇の時間が長いのですね。イメージがわきました。" },
+    { cat: "day", to: ["genba", "jinji"], q: "1年のうちで、忙しくなる時期はいつごろですか。",
+      why: "繁忙期を前もって知ろうとする人は、準備ができる人に見えます。",
+      after: "〇月ごろですね。その時期に戦力になれるよう、早めに覚えたいです。" },
+    { cat: "eval", to: ["jinji", "genba", "top"], q: "どのようなことができるようになると、評価されたり、任される仕事が増えたりしますか。",
+      why: "長く働いて成長したい気持ちが伝わります。会社が大事にしていることもわかります。",
+      after: "〇〇が大事なのですね。まずはそこを目標にします。" },
+    { cat: "eval", to: ["jinji"], q: "評価や昇給は、どのような時期に、どのような方法で決まりますか。", only: ["sei", "haken"],
+      why: "条件を落ち着いて確かめる人だと伝わります。聞き方がていねいなら、印象は下がりません。",
+      after: "年に〇回なのですね。ありがとうございます。" },
+    { cat: "team", to: ["jinji", "genba", "unk"], q: "配属先は何人くらいで、どのような方が多いですか。",
+      why: "一緒に働く人を大切に考えている、と伝わります。",
+      after: "〇〇な方が多いのですね。早くなじめるようにしたいです。" },
+    { cat: "team", to: ["genba"], q: "〇〇さん（面接官）が、この職場で働いていてよかったと感じるのは、どんなときですか。",
+      why: "面接官自身の話を聞くので、場がやわらぎます。職場の本当の雰囲気が出やすい質問です。",
+      after: "そういう場面があるのはうれしいですね。お話をうかがって、ますます働きたくなりました。" },
+    { cat: "fit", to: ["genba", "top", "jinji"], q: "このお仕事で活躍されている方には、どのような共通点がありますか。",
+      why: "求められる人に近づこうとする姿勢が伝わります。答えが、そのまま入社後の目標になります。",
+      after: "〇〇な方なのですね。私も〇〇を心がけてきたので、生かしたいと思います。" },
+    { cat: "fit", to: ["jinji", "genba", "top", "unk"], q: "入社までに、勉強や準備をしておくとよいことはありますか。", expOnly: "no",
+      why: "未経験でも前向きに準備したい気持ちが伝わります。最後の質問にとても向いています。",
+      after: "〇〇ですね。さっそく始めます。" },
+    { cat: "fit", to: ["jinji", "genba", "top", "unk"], q: "これまでの〇〇の経験は、こちらのお仕事のどのような場面で生かせそうでしょうか。", expOnly: "yes",
+      why: "経験を生かして貢献したい、という気持ちが自然に伝わります。",
+      after: "〇〇の場面ですね。前の職場でも近いことをしていたので、生かせると思います。" },
+    { cat: "future", to: ["top"], q: "今後、会社として、どのようなことに力を入れていく予定ですか。",
+      why: "最終面接で社長・役員に聞くと、会社の先を一緒に見たい人だと伝わります。",
+      after: "〇〇に力を入れるのですね。その中で役に立てるよう頑張ります。" },
+    { cat: "future", to: ["top", "jinji"], q: "これから入る人に、いちばん期待されていることは何ですか。",
+      why: "会社の期待に応えたい気持ちが、短い言葉で伝わります。",
+      after: "〇〇ですね。期待に応えられるよう取り組みます。" }
+  ];
+  var WORK = {
+    sei: ["残業のことを聞きたいとき", "「繁忙期と、落ち着いている時期とで、残業はどのくらい違いますか。」\n→「残業はありますか」より、働く気があることが伝わります。"],
+    part: ["休みのことを聞きたいとき", "「急に休みが必要になったとき、シフトはどのように調整されていますか。」\n→「休めますか」より、迷惑をかけない方法を考えている人に見えます。"],
+    haken: ["契約のことを聞きたいとき", "「契約の更新は、どのような時期に、どのように決まりますか。」\n→ 条件を落ち着いて確かめる人だと伝わります。"]
+  };
+  function pick() {
+    var who = $("who").value, kei = $("kei").value, exp = $("exp").value;
+    var wants = Array.prototype.map.call(document.querySelectorAll("#want input:checked"), function (x) { return x.value; });
+    var cands = BANK.filter(function (b) {
+      if (b.only && b.only.indexOf(kei) < 0) return false;
+      if (b.expOnly && b.expOnly !== exp) return false;
+      return true;
+    }).map(function (b, i) {
+      var s = 0;
+      if (wants.indexOf(b.cat) >= 0) s += 10;
+      if (b.to.indexOf(who) >= 0) s += 5;
+      if (who === "unk" && b.to.indexOf("jinji") >= 0) s += 2;
+      if (b.cat === "fit" && b.expOnly) s += 3; // 経験に合わせた質問は、最後に置きやすい
+      return { b: b, s: s, i: i };
+    }).sort(function (x, y) { return y.s - x.s || x.i - y.i; });
+    var out = [], used = {};
+    cands.forEach(function (c) { if (out.length < 3 && !used[c.b.cat] && c.b.cat !== "work") { out.push(c.b); used[c.b.cat] = 1; } });
+    cands.forEach(function (c) { if (out.length < 3 && out.indexOf(c.b) < 0) out.push(c.b); });
+    // 「準備・経験」の質問は、最後にまわす
+    out.sort(function (a, b) { return (a.cat === "fit" ? 1 : 0) - (b.cat === "fit" ? 1 : 0); });
+    return { out: out, wants: wants, kei: kei, who: who };
+  }
+  var MEMO = "";
+  function make() {
+    var r = pick();
+    var qb = $("qs"); qb.innerHTML = "";
+    MEMO = "【逆質問のメモ】\n";
+    r.out.forEach(function (b, i) {
+      var el = document.createElement("div"); el.className = "qa";
+      el.innerHTML = '<div class="no"></div><div class="q"></div><div class="w"></div><div class="f2"></div>';
+      el.querySelector(".no").textContent = (i + 1) + "つ目" + (i === r.out.length - 1 ? "（最後に聞くと印象が残りやすい）" : "");
+      el.querySelector(".q").textContent = "「" + b.q + "」";
+      el.querySelector(".w").textContent = b.why;
+      el.querySelector(".f2").textContent = "答えを聞いたら：「" + b.after + "」";
+      qb.appendChild(el);
+      MEMO += (i + 1) + ". " + b.q + "\n";
+    });
+    $("nomore").textContent = "「ありがとうございます。今日のお話で、〇〇についてよくわかりました。聞きたかったことは、すべてうかがえました。」\n→ 面接の中で何がわかったかを、ひと言だけ添えます。";
+    $("nomore").style.whiteSpace = "pre-wrap";
+    var wk = $("work"); wk.innerHTML = "";
+    var showWork = r.wants.indexOf("work") >= 0;
+    $("hdWork").hidden = !showWork;
+    if (showWork) {
+      var w = WORK[r.kei];
+      var el = document.createElement("div"); el.className = "tip";
+      el.innerHTML = '<div class="nm"></div><div class="w"></div>';
+      el.querySelector(".nm").textContent = w[0];
+      el.querySelector(".w").textContent = w[1]; el.querySelector(".w").style.whiteSpace = "pre-wrap";
+      wk.appendChild(el);
+      var el2 = document.createElement("div"); el2.className = "tip";
+      el2.innerHTML = '<div class="nm">聞く順番</div><div class="w">聞きにくいことは、1つ目にしない。仕事の中身の質問をしたあとの、2つ目か3つ目に聞きます。</div>';
+      wk.appendChild(el2);
+    }
+    $("ng").textContent = "・「特にありません」だけで終える\n・会社のホームページや求人票に書いてあることを、そのまま聞く\n・1つ目から、給料・休み・残業のことだけを聞く\n・「はい」「いいえ」で終わってしまう質問ばかりにする" +
+      (r.who === "top" ? "\n・最終面接で、細かい手続きのこと（書類の出し方など）を社長に聞く" : "");
+    $("ng").style.whiteSpace = "pre-wrap";
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = MEMO;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "3つの質問をメモにコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("who").value = "genba";
+    document.querySelector('#want input[value="work"]').checked = true;
+    make();
+  }
+})();
+</script>
+</body>
+</html>
