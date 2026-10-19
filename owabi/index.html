@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>おわびにうかがうときの流れ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { margin-top: 8px; padding: 9px; font-size: .92rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .st { position: relative; border-left: 3px solid var(--accent); padding: 0 0 14px 16px; margin-left: 8px; }
+  .st:last-child { border-color: transparent; }
+  .st::before { content: ""; position: absolute; left: -8px; top: 4px; width: 13px; height: 13px; border-radius: 50%; background: var(--accent); }
+  .st .when { font-weight: 700; }
+  .st .say { background: var(--accent-soft); border-radius: 8px; padding: 8px 10px; margin: 6px 0; white-space: pre-wrap; }
+  .st .do { font-size: .88rem; color: var(--sub); white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .st .say { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>おわびにうかがうときの流れ</h1>
+  <p class="lead">ミスのおわびに、相手のところへ直接うかがうときの、着く前から帰ったあとまでの流れです。相手とミスの内容を入れると、受付で言うこと、部屋に入って最初に言うこと、手みやげの渡し方、帰りぎわの一言が、順番に出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>どこへ、何のおわびに</h2>
+    <label class="f" for="aite">相手</label>
+    <select id="aite"><option value="biz">取引先（会社）</option><option value="kojin">お客さん（個人のお宅）</option><option value="kinjo">近所・知り合い</option></select>
+    <div class="row">
+      <div><label class="f" for="name">相手の名前<span class="hint">会社なら担当の方</span></label><input type="text" id="name" placeholder="例：佐藤"></div>
+      <div><label class="f" for="me">自分の名前<span class="hint">会社名も</span></label><input type="text" id="me" placeholder="例：〇〇商事の田中"></div>
+    </div>
+    <label class="f" for="what">何のおわびか（短く）</label>
+    <input type="text" id="what" placeholder="例：お見積書の金額の誤り">
+    <div class="row">
+      <div><label class="f" for="with">誰と行く？</label><select id="with"><option value="boss">上司と一緒</option><option value="alone">一人で</option></select></div>
+      <div><label class="f" for="gift">手みやげ</label><select id="gift"><option value="yes">持っていく</option><option value="no">持っていかない</option></select></div>
+    </div>
+    <button id="make" type="button">流れを出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>当日の流れ</h2>
+    <div id="flow"></div>
+    <button type="button" class="copy" id="copy">言うことだけをメモにコピー</button>
+    <h2 style="margin-top:18px">その場で言わないほうがいいこと</h2>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※会社や業界のしきたり、相手の意向（「来なくていい」と言われた場合など）があれば、そちらを優先してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var MEMO = "";
+  function make() {
+    var aite = $("aite").value, name = v("name") || "〇〇", me = v("me") || "〇〇の〇〇", what = v("what") || "〇〇の件";
+    var boss = $("with").value === "boss", gift = $("gift").value === "yes";
+    var sama = name + "様";
+    var myName = me.split("の").pop();
+    var steps = [];
+    steps.push(["着く前（約束の5分前）", "",
+      (aite === "biz" ? "・建物には約束の5分前に着き、受付には約束の時間ちょうどに\n・上着は建物に入る前に脱ぐ。スマホは音を消す\n" :
+        "・近くには5分前に着き、インターホンは約束の時間ちょうどに押す（早すぎるのも失礼になる）\n・上着は玄関に入る前に脱ぐ。スマホは音を消す\n") + (boss ? "・上司と、「最初に誰が話すか」と、事実を説明する役を決めておく" : "・言う順番（おわび→事実→対策→お礼）を、もう一度確かめる")]);
+    if (aite === "biz") steps.push(["受付で", "「" + me + "と申します。" + sama + "に、本日〇時のお約束をいただいております。」",
+      "受付では、おわびの中身は言わない。名前と約束だけを伝える"]);
+    else steps.push(["玄関で（インターホン）", "「" + me + "でございます。このたびは、申し訳ございませんでした。」",
+      aite === "kojin" ? "玄関先で済ませるか、上がるかは、相手に合わせる。「どうぞ」と言われたら上がる" : "長くなりそうなら、「少しだけ、お時間よろしいでしょうか」と先に聞く"]);
+    steps.push(["相手に会ったら、座る前に", (boss ? "（上司）「このたびは、" + what + "で、大変ご迷惑をおかけいたしました。誠に申し訳ございません。」\n（自分）「担当の" + myName + "でございます。誠に申し訳ございませんでした。」" :
+      "「このたびは、" + what + "で、大変ご迷惑をおかけいたしました。誠に申し訳ございません。」"),
+      "立ったまま、相手の目を見て言い、深く頭を下げる（数秒止める）。すすめられてから座る"]);
+    steps.push(["座ってから", "「" + (boss ? "私から、" : "") + "経緯と、今後の対策をご説明させてください。」",
+      "起きたこと→原因→今後の対策の順に、短く。相手が話し始めたら、途中で口をはさまずに最後まで聞く"]);
+    if (gift) steps.push(["手みやげを渡す（おわびと説明のあと）", "「心ばかりのものですが、おわびのしるしにお納めください。」",
+      "最初には出さない。おわびと説明が終わってから、紙袋から出して、相手に正面を向けて両手で渡す\n" + (aite === "biz" ? "会社によっては受け取れないこともある。断られたら、無理に置いていかない" : "相手が受け取りにくそうなら、無理に渡さない")]);
+    steps.push(["帰りぎわ", aite === "biz" ? "「本日は、お時間をいただき、ありがとうございました。今後とも、どうぞよろしくお願いいたします。」" :
+      "「本日は、お時間をいただき、ありがとうございました。今後は、このようなことがないよう努めます。」",
+      "部屋を出るとき、建物を出るときにも、もう一度頭を下げる"]);
+    steps.push(["帰ってから（その日のうちに）", (aite === "biz" ? "「本日はお時間をいただき、ありがとうございました。お伝えした対策を、本日から進めております。」" : "（必要なら）お礼の電話か手紙を一言"),
+      aite === "biz" ? "お礼のメールは、長く書かない。会ってくれたことへのお礼と、対策を始めたことだけ" : "何度も連絡しすぎない。約束したことを、約束どおりにやる"]);
+    var fb = $("flow"); fb.innerHTML = "";
+    MEMO = "【おわびの訪問で言うこと】\n";
+    steps.forEach(function (s) {
+      var d = document.createElement("div"); d.className = "st";
+      d.innerHTML = '<div class="when"></div>' + (s[1] ? '<div class="say"></div>' : "") + '<div class="do"></div>';
+      d.querySelector(".when").textContent = s[0];
+      if (s[1]) { d.querySelector(".say").textContent = s[1]; MEMO += "■" + s[0] + "\n" + s[1] + "\n"; }
+      d.querySelector(".do").textContent = s[2];
+      fb.appendChild(d);
+    });
+    $("ng").textContent = "・「でも」「ただ」から始まる言い訳\n・「担当の〇〇が」「システムが」と、ほかのせいにする言い方\n・相手が話している途中で、説明をかぶせる\n・「二度と起こしません」と、約束できないことを約束する\n・長く話しすぎる（言うことは短く、聞く時間を長く）";
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = MEMO;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "言うことだけをメモにコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("name").value = "佐藤"; $("me").value = "〇〇商事の田中"; $("what").value = "お見積書の金額の誤り";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
