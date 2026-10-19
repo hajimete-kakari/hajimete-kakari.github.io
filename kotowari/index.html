@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>仕事の断り方の作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { margin-top: 6px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .opt { background: var(--accent-soft); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .opt .t { font-weight: 700; }
+  .opt .w { font-size: .85rem; color: var(--sub); margin-bottom: 6px; }
+  .opt .say, .opt .chat { white-space: pre-wrap; background: var(--card); border-radius: 8px; padding: 8px 10px; font-size: .94rem; margin-top: 6px; }
+  .opt .lb { font-size: .78rem; color: var(--sub); margin-top: 8px; }
+  .first { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .opt .say, .mihon .opt .chat, .mihon #first { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>仕事の断り方の作成ページ</h1>
+  <p class="lead">社内で仕事を頼まれたけれど、引き受けられないときの返し方を作ります。頼んできた人と今の状況を入れると、「代わりの案」を添えた断り方が2〜3つ、口で言う言い方とチャットで送る文の両方で出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 誰に、何を頼まれたか</h2>
+    <label class="f" for="who">頼んできた人</label>
+    <select id="who"><option value="boss">上司</option><option value="senpai">先輩</option><option value="peer">同僚・後輩</option><option value="other">他部署の人</option></select>
+    <div class="row">
+      <div><label class="f" for="name">相手の名前</label><input type="text" id="name" placeholder="例：佐藤"></div>
+      <div><label class="f" for="task">頼まれたこと</label><input type="text" id="task" placeholder="例：会議の資料づくり"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 今の状況</h2>
+    <label class="f" for="why">引き受けられない理由</label>
+    <select id="why">
+      <option value="busy">手一杯（締め切りが重なっている）</option>
+      <option value="notmine">自分の担当ではない</option>
+      <option value="skill">やったことがなく、自信がない</option>
+      <option value="time">時間外になる（残業できない事情がある）</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="now">今やっている仕事</label><input type="text" id="now" placeholder="例：月末の請求書の作業"></div>
+      <div><label class="f" for="free">手が空く時期</label><input type="text" id="free" placeholder="例：来週の水曜"></div>
+    </div>
+    <label class="f" for="part">一部だけなら、できそうなこと<span class="hint">なければ空欄</span></label>
+    <input type="text" id="part" placeholder="例：表の数字を集めるところ">
+    <label class="f" for="who2">代わりに聞けそうな人・方法<span class="hint">なければ空欄</span></label>
+    <input type="text" id="who2" placeholder="例：鈴木さん（前にも作っていた）">
+    <button id="make" type="button">断り方を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <h3>最初のひと言</h3>
+    <div class="first" id="first"></div>
+    <h3>代わりの案を添えた断り方（どれか1つを選ぶ）</h3>
+    <div id="opts"></div>
+    <h3>言わないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※職場のルールや、相手との関係に合わせて言葉を調整してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var COPY = [];
+  function make() {
+    var who = $("who").value, name = v("name") || "〇〇", task = v("task") || "〇〇", why = $("why").value;
+    var now = v("now") || "今の作業", free = v("free") || "〇日", part = v("part"), who2 = v("who2");
+    var san = name + "さん";
+    var boss = who === "boss";
+    $("first").textContent = boss ? "「わかりました。ひとつだけ、ご相談させてください。」" :
+      "「声をかけてくださって、ありがとうございます。ただ、" + (why === "busy" ? "今ちょうど手がいっぱいで" : why === "notmine" ? "私の担当ではないので" : why === "skill" ? "私はやったことがなく" : "時間の都合がつかず") + "……」";
+    var reason = { busy: now + "が" + free + "まで詰まっていて", notmine: "私の担当ではなく、決められる立場にないので", skill: "私はやったことがなく、時間がかかってしまいそうなので", time: "その時間はどうしても残れない事情があって" }[why];
+    var opts = [];
+    if (boss) {
+      opts.push(["優先順位を決めてもらう（上司のとき、いちばんおすすめ）", "上司の頼みは、断るより「どちらを先にするか」を決めてもらうほうが角が立たない",
+        "今、" + now + "を" + free + "までに仕上げる予定です。" + task + "を先にしたほうがよければ、" + now + "の締め切りを少しずらしてもよろしいでしょうか。",
+        san + "\n" + task + "の件、承知しました。\n今、" + now + "を" + free + "までの予定で進めています。\nどちらを先にすればよいか、ご指示いただけますか。"]);
+    }
+    opts.push(["時期をずらす", "「やらない」ではなく「いつならできる」を言う",
+      reason + "、すぐには難しいです。" + free + "以降でもよろしければ、お受けできます。",
+      san + "\n" + task + "の件、ありがとうございます。\n" + reason + "、すぐには難しい状況です。\n" + free + "以降でもよろしければ、お受けできます。"]);
+    opts.push(["量を減らす", "全部は無理でも、できる部分を先に言う",
+      "全部は難しいのですが、" + (part || "〇〇の部分") + "だけなら、" + free + "までにできます。",
+      san + "\n" + task + "の件、全部はお受けできないのですが、\n" + (part || "〇〇の部分") + "だけなら、" + free + "までにできます。\nそれでよろしければ、進めます。"]);
+    if (who2 || why === "notmine" || why === "skill") opts.push(["ほかの人・方法を紹介する", "断りっぱなしにせず、次に聞く先を渡す",
+      (who2 ? who2.replace(/（.*）/, "") + "がくわしいので、" : "担当の方に聞いていただくほうが早いので、") + "そちらに聞いていただくのはいかがでしょうか。" + (who2 ? "私からもひと声かけておきます。" : ""),
+      san + "\n" + task + "の件、" + (who2 ? who2.replace(/（.*）/, "") + "がくわしいので、\nそちらに聞いていただくのが早いと思います。\n私からもひと声かけておきますね。" : "担当の方のほうが確実なので、\nそちらに聞いていただけますか。")]);
+    // 担当外・未経験のときは、紹介を先に。担当外なら「時期をずらす」は外す
+    if (why === "notmine" || why === "skill") {
+      var intro = opts.filter(function (o) { return o[0].indexOf("紹介") >= 0; });
+      var rest = opts.filter(function (o) { return o[0].indexOf("紹介") < 0 && !(why === "notmine" && o[0] === "時期をずらす"); });
+      opts = intro.concat(rest);
+    }
+    opts = opts.slice(0, 3);
+    var ob = $("opts"); ob.innerHTML = ""; COPY = [];
+    opts.forEach(function (o, i) {
+      var d = document.createElement("div"); d.className = "opt";
+      d.innerHTML = '<div class="t"></div><div class="w"></div><div class="lb">口で言う</div><div class="say"></div><div class="lb">チャットで送る</div><div class="chat"></div><button type="button" class="copy">チャットの文をコピー</button>';
+      d.querySelector(".t").textContent = "案" + (i + 1) + "：" + o[0];
+      d.querySelector(".w").textContent = o[1];
+      d.querySelector(".say").textContent = "「" + o[2] + "」";
+      d.querySelector(".chat").textContent = o[3];
+      var b = d.querySelector(".copy"); COPY.push(o[3]);
+      b.addEventListener("click", function () { copy(o[3], b); });
+      ob.appendChild(d);
+    });
+    $("ng").textContent = "・「無理です」「できません」だけで終わる\n・理由を長々と説明する（言い訳に聞こえる）\n・あいまいに引き受けて、あとから断る（いちばん困らせる）\n" + (boss ? "・上司に「忙しいので」とだけ言う（何と何が重なっているかを言う）" : "・ほかの人の名前を出して、勝手に押しつける（紹介するなら、自分からもひと声かける）");
+    $("result").hidden = false;
+  }
+  function copy(txt, b) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "チャットの文をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (e) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("name").value = "佐藤"; $("task").value = "会議の資料づくり";
+    $("now").value = "月末の請求書の作業"; $("free").value = "来週の水曜"; $("part").value = "表の数字を集めるところ";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
