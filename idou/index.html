@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>異動の打診への返事｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .chk { display: block; padding: 5px 0; font-size: .95rem; }
+  .chk input { margin-right: 6px; transform: scale(1.15); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .94rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #first, .mihon #say, .mihon #write, .mihon #ask { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>異動の打診への返事</h1>
+  <p class="lead">上司から異動の話をされたときの返事を作ります。受ける・条件付きで受ける・断りたい・まだ決められない、から選んで事情を入れると、その場の一言、後日の返事（口で言う形と、書いて送る形）、返事の前に聞いておくことが出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. どんな打診か</h2>
+    <div class="row">
+      <div><label class="f" for="name">話をしてきた人の名前</label><input type="text" id="name" placeholder="例：田中"></div>
+      <div><label class="f" for="to">異動先</label><input type="text" id="to" placeholder="例：大阪の営業所"></div>
+    </div>
+    <label class="f" for="kind">異動の種類</label>
+    <select id="kind"><option value="dept">部署が変わる（通う場所は同じ）</option><option value="place">勤務地が変わる（通える範囲）</option><option value="move">引っ越しが必要（転勤）</option></select>
+    <label class="f" for="due">返事の期限<span class="hint">言われていなければ空欄</span></label>
+    <input type="date" id="due">
+  </div>
+
+  <div class="card">
+    <h2>2. 返事と事情</h2>
+    <label class="f" for="ans">今の気持ち</label>
+    <select id="ans">
+      <option value="cond">条件付きなら受けたい</option>
+      <option value="yes">受ける</option>
+      <option value="no">できれば断りたい</option>
+      <option value="think">まだ決められない</option>
+    </select>
+    <label class="f" for="why">事情<span class="hint">条件や断る理由のもとになること</span></label>
+    <select id="why">
+      <option value="care">家族の介護がある</option>
+      <option value="child">子育て中（保育園・学校）</option>
+      <option value="commute">通勤がむずかしくなる</option>
+      <option value="health">体調のことで配慮がほしい</option>
+      <option value="work">今の仕事に区切りをつけたい</option>
+      <option value="career">今の仕事を続けて、力をつけたい</option>
+      <option value="none">特になし</option>
+    </select>
+    <label class="f" for="cond">お願いしたい条件<span class="hint">「条件付き」のとき。なければ空欄</span></label>
+    <input type="text" id="cond" placeholder="例：異動の時期を4月からにする">
+    <label class="f">返事の前に聞いておきたいこと</label>
+    <label class="chk"><input type="checkbox" value="when">いつから・どのくらいの期間か</label>
+    <label class="chk"><input type="checkbox" value="job">仕事の内容と、期待されていること</label>
+    <label class="chk"><input type="checkbox" value="pay">給料・手当・通勤の扱い</label>
+    <label class="chk"><input type="checkbox" value="house">住まい（社宅・引っ越し費用）</label>
+    <label class="chk"><input type="checkbox" value="back">将来、元の部署に戻れるか</label>
+    <button id="make" type="button">返事を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>その場の一言（話をされたとき）</h3>
+    <div class="box" id="first"></div>
+    <h3>後日の返事（口で言う）</h3>
+    <div class="box" id="say"></div>
+    <h3>後日の返事（書いて送る）</h3>
+    <div class="box" id="write"></div>
+    <button type="button" class="copy" id="copy">書いて送る文をコピー</button>
+    <h3>返事の前に聞いておくこと</h3>
+    <div class="box" id="ask"></div>
+    <h3>言わないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※異動を断れるかどうかは、会社の就業規則や雇用契約によって違います。迷うときは、会社の人事の窓口に確認してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(d) { var W = ["日", "月", "火", "水", "木", "金", "土"]; return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + W[d.getDay()] + "）"; }
+  function make() {
+    var name = v("name") || "〇〇", san = name + "さん", to = v("to") || "〇〇", kind = $("kind").value, ans = $("ans").value, why = $("why").value;
+    var cond = v("cond"), due = pd(v("due"));
+    var dueTxt = due ? md(due) : "〇日";
+    var W = {
+      care: "家族の介護をしていて、" + (kind === "move" ? "今の家を離れるのがむずかしい状況です" : "通院の付き添いなどで、時間の融通が必要な状況です"),
+      child: "子どもの保育園や学校の送り迎えがあり、" + (kind === "move" ? "引っ越しを伴うとすぐには動けない状況です" : "勤務時間や通勤時間が変わると、むずかしい面があります"),
+      commute: "今の住まいからだと、通勤に時間がかかりすぎてしまう状況です",
+      health: "体調のことで、通院を続けている状況です",
+      work: "今担当している仕事が、" + "〇月に区切りがつく予定です",
+      career: "今の仕事で、もう少し経験を積みたいと考えています",
+      none: ""
+    };
+    var reason = W[why];
+    // 結論の型
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">返事の組み立て</div><div class="v"></div><div class="s"></div>';
+    var head = { yes: "お礼 → 受ける → 確かめたいこと", cond: "お礼 → 受けたい気持ち → 条件を1つ", no: "お礼 → 事情 → 今回は見送りたい → 代わりの案", think: "お礼 → 考える時間をもらう → 返事の日を約束" }[ans];
+    el.querySelector(".v").textContent = head;
+    el.querySelector(".s").textContent = ans === "yes" ? "その場で受けてもかまいませんが、条件（時期・手当など）は、受ける前に確かめておきます。" :
+      "その場で答えを出さず、「少し考えさせてください」で一度持ち帰るのが一般的です。" + (due ? "返事の期限は" + dueTxt + "です。" : "");
+    sb.appendChild(el);
+    $("first").textContent = ans === "yes" ? "「お話しいただき、ありがとうございます。前向きにお受けしたいと思います。いくつか確認させていただけますか。」" :
+      "「お話しいただき、ありがとうございます。大事なことなので、少し考えさせてください。" + (due ? dueTxt + "までに" : "数日中に") + "お返事します。」";
+    var say = "", write = "";
+    var top = san + "、先日の" + to + "への異動のお話、ありがとうございました。";
+    if (ans === "yes") {
+      say = "「" + top + "考えましたが、お受けしたいと思います。新しい仕事でもお役に立てるよう、がんばります。」";
+      write = san + "\n先日は、" + to + "への異動のお話をいただき、ありがとうございました。\n考えた結果、お受けしたいと思います。\n引き継ぎの進め方や時期について、あらためてご相談させてください。\nよろしくお願いいたします。";
+    } else if (ans === "cond") {
+      var c = cond || "〇〇";
+      say = "「" + top + "前向きにお受けしたいと考えています。" + (reason ? "ただ、" + reason + "。" : "") + "そのため、『" + c + "』という条件で、ご検討いただけないでしょうか。」";
+      write = san + "\n先日は、" + to + "への異動のお話をいただき、ありがとうございました。\n前向きにお受けしたいと考えております。\n" + (reason ? "ただ、" + reason + "。\n" : "") + "そのため、「" + c + "」という条件で、ご検討いただけないでしょうか。\n一度、直接ご相談のお時間をいただけますと幸いです。";
+    } else if (ans === "no") {
+      say = "「" + top + "声をかけていただいたことは、とてもありがたく思っています。" + (reason ? "ただ、" + reason + "。" : "") + "そのため、今回は見送らせていただけないでしょうか。" + (kind === "move" ? "通える範囲の異動であれば、前向きに考えたいです。" : "時期がずれれば、あらためて考えたいです。") + "」";
+      write = san + "\n先日は、" + to + "への異動のお話をいただき、ありがとうございました。\n声をかけていただいたことを、ありがたく思っております。\n" + (reason ? "ただ、" + reason + "。\n" : "") + "そのため、今回は見送らせていただけないかと考えております。\n" + (kind === "move" ? "通える範囲での異動であれば、前向きに考えたいと思っております。\n" : "") + "一度、直接ご相談のお時間をいただけますでしょうか。";
+    } else {
+      say = "「" + top + "まだ気持ちが決めきれていません。家族とも相談したうえで、" + (due ? dueTxt + "までに" : "〇日までに") + "お返事させてください。その前に、いくつか確認させていただけますか。」";
+      write = san + "\n先日は、" + to + "への異動のお話をいただき、ありがとうございました。\n大事なことなので、" + (due ? dueTxt + "までに" : "〇日までに") + "お返事させていただきたいと考えております。\nその前に、いくつか確認させていただきたいことがあります。\nお時間をいただけますでしょうか。";
+    }
+    $("say").textContent = say; $("write").textContent = write;
+    var Q = { when: "いつから、どのくらいの期間の予定ですか", job: "どんな仕事を、どこまで任されますか", pay: "給料や手当、通勤の扱いは変わりますか", house: "住まいの用意や、引っ越しの費用はどうなりますか", back: "将来、今の部署に戻ることはありますか" };
+    var qs = Array.prototype.filter.call(document.querySelectorAll(".chk input"), function (c) { return c.checked; }).map(function (c) { return "□ " + Q[c.value]; });
+    if (kind === "move" && !document.querySelector('.chk input[value="house"]').checked) qs.push("□ " + Q.house + "（転勤なので、聞いておくことが多いです）");
+    $("ask").textContent = qs.length ? qs.join("\n") : "□ いつから、どのくらいの期間の予定ですか";
+    $("ng").textContent = "・その場で「無理です」と即答する\n・「〇〇さんが行けばいいのに」と、ほかの人の名前を出す\n・返事の期限を過ぎても、何も言わない\n" + (ans === "no" ? "・事情を大げさに話す（あとで話が合わなくなる）" : "・条件を後出しにする（受けたあとで言うと、通りにくい）");
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = $("write").textContent;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "書いて送る文をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("name").value = "田中"; $("to").value = "大阪の営業所"; $("kind").value = "move"; $("due").value = "2026-10-30";
+    $("ans").value = "cond"; $("why").value = "child"; $("cond").value = "異動の時期を4月からにする";
+    ["when", "pay"].forEach(function (k) { document.querySelector('.chk input[value="' + k + '"]').checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
