@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>後任紹介のあいさつメール｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .subj { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-weight: 600; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #subj, .mihon #mail, .mihon #mail2 { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>後任紹介のあいさつメール</h1>
+  <p class="lead">退職や異動で担当が変わるときに、取引先へ送るあいさつのメールを作ります。後任の名前と切り替えの日を入れると、送る日の目安、件名と本文、後任から送る短いメールが出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 担当が変わる理由と日程</h2>
+    <label class="f" for="why">理由</label>
+    <select id="why"><option value="quit">退職する</option><option value="move">異動する（社内にはいる）</option></select>
+    <div class="row">
+      <div><label class="f" for="last">自分の最終日</label><input type="date" id="last"></div>
+      <div><label class="f" for="switch">後任に切り替わる日</label><input type="date" id="switch"></div>
+    </div>
+    <label class="f" for="today">今日の日付</label><input type="date" id="today">
+  </div>
+
+  <div class="card">
+    <h2>2. 相手・自分・後任</h2>
+    <div class="row">
+      <div><label class="f" for="to">相手の会社名</label><input type="text" id="to" placeholder="例：株式会社みどり"></div>
+      <div><label class="f" for="toname">相手の名前</label><input type="text" id="toname" placeholder="例：山田"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="me">自分の会社名</label><input type="text" id="me" placeholder="例：さくら商事"></div>
+      <div><label class="f" for="myname">自分の名前</label><input type="text" id="myname" placeholder="例：佐藤"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="next">後任の名前</label><input type="text" id="next" placeholder="例：鈴木"></div>
+      <div><label class="f" for="nextmail">後任の連絡先</label><input type="text" id="nextmail" placeholder="例：メールアドレスか電話番号"></div>
+    </div>
+    <label class="f" for="nextabout">後任のひとこと紹介<span class="hint">なければ空欄</span></label>
+    <input type="text" id="nextabout" placeholder="例：これまで同じ部署で、御社の発注業務にも関わってきました">
+    <label class="f" for="visit">直接のあいさつ</label>
+    <select id="visit"><option value="visit">後任と一緒に伺いたい</option><option value="online">オンラインで顔合わせしたい</option><option value="mail">メールだけで済ませる</option></select>
+    <label class="f" for="years">お取引の長さ<span class="hint">わからなければ空欄</span></label>
+    <input type="text" id="years" placeholder="例：3年">
+    <button id="make" type="button">メールを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>件名</h3>
+    <div class="subj" id="subj"></div>
+    <h3>本文（自分から送る）</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" id="copy">件名と本文をコピー</button>
+    <h3>後任から続けて送る短いメール</h3>
+    <div class="mail" id="mail2"></div>
+    <button type="button" class="copy" id="copy2">後任のメールをコピー</button>
+    <h3>書かないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※送る時期は一般的な目安です。会社や取引先の決まりがあれば、そちらに合わせてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function prevBiz(d) { var x = new Date(d); while (x.getDay() === 0 || x.getDay() === 6) x.setDate(x.getDate() - 1); return x; }
+  $("today").value = iso(new Date());
+  var C1 = "", C2 = "";
+  function make() {
+    var why = $("why").value, last = pd(v("last")), sw = pd(v("switch")) || last, today = pd(v("today")) || new Date();
+    var to = v("to") || "〇〇株式会社", toname = v("toname") || "〇〇", me = v("me") || "〇〇", myname = v("myname") || "〇〇";
+    var next = v("next") || "〇〇", nextmail = v("nextmail"), about = v("nextabout"), visit = $("visit").value, years = v("years");
+    // 送る日の目安：切り替えの2週間前（休日なら前の営業日）
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div");
+    var send = null, late = false;
+    if (sw) { send = new Date(sw); send.setDate(send.getDate() - 14); send = prevBiz(send); late = send < today; }
+    el.className = "big" + (late ? " ng" : "");
+    el.innerHTML = '<div class="k">送る日の目安</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = !sw ? "日付を入れると、送る日の目安が出ます" : late ? "なるべく早く（今日〜明日）" : md(send) + "ごろ";
+    el.querySelector(".s").textContent = !sw ? "" : late ? "切り替えまで2週間を切っています。" + (visit === "visit" ? "訪問の日程を先に電話で相談し、メールはその前後に送ります。" : "メールを先に送り、必要なら電話でも一言伝えます。") :
+      "切り替えの2週間前が一般的です。" + (visit === "visit" ? "訪問するなら、日程の相談も含めて送ります。" : "") + (why === "quit" ? "社内で退職の公表が済んでから送ります。" : "");
+    sb.appendChild(el);
+    var lastTxt = last ? md(last) : "〇月〇日", swTxt = sw ? md(sw) : "〇月〇日";
+    var subj = "担当者交代のご挨拶（" + me + "　" + myname + "）";
+    var reason = why === "quit" ? "私事で恐縮ですが、" + lastTxt + "をもちまして、" + me + "を退職することになりました。" :
+      "このたび社内の異動により、" + swTxt + "より、御社の担当を離れることになりました。";
+    var visitTxt = visit === "visit" ? "あらためて、" + next + "と一緒にご挨拶に伺いたいと考えております。ご都合のよい日時を、いくつか教えていただけますでしょうか。" :
+      visit === "online" ? "あらためて、" + next + "と一緒にオンラインでご挨拶させていただければと考えております。15分ほど、お時間をいただけますでしょうか。" :
+      "本来であれば直接ご挨拶に伺うべきところ、メールでのご連絡となり失礼いたします。";
+    var body = to + "\n" + toname + "様\n\nいつも大変お世話になっております。\n" + me + "の" + myname + "です。\n\n" + reason + "\n" +
+      (years ? years + "にわたり、" : "これまで、") + "大変お世話になり、心より御礼申し上げます。\n\n" +
+      "後任は、" + next + "が担当させていただきます。\n" + (about ? about + "。\n" : "") +
+      swTxt + "からは、" + next + "が窓口となります。\n" + (nextmail ? "連絡先：" + nextmail + "\n" : "") +
+      "引き継ぎは十分に行い、ご迷惑をおかけしないよう努めます。\n\n" + visitTxt + "\n\n" +
+      "最後に、これまで本当にありがとうございました。\n" + toname + "様の、ますますのご活躍をお祈りしております。\n\n" + me + "\n" + myname;
+    $("subj").textContent = subj; $("mail").textContent = body;
+    C1 = "件名：" + subj + "\n\n" + body;
+    var body2 = to + "\n" + toname + "様\n\nはじめまして。\n" + me + "の" + next + "と申します。\n" +
+      "先ほど" + myname + "からご連絡いたしましたとおり、" + swTxt + "より、御社の担当をさせていただくことになりました。\n" +
+      "まだ至らない点もあるかと思いますが、" + myname + "と同じようにお役に立てるよう努めます。\n" +
+      (visit === "visit" ? "近いうちに、" + myname + "と一緒にご挨拶に伺えれば幸いです。\n" : visit === "online" ? "顔合わせの機会をいただけますと幸いです。\n" : "") +
+      "今後とも、どうぞよろしくお願いいたします。\n\n" + me + "\n" + next + (nextmail ? "\n" + nextmail : "");
+    $("mail2").textContent = body2;
+    C2 = "件名：担当就任のご挨拶（" + me + "　" + next + "）\n\n" + body2;
+    $("ng").textContent = "・退職の本当の理由や、会社への不満\n・次の勤め先の名前（決まっていても、書かないのが一般的です）\n・「後任は不慣れですが」と、後任を下げる言い方\n・宛先を全員入れて一斉に送る（1社ずつ、宛名を入れて送る）";
+    $("result").hidden = false;
+  }
+  function copy(txt, b, label) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("copy").addEventListener("click", function (e) { copy(C1, e.target, "件名と本文をコピー"); });
+  $("copy2").addEventListener("click", function (e) { copy(C2, e.target, "後任のメールをコピー"); });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("today").value = "2026-10-20"; $("last").value = "2026-11-30"; $("switch").value = "2026-11-16";
+    $("to").value = "株式会社みどり"; $("toname").value = "山田"; $("me").value = "さくら商事"; $("myname").value = "佐藤";
+    $("next").value = "鈴木"; $("nextmail").value = "suzuki@example.com"; $("nextabout").value = "これまで同じ部署で、御社の発注業務にも関わってきました";
+    $("years").value = "3年";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
