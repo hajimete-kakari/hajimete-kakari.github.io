@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>飲み会の断り方の作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { margin-top: 6px; padding: 8px; font-size: .9rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .tip { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .9rem; margin-bottom: 4px; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .94rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #say, .mihon #chat, .mihon #next, .mihon #after { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>飲み会の断り方の作成ページ</h1>
+  <p class="lead">会社の飲み会に誘われたけれど、行きたくない・行けないときの返し方を作ります。誘ってきた人と飲み会の種類、理由を入れると、その場で言う一言、チャットの返事、次につなげる一言が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. どんな飲み会か</h2>
+    <div class="row">
+      <div><label class="f" for="who">誘ってきた人</label>
+        <select id="who"><option value="boss">上司</option><option value="senpai">先輩</option><option value="peer">同僚・後輩</option><option value="kanji">幹事（全体への案内）</option></select></div>
+      <div><label class="f" for="name">相手の名前</label><input type="text" id="name" placeholder="例：佐藤"></div>
+    </div>
+    <label class="f" for="kind">飲み会の種類</label>
+    <select id="kind">
+      <option value="casual">いつもの飲み（仕事帰りの軽い誘い）</option>
+      <option value="event">歓迎会・送別会（主役がいる会）</option>
+      <option value="season">忘年会・新年会・打ち上げ（部署の行事）</option>
+    </select>
+    <label class="f" for="count">これまでの誘い</label>
+    <select id="count"><option value="first">はじめて断る</option><option value="some">何回か断っている</option><option value="always">ほぼ毎回断っている</option></select>
+  </div>
+
+  <div class="card">
+    <h2>2. 断る理由と、これから</h2>
+    <label class="f" for="why">断る理由<span class="hint">本当の理由でなくても、言える理由でかまいません</span></label>
+    <select id="why">
+      <option value="plan">その日は予定がある</option>
+      <option value="family">家の事情（子ども・介護・家族）</option>
+      <option value="alcohol">お酒が飲めない・苦手</option>
+      <option value="health">体調を整えたい</option>
+      <option value="money">出費をおさえたい</option>
+      <option value="none">理由は言いたくない</option>
+    </select>
+    <label class="f" for="future">次の誘いは</label>
+    <select id="future"><option value="yes">内容によっては行きたい</option><option value="no">当分は行かないつもり</option></select>
+    <label class="f" for="alt">代わりにできること</label>
+    <select id="alt">
+      <option value="">（なし）</option>
+      <option value="lunch">ランチなら行ける</option>
+      <option value="first">最初の1時間だけなら出られる</option>
+      <option value="gift">送別の品や寄せ書きには参加する</option>
+    </select>
+    <button id="make" type="button">断り方を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <div class="tip" id="tip"></div>
+    <h3>その場で言う一言</h3>
+    <div class="box" id="say"></div>
+    <h3>チャットで返すとき</h3>
+    <div class="box" id="chat"></div>
+    <button type="button" class="copy" id="copy">チャットの文をコピー</button>
+    <h3>次につなげる一言</h3>
+    <div class="box" id="next"></div>
+    <h3>翌日に、ひと言</h3>
+    <div class="box" id="after"></div>
+    <h3>言わないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※職場の雰囲気や、相手との関係に合わせて言葉を調整してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function make() {
+    var who = $("who").value, name = v("name") || "〇〇", kind = $("kind").value, count = $("count").value;
+    var why = $("why").value, future = $("future").value, alt = $("alt").value;
+    var san = name + "さん", polite = who === "boss" || who === "senpai" || who === "kanji";
+    var thanks = polite ? "誘っていただいて、ありがとうございます。" : "誘ってくれて、ありがとう。";
+    var R = {
+      plan: polite ? "その日は、前から予定が入っていて" : "その日は予定があって",
+      family: polite ? "家の都合で、夜はなかなか出られなくて" : "家のことがあって、夜は出にくくて",
+      alcohol: polite ? "お酒があまり飲めないので" : "お酒が苦手で",
+      health: polite ? "最近、体調を整えるようにしていて" : "最近、体調を整えてて",
+      money: polite ? "今月は出費をおさえていて" : "今月はちょっと節約中で",
+      none: polite ? "今回は都合がつかなくて" : "今回は都合が合わなくて"
+    };
+    var reason = R[why];
+    var end = polite ? "今回は失礼させてください。" : "今回はパスさせて。";
+    var A = {
+      lunch: polite ? "お昼でしたら、ぜひご一緒させてください。" : "ランチなら行けるから、また誘って。",
+      first: polite ? "最初の1時間だけでしたら、顔を出せます。" : "最初の1時間だけなら出られるよ。",
+      gift: polite ? "送別の品や寄せ書きには、ぜひ参加させてください。" : "プレゼントとか寄せ書きには参加するね。"
+    };
+    var altTxt = alt ? A[alt] : "";
+    // 送別会・歓迎会は主役への気持ちを添える
+    var star = kind === "event" ? (polite ? "〇〇さんにはお世話になったので、本当は出たかったのですが、" : "〇〇さんの会だから出たかったんだけど、") : "";
+    $("say").textContent = "「" + thanks + star + reason + "、" + end + (altTxt ? altTxt : "") + "」";
+    var chat = san + "\n" + (kind === "event" ? (polite ? "〇〇さんの会のご案内、ありがとうございます。" : "〇〇さんの会の連絡ありがとう。") : thanks) + "\n" +
+      (kind === "event" && polite ? "お世話になった方なので心苦しいのですが、" : "") + reason + "、" + (polite ? "今回は欠席させてください。" : "今回は欠席するね。") +
+      (altTxt ? "\n" + altTxt : "") + (polite ? "\n" + (kind === "season" ? "皆さんで楽しんでください。" : kind === "event" ? "〇〇さんに、よろしくお伝えください。" : "またの機会に、よろしくお願いします。") : "");
+    $("chat").textContent = chat;
+    var nx = future === "yes" ? (count === "always" ? (polite ? "「いつも断ってばかりですみません。〇〇の会なら、ぜひ出たいです。」" : "「いつも断ってごめん。〇〇のときは行きたいから、また声かけて。」") :
+      (polite ? "「また次の機会に、ぜひ誘ってください。」" : "「また誘って。」")) :
+      (polite ? "「しばらくは参加が難しいのですが、声をかけていただけるのはうれしいです。」" : "「しばらくは行けないけど、声かけてくれるのはうれしい。」");
+    $("next").textContent = nx;
+    $("after").textContent = kind === "event" ? (polite ? "「昨日の会、いかがでしたか。〇〇さん、喜ばれていましたか。」" : "「昨日の会どうだった？〇〇さん、喜んでた？」") :
+      (polite ? "「昨日は行けずにすみませんでした。楽しかったですか。」" : "「昨日どうだった？楽しかった？」");
+    var tip = {
+      first: "はじめて断るときは、理由を1つだけ短く言えば十分です。",
+      some: "何回か断っているときは、「次につなげる一言」を添えると、距離ができにくくなります。",
+      always: "ほぼ毎回のときは、毎回ちがう理由を作るより、「しばらくは参加が難しい」と一度伝えておくほうが、お互いに楽になります。"
+    }[count];
+    if (kind === "event") tip += "歓迎会・送別会は、主役への気持ちを先に言うと、断っても角が立ちにくくなります。";
+    $("tip").textContent = tip;
+    $("ng").textContent = "・その場でうそを重ねる（あとで話がかみ合わなくなる）\n・「飲み会って意味あります？」と、会そのものを否定する\n・返事をせずに、当日まで放っておく（幹事が困る）\n" +
+      (count === "always" ? "・毎回ちがう理由を作る（かえって不自然に見える）" : "・理由を長々と説明する（言い訳に聞こえる）");
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = $("chat").textContent;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "チャットの文をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("who").value = "senpai"; $("name").value = "佐藤"; $("kind").value = "event"; $("count").value = "some";
+    $("why").value = "family"; $("alt").value = "gift";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
