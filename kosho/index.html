@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>設備の故障の連絡文｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .chk { display: block; padding: 5px 0; font-size: .95rem; }
+  .chk input { margin-right: 6px; transform: scale(1.15); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .subj { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-weight: 600; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .list { white-space: pre-wrap; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #subj, .mihon #mail, .mihon #tel { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>設備の故障の連絡文</h1>
+  <p class="lead">賃貸の部屋のエアコンや給湯器などが壊れたときに、管理会社（または大家さん）へ送る連絡文を作ります。壊れた設備と様子を入れると、電話とメールのどちらで連絡するかの目安、連絡文、電話で話す順番、連絡の前にそろえるものが出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 何が、どう壊れたか</h2>
+    <label class="f" for="eq">壊れた設備</label>
+    <select id="eq">
+      <option value="aircon">エアコン</option>
+      <option value="water">給湯器（お湯が出ない）</option>
+      <option value="leak">水漏れ（天井・床・配管）</option>
+      <option value="toilet">トイレ（流れない・水が止まらない）</option>
+      <option value="lock">玄関の鍵・ドア</option>
+      <option value="fan">換気扇</option>
+      <option value="intercom">インターホン</option>
+      <option value="other">その他</option>
+    </select>
+    <label class="f" for="other" id="otherL" hidden>設備の名前</label>
+    <input type="text" id="other" placeholder="例：浴室乾燥機" hidden>
+    <label class="f" for="state">今の様子</label>
+    <select id="state">
+      <option value="dead">まったく動かない</option>
+      <option value="part">動くが、一部がおかしい</option>
+      <option value="noise">変な音・におい・水が出る</option>
+    </select>
+    <label class="f" for="detail">くわしい様子<span class="hint">見たまま、聞こえたままでかまいません</span></label>
+    <input type="text" id="detail" placeholder="例：冷房をつけても、ぬるい風しか出ない">
+    <label class="f" for="since">いつから</label>
+    <input type="date" id="since">
+    <label class="f">自分で試したこと</label>
+    <label class="chk"><input type="checkbox" value="battery">リモコンの電池を替えた</label>
+    <label class="chk"><input type="checkbox" value="breaker">ブレーカー・コンセントを確かめた</label>
+    <label class="chk"><input type="checkbox" value="reset">電源を入れ直した・リセットした</label>
+    <label class="chk"><input type="checkbox" value="valve">水の元栓を閉めた</label>
+  </div>
+
+  <div class="card">
+    <h2>2. 連絡する相手と自分</h2>
+    <div class="row">
+      <div><label class="f" for="to">管理会社の名前</label><input type="text" id="to" placeholder="例：〇〇不動産"></div>
+      <div><label class="f" for="room">建物名と部屋番号</label><input type="text" id="room" placeholder="例：さくらハイツ 203号室"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="me">自分の名前</label><input type="text" id="me" placeholder="例：佐藤"></div>
+      <div><label class="f" for="tel2">日中の連絡先</label><input type="text" id="tel2" placeholder="例：090-0000-0000"></div>
+    </div>
+    <label class="f" for="when">修理に来てもらえる日時<span class="hint">いくつか書いておくと、早く決まります</span></label>
+    <input type="text" id="when" placeholder="例：平日18時以降、土日は終日">
+    <button id="make" type="button">連絡文を作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>件名</h3>
+    <div class="subj" id="subj"></div>
+    <h3>本文</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" id="copy">件名と本文をコピー</button>
+    <h3>電話で話す順番</h3>
+    <div class="mail" id="tel"></div>
+    <h3>連絡の前にそろえるもの</h3>
+    <div class="list" id="prep"></div>
+    <h3>しないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※修理の手配や費用の負担は、契約書や管理会社によって違います。わからないときは、連絡のときに確認してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  $("since").value = iso(new Date());
+  $("eq").addEventListener("change", function () { var o = $("eq").value !== "other"; $("other").hidden = o; $("otherL").hidden = o; });
+  var EQ = { aircon: "エアコン", water: "給湯器", leak: "水漏れ", toilet: "トイレ", lock: "玄関の鍵", fan: "換気扇", intercom: "インターホン" };
+  var COPY = "";
+  function make() {
+    var eq = $("eq").value, name = eq === "other" ? (v("other") || "設備") : EQ[eq];
+    var state = eq === "leak" ? "水が漏れています" : { dead: "まったく動きません", part: "動きはしますが、正常に使えません", noise: "変な音やにおい、水が出ています" }[$("state").value];
+    var what = eq === "leak" ? "部屋で水漏れが起きている" : "部屋の" + name + "の調子が悪い";
+    var detail = v("detail"), since = pd(v("since"));
+    var to = v("to") || "〇〇", room = v("room") || "〇〇 〇号室", me = v("me") || "〇〇", tel = v("tel2") || "〇〇", when = v("when");
+    var T = { battery: "リモコンの電池を替えました", breaker: "ブレーカーとコンセントを確かめました", reset: "電源を入れ直しました", valve: "水の元栓を閉めました" };
+    var tried = Array.prototype.filter.call(document.querySelectorAll(".chk input"), function (c) { return c.checked; }).map(function (c) { return T[c.value]; });
+    // 急ぎかどうか（水・お湯・鍵・トイレは生活に直結するので電話を先に）
+    var urgent = eq === "leak" || eq === "lock" || eq === "toilet" || eq === "water" || $("state").value === "noise";
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (urgent ? " ng" : "");
+    el.innerHTML = '<div class="k">連絡のしかた</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = urgent ? "まず電話。あとでメールで残す" : "メールでよい。2日返事がなければ電話";
+    el.querySelector(".s").textContent = urgent ? (eq === "leak" ? "水漏れは、下の部屋に広がることがあります。元栓を閉めてから、すぐ電話してください。夜間や休日は、契約書や部屋の掲示にある緊急連絡先へ。" : "生活に直結する設備なので、先に電話で伝えます。夜間や休日は、契約書や部屋の掲示にある緊急連絡先へ。") : "急ぎでなければ、文面で残るメールのほうが、言った・言わないになりません。";
+    sb.appendChild(el);
+    var subj = "【設備の故障のご連絡】" + room + "　" + name;
+    var body = to + " ご担当者様\n\n" + room + "に住んでいる" + me + "です。\n" + what + "ので、ご連絡いたしました。\n\n" +
+      "■故障している設備\n" + name + "\n\n■様子\n" + (since ? md(since) + "から、" : "") + state + "。" + (detail ? "\n" + detail + "。" : "") + "\n\n" +
+      (tried.length ? "■こちらで試したこと\n" + tried.map(function (t) { return "・" + t; }).join("\n") + "\nいずれも直りませんでした。\n\n" : "") +
+      "■お願い\n点検・修理の手配をお願いできますでしょうか。\n費用の負担について、決まりがあれば教えてください。\n\n" +
+      "■修理に来ていただける日時\n" + (when || "〇〇") + "\n\n■連絡先\n" + me + "\n" + tel + "\n\n" +
+      "写真が必要でしたら、お送りします。\nお手数をおかけしますが、よろしくお願いいたします。";
+    $("subj").textContent = subj; $("mail").textContent = body;
+    COPY = "件名：" + subj + "\n\n" + body;
+    $("tel").textContent = "1．「" + room + "の" + me + "です。」\n2．「" + what + "ので、お電話しました。" + (since ? md(since) + "から、" : "") + state + "。」\n" +
+      "3．聞かれたら、くわしい様子と、試したことを話す\n4．「修理の手配と、来ていただける日を相談させてください。」\n5．最後に、担当者の名前と、次の連絡がいつ来るかを聞いてメモする";
+    var prep = ["□ 壊れたところの写真（全体と、近く）", "□ 契約書（設備や修理のきまりの部分）"];
+    if (eq === "aircon" || eq === "water" || eq === "fan" || eq === "intercom" || eq === "other") prep.splice(1, 0, "□ 本体のシールにある、メーカー名と型番の写真");
+    if (eq === "leak") prep.unshift("□ 水の元栓を閉める（場所がわからなければ電話で聞く）");
+    if ($("state").value === "noise") prep.push("□ 音が出ているなら、スマホで動画を撮っておく");
+    $("prep").textContent = prep.join("\n");
+    $("ng").textContent = "・管理会社に連絡する前に、自分で業者を呼ぶ（費用が自分持ちになることがあります）\n・壊れたまま、何週間も放っておく（被害が広がると、責任を問われることがあります）\n・電話だけで終わらせる（あとでメールでも残す）" +
+      (eq === "aircon" || eq === "water" ? "\n・本体を自分で分解する" : "");
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = COPY;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "件名と本文をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("eq").value = "aircon"; $("state").value = "part"; $("detail").value = "冷房をつけても、ぬるい風しか出ない";
+    $("since").value = "2026-10-18";
+    ["battery", "breaker"].forEach(function (k) { document.querySelector('.chk input[value="' + k + '"]').checked = true; });
+    $("to").value = "みどり不動産"; $("room").value = "さくらハイツ 203号室"; $("me").value = "佐藤"; $("tel2").value = "090-0000-0000";
+    $("when").value = "平日18時以降、土日は終日";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
