@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>値上げのお願いメールの作成ページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .item { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px; }
+  .item:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+  .item label { display: block; font-size: .8rem; color: var(--sub); margin: 4px 0 3px; }
+  .chk { display: block; padding: 5px 0; font-size: .95rem; }
+  .chk input { margin-right: 6px; transform: scale(1.15); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.sub, .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.15rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .85rem; color: var(--sub); }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; }
+  .subj { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-weight: 600; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #subj, .mihon #mail, .mihon .reply { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>値上げのお願いメールの作成ページ</h1>
+  <p class="lead">取引先に、はじめて値上げをお願いするときの最初のメールを作ります。品目と、今の単価・新しい単価、いつからを入れると、上げ幅の一覧、件名と本文、断られたときの返し方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 相手と自分</h2>
+    <div class="row">
+      <div><label class="f" for="to">相手の会社名</label><input type="text" id="to" placeholder="例：株式会社〇〇"></div>
+      <div><label class="f" for="toname">担当者の名前</label><input type="text" id="toname" placeholder="例：山田"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="me">自分の会社名</label><input type="text" id="me" placeholder="例：〇〇商店"></div>
+      <div><label class="f" for="myname">自分の名前</label><input type="text" id="myname" placeholder="例：佐藤"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 品目と単価</h2>
+    <div id="items"></div>
+    <button type="button" class="sub" id="add">品目を追加する</button>
+    <label class="f" for="start">新しい単価にする日</label><input type="date" id="start">
+    <label class="f" for="today">今日の日付</label><input type="date" id="today">
+  </div>
+
+  <div class="card">
+    <h2>3. 理由とこれまで</h2>
+    <label class="f">値上げの理由<span class="hint">あてはまるものすべて</span></label>
+    <label class="chk"><input type="checkbox" value="material">原材料・仕入れの値上がり</label>
+    <label class="chk"><input type="checkbox" value="labor">人件費の上昇</label>
+    <label class="chk"><input type="checkbox" value="logistics">運送費の上昇</label>
+    <label class="chk"><input type="checkbox" value="energy">電気・燃料費の上昇</label>
+    <label class="f" for="since">今の単価にしてから<span class="hint">わからなければ空欄</span></label>
+    <input type="text" id="since" placeholder="例：2021年">
+    <label class="f" for="effort">自社で努めてきたこと<span class="hint">なければ空欄</span></label>
+    <input type="text" id="effort" placeholder="例：仕入れ先の見直しや、作業の効率化">
+    <button id="make" type="button">メールを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <div id="lines"></div>
+    <h3>件名</h3>
+    <div class="subj" id="subj"></div>
+    <h3>本文</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" id="copy">件名と本文をコピー</button>
+    <h3>断られたときの返し方</h3>
+    <div id="replies"></div>
+    <h3>書かないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※文面の目安です。契約書や取引の決まりで、価格の変え方や連絡の時期が決まっている場合は、そちらに従ってください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function jd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function short(n) { return n.replace(/（.*）/, ""); }
+  function addItem(name, a, b) {
+    var d = document.createElement("div"); d.className = "item";
+    d.innerHTML = '<label>品目</label><input type="text" class="nm" placeholder="例：焼き菓子の詰め合わせ（1箱）">' +
+      '<div class="row"><div><label>今の単価（円）</label><input type="number" class="a" min="0" inputmode="numeric"></div>' +
+      '<div><label>新しい単価（円）</label><input type="number" class="b" min="0" inputmode="numeric"></div></div>';
+    d.querySelector(".nm").value = name || ""; d.querySelector(".a").value = a || ""; d.querySelector(".b").value = b || "";
+    $("items").appendChild(d);
+  }
+  addItem(); addItem();
+  $("add").addEventListener("click", function () { addItem(); });
+  $("today").value = iso(new Date());
+  var COPY = "";
+  function make() {
+    var to = v("to") || "〇〇株式会社", toname = v("toname") || "〇〇", me = v("me") || "〇〇", myname = v("myname") || "〇〇";
+    var its = Array.prototype.map.call(document.querySelectorAll(".item"), function (el) {
+      return { name: el.querySelector(".nm").value.trim(), a: +el.querySelector(".a").value || 0, b: +el.querySelector(".b").value || 0 };
+    }).filter(function (x) { return x.name && x.a > 0 && x.b > 0; });
+    if (!its.length) { alert("品目と、今の単価・新しい単価を入れてください。"); return; }
+    var start = pd(v("start")), today = pd(v("today")) || new Date();
+    // 上げ幅
+    var lb = $("lines"); lb.innerHTML = "";
+    var maxp = 0;
+    its.forEach(function (x) {
+      x.p = Math.round((x.b - x.a) / x.a * 1000) / 10; if (x.p > maxp) maxp = x.p;
+      var d = document.createElement("div"); d.className = "ln";
+      d.innerHTML = "<span></span><b></b>";
+      d.children[0].textContent = x.name + "　" + yen(x.a) + "→" + yen(x.b);
+      d.children[1].textContent = (x.p >= 0 ? "+" : "") + x.p + "%";
+      lb.appendChild(d);
+    });
+    // 新しい単価にする日までの日数
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    var days = start ? Math.round((start - today) / 86400000) : null;
+    var tight = days !== null && days < 60;
+    el.className = "big" + (tight ? " ng" : "");
+    el.querySelector(".k").textContent = "新しい単価にする日まで";
+    el.querySelector(".v").textContent = days === null ? "日付を入れると、残りの日数が出ます" : days < 0 ? "その日は、もう過ぎています" : "あと" + days + "日（約" + Math.round(days / 30 * 10) / 10 + "か月）";
+    el.querySelector(".s").textContent = days === null ? "" : tight ? "相手が社内で検討する時間を考えると、2〜3か月ほど先にすることが多いです。日にちを後ろにずらすか、話し合いの時間を先に取ってください" : "相手が社内で検討する時間を取れる日程です";
+    sb.appendChild(el);
+    // 理由
+    var R = { material: "原材料・仕入れ価格", labor: "人件費", logistics: "運送費", energy: "電気・燃料費" };
+    var rs = Array.prototype.filter.call(document.querySelectorAll(".chk input"), function (c) { return c.checked; }).map(function (c) { return R[c.value]; });
+    var reason = (rs.length ? rs.join("や") : "〇〇") + "の上昇が続いております。";
+    var since = v("since"), effort = v("effort");
+    var startTxt = start ? jd(start) : "〇年〇月〇日";
+    var subj = "【価格改定のお願い】" + (its.length === 1 ? short(its[0].name) : "お取引品目") + "の単価について";
+    var body = to + "\n" + toname + "様\n\nいつも大変お世話になっております。\n" + me + "の" + myname + "です。\n\n" +
+      "本日は、" + startTxt + "のご注文分より、下記の品目の単価を改定させていただきたく、お願いのご連絡を差し上げました。\n\n" +
+      "■改定をお願いしたい品目\n" + its.map(function (x) { return "・" + x.name + "\n　" + yen(x.a) + " → " + yen(x.b); }).join("\n") + "\n\n" +
+      "■理由\n" + (since ? since + "から、今の単価でお取引をいただいております。その間、" : "近年、") + reason +
+      (effort ? effort + "などで" : "社内で") + "吸収に努めてまいりましたが、今の価格を続けることが難しくなりました。\n\n" +
+      "ご負担をおかけすることになり、大変心苦しいのですが、何とぞご理解をいただけますと幸いです。\n" +
+      "ご不明な点やご相談があれば、お電話またはお伺いのうえ、ご説明させていただきます。ご都合のよい日時を教えていただけますでしょうか。\n\n" +
+      "今後とも、どうぞよろしくお願いいたします。\n\n" + me + "\n" + myname;
+    $("subj").textContent = subj; $("mail").textContent = body;
+    COPY = "件名：" + subj + "\n\n" + body;
+    // 断られたとき
+    var later = "〇月";
+    if (start) { var L = new Date(start.getFullYear(), start.getMonth() + 3, 1); later = L.getFullYear() + "年" + (L.getMonth() + 1) + "月"; }
+    var reps = [
+      ["2回に分けて上げる", "一度に上げると、相手の負担が大きいとき",
+        "おっしゃること、よくわかります。では、" + startTxt + "からは" + its.map(function (x) { return short(x.name) + "を" + yen(x.a + Math.round((x.b - x.a) / 2)); }).join("、") + "とし、残りは半年後にお願いする形ではいかがでしょうか。"],
+      ["時期を後ろにずらす", "相手の予算の時期に合わないとき",
+        "ご事情、承知いたしました。改定の時期を、" + later + "からに後ろにずらすことは可能でしょうか。"]
+    ];
+    if (its.length >= 2) reps.push(["品目をしぼる", "品目が多く、全部は難しいと言われたとき",
+      "全部の品目が難しいようでしたら、" + short(its[0].name) + "だけでも、改定をお願いできませんでしょうか。"]);
+    var rb = $("replies"); rb.innerHTML = "";
+    reps.forEach(function (r, i) {
+      var d = document.createElement("div"); d.className = "big";
+      d.innerHTML = '<div class="v" style="font-size:1rem"></div><div class="s"></div><div class="mail reply" style="margin-top:6px"></div>';
+      d.querySelector(".v").textContent = "案" + (i + 1) + "：" + r[0];
+      d.querySelector(".s").textContent = r[1];
+      d.querySelector(".reply").textContent = "「" + r[2] + "」";
+      rb.appendChild(d);
+    });
+    $("ng").textContent = "・「ご理解ください」だけで、理由を書かない\n・「他社も上げています」と、ほかの会社を理由にする\n・「〇日までにお返事がなければ、了承とみなします」と書く\n・品目と金額を本文に書かず、添付ファイルだけにする" + (maxp >= 20 ? "\n・上げ幅が20%を超える品目があります。一度に上げず、2回に分ける案も用意しておくと話しやすくなります" : "");
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = COPY;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "件名と本文をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("to").value = "株式会社みどり"; $("toname").value = "山田"; $("me").value = "さくら製菓"; $("myname").value = "佐藤";
+    var rows = document.querySelectorAll(".item");
+    [["焼き菓子の詰め合わせ（1箱）", 1200, 1350], ["クッキー（1袋）", 380, 420]].forEach(function (x, i) {
+      rows[i].querySelector(".nm").value = x[0]; rows[i].querySelector(".a").value = x[1]; rows[i].querySelector(".b").value = x[2];
+    });
+    $("today").value = "2026-10-20"; $("start").value = "2027-01-01";
+    $("since").value = "2021年"; $("effort").value = "仕入れ先の見直しや、作業の効率化";
+    ["material", "logistics"].forEach(function (k) { document.querySelector('.chk input[value="' + k + '"]').checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
