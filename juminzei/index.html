@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職後の住民税の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.15rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .94rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #say { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職後の住民税の目安</h1>
+  <p class="lead">会社を辞めたあとの住民税が、いつ・いくら・どう払うことになるかの目安を出します。辞める日と、給与明細の住民税の額を入れると、最後の給料から引かれる分と、あとで納付書が届く分、来年の6月ごろに届く分の目安がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞める日と給料日</h2>
+    <div class="row">
+      <div><label class="f" for="quit">退職日</label><input type="date" id="quit"></div>
+      <div><label class="f" for="pay">最後の給料が出る日</label><input type="date" id="pay"></div>
+    </div>
+    <label class="f" for="monthly">給与明細の「住民税」の額（1か月分）<span class="hint">6月分だけ額が違うことがあります。7月以降の額を入れてください</span></label>
+    <input type="number" id="monthly" min="0" step="100" inputmode="numeric" placeholder="例：15000">
+    <label class="f" for="next">次の仕事</label>
+    <select id="next">
+      <option value="none">まだ決まっていない（しばらく働かない）</option>
+      <option value="soon">決まっていて、すぐに働き始める</option>
+    </select>
+    <button id="make" type="button">目安を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>月ごとの払い方</h3>
+    <div id="lines"></div>
+    <h3>来年の6月ごろに届く分</h3>
+    <div id="nextyear"></div>
+    <h3>会社に伝える一言</h3>
+    <div class="box" id="say"></div>
+    <button type="button" class="copy" id="copy">一言をコピー</button>
+  </div>
+
+  <p class="note">※住民税の額は、市区町村が前の年の収入をもとに決めます。このページは、いま天引きされている額をもとにした払い方の目安で、税額そのものの計算はしていません。納付書の回数や期限は、市区町村によって違います。くわしくは、お住まいの市区町村の住民税の窓口で確認してください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function ym(y, m) { return y + "年" + m + "月"; }
+  // 退職日を入れたら、最後の給料日の初期値を同じ月の25日にする
+  $("quit").addEventListener("change", function () {
+    var q = pd($("quit").value); if (!q || $("pay").value) return;
+    $("pay").value = q.getFullYear() + "-" + ("0" + (q.getMonth() + 1)).slice(-2) + "-25";
+  });
+  var SAY = "";
+  function make() {
+    var quit = pd($("quit").value), pay = pd($("pay").value) || quit, m = +$("monthly").value || 0, next = $("next").value;
+    if (!quit || !m) { alert("退職日と、住民税の1か月分の額を入れてください。"); return; }
+    // 住民税の年度は6月〜翌年5月。最後の給料が出る月までは天引き済みとみなす
+    var py = pay.getFullYear(), pm = pay.getMonth() + 1;
+    var endY = pm >= 6 ? py + 1 : py; // その年度の5月の年
+    var rest = [];
+    var y = py, mo = pm + 1;
+    if (mo === 13) { mo = 1; y++; }
+    while (y < endY || (y === endY && mo <= 5)) { rest.push([y, mo]); mo++; if (mo === 13) { mo = 1; y++; } }
+    var restSum = rest.length * m;
+    var qm = quit.getMonth() + 1;
+    var janMay = qm >= 1 && qm <= 5;
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    var mode;
+    if (!rest.length) {
+      mode = "none"; el.className = "big";
+      el.querySelector(".k").textContent = "今の年度の住民税";
+      el.querySelector(".v").textContent = "残りはありません";
+      el.querySelector(".s").textContent = "5月分までの天引きが、最後の給料で終わる見込みです。";
+    } else if (janMay) {
+      mode = "lump"; el.className = "big ng";
+      el.querySelector(".k").textContent = "最後の給料から、まとめて引かれる見込み";
+      el.querySelector(".v").textContent = "残り" + rest.length + "か月分　" + yen(restSum);
+      el.querySelector(".s").textContent = "1月〜5月に辞める場合、5月分までの残りは、最後の給料（または退職金）からまとめて引かれるのが原則です（一括徴収）。最後の給料の手取りが、いつもより少なくなります。";
+    } else if (next === "soon") {
+      mode = "move"; el.className = "big";
+      el.querySelector(".k").textContent = "残りの払い方（3つから選べることが多い）";
+      el.querySelector(".v").textContent = "残り" + rest.length + "か月分　" + yen(restSum);
+      el.querySelector(".s").textContent = "次の会社がすぐ決まっているなら、新しい会社の給料から引き続き天引きにできることがあります（会社どうしの手続きが要ります）。ほかに、最後の給料からまとめて引いてもらう、あとで届く納付書で払う、のどれかになります。";
+    } else {
+      mode = "bill"; el.className = "big ng";
+      el.querySelector(".k").textContent = "あとで納付書が届く見込み";
+      el.querySelector(".v").textContent = "残り" + rest.length + "か月分　" + yen(restSum);
+      el.querySelector(".s").textContent = "6月〜12月に辞める場合、残りは、市区町村から届く納付書で自分で払うのが一般的です（普通徴収）。届くのは、辞めてから1〜2か月後が多いです。希望すれば、最後の給料からまとめて引いてもらうこともできます。";
+    }
+    sb.appendChild(el);
+    // 月ごと
+    var lb = $("lines"); lb.innerHTML = "";
+    function line(a, b) { var d = document.createElement("div"); d.className = "ln"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = a; d.children[1].textContent = b; lb.appendChild(d); }
+    line(ym(py, pm) + "（最後の給料）", "いつもどおり " + yen(m) + " 天引き");
+    if (rest.length) {
+      var label = mode === "lump" ? "最後の給料からまとめて" : mode === "move" ? "新しい会社で天引き／まとめて／納付書" : "納付書で払う（回数は市区町村による）";
+      line(ym(rest[0][0], rest[0][1]) + "〜" + ym(rest[rest.length - 1][0], rest[rest.length - 1][1]) + "分", yen(restSum));
+      line("払い方", label);
+    }
+    // 来年6月
+    var ny = $("nextyear"); ny.innerHTML = "";
+    var e2 = document.createElement("div"); e2.className = "big"; e2.innerHTML = '<div class="v"></div><div class="s"></div>';
+    // 退職した年の収入にかかる住民税は、その翌年6月から
+    var taxYear = quit.getFullYear() + 1;
+    e2.querySelector(".v").textContent = taxYear + "年6月ごろ：" + quit.getFullYear() + "年の収入にかかる住民税の通知";
+    e2.querySelector(".s").textContent = (next === "soon" ? "新しい会社で働いていれば、その会社の給料から天引きになるのが一般的です。" : "働いていなければ、納付書が届いて自分で払います。") +
+      quit.getFullYear() + "年の収入が去年と同じくらいなら、1年分は今の月額×12＝約" + yen(m * 12) + "が目安です。働かなかった月が多ければ、そのぶん少なくなります。辞めたあとに届くので、先に取っておくと慌てずにすみます。";
+    ny.appendChild(e2);
+    // 会社への一言
+    SAY = mode === "lump" ? "「最後の給料から、住民税の残りがまとめて引かれると聞きました。いくら引かれる予定か、先に教えていただけますか。」" :
+      mode === "move" ? "「次の会社が〇月〇日から決まっています。住民税を、新しい会社で引き続き天引きにしてもらう手続きをお願いできますか。」" :
+      mode === "bill" ? "「退職後の住民税は、納付書で払う形でお願いします。（まとめて引いてほしい場合：最後の給料から、残りをまとめて引いていただけますか。）」" :
+      "「住民税の天引きが、最後の給料でいつ終わるかを確認させてください。」";
+    $("say").textContent = SAY;
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = SAY.replace(/^「|」$/g, "");
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "一言をコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("quit").value = "2026-11-30"; $("pay").value = "2026-11-25"; $("monthly").value = 15000;
+    make();
+  }
+})();
+</script>
+</body>
+</html>
