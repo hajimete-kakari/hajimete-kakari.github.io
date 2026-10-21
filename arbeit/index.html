@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険中のアルバイト申告メモ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .day { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px; }
+  .day:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+  .day label { display: block; font-size: .8rem; color: var(--sub); margin: 4px 0 3px; }
+  .day .row > div:first-child { flex: 1.6; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.sub, .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; text-align: right; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .k, .mihon #sum .v, .mihon #sum .s, .mihon #lines b, .mihon #memo { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険中のアルバイト申告メモ</h1>
+  <p class="lead">失業保険（基本手当）を受け取る手続き中にアルバイトをしたとき、認定日に何をどう申告するかを整理します。働いた日と時間を入れると、その日が「就労」か「内職・手伝い」か、申告書のカレンダーに書く印、その日の分がどうなるかの目安が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 手続きと働き方</h2>
+    <label class="f" for="apply">ハローワークで手続きした日<span class="hint">待期（最初の7日）に働いていないかを見ます</span></label>
+    <input type="date" id="apply">
+    <label class="f" for="contract">アルバイトの契約</label>
+    <select id="contract">
+      <option value="spot">単発・日雇い（その日だけ）</option>
+      <option value="lt20">続けて働く・週20時間未満</option>
+      <option value="ge20">続けて働く・週20時間以上</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 働いた日</h2>
+    <div id="days"></div>
+    <button type="button" class="sub" id="add">日を追加する</button>
+    <button id="make" type="button">申告メモを作る</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>日ごとの申告</h3>
+    <div id="lines"></div>
+    <h3>認定日に持っていくメモ</h3>
+    <div class="box" id="memo"></div>
+    <button type="button" class="copy" id="copy">メモをコピー</button>
+  </div>
+
+  <p class="note">※ハローワークで一般的に案内されている分け方をもとにした目安です。収入による減額の計算はしていません（計算に使う額は毎年8月に見直されます）。判断に迷うときは、働く前にハローワークに相談してください。申告しなかったり、事実と違う申告をしたりすると、不正受給として返還などを求められることがあります。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(d) { return (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addDay(t) {
+    t = t || {};
+    var d = document.createElement("div"); d.className = "day";
+    d.innerHTML = '<div class="row"><div><label>働いた日</label><input type="date" class="dt"></div>' +
+      '<div><label>時間</label><input type="number" class="hr" min="0" max="24" step="0.5" inputmode="decimal" placeholder="例：3"></div>' +
+      '<div><label>収入（円）</label><input type="number" class="pay" min="0" step="1" inputmode="numeric" placeholder="例：3000"></div></div>';
+    d.querySelector(".dt").value = t.dt || ""; d.querySelector(".hr").value = t.hr || ""; d.querySelector(".pay").value = t.pay || "";
+    $("days").appendChild(d);
+  }
+  addDay(); addDay();
+  $("add").addEventListener("click", function () { addDay(); });
+  var MEMO = "";
+  function make() {
+    var D = pd($("apply").value), contract = $("contract").value;
+    var ds = Array.prototype.map.call(document.querySelectorAll(".day"), function (el) {
+      return { dt: pd(el.querySelector(".dt").value), hr: +el.querySelector(".hr").value || 0, pay: el.querySelector(".pay").value === "" ? null : +el.querySelector(".pay").value };
+    }).filter(function (x) { return x.dt && x.hr > 0; });
+    if (!ds.length) { alert("働いた日と時間を入れてください。"); return; }
+    ds.sort(function (a, b) { return a.dt - b.dt; });
+    var waitEnd = D ? add(D, 6) : null;
+    var work = 0, side = 0, inWait = 0;
+    var lb = $("lines"); lb.innerHTML = "";
+    var memoLines = [];
+    ds.forEach(function (x) {
+      var isWork = x.hr >= 4;
+      var w = waitEnd && x.dt >= D && x.dt <= waitEnd;
+      if (isWork) work++; else side++;
+      if (w) inWait++;
+      var d = document.createElement("div"); d.className = "ln"; d.innerHTML = "<span></span><b></b>";
+      d.children[0].textContent = md(x.dt) + "　" + x.hr + "時間" + (x.pay != null ? "・" + x.pay.toLocaleString("ja-JP") + "円" : "");
+      d.children[1].textContent = (isWork ? "○ 就労（この日の分は後ろへ）" : "× 内職・手伝い（収入を書く）") + (w ? "・待期中" : "");
+      lb.appendChild(d);
+      memoLines.push(md(x.dt) + "　" + (isWork ? "○" : "×") + "　" + x.hr + "時間" + (isWork ? "" : "　収入 " + (x.pay != null ? x.pay.toLocaleString("ja-JP") + "円" : "〇円（見込みでも書く）")));
+    });
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    var risk = contract === "ge20";
+    el.className = "big" + (risk || inWait ? " ng" : "");
+    el.querySelector(".k").textContent = risk ? "このアルバイトは、就職と見なされることがあります" : "申告のまとめ";
+    el.querySelector(".v").textContent = risk ? "働く前に、ハローワークに相談を" : "○就労 " + work + "日・×内職 " + side + "日";
+    el.querySelector(".s").textContent = risk ? "週20時間以上で、続けて働く見込み（31日以上）がある場合は、雇用保険に入る働き方として「就職」と扱われ、失業保険が止まることがあります。" :
+      (work ? "○の" + work + "日分は、その日の失業保険が出ません。ただし、なくなるのではなく、受け取れる期間（原則、辞めた日の翌日から1年）の中で後ろにずれます。" : "") +
+      (side ? "×の" + side + "日は、その日の収入を書きます。収入の額によっては、その日の分が減ったり出なかったりします。" : "") +
+      (inWait ? "待期（手続きの日から7日）の中に働いた日が" + inWait + "日あります。待期は、働いていない日が7日そろうまで延びます。" : "");
+    sb.appendChild(el);
+    MEMO = "【認定日の申告メモ】\n○＝就労（4時間以上）　×＝内職・手伝い（4時間未満）\n\n" + memoLines.join("\n") +
+      "\n\n・申告書のカレンダーに、上の印を書く\n・×の日は、収入の欄に額を書く（まだもらっていなければ見込みの額）\n・働いた先の名前と連絡先も聞かれることがある" +
+      (risk ? "\n・週20時間以上で続けて働く場合は、働く前に窓口で相談済みか確かめる" : "");
+    $("memo").textContent = MEMO;
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = MEMO;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "メモをコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("apply").value = "2026-11-12"; $("contract").value = "spot";
+    $("days").innerHTML = "";
+    [{ dt: "2026-11-21", hr: 6, pay: 7200 }, { dt: "2026-11-24", hr: 3, pay: 3000 }, { dt: "2026-11-28", hr: 5, pay: 6000 }].forEach(addDay);
+    make();
+  }
+})();
+</script>
+</body>
+</html>
