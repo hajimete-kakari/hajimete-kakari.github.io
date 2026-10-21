@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>年の途中で辞めた人の確定申告チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .chk { display: block; padding: 5px 0; font-size: .95rem; }
+  .chk input { margin-right: 6px; transform: scale(1.15); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; text-align: right; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .k, .mihon #sum .v, .mihon #sum .s, .mihon #dates b, .mihon #prep, .mihon #ask { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>年の途中で辞めた人の確定申告チェック</h1>
+  <p class="lead">年の途中で会社を辞めて、年末調整を受けていない人が、確定申告で税金が戻るかもしれないかを確かめます。辞めた日と年内の予定、辞めたあとに払ったものを入れると、申告が要りそうか、出せる時期と期限、用意するものが出ます。税金の額の計算はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と、年内の予定</h2>
+    <label class="f" for="quit">退職日</label>
+    <input type="date" id="quit">
+    <label class="f" for="next">年内（12月31日まで）の予定</label>
+    <select id="next">
+      <option value="none">年内は働かない</option>
+      <option value="adj">年内に再就職し、新しい会社で年末調整を受ける</option>
+      <option value="unk">年内に再就職するが、年末調整があるかわからない</option>
+      <option value="self">年内に、自分で仕事を始める（個人事業など）</option>
+    </select>
+    <label class="f" for="slip">辞めた会社の源泉徴収票</label>
+    <select id="slip"><option value="yes">受け取った</option><option value="no">まだ受け取っていない</option></select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めたあと（その年）に払ったもの</h2>
+    <label class="chk"><input type="checkbox" value="kokuho">国民健康保険・国民年金・任意継続の保険料</label>
+    <label class="chk"><input type="checkbox" value="life">生命保険・地震保険の保険料</label>
+    <label class="chk"><input type="checkbox" value="ideco">iDeCo（個人型確定拠出年金）の掛金</label>
+    <label class="chk"><input type="checkbox" value="med">家族の分も合わせて、医療費が多かった</label>
+    <label class="chk"><input type="checkbox" value="furusato">ふるさと納税をした</label>
+    <button id="make" type="button">確かめる</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>出せる時期と期限</h3>
+    <div id="dates"></div>
+    <h3>用意するもの</h3>
+    <div class="box" id="prep"></div>
+    <button type="button" class="copy" id="copy1">用意するものをコピー</button>
+    <h3>会社や税務署に聞くこと</h3>
+    <div class="box" id="ask"></div>
+  </div>
+
+  <p class="note">※所得税の一般的な仕組みをもとにした目安です。戻る額は、収入や控除によって人それぞれで、このページでは計算していません。失業保険（基本手当）は、税金のかからない収入です。退職金は、多くの場合、受け取るときに税金の手続きが済んでいます。くわしくは、税務署や国税庁の案内で確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(d) { return d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
+  var PREP = "";
+  function make() {
+    var quit = pd($("quit").value);
+    if (!quit) { alert("退職日を入れてください。"); return; }
+    var next = $("next").value, slip = $("slip").value;
+    var paid = Array.prototype.filter.call(document.querySelectorAll(".chk input"), function (c) { return c.checked; }).map(function (c) { return c.value; });
+    var y = quit.getFullYear();
+    var from = new Date(y + 1, 0, 1), end = new Date(y + 6, 0, 1); end.setDate(end.getDate() - 1); // 翌年1/1から5年
+    var season = [new Date(y + 1, 1, 16), new Date(y + 1, 2, 15)];
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div");
+    el.innerHTML = '<div class="k">' + y + '年分の確定申告</div><div class="v"></div><div class="s"></div>';
+    var v, s, hl = true;
+    if (next === "none") { v = "申告すると、戻る可能性が高い"; s = "年末調整を受けていないので、辞めるまでに引かれた所得税は、1年分の控除が反映されていないことが多いです。" + (quit.getMonth() <= 8 ? "辞めた時期が早いほど、戻る可能性は高くなります。" : "") + "戻すための申告（還付申告）は、" + (y + 1) + "年1月1日から出せます。"; }
+    else if (next === "adj") { v = "新しい会社の年末調整で、まとめて精算できる見込み"; hl = false; s = "辞めた会社の源泉徴収票を、新しい会社に出せば、年末調整で1年分を精算してもらえます。" + (paid.indexOf("med") >= 0 || paid.indexOf("furusato") >= 0 ? "ただし、医療費の控除は年末調整では扱えません。ふるさと納税も、ワンストップ特例を使っていない（6か所以上を含む）なら、自分で申告します。" : ""); }
+    else if (next === "unk") { v = "まず新しい会社に、年末調整があるかを聞く"; s = "年末調整を受けられれば、辞めた会社の源泉徴収票を出して精算できます。受けられなければ、自分で申告すると戻る可能性があります。"; }
+    else { v = "確定申告が要る見込み"; s = "自分で始めた仕事の収入があると、確定申告で1年分をまとめて申告するのが一般的です。申告の期間（" + md(season[0]).replace(/（.*）/, "") + "〜" + md(season[1]).replace(/（.*）/, "") + "ごろ）を確かめてください。"; }
+    el.className = "big" + (hl ? " ng" : "");
+    el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    sb.appendChild(el);
+    var db = $("dates"); db.innerHTML = "";
+    function line(a, b) { var d = document.createElement("div"); d.className = "ln"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = a; d.children[1].textContent = b; db.appendChild(d); }
+    line("退職日", md(quit));
+    if (next === "self") line("確定申告の期間（例年）", (y + 1) + "/2/16〜3/15ごろ");
+    else {
+      line("戻すための申告を出せる最初の日", md(from));
+      line("出せる期限（5年）", md(end));
+      line("混む時期（例年）", (y + 1) + "/2/16〜3/15ごろ");
+    }
+    var p = ["・辞めた会社の源泉徴収票（その年に働いた会社の分、全部）"];
+    if (slip === "no") p.push("　→ まだなら、辞めた会社に送ってもらう（下の聞くこと）");
+    if (paid.indexOf("kokuho") >= 0) p.push("・国民健康保険・国民年金・任意継続の保険料を払ったことがわかるもの（領収書・控除証明書）");
+    if (paid.indexOf("life") >= 0) p.push("・生命保険料・地震保険料の控除証明書");
+    if (paid.indexOf("ideco") >= 0) p.push("・iDeCoの掛金の払込証明書");
+    if (paid.indexOf("med") >= 0) p.push("・医療費の領収書か、医療費のお知らせ（医療費の控除を使う場合）");
+    if (paid.indexOf("furusato") >= 0) p.push("・ふるさと納税の受領証明書");
+    p.push("・マイナンバーがわかるもの、本人確認の書類", "・戻ったお金の振込先の口座", "・出し方：スマホやパソコンから（e-Tax）か、税務署に提出・郵送");
+    PREP = p.join("\n");
+    $("prep").textContent = PREP;
+    var a = [];
+    if (slip === "no") a.push("【辞めた会社へ】\n「" + md(quit).replace(/^\d+\//, "") + "付で退職した〇〇です。確定申告に使うため、源泉徴収票を送っていただけますか。送り先は〇〇です。」");
+    if (next === "unk" || next === "adj") a.push("【新しい会社へ】\n「年末調整はありますか。前の会社の源泉徴収票は、いつまでに出せばいいですか。」");
+    a.push("【税務署へ（迷ったら）】\n「年の途中で退職して、年末調整を受けていません。還付申告を出したいのですが、必要なものを教えてください。」");
+    $("ask").textContent = a.join("\n\n");
+    $("result").hidden = false;
+  }
+  $("copy1").addEventListener("click", function (e) {
+    var b = e.target, txt = PREP;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "用意するものをコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("quit").value = "2026-06-30"; $("slip").value = "no";
+    ["kokuho", "life"].forEach(function (k) { document.querySelector('.chk input[value="' + k + '"]').checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
