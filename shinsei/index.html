@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金の会社の欄が進まないとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .step { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+  .step .n { font-weight: 700; color: var(--accent); flex: none; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .k, .mihon #sum .v, .mihon #sum .s, .mihon .step span:last-child, .mihon #mail, .mihon #memo { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金の会社の欄が進まないとき</h1>
+  <p class="lead">傷病手当金の申請書の「会社が書く欄」を、会社がなかなか書いてくれないときの進め方を整理します。今の状況と期間を入れると、会社の欄が要る期間か、次にすること、会社へのお願いの文面、健康保険に相談するときのメモが出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 申請する期間</h2>
+    <div class="row">
+      <div><label class="f" for="from">申請する期間のはじめ</label><input type="date" id="from"></div>
+      <div><label class="f" for="to">おわり</label><input type="date" id="to"></div>
+    </div>
+    <label class="f" for="quit">退職日<span class="hint">まだ在籍しているなら空欄</span></label>
+    <input type="date" id="quit">
+  </div>
+
+  <div class="card">
+    <h2>2. 会社の様子</h2>
+    <label class="f" for="st">今の状況</label>
+    <select id="st">
+      <option value="slow">頼んだが、返事がない・遅い</option>
+      <option value="know">「書き方がわからない」と言われた</option>
+      <option value="refuse">「書けない」「書かない」と言われた</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="asked">最初に頼んだ日</label><input type="date" id="asked"></div>
+      <div><label class="f" for="boss">頼んだ相手</label><input type="text" id="boss" placeholder="例：総務の田中さん"></div>
+    </div>
+    <label class="f" for="ins">入っている健康保険</label>
+    <select id="ins"><option value="kyokai">協会けんぽ</option><option value="kumiai">健康保険組合</option><option value="unk">わからない</option></select>
+    <button id="make" type="button">進め方を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>次にすること</h3>
+    <div id="steps"></div>
+    <h3>会社へのお願い（メール・チャット）</h3>
+    <div class="box" id="mail"></div>
+    <button type="button" class="copy" id="copy1">お願いの文をコピー</button>
+    <h3>健康保険に相談するときのメモ</h3>
+    <div class="box" id="memo"></div>
+    <button type="button" class="copy" id="copy2">メモをコピー</button>
+  </div>
+
+  <p class="note">※会社の健康保険（協会けんぽ・健康保険組合）の一般的な扱いをもとにした目安です。会社の欄がないときにどんな書類で受け付けてもらえるかは、加入している健康保険によって違います。医師の欄は、どの場合も必要です。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(d) { return d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addYear(d, n) { var x = new Date(d); x.setFullYear(x.getFullYear() + n); return x; }
+  var T1 = "", T2 = "";
+  function make() {
+    var from = pd($("from").value), to = pd($("to").value), quit = pd($("quit").value), asked = pd($("asked").value);
+    if (!from || !to) { alert("申請する期間を入れてください。"); return; }
+    var st = $("st").value, boss = $("boss").value.trim() || "ご担当者", ins = $("ins").value;
+    var insName = ins === "kyokai" ? "協会けんぽの支部" : ins === "kumiai" ? "健康保険組合" : "加入している健康保険（保険証に書いてある保険者）";
+    // 会社の欄が要るのは、在籍していた日を含む期間だけ
+    var afterOnly = quit && from > quit;
+    var limit = addYear(add(from, 1), 2); limit = add(limit, -1); // 期間のはじめの日の分の時効（翌日から2年）
+    var waited = asked ? Math.round((new Date() - asked) / 86400000) : null;
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (afterOnly ? "" : " ng");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = "この期間の会社の欄";
+    el.querySelector(".v").textContent = afterOnly ? "要らない見込み" : "要る（在籍していた日を含むため）";
+    el.querySelector(".s").textContent = (afterOnly ? "退職日より後の期間だけの申請なので、会社の欄がなくても出せることが多いです。医師の欄はそろえて、" + insName + "に確かめてから送ります。" :
+      "会社が書かないまま止まっているときは、" + insName + "に相談すると、理由を書いた申立書などで受け付けてもらえることがあります。") +
+      "この期間のはじめの日の分は、" + md(limit) + "ごろに時効（2年）を迎えます。";
+    sb.appendChild(el);
+    var steps = [];
+    if (afterOnly) {
+      steps = ["申請書の本人の欄と、医師の欄をそろえる", insName + "に電話し、「退職後の期間だけなので、会社の欄なしで出せますか」と確かめる", "言われたとおりに郵送する（控えのコピーを取っておく）"];
+    } else if (st === "slow") {
+      steps = ["もう一度、期限を添えてメールで頼む（下の文面）" + (waited != null ? "。最初に頼んでから" + waited + "日たっています" : ""), "期限を過ぎても返事がなければ、上の人か別の担当者に頼む", "それでも進まなければ、" + insName + "に相談する（下のメモ）"];
+    } else if (st === "know") {
+      steps = ["会社の欄の書き方は、" + insName + "の案内ページや記入例にあると伝える", "わからない点は、会社から" + insName + "に直接聞いてもらうようお願いする", "期限を決めて、もう一度メールで頼む（下の文面）"];
+    } else {
+      steps = ["断られた日と、言われたことをメモしておく", insName + "に相談し、会社の欄がないときの出し方を聞く（下のメモ）", "必要と言われた書類（申立書など）をそろえて送る"];
+    }
+    var sp = $("steps"); sp.innerHTML = "";
+    steps.forEach(function (t, i) { var d = document.createElement("div"); d.className = "step"; d.innerHTML = "<span class='n'></span><span></span>"; d.children[0].textContent = (i + 1) + "."; d.children[1].textContent = t; sp.appendChild(d); });
+    var period = md(from).replace(/^\d+\//, "") + "〜" + md(to).replace(/^\d+\//, "");
+    T1 = boss + "\n\nお疲れさまです。〇〇です。\n傷病手当金の申請書の、会社の証明の欄についてのお願いです。\n\n対象の期間：" + period + "\n\n申請書は" + (asked ? md(asked).replace(/^\d+\//, "") + "に" : "先日") + "お送りしています。\n" +
+      (st === "know" ? "書き方は、" + insName + "の記入例に載っています。ご不明な点は、" + insName + "に直接お問い合わせいただくこともできます。\n" : "") +
+      "生活費のことがあり、〇月〇日ごろまでにご返送いただけますと助かります。\nお忙しいところ恐れ入りますが、よろしくお願いいたします。";
+    T2 = "【" + insName + "への相談】\n・氏名、保険証の記号・番号\n・申請したい期間：" + period + "\n" + (quit ? "・退職日：" + md(quit) + "\n" : "・在籍中\n") +
+      "・会社に頼んだ日：" + (asked ? md(asked) : "〇月〇日") + "（頼んだ相手：" + boss + "）\n・会社の様子：" + { slow: "返事がない・遅い", know: "書き方がわからないと言われた", refuse: "書けない・書かないと言われた" }[st] +
+      "\n\n聞くこと\n・会社の欄がないまま出す方法（申立書など）はありますか\n・会社に、そちらから連絡してもらうことはできますか\n・医師の欄だけ先に出しておくことはできますか";
+    $("mail").textContent = T1; $("memo").textContent = T2;
+    $("result").hidden = false;
+  }
+  function copy(txt, b, label) {
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  }
+  $("copy1").addEventListener("click", function (e) { copy(T1, e.target, "お願いの文をコピー"); });
+  $("copy2").addEventListener("click", function (e) { copy(T2, e.target, "メモをコピー"); });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("from").value = "2026-09-10"; $("to").value = "2026-10-09"; $("asked").value = "2026-10-12"; $("boss").value = "総務の田中さん";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
