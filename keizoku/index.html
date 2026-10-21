@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職後の傷病手当金チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.ng { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.1rem; font-weight: 700; }
+  .big.ng .v { color: var(--warn); }
+  .big .s { font-size: .88rem; }
+  .ck { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
+  .ck .m { font-weight: 700; width: 1.4em; flex: none; text-align: center; }
+  .ck .m.ok { color: var(--accent); } .ck .m.bad { color: var(--warn); } .ck .m.q { color: var(--mus); }
+  .ck .t b { display: block; }
+  .ck .t span { color: var(--sub); font-size: .85rem; }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; text-align: right; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .k, .mihon #sum .v, .mihon #sum .s, .mihon .ck .m, .mihon .ck .t b, .mihon .ck .t span, .mihon #dates b, .mihon #memo { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職後の傷病手当金チェック</h1>
+  <p class="lead">病気やけがで休んでいて、そのまま会社を辞めることになったときに、辞めたあとも傷病手当金を受け取り続けられる条件を満たしていそうかを確かめます。日付と状況を入れると、条件ごとのチェック、大事な日付、退職日の過ごし方の注意が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="join">今の健康保険に入った日<span class="hint">入社日がふつうです。前の会社から1日も空けずに転職した人は、前の会社の健康保険に入った日</span></label>
+    <input type="date" id="join">
+    <div class="row">
+      <div><label class="f" for="off">休み始めた日</label><input type="date" id="off"></div>
+      <div><label class="f" for="quit">退職日</label><input type="date" id="quit"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 状況</h2>
+    <label class="f" for="gap">健康保険のつながり</label>
+    <select id="gap">
+      <option value="cont">ずっと会社の健康保険（空白なし）</option>
+      <option value="gap">途中で国民健康保険や、空白の期間がある</option>
+      <option value="nin">任意継続の期間がある</option>
+    </select>
+    <label class="f" for="doc">医師の意見</label>
+    <select id="doc">
+      <option value="no">仕事ができない状態だと言われている</option>
+      <option value="maybe">まだ聞いていない</option>
+      <option value="ok">もう働けると言われている</option>
+    </select>
+    <label class="f" for="last">退職日の過ごし方</label>
+    <select id="last">
+      <option value="rest">休む（出勤しない）</option>
+      <option value="go">あいさつや荷物の受け取りで、出勤する予定</option>
+    </select>
+    <button id="make" type="button">チェックする</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>条件ごとのチェック</h3>
+    <div id="checks"></div>
+    <h3>大事な日付</h3>
+    <div id="dates"></div>
+    <h3>会社と医師に伝えること</h3>
+    <div class="box" id="memo"></div>
+    <button type="button" class="copy" id="copy">メモをコピー</button>
+  </div>
+
+  <p class="note">※会社の健康保険（協会けんぽ・健康保険組合）の一般的な決まりをもとにした目安です。受け取れるかどうかは、加入している健康保険が判断します。退職日の扱い（有給休暇にするか、欠勤にするか）は、会社と健康保険に確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(d) { return d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addMonth(d, n) { var x = new Date(d.getFullYear(), d.getMonth() + n, 1); var last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(d.getDate(), last)); return x; }
+  var MEMO = "";
+  function make() {
+    var join = pd($("join").value), off = pd($("off").value), quit = pd($("quit").value);
+    if (!join || !off || !quit) { alert("3つの日付を入れてください。"); return; }
+    var gap = $("gap").value, doc = $("doc").value, last = $("last").value;
+    // 条件1：退職日まで、続けて1年以上（任意継続の期間は数えない）
+    var oneYear = addMonth(join, 12); oneYear = add(oneYear, -1); // 入った日から1年たつ日（この日まで加入していれば1年）
+    var c1 = gap !== "cont" ? "q" : quit >= oneYear ? "ok" : "bad";
+    // 条件2：待期（連続3日の休み）が退職日までに終わっている
+    var waitEnd = add(off, 2), payStart = add(off, 3);
+    var c2 = waitEnd <= quit ? "ok" : "bad";
+    // 条件3：退職日に仕事ができない状態で、出勤していない
+    var c3 = last === "go" ? "bad" : doc === "ok" ? "bad" : doc === "maybe" ? "q" : "ok";
+    var cks = [
+      [c1, "退職日まで、続けて1年以上、健康保険に入っている", c1 === "ok" ? md(oneYear) + "で1年。退職日はそれ以降なので、満たしている" : c1 === "bad" ? "退職日の時点で1年に足りない（" + md(oneYear) + "まで加入が必要）" : gap === "nin" ? "任意継続の期間は数えません。それを除いて1年あるか確かめる" : "空白があると、そこで数え直しになります。健康保険に確かめる"],
+      [c2, "退職日までに、連続3日の休み（待期）が終わっている", c2 === "ok" ? "待期は" + md(waitEnd) + "に終わる" : "退職日までに3日続けて休んでいない"],
+      [c3, "退職日に、仕事ができない状態で、出勤していない", last === "go" ? "退職日に出勤すると、続けて受け取れなくなることがあります" : doc === "ok" ? "働ける状態だと、続けて受け取る対象になりません" : doc === "maybe" ? "医師に、仕事ができない状態かどうかを確かめる" : "退職日は、出勤せずに休む"]
+    ];
+    var bad = cks.some(function (c) { return c[0] === "bad"; }), q = cks.some(function (c) { return c[0] === "q"; });
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (bad ? " ng" : "");
+    el.innerHTML = '<div class="k">辞めたあとも受け取れそうか</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = bad ? "このままだと、条件に合わない見込み" : q ? "確かめることが残っています" : "条件を満たしていそうです";
+    el.querySelector(".s").textContent = bad ? "×の項目を見て、退職日を動かせないか、出勤の予定を変えられないかを考えます。" : q ? "△の項目を、健康保険か医師に確かめてください。" : "辞めたあとは、自分で健康保険に申請します。一度でも働ける状態になると、そのあとは受け取れなくなります。";
+    sb.appendChild(el);
+    var cb = $("checks"); cb.innerHTML = "";
+    cks.forEach(function (c) {
+      var d = document.createElement("div"); d.className = "ck";
+      d.innerHTML = '<div class="m"></div><div class="t"><b></b><span></span></div>';
+      var m = d.querySelector(".m"); m.textContent = c[0] === "ok" ? "○" : c[0] === "bad" ? "×" : "△"; m.className = "m " + c[0];
+      d.querySelector("b").textContent = c[1]; d.querySelector("span").textContent = c[2];
+      cb.appendChild(d);
+    });
+    var db = $("dates"); db.innerHTML = "";
+    function line(a, b) { var d = document.createElement("div"); d.className = "ln"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = a; d.children[1].textContent = b; db.appendChild(d); }
+    line("健康保険に入って1年たつ日", md(oneYear));
+    line("待期が終わる日", md(waitEnd));
+    line("支給の対象になる最初の日", md(payStart));
+    line("退職日", md(quit));
+    line("受け取れる期間の終わり（目安）", md(add(addMonth(payStart, 18), -1)));
+    MEMO = "【会社に】\n・退職日（" + md(quit) + "）は、出勤せずに休みます\n・退職後に傷病手当金を申請するので、申請書の会社の欄（退職日までの分）をお願いします\n\n【医師に】\n・退職日の前後も、仕事ができない状態かどうかを、申請書の医師の欄に書いてもらえますか\n\n【健康保険に】\n・退職後の申請書の送り先と、提出の区切り（1か月ごとなど）を確かめる";
+    $("memo").textContent = MEMO;
+    $("result").hidden = false;
+  }
+  $("copy").addEventListener("click", function (e) {
+    var b = e.target, txt = MEMO;
+    var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "メモをコピー"; }, 1500); };
+    function fallback() {
+      var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+      t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+    }
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("join").value = "2024-04-01"; $("off").value = "2026-09-07"; $("quit").value = "2026-11-30";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
