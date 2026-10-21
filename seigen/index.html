@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>自己都合の失業保険、振込の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.15rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .ln { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; }
+  .ln b { white-space: nowrap; text-align: right; }
+  .box { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .k, .mihon #sum .v, .mihon #sum .s, .mihon #lines b, .mihon #money, .mihon #tips { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>自己都合の失業保険、振込の目安</h1>
+  <p class="lead">自己都合で会社を辞めたときに、失業保険（基本手当）がいつから対象になり、最初の振込がいつごろになるかの目安を出します。ハローワークに行く日を入れると、待つ期間・給付制限・認定日・振込の目安が日付で並びます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="quit">退職日</label>
+    <input type="date" id="quit">
+    <label class="f" for="apply">ハローワークで手続きする日<span class="hint">離職票が届いてから行きます。わからなければ、退職日の2週間後が目安です</span></label>
+    <input type="date" id="apply">
+  </div>
+
+  <div class="card">
+    <h2>2. あてはまること</h2>
+    <label class="f" for="kind">給付制限（待つ期間）にかかわること</label>
+    <select id="kind">
+      <option value="m1">自己都合で辞めた（ふつう）</option>
+      <option value="m3">5年のうちに、自己都合で辞めるのが3回目以上</option>
+      <option value="none">辞める前後に、決まった教育訓練を受けた</option>
+      <option value="just">体調・介護・契約満了など、やむを得ない理由がある</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="daily">1日あたりの額<span class="hint">わからなければ空欄</span></label><input type="number" id="daily" min="0" step="1" inputmode="numeric" placeholder="例：5800"></div>
+      <div><label class="f" for="days">もらえる日数<span class="hint">わからなければ空欄</span></label><input type="number" id="days" min="0" step="1" inputmode="numeric" placeholder="例：90"></div>
+    </div>
+    <button id="make" type="button">日程を出す</button>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>日程の目安</h3>
+    <div id="lines"></div>
+    <h3>最初の振込の額の目安</h3>
+    <div class="box" id="money"></div>
+    <h3>この間にしておくこと</h3>
+    <div class="box" id="tips"></div>
+  </div>
+
+  <p class="note">※2025年4月1日以降に自己都合で辞めた人の、一般的な目安です。認定日はハローワークが一人ずつ決めるので、実際の日付は「雇用保険受給資格者証」で確かめてください。やむを得ない理由にあたるか、教育訓練が対象になるかは、ハローワークが判断します。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function pd(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function md(d) { return (d.getMonth() + 1) + "/" + d.getDate() + "（" + WD[d.getDay()] + "）"; }
+  function add(d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function addMonth(d, n) { var x = new Date(d.getFullYear(), d.getMonth() + n, 1); var last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(d.getDate(), last)); return x; }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  // 振込は認定日のおよそ1週間後（土日を除いて5日）
+  function payDay(d) { var x = new Date(d), n = 0; while (n < 5) { x.setDate(x.getDate() + 1); if (x.getDay() !== 0 && x.getDay() !== 6) n++; } return x; }
+  $("quit").addEventListener("change", function () { var q = pd($("quit").value); if (q && !$("apply").value) $("apply").value = iso(add(q, 14)); });
+  function make() {
+    var quit = pd($("quit").value), D = pd($("apply").value);
+    if (!quit && !D) { alert("退職日か、手続きする日を入れてください。"); return; }
+    if (!D) D = add(quit, 14);
+    var kind = $("kind").value, daily = +$("daily").value || 0, total = +$("days").value || 0;
+    var waitEnd = add(D, 6); // 待期：手続きの日から7日
+    var months = kind === "m1" ? 1 : kind === "m3" ? 3 : 0;
+    var start = months ? addMonth(add(waitEnd, 1), months) : add(waitEnd, 1); // 支給の対象になる最初の日
+    var restEnd = add(start, -1);
+    // 認定日は4週間ごと。支給の対象の日を含む最初の認定日
+    var n = 1; while (add(D, 28 * n) <= start) n++;
+    var nin1 = add(D, 28), ninK = add(D, 28 * n);
+    var paidDays = days(start, ninK); // start〜認定日の前日
+    if (total && paidDays > total) paidDays = total;
+    var pay = payDay(ninK);
+    var sb = $("sum"); sb.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">最初の振込の目安</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = md(pay) + "ごろ";
+    el.querySelector(".s").textContent = "手続きの日から約" + Math.round(days(D, pay) / 7) + "週間後" + (quit ? "、退職日から約" + (Math.round(days(quit, pay) / 30 * 10) / 10) + "か月後" : "") + "です。" +
+      (months ? "給付制限（" + months + "か月）のあいだは、失業保険は出ません。" : "給付制限はかからない見込みです（ハローワークの判断によります）。");
+    sb.appendChild(el);
+    var lb = $("lines"); lb.innerHTML = "";
+    function line(a, b) { var d = document.createElement("div"); d.className = "ln"; d.innerHTML = "<span></span><b></b>"; d.children[0].textContent = a; d.children[1].textContent = b; lb.appendChild(d); }
+    if (quit) line("退職日", md(quit));
+    line("ハローワークで手続き", md(D));
+    line("待期（7日）", md(D) + "〜" + md(waitEnd));
+    if (months) line("給付制限（" + months + "か月）", md(add(waitEnd, 1)) + "〜" + md(restEnd));
+    line("1回目の認定日", md(nin1) + (n > 1 ? "（まだ支給なし）" : ""));
+    if (n === 3) line("2回目の認定日", md(add(D, 56)) + "（まだ支給なし）");
+    if (n > 3) line("2〜" + (n - 1) + "回目の認定日", "4週間ごと（まだ支給なし）");
+    if (n > 1) line(n + "回目の認定日", md(ninK));
+    line("支給の対象になる日", md(start) + "から");
+    line("最初の振込", md(pay) + "ごろ");
+    $("money").textContent = daily ? "1日" + daily.toLocaleString("ja-JP") + "円 × " + paidDays + "日分\n＝ 約" + (daily * paidDays).toLocaleString("ja-JP") + "円" + "\n\nそのあとは、4週間ごとに28日分（約" + (daily * 28).toLocaleString("ja-JP") + "円）ずつが目安です。" :
+      "最初の振込は、" + paidDays + "日分です。1日あたりの額を入れると、金額の目安が出ます。";
+    var t = ["・" + md(D) + "の前に：離職票・本人確認の書類・写真・通帳かキャッシュカード・マイナンバーがわかるものをそろえる",
+      "・雇用保険の説明会：手続きの日に日程を言われることが多い。出られないときは、早めにハローワークへ",
+      "・1回目の認定日まで：求職活動を、決められた回数（多くは1回以上）しておく",
+      "・最初の振込まで約" + Math.round(days(D, pay) / 7) + "週間：その間の生活費（家賃・保険・年金・住民税）を先に数えておく"];
+    if (months) t.push("・給付制限のあいだにアルバイトをするときは、認定日に申告が要る");
+    $("tips").textContent = t.join("\n");
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("quit").value = "2026-10-31"; $("apply").value = "2026-11-12"; $("daily").value = 5800; $("days").value = 90;
+    make();
+  }
+})();
+</script>
+</body>
+</html>
