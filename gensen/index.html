@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>前職の源泉徴収票が届かない｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #toOld, .mihon #toNew, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>前職の源泉徴収票が届かない</h1>
+  <p class="lead">転職先の年末調整に、前の会社の源泉徴収票が要るのに届かないときの、頼み方と、待つ目安、間に合わないときの代わりを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 前の会社のこと</h2>
+    <div class="row">
+      <div><label class="f" for="quit">前の会社の退職日</label><input type="date" id="quit"></div>
+      <div><label class="f" for="due">転職先の提出の締め切り</label><input type="date" id="due"></div>
+    </div>
+    <label class="f" for="asked">前の会社に、もう頼んだか</label>
+    <select id="asked">
+      <option value="no">まだ頼んでいない</option>
+      <option value="once">一度頼んだが、届かない</option>
+      <option value="many">何度か頼んだが、返事がない・送ってくれない</option>
+    </select>
+    <label class="f" for="how">頼む方法</label>
+    <select id="how">
+      <option value="mail">メール</option>
+      <option value="tel">電話</option>
+      <option value="post">手紙（郵送）</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="old">前の会社の名前<span class="hint">文面に入ります</span></label><input type="text" id="old" placeholder="例：〇〇株式会社"></div>
+      <div><label class="f" for="me">自分の名前</label><input type="text" id="me" placeholder="例：山田花子"></div>
+    </div>
+  </div>
+  <button id="make" type="button">頼み方と目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>前の会社への頼み方</h3>
+    <div class="mail" id="toOld"></div>
+    <button type="button" class="copy" data-t="toOld">文面をコピー</button>
+    <h3>間に合わないとき、転職先に伝える一言</h3>
+    <div class="mail" id="toNew"></div>
+    <button type="button" class="copy" data-t="toNew">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な流れの目安です。会社は、退職した人に退職の日から1か月以内に源泉徴収票を渡すことになっています。届かないときは、税務署に相談できます。確定申告の期限や手続きは、国税庁の案内や税務署で確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function addM(dt, n) { var x = new Date(dt); x.setMonth(x.getMonth() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(date, text) { var e = document.createElement("li"); e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; $("tl").appendChild(e); }
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var q = d($("quit").value) || addM(today, -2), due = d($("due").value) || add(today, 21);
+    var asked = $("asked").value, how = $("how").value, old = v("old") || "〇〇株式会社", me = v("me") || "（自分の名前）";
+    var limit = addM(q, 1), sameYear = q.getFullYear() === due.getFullYear();
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (sameYear ? "" : "");
+    el.innerHTML = '<div class="k">今の状況</div><div class="v"></div><div class="s"></div>';
+    if (!sameYear) {
+      el.querySelector(".v").textContent = "去年辞めた会社の分は、今年の年末調整には要りません";
+      el.querySelector(".s").textContent = "年末調整で要るのは、今年（1月から）に給料をもらった会社の源泉徴収票です。転職先に、去年の退職だと伝えます。";
+    } else if (today <= limit && asked === "no") {
+      el.querySelector(".v").textContent = "まだ届く時期の範囲内です。早めに一度頼みます";
+      el.querySelector(".s").textContent = "会社は、退職の日から1か月以内（" + f(limit) + "ごろまで）に渡すことになっています。締め切りが近いので、待たずに頼むと安心です。";
+    } else {
+      el.className = "big no";
+      el.querySelector(".v").textContent = asked === "many" ? "税務署への相談と、確定申告の準備をします" : "もう届いていい時期です。今日、頼みます";
+      el.querySelector(".s").textContent = "退職の日から1か月（" + f(limit) + "ごろ）を過ぎています。" + (asked === "many" ? "何度頼んでも届かないときは、税務署に「源泉徴収票不交付の届出書」を出すと、税務署から会社に出すよう伝えてもらえます。" : "一度はっきり頼んで、それでも来なければ税務署に相談します。");
+    }
+    $("sum").appendChild(el);
+    if (sameYear) {
+      if (asked !== "many") li(f(today), "前の会社に頼む（下の文面）");
+      var wait = add(today, 7);
+      if (asked !== "many") li(f(wait) + "ごろ", "届かなければ、もう一度頼む。電話なら担当の人の名前を聞く");
+      li(f(asked === "many" ? today : add(today, 10)) + "ごろ", (asked === "many" ? "" : "それでも来なければ、") + "住所地の税務署に「源泉徴収票不交付の届出書」を出す（頼んだ日と相手の名前を書く）");
+      li(f(add(due, -3)) + "ごろ", "締め切りに間に合わないとわかったら、転職先に早めに伝える（下の一言）");
+      li("年明け（翌年2月16日〜3月15日）", "前の会社の分を足して、自分で確定申告をする。税金が戻るだけの申告なら、1月から出せる。源泉徴収票が届いたら、それを使う");
+    } else {
+      li(f(today), "転職先に「前の会社は去年辞めたので、今年の分はありません」と伝える");
+    }
+    var greet = "〇〇部 ご担当者様\n\n" + f(q).replace(/（.）/, "") + "付けで退職いたしました、" + me + "です。在職中はお世話になりました。\n\n";
+    var body = "転職先で年末調整を行うため、" + q.getFullYear() + "年分の源泉徴収票が必要です。お手数ですが、" + f(add(due, -5)).replace(/（.）/, "") + "ごろまでに、下記の住所へお送りいただけますでしょうか。\n\n送り先：〒〇〇〇-〇〇〇〇 〇〇県〇〇市〇〇\n電話：〇〇〇-〇〇〇〇-〇〇〇〇\n\n" + (asked !== "no" ? "以前にもお願いしておりましたが、まだ届いていないため、改めてご連絡いたしました。\n" : "") + "どうぞよろしくお願いいたします。";
+    $("toOld").textContent = how === "tel" ? "（電話で）\nお世話になっております。" + f(q).replace(/（.）/, "") + "付けで退職した" + me + "です。転職先で年末調整をするため、" + q.getFullYear() + "年分の源泉徴収票をお送りいただきたく、お電話しました。いつごろ送っていただけそうでしょうか。ご担当の方のお名前も伺ってよろしいでしょうか。" :
+      (how === "mail" ? "件名：源泉徴収票の送付のお願い（" + me + "）\n\n" : "") + old + "\n" + greet + body;
+    $("toNew").textContent = "前の会社に源泉徴収票をお願いしていますが、締め切りまでに届かないかもしれません。間に合わない場合、前の会社の分は年末調整に入れず、自分で確定申告をする形でもよろしいでしょうか。";
+    $("ng").textContent = "・転職先に、前の会社の分を言わずに年末調整をしてもらう（あとで確定申告が必要になる）\n・給与明細だけで済ませる（源泉徴収票の代わりにはならないことが多い）\n・前の会社とのやりとりは、日付と相手の名前を残しておく（税務署に相談するとき役に立つ）";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("quit").value = "2026-08-31"; $("due").value = "2026-11-20"; $("asked").value = "once"; $("old").value = "〇〇株式会社"; $("me").value = "山田花子";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
