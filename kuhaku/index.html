@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>履歴書の空白期間の1行｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=month], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #rireki, .mihon #mensetsu, .mihon #kaeshi, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>履歴書の空白期間の1行</h1>
+  <p class="lead">仕事をしていなかった期間を、履歴書にどう1行で書くか、面接でどう話すかを作ります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 空白の期間</h2>
+    <div class="row">
+      <div><label class="f" for="from">いつから</label><input type="month" id="from"></div>
+      <div><label class="f" for="to">いつまで<span class="hint">今も続くなら空</span></label><input type="month" id="to"></div>
+    </div>
+    <label class="f" for="why">その間にしていたこと</label>
+    <select id="why">
+      <option value="ryoyo">体調をくずして療養していた</option>
+      <option value="kaigo">家族の介護をしていた</option>
+      <option value="ikuji">子育てに専念していた</option>
+      <option value="benkyo">資格や勉強に取り組んでいた</option>
+      <option value="katsudo">転職活動が長引いた</option>
+      <option value="kazoku">家庭の事情（引っ越し・配偶者の転勤など）</option>
+    </select>
+    <label class="f" for="now">今の状態</label>
+    <select id="now">
+      <option value="ok">落ち着いて、仕事に支障はない</option>
+      <option value="part">落ち着いたが、配慮してほしいことが少しある</option>
+    </select>
+    <label class="f" for="what">その間に、少しでも続けていたこと<span class="hint">あれば。例：簿記の勉強、パソコンの練習、家計の管理</span></label>
+    <input type="text" id="what" placeholder="例：パソコンの練習">
+  </div>
+  <button id="make" type="button">1行と一言を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>履歴書の職歴欄に書く1行</h3>
+    <div class="mail" id="rireki"></div>
+    <button type="button" class="copy" data-t="rireki">1行をコピー</button>
+    <h3>面接で言う一言（30秒ほど）</h3>
+    <div class="mail" id="mensetsu"></div>
+    <button type="button" class="copy" data-t="mensetsu">一言をコピー</button>
+    <h3>深く聞かれたときの返し</h3>
+    <div class="mail" id="kaeshi"></div>
+    <h3>しないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※文面の目安です。言いたくないこと（病名など）を、くわしく書く必要はありません。うそは書かず、言える範囲で短く伝えます。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function ym(s) { if (!s) return null; var p = s.split("-"); return { y: +p[0], m: +p[1] }; }
+  function lab(o) { return o.y + "年" + o.m + "月"; }
+  var W = {
+    ryoyo: ["体調不良のため療養", "体調をくずしたため、治療に専念していました", "今は体調が落ち着き、働ける状態です", "病名など、くわしいことは控えさせてください。今は通院も落ち着いていて、毎日の勤務に問題はありません"],
+    kaigo: ["家族の介護のため離職", "家族の介護のため、仕事を離れていました", "今は介護の体制が整い、仕事に専念できる状態です", "今は施設や家族と分担できていて、急に休むことはほとんどない見込みです"],
+    ikuji: ["育児に専念", "子育てに専念していました", "子どもが大きくなり、預け先も決まっています", "急な発熱のときは、家族や預け先と分担して対応します"],
+    benkyo: ["資格取得のため学習に専念", "資格の取得をめざして、勉強に専念していました", "その間に身につけたことを、仕事で生かしたいと考えています", "毎日の学習の時間を決めて取り組んでいました"],
+    katsudo: ["転職活動に専念", "自分に合う仕事をじっくり探していて、転職活動が長くなりました", "その中で、やりたい仕事がはっきりしました", "応募先を絞りすぎていたと気づき、見直しました"],
+    kazoku: ["家庭の事情により離職", "家庭の事情で、仕事を離れていました", "今は生活が落ち着き、長く働ける状態です", "引っ越しなどが重なりましたが、今は落ち着いています"]
+  };
+  function make() {
+    var f = ym($("from").value), t = ym($("to").value), why = $("why").value, now = $("now").value, what = $("what").value.trim();
+    var now0 = new Date(); if (!f) f = { y: now0.getFullYear() - 1, m: now0.getMonth() + 1 };
+    var months = ((t ? t.y : now0.getFullYear()) - f.y) * 12 + ((t ? t.m : now0.getMonth() + 1) - f.m) + (t ? 1 : 0);
+    var w = W[why];
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">あなたの空白期間</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = "約" + Math.max(1, months) + "か月。理由は短く、今は働けることを添えます";
+    el.querySelector(".s").textContent = months >= 12 ? "1年を超えると、面接で聞かれることが多いです。履歴書に1行書いておくと、先に安心してもらえます。" : "半年ほどなら、聞かれないこともあります。履歴書に1行あると、説明が短く済みます。";
+    s.appendChild(el);
+    $("rireki").textContent = lab(f) + "〜" + (t ? lab(t) : "現在") + "　" + w[0] + (why === "ryoyo" || why === "kaigo" ? "（現在は" + (now === "ok" ? "業務に支障なし" : "就業可能") + "）" : "") + (what && why !== "benkyo" ? "\n（期間中に" + what + "に取り組む）" : "");
+    $("mensetsu").textContent = (t ? lab(t) + "まで、" : "これまで、") + w[1] + "。" + w[2] + "。" + (what ? "その間も、" + what + "は続けていました。" : "") + "これからは、" + (why === "katsudo" || why === "benkyo" ? "御社の仕事に、その分しっかり取り組みたいと考えています。" : "長く働ける環境で、仕事に力を入れたいと考えています。") + (now === "part" ? "\n（入社前に）ひとつだけ、〇〇の点でご相談させてください。" : "");
+    $("kaeshi").textContent = "「" + w[3] + "。」";
+    $("ng").textContent = "・空白期間を書かずに、職歴の日付をずらす（あとで食い違うと信用を失う）\n・理由をくわしく話しすぎる。短く言って、今と、これからに話を移す\n・前の会社のせいにする言い方";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var tt = document.createElement("textarea"); tt.value = txt; document.body.appendChild(tt);
+        tt.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(tt);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("from").value = "2025-04"; $("to").value = "2026-03"; $("what").value = "パソコンの練習"; make(); }
+})();
+</script>
+</body>
+</html>
