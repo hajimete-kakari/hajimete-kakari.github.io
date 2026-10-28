@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金の待期3日の数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .day { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .day span { width: 7.5em; flex: none; font-size: .92rem; }
+  .day select { padding: 7px 8px; font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金の待期3日の数え方</h1>
+  <p class="lead">休み始めた日と、その後の日ごとの過ごし方を選ぶと、傷病手当金の「待期」の3日がいつ終わるか、手当がどの日から出るかの目安を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 休み始めた日</h2>
+    <label class="f" for="start">仕事を休み始めた日（1日目）</label>
+    <input type="date" id="start">
+    <label class="f" for="first">1日目の様子</label>
+    <select id="first">
+      <option value="off">一日、仕事を休んだ</option>
+      <option value="early">仕事中に具合が悪くなり、早退した</option>
+      <option value="after">仕事が終わったあとに具合が悪くなった</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. それぞれの日の過ごし方</h2>
+    <p class="hint">休み始めた日から14日分。わかる日だけでかまいません</p>
+    <div id="days"></div>
+  </div>
+  <button id="make" type="button">待期と支給の始まりを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>日ごとの数え方</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※会社の健康保険の傷病手当金の、一般的な決まりで出した目安です（仕事を休んだ日が連続して3日続くと待期が終わり、4日目から支給の対象。待期の3日には、有給・土日などの公休を含めてよい）。病気やけがで働けないことは、医師の証明で確かめられます。最後は、加入している健康保険（協会けんぽ・健康保険組合）で確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  var N = document.body.className === "mihon" ? 6 : 14, OPT = [["ab", "欠勤した"], ["yu", "有給を使った"], ["ko", "公休（土日など）"], ["wk", "出勤した"]];
+  function draw() {
+    var s = d($("start").value) || new Date(), box = $("days"), old = [].map.call(box.querySelectorAll("select"), function (x) { return x.value; });
+    box.innerHTML = "";
+    for (var i = 0; i < N; i++) {
+      var dt = add(s, i), row = document.createElement("div"); row.className = "day";
+      var sp = document.createElement("span"); sp.textContent = f(dt); row.appendChild(sp);
+      var sel = document.createElement("select");
+      OPT.forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op); });
+      sel.value = old[i] || (dt.getDay() === 0 || dt.getDay() === 6 ? "ko" : "ab");
+      row.appendChild(sel); box.appendChild(row);
+    }
+  }
+  $("start").addEventListener("change", draw);
+  function make() {
+    var s = d($("start").value) || new Date(), first = $("first").value;
+    var v = [].map.call($("days").querySelectorAll("select"), function (x) { return x.value; });
+    var off = v.map(function (x, i) { return !(x === "wk" || (i === 0 && first === "after")); });
+    var run = 0, done = -1;
+    for (var i = 0; i < N; i++) { if (off[i]) { run++; if (run === 3) { done = i; break; } } else run = 0; }
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (done < 0 ? " no" : "");
+    el.innerHTML = '<div class="k">待期と支給の始まり</div><div class="v"></div><div class="s"></div>';
+    if (done < 0) {
+      el.querySelector(".v").textContent = "この14日の中では、待期の3日がまだ終わっていません";
+      el.querySelector(".s").textContent = "仕事を休んだ日が、連続して3日続く必要があります。途中で出勤すると、そこから数え直しです。";
+    } else {
+      var pay = add(s, done + 1), paid = [];
+      for (var j = done + 1; j < N; j++) if (v[j] === "yu") paid.push(f(add(s, j)));
+      el.querySelector(".v").textContent = f(add(s, done)) + "で待期が終わり、" + f(pay) + "から支給の対象です";
+      el.querySelector(".s").textContent = "待期の3日分は、手当が出ません。" + (paid.length ? "支給の対象になってから有給を使った日（" + paid.join("、") + "）は、給料が出るため、手当は出ないか差額だけになります。" : "支給の対象になってからは、有給を使わずに欠勤にすると、その日も手当の対象になります。");
+    }
+    $("sum").appendChild(el);
+    var run2 = 0;
+    for (var k = 0; k < N; k++) {
+      var label = OPT.filter(function (o) { return o[0] === v[k]; })[0][1], t;
+      if (k === 0 && first === "after") { t = "仕事のあとに具合が悪くなった日は、数えない（翌日から1日目）"; run2 = 0; }
+      else if (!off[k]) { t = label + "：ここで数え直し"; run2 = 0; }
+      else if (done < 0 || k <= done) { run2++; t = label + "：待期の" + run2 + "日目" + (k === 0 && first === "early" ? "（早退した日も1日目に数える）" : ""); }
+      else t = label + "：" + (v[k] === "yu" ? "給料が出る日（手当は出ないか差額）" : "支給の対象");
+      var li = document.createElement("li"); li.innerHTML = '<span class="d"></span> <span class="t"></span>';
+      li.querySelector(".d").textContent = f(add(s, k)); li.querySelector(".t").textContent = t; $("tl").appendChild(li);
+    }
+    $("ng").textContent = "・待期の3日に、有給や土日を入れてもかまわない。続いていることが大事\n・休み始めの日から、医師にかかっておく（働けないことの証明が要る）\n・会社を辞める予定なら、退職日までに待期を終え、退職日に出勤しないこと（辞めたあとも受け取るための条件）";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("start").value = "2026-11-05"; draw(); var sel = $("days").querySelectorAll("select"); sel[0].value = "yu"; sel[1].value = "ab"; make(); } else draw();
+})();
+</script>
+</body>
+</html>
