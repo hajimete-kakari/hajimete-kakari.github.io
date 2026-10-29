@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>誤送信のお詫びメール｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.w { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #subj, .mihon #mail, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>誤送信のお詫びメール</h1>
+  <p class="lead">送り間違えたメールのあとに出す、お詫びの1通を作ります。宛先ちがい・添付ファイルちがい・本文のまちがいに分けて、まずやることと、件名・本文が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 何をまちがえたか</h2>
+    <label class="f" for="type">まちがい</label>
+    <select id="type">
+      <option value="wrong">宛先をまちがえた（関係のない人に届いた）</option>
+      <option value="attach">添付ファイルをまちがえた（相手は正しい）</option>
+      <option value="body">本文の日時・金額などをまちがえた</option>
+      <option value="bcc">一斉送信で、ほかの人のアドレスが見えた</option>
+    </select>
+    <div id="bodyBox" hidden>
+      <div class="row">
+        <div><label class="f" for="go">まちがえた内容</label><input type="text" id="go" placeholder="例：11月5日（水）"></div>
+        <div><label class="f" for="sei">正しい内容</label><input type="text" id="sei" placeholder="例：11月6日（木）"></div>
+      </div>
+    </div>
+    <label class="f" for="orig">送ったメールの件名</label>
+    <input type="text" id="orig" placeholder="例：お見積書の送付">
+    <label class="f" for="when">気づいたのは</label>
+    <select id="when">
+      <option value="soon">送ってすぐ（1時間以内）</option>
+      <option value="today">今日のうち</option>
+      <option value="late">昨日より前</option>
+    </select>
+    <h2 style="margin-top:20px">2. 相手と自分</h2>
+    <label class="f" for="side">お詫びを送る相手</label>
+    <select id="side">
+      <option value="out">社外の人</option>
+      <option value="in">社内の人</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="co">相手の会社名<span class="hint">社内なら空</span></label><input type="text" id="co" placeholder="例：〇〇株式会社"></div>
+      <div><label class="f" for="nm">相手の名前<span class="hint">名字だけで可</span></label><input type="text" id="nm" placeholder="例：佐藤"></div>
+    </div>
+    <div class="row">
+      <div><label class="f" for="myco">自分の会社名</label><input type="text" id="myco" placeholder="例：△△株式会社"></div>
+      <div><label class="f" for="me">自分の名前</label><input type="text" id="me" placeholder="例：山田"></div>
+    </div>
+  </div>
+  <button id="make" type="button">お詫びメールを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <div id="mailBox">
+      <h3>件名</h3>
+      <div class="mail" id="subj"></div>
+      <h3>本文</h3>
+      <div class="mail" id="mail"></div>
+      <button type="button" class="copy" data-t="mail">件名と本文をコピー</button>
+    </div>
+    <h3>しないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※文面の目安です。会社に誤送信のときの決まり（報告先・使う文面）があれば、そちらを先にしてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var WHEN = { soon: "先ほど", today: "本日", late: "先日" };
+  var TODO = {
+    wrong: ["誤って届いた相手に、削除のお願いを送る", "気づいたら、なるべく早く送ります。送ったあと、上司にもひとこと報告を。本来の相手には、あらためて正しく送ります。"],
+    attach: ["正しいファイルを付けて、すぐ送り直す", "前のファイルの削除もお願いします。前のファイルに社外に出せない情報が入っていたときは、送り直す前に上司へ。"],
+    body: ["訂正のメールを1通送る", "まちがえた所と正しい所を「誤・正」で並べます。日時や金額のまちがいは、相手が動く前に届くよう早めに。"],
+    bcc: ["お詫びの前に、上司に報告する", "ほかの人のアドレスが見えてしまったときは、個人情報の扱いとして、会社の手順で対応することが多いです。このページの文面で済ませず、まず上司に相談してください。"]
+  };
+  function sync() { $("bodyBox").hidden = $("type").value !== "body"; }
+  function make() {
+    var t = $("type").value, w = $("when").value, out = $("side").value === "out";
+    var co = v("co"), nm = v("nm") || "（相手の名前）", myco = v("myco"), me = v("me") || "（自分の名前）";
+    var orig = v("orig") || "（送ったメールの件名）", go = v("go") || "（まちがえた内容）", sei = v("sei") || "（正しい内容）";
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (t === "bcc" ? " w" : "");
+    el.innerHTML = '<div class="k">まずやること</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = TODO[t][0];
+    el.querySelector(".s").textContent = TODO[t][1] + (w === "late" && t !== "bcc" ? "日がたっているときは、本文に「ご連絡が遅くなり」を入れます。" : "");
+    s.appendChild(el);
+    $("mailBox").hidden = t === "bcc";
+    var head = out ? (co ? co + "\n" : "") + nm + "様\n\n" + (t === "wrong" ? "突然のご連絡、失礼いたします。\n" : "いつもお世話になっております。\n") + (myco ? myco + "の" : "") + me + "です。\n\n"
+                   : nm + "さん\n\nお疲れさまです。" + me + "です。\n\n";
+    var late = (w === "late" ? "ご連絡が遅くなり、" : "") + "大変申し訳ございません。\n";
+    var subj = "", body = "";
+    if (t === "wrong") {
+      subj = "【お詫び】誤送信のお詫びと削除のお願い";
+      body = head + WHEN[w] + "、「" + orig + "」という件名のメールを、" + nm + (out ? "様" : "さん") + "あてに誤ってお送りしてしまいました。\n本来は別の方へお送りするものでした。\n" + late +
+        "\nお手数をおかけしますが、メールと添付ファイルを削除していただけますでしょうか。\n\n今後は、送信の前に宛先を確かめるようにいたします。\nこのたびは、ご迷惑をおかけし申し訳ございませんでした。\n\n" + me;
+    } else if (t === "attach") {
+      subj = "【再送】" + orig + "（添付ファイルの差し替え）";
+      body = head + WHEN[w] + "お送りしたメール「" + orig + "」に、誤ったファイルを添付してしまいました。\n" + late +
+        "\n正しいファイルを、このメールに添付いたしました。\nお手数ですが、前のメールの添付ファイルは削除していただけますでしょうか。\n\n今後は、送信の前に添付ファイルを確かめるようにいたします。\nどうぞよろしくお願いいたします。\n\n" + me;
+    } else if (t === "body") {
+      subj = "【訂正】" + orig;
+      body = head + WHEN[w] + "お送りしたメール「" + orig + "」の内容に、誤りがございました。\n" + late +
+        "\n誤：" + go + "\n正：" + sei + "\n\nほかの内容に変わりはございません。\nお手数をおかけしますが、上記のとおりご訂正をお願いいたします。\n\n" + me;
+    }
+    $("subj").textContent = subj;
+    $("mail").textContent = body;
+    $("ng").textContent = "・言いわけや、まちがえた事情を長く書く\n・お詫びのメールを何通も続けて送る\n・強い言葉で、削除を急がせる\n・元の件名のまま、何の連絡かわからない形で送る\n・気づかなかったことにして、そのままにする";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $("subj").textContent + "\n\n" + $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("type").addEventListener("change", sync);
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("co").value = "〇〇株式会社"; $("nm").value = "佐藤"; $("myco").value = "△△株式会社"; $("me").value = "山田"; $("orig").value = "お見積書の送付"; make(); }
+  sync();
+})();
+</script>
+</body>
+</html>
