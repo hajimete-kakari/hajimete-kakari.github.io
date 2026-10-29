@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>任意継続をやめるとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #memo, .mihon #toTel, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>任意継続をやめるとき</h1>
+  <p class="lead">退職後に入った健康保険の「任意継続」をやめて、次の会社の保険・家族の扶養・国民健康保険に切り替えるときの、やめる日と、申出書を出す時期、伝え方を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今の任意継続のこと</h2>
+    <label class="f" for="ins">任意継続をしている保険</label>
+    <select id="ins"><option value="kyokai">協会けんぽ</option><option value="kumiai">前の会社の健康保険組合</option></select>
+    <label class="f" for="pay">保険料の払い方</label>
+    <select id="pay"><option value="month">毎月払っている</option><option value="pre">半年分・1年分をまとめて払った</option></select>
+    <h2 style="margin-top:20px">2. 次にどうするか</h2>
+    <label class="f" for="why">切り替える先</label>
+    <select id="why">
+      <option value="fuyou">家族（配偶者など）の扶養に入る</option>
+      <option value="kokuho">国民健康保険に入る</option>
+      <option value="job">就職して、会社の健康保険に入る</option>
+      <option value="stop">保険料を払わずにやめたい</option>
+    </select>
+    <div id="wMonth"><label class="f" for="month">切り替えたい月<span class="hint">その月の1日から、新しい保険にします</span></label>
+      <select id="month"></select></div>
+    <div id="wJob" hidden><label class="f" for="job">新しい会社の健康保険に入った日（入社日）</label><input type="date" id="job"></div>
+    <div class="row">
+      <div><label class="f" for="me">自分の名前</label><input type="text" id="me" placeholder="例：山田花子"></div>
+      <div><label class="f" for="fam">扶養に入る相手<span class="hint">扶養のときだけ</span></label><input type="text" id="fam" placeholder="例：夫"></div>
+    </div>
+  </div>
+  <button id="make" type="button">やめ方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>申出書と一緒にそろえるもの</h3>
+    <div class="mail" id="memo"></div>
+    <h3>電話で確かめるときの一言</h3>
+    <div class="mail" id="toTel"></div>
+    <button type="button" class="copy" data-t="toTel">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な流れの目安です。2022年1月から、任意継続は本人が申し出ればやめられるようになり、その場合は申し出た月の翌月1日に資格がなくなります。就職して会社の健康保険に入ったときは、その日に資格がなくなります。書類の名前・届く期限・保険料の戻り方は、協会けんぽの支部や健康保険組合によって違うことがあります。前もって、今入っている保険に確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function mo(dt) { return (dt.getMonth() + 1) + "月"; }
+  function li(date, text) { var e = document.createElement("li"); e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; $("tl").appendChild(e); }
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  for (var i = 1; i <= 6; i++) { var m = new Date(today.getFullYear(), today.getMonth() + i, 1), o = document.createElement("option"); o.value = m.getFullYear() + "-" + (m.getMonth() + 1); o.textContent = m.getFullYear() + "年" + (m.getMonth() + 1) + "月1日から"; $("month").appendChild(o); }
+  function sw() { var w = $("why").value; $("wMonth").hidden = !(w === "fuyou" || w === "kokuho"); $("wJob").hidden = w !== "job"; }
+  $("why").addEventListener("change", sw);
+  function make() {
+    var ins = $("ins").value, pay = $("pay").value, why = $("why").value;
+    var me = v("me") || "（自分の名前）", fam = v("fam") || "家族";
+    var who = ins === "kyokai" ? "協会けんぽの支部（保険証に書いてある都道府県）" : "前の会社の健康保険組合";
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var loss, el = document.createElement("div"), memo, tel, head, sub;
+    el.className = "big" + (why === "stop" ? " no" : "");
+    el.innerHTML = '<div class="k">任意継続がなくなる日</div><div class="v"></div><div class="s"></div>';
+    if (why === "job") {
+      loss = d($("job").value) || new Date(today.getFullYear(), today.getMonth() + 1, 1);
+      head = f(loss) + "（入社日）になくなります";
+      sub = "会社の健康保険に入った日に、任意継続の資格はなくなります。ただし、申出書を出さないと任意継続の側には伝わらないので、入社したらすぐに出します。" + mo(loss) + "分からの保険料は、払っていれば戻ることが多いです。";
+      li("入社した日", "会社の健康保険に入る。新しい保険証（または資格を確かめられる書類）を受け取る");
+      li("入社後すぐ", who + "に、資格喪失申出書を出す。新しい保険に入ったことがわかるもののコピーを添える");
+      li("申出のあと", "任意継続の保険証を持っていれば返す。払いすぎた保険料があれば、案内に沿って戻してもらう");
+      memo = "・資格喪失申出書（今の保険の書式）\n・任意継続の保険証の記号・番号\n・やめる理由：就職して会社の保険に入った\n・新しい保険に入った日：" + md(loss) + "\n・新しい保険証などのコピー\n・返すもの：任意継続の保険証（あれば）";
+      tel = "任意継続をしている" + me + "です。" + md(loss) + "に就職して、会社の健康保険に入りました。資格喪失申出書の送り先と、添える書類を教えてください。" + (pay === "pre" ? "まとめて払った保険料の残りはどうなりますか。" : "");
+    } else if (why === "stop") {
+      var dl = today.getDate() <= 10 ? new Date(today.getFullYear(), today.getMonth(), 10) : new Date(today.getFullYear(), today.getMonth() + 1, 10);
+      loss = new Date(dl); loss.setDate(11);
+      head = "納付期限の翌日（たとえば" + md(loss) + "）になくなります";
+      sub = "保険料をその月の納付期限" + (ins === "kyokai" ? "（協会けんぽは毎月10日。土日祝なら次の平日）" : "（組合の案内を見る）") + "までに払わないと、期限の翌日に資格がなくなります。ただ、月の途中から保険のない日ができやすいので、2022年からできるようになった「申出でやめる」ほうが、切り替えの日をそろえやすいです。" + (pay === "pre" ? "保険料をまとめて払っている場合は、払わずにやめることはできないので、申出でやめます。" : "");
+      li(md(dl) + "まで", "その月の保険料を払わない（払えば、その月も任意継続が続く）");
+      li(md(loss), "任意継続の資格がなくなる。保険がない日をつくらないよう、この日から入る保険の手続きを進める");
+      li(md(loss) + "から14日以内", "国民健康保険なら市区町村の窓口、扶養なら家族の会社で手続きする。資格がなくなったことがわかる書類が要ることが多い");
+      memo = "・任意継続の保険証の記号・番号\n・資格がなくなったことがわかる書類（届くのを待つか、" + (ins === "kyokai" ? "協会けんぽ" : "組合") + "に頼む）\n・次の保険の手続きに要るもの（マイナンバーカード・本人確認書類など）\n・返すもの：任意継続の保険証（あれば）";
+      tel = "任意継続をしている" + me + "です。任意継続をやめたいのですが、保険料を払わずにやめる場合と、申出でやめる場合の、資格がなくなる日を教えてください。";
+    } else {
+      var p = $("month").value.split("-"); loss = new Date(+p[0], +p[1] - 1, 1);
+      var by = new Date(loss); by.setDate(0);
+      var lastPay = new Date(by.getFullYear(), by.getMonth(), 10);
+      head = f(loss) + "になくなります";
+      sub = "申出書を出した月の翌月1日に、任意継続の資格がなくなります。" + mo(loss) + "1日から切り替えるには、" + md(by) + "までに申出書が届くように出します。" + mo(by) + "分の保険料は、" + md(lastPay) + "（期限）までに払います。";
+      li(mo(by) + "のはじめ", why === "fuyou" ? fam + "の会社に、" + md(loss) + "から扶養に入りたいと伝え、要る書類を聞く" : "住まいの市区町村の国民健康保険の窓口に、" + md(loss) + "から入るときに要る書類を聞く");
+      li(md(lastPay) + "まで", mo(by) + "分の任意継続の保険料を払う（この月までは任意継続）");
+      li(md(by) + "までに届くよう", who + "に、資格喪失申出書を出す（郵送なら数日の余裕を見る）");
+      li(md(loss), "任意継続の資格がなくなる。資格がなくなったことがわかる書類が届いたら、" + (why === "fuyou" ? fam + "の会社に出す" : "14日以内に市区町村で国民健康保険に入る"));
+      memo = "・資格喪失申出書（今の保険の書式）\n・任意継続の保険証の記号・番号\n・やめる理由：申出によりやめる\n・やめたい日：" + md(loss) + "\n・届く期限：" + md(by) + "\n・返すもの：任意継続の保険証（あれば）";
+      tel = "任意継続をしている" + me + "です。" + md(by) + "で任意継続をやめて、" + md(loss) + "から" + (why === "fuyou" ? fam + "の扶養" : "国民健康保険") + "に切り替えたいです。資格喪失申出書は、いつまでに届けばよいですか。" + (pay === "pre" ? "まとめて払った保険料の残りはどうなりますか。" : "");
+    }
+    el.querySelector(".v").textContent = head; el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    $("memo").textContent = memo;
+    $("toTel").textContent = tel;
+    $("ng").textContent = "・保険がない日をつくらない。今の保険がなくなる日と、次の保険が始まる日を同じ日にそろえる\n" + (pay === "pre" ? "・まとめて払った保険料は、資格がなくなった月からの分が戻ることが多い。戻し方は今の保険の案内に従う\n" : "") + "・任意継続の保険証は、資格がなくなった日から使えない。使うと、あとで医療費を返すことになる\n・扶養に入れるかは、家族の会社の健康保険が決める。収入の見込みによっては入れないこともある";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("why").value = "fuyou"; $("month").selectedIndex = 1; $("pay").value = "pre"; $("me").value = "山田花子"; $("fam").value = "夫"; sw(); make(); }
+})();
+</script>
+</body>
+</html>
