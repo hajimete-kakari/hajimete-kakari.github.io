@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の受給中に引っ越すとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #need, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の受給中に引っ越すとき</h1>
+  <p class="lead">失業保険を受けているあいだに引っ越すときに、どこのハローワークで手続きするか、用意するもの、これからの流れ、ハローワークへの電話で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="move">引っ越す日</label>
+    <input type="date" id="move">
+    <label class="f" for="day">次の認定日<span class="hint">4週に1回、ハローワークで失業の確認を受ける日</span></label>
+    <input type="date" id="day">
+    <label class="f" for="area">引っ越し先</label>
+    <select id="area">
+      <option value="same">同じ市区町村の中</option>
+      <option value="other">別の市区町村</option>
+      <option value="far">別の都道府県</option>
+    </select>
+    <label class="f" for="me">自分の名前<span class="hint">電話の文面に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">進め方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>用意するもの</h3>
+    <ul class="w" id="need"></ul>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>ハローワークへの電話で言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。どのハローワークの担当になるか（管轄）と、持っていく書類は、ハローワークによって案内が少しちがうことがあります。最後は、いま受給の手続きをしているハローワークで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function wd(dt) { while (dt.getDay() === 0 || dt.getDay() === 6) dt = add(dt, 1); return dt; }
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var move = d($("move").value) || add(today, 10), day = d($("day").value) || add(today, 14), area = $("area").value;
+    var me = $("me").value.trim() || "（自分の名前）";
+    var before = move < day; // 次の認定日より前に引っ越す
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">手続きするところ</div><div class="v"></div><div class="s"></div>';
+    var head, sub;
+    if (area === "same") { head = "いまのハローワークで、住所の変更を届けることが多いです"; sub = "同じ市区町村の中なら、担当のハローワークは変わらないことがほとんどです。次の認定日に、窓口で新しい住所を伝えます。"; }
+    else if (area === "other") { head = "担当のハローワークが変わるか、先に調べます"; sub = "別の市区町村でも、同じハローワークの担当のことがあります。変わるときは、新しい住所の担当のハローワークで手続きを移します。"; }
+    else { head = "新しい住所の担当のハローワークに、手続きを移します"; sub = "別の都道府県なら、担当のハローワークが変わります。引っ越したあと、新しいハローワークで受給資格者証を出して手続きします。"; }
+    el.querySelector(".v").textContent = head; el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    ["雇用保険受給資格者証", "新しい住所がわかるもの（住民票の写し、住所を書き換えたマイナンバーカードや運転免許証など）", "ほかに要るもの（印鑑など）は、電話で聞いておく"].forEach(function (x) { li("need", "", x); });
+    var call = wd(today) > move ? today : wd(today);
+    li("tl", f(call), "いま受給の手続きをしているハローワークに電話する（下の文面）。引っ越す日と、新しい住所の市区町村を伝える");
+    li("tl", f(move) + "のあと", "市区町村の役所で転入（転居）の届けをして、新しい住所がわかる書類をそろえる");
+    if (area === "same") {
+      li("tl", before ? f(day) : f(day) + "（認定日）", before ? "認定日に、受給資格者証と住所がわかるものを持って行き、住所の変更を届ける" : "認定日に、引っ越しの予定を伝えておく。住所の変更は、引っ越したあとの次の認定日に届ける");
+    } else {
+      if (!before) li("tl", f(day), "いつもどおり、いまのハローワークで認定を受ける。引っ越しの予定もこの日に伝える");
+      li("tl", "引っ越したあと、早めに", (area === "other" ? "担当が変わる場合は、" : "") + "新しい住所の担当のハローワークで、受給資格者証を出して手続きを移す");
+      li("tl", "手続きのとき", "次の認定日がいつになるか、窓口で確かめる（日が変わることがある）");
+    }
+    $("tel").textContent = "お世話になります。失業保険を受けている" + me + "と申します。\n" + f(move) + "に、" + (area === "same" ? "同じ市内" : area === "other" ? "別の市区町村" : "別の県") + "へ引っ越す予定です。\n次の認定日は" + f(day) + "です。\n" + (area === "same" ? "住所の変更は、いつ、何を持って伺えばよいでしょうか。" : "どちらのハローワークで、いつ手続きをすればよいでしょうか。持っていくものも教えてください。");
+    $("ng").textContent = (area !== "same" ? "・管轄（どのハローワークの担当か）は、ハローワークのサイトの「管轄区域」で調べられる\n・手続きを移すと、次の認定日が変わることがある。前の日にちのまま行かないようにする\n" : "") + (before ? "・引っ越しと認定日が近いときは、認定日に行けるか先に考える。行けないときは電話で相談する\n" : "") + "・振込の口座も変えるなら、通帳など口座がわかるものを持って行き、窓口で伝える\n・住民票、国民健康保険、国民年金の住所の手続きは、役所で別にする";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function iso(t) { return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); }
+  if (DEMO) { var t = new Date(); t.setHours(0, 0, 0, 0); $("move").value = iso(add(t, 8)); $("day").value = iso(wd(add(t, 15))); $("area").value = "far"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
