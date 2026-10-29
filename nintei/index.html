@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の認定日に行けない｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #need, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の認定日に行けない</h1>
+  <p class="lead">失業保険の認定日（4週に1回、ハローワークで失業の確認を受ける日）に行けないときに、変更を頼めそうか、用意するもの、ハローワークへの電話で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="day">次の認定日</label>
+    <input type="date" id="day">
+    <label class="f" for="why">行けない理由</label>
+    <select id="why">
+      <option value="mensetsu">会社の面接・採用試験</option>
+      <option value="shushoku">就職が決まった（働き始める）</option>
+      <option value="byoki">自分の病気・けが</option>
+      <option value="kango">家族の看護</option>
+      <option value="sogi">親族の葬儀</option>
+      <option value="kekkon">自分の結婚</option>
+      <option value="shiken">国家試験・資格試験の受験</option>
+      <option value="shiyo">旅行・アルバイト・ほかの用事</option>
+    </select>
+    <label class="f" for="when">気づいたのは</label>
+    <select id="when">
+      <option value="mae">認定日の前</option>
+      <option value="ato">認定日が過ぎてから</option>
+    </select>
+    <label class="f" for="me">自分の名前<span class="hint">電話の文面に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">進め方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>用意するもの</h3>
+    <ul class="w" id="need"></ul>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>ハローワークへの電話で言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。変更できる理由と、必要な証明の書類は、ハローワークによって案内が少しちがうことがあります。最後は、受給の手続きをしているハローワークで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function wd(dt) { while (dt.getDay() === 0 || dt.getDay() === 6) dt = add(dt, 1); return dt; }
+  var R = {
+    mensetsu: { ok: 1, name: "会社の面接", doc: "面接を受けた会社に書いてもらう証明（ハローワークで用紙をもらえることが多い）", word: "会社の面接が入ったため" },
+    shushoku: { ok: 2, name: "就職", doc: "入社日がわかるもの（採用の通知など）", word: "就職が決まり、その日から働き始めるため" },
+    byoki: { ok: 1, name: "病気・けが", doc: "医師の証明（診断書や、ハローワークの用紙に書いてもらうもの）", word: "病気（けが）で動けないため" },
+    kango: { ok: 1, name: "家族の看護", doc: "看護が必要なことがわかる書類（医師の証明など）", word: "家族の看護が必要になったため" },
+    sogi: { ok: 1, name: "親族の葬儀", doc: "葬儀の日がわかるもの（会葬礼状など）", word: "親族の葬儀があるため" },
+    kekkon: { ok: 1, name: "自分の結婚", doc: "結婚の日がわかるもの（式の案内や届の受理の書類など）", word: "自分の結婚式（入籍）の日と重なったため" },
+    shiken: { ok: 1, name: "国家試験・資格試験", doc: "受験票", word: "国家試験（資格試験）の受験日と重なったため" },
+    shiyo: { ok: 0, name: "ほかの用事", doc: "", word: "用事と重なってしまい" }
+  };
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var day = d($("day").value) || wd(add(today, 7)), r = R[$("why").value], ato = $("when").value === "ato" || day < today;
+    var me = $("me").value.trim() || "（自分の名前）";
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (r.ok ? "" : " no");
+    el.innerHTML = '<div class="k">変更を頼めそうか</div><div class="v"></div><div class="s"></div>';
+    var head, sub;
+    if (r.ok === 2) { head = "就職の届けとして、ハローワークに連絡します"; sub = "働き始める日が決まったら、認定日を待たずに連絡して、手続きの日を決めてもらいます。早く決まった人は、再就職手当を受けられることもあります。"; }
+    else if (r.ok) { head = (ato ? "過ぎていても、" : "") + "「" + r.name + "」は、認定日を変えてもらえることが多い理由です"; sub = (ato ? "できるだけ早く連絡して、証明の書類を持っていきます。" : "認定日より前に電話して、変更をお願いします。") + "変えたあとの日は、ハローワークが決めます。"; }
+    else { head = "この理由では、変更は難しいことが多いです"; sub = ato ? "その回の分は、手当が出ないことが多いです。ただ、給付の日数そのものは、受け取れる期間のうちなら残ることが多いです。まず電話して、次の手続きを聞きます。" : "用事のほうを動かせないか考えます。動かせなければ、事情を話して、どうなるかを先に聞いておきます。"; }
+    el.querySelector(".v").textContent = head; el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    var need = ["雇用保険受給資格者証", "失業認定申告書（認定日に書いて出す紙）"];
+    if (r.doc) need.unshift(r.doc);
+    if (r.ok === 2) need = ["雇用保険受給資格者証", r.doc, "ハローワークで案内された書類"];
+    need.forEach(function (x) { li("need", "", x); });
+    var call = ato ? wd(today) : wd(today) > day ? day : wd(today);
+    li("tl", f(call), "受給の手続きをしているハローワークに電話する（下の文面）。名前と、次の認定日を伝える");
+    if (r.ok === 1) {
+      li("tl", ato ? "電話のあと" : f(day) + "まで", r.doc + "を用意する。書いてもらう用紙があるか、電話で聞いておく");
+      li("tl", "ハローワークが決めた日", "証明の書類と受給資格者証を持って行き、認定を受ける");
+    } else if (r.ok === 2) {
+      li("tl", "働き始める前", "ハローワークで、就職の手続きをする（日にちは電話で決める）");
+    } else {
+      li("tl", ato ? "電話のあと" : f(day), ato ? "言われた日に行って、次の認定日を確かめる" : "用事を動かせなければ、言われたとおりに次の手続きをする");
+    }
+    $("tel").textContent = "お世話になります。失業保険を受けている" + me + "と申します。\n" + (ato ? f(day) + "の認定日に、" : f(day) + "が認定日なのですが、") + r.word + (ato ? "、行けませんでした。" : "、行けそうにありません。") + "\n" + (r.ok === 0 ? "この場合、どうなるか教えていただけますか。" : r.ok === 2 ? "就職の手続きは、いつ伺えばよいでしょうか。" : "認定日を変えていただくことはできますか。また、持っていく証明の書類も教えてください。");
+    $("ng").textContent = (r.ok === 1 ? "・証明の書類がないと、変更が認められないことがある。先に用紙があるか聞く\n" : "") + (r.name === "病気・けが" ? "・病気やけがが長く続く（15日以上など）と、別の手続きになることがある。電話で相談する\n" : "") + "・連絡しないまま過ぎると、その回の分の手当が出ないことが多い\n・理由と証明の書類は、ハローワークによって案内が少しちがうことがある";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { var t = new Date(); t.setDate(t.getDate() + 5); while (t.getDay() === 0 || t.getDay() === 6) t.setDate(t.getDate() + 1); $("day").value = t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); $("why").value = "mensetsu"; $("when").value = "mae"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
