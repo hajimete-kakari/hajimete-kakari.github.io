@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接のお礼メール｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #subj, .mihon #mail, .mihon #ichibun, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接のお礼メール</h1>
+  <p class="lead">面接のあとに送るお礼メールを、件名から本文まで作ります。送るかどうかの目安と送る時間、印象に残った話を入れる1文も出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 相手と自分</h2>
+    <div class="row">
+      <div><label class="f" for="co">会社の名前</label><input type="text" id="co" placeholder="例：〇〇株式会社"></div>
+      <div><label class="f" for="tan">面接官の名前<span class="hint">わからなければ空</span></label><input type="text" id="tan" placeholder="例：佐藤"></div>
+    </div>
+    <label class="f" for="me">自分の名前</label>
+    <input type="text" id="me" placeholder="例：山田花子">
+    <h2 style="margin-top:20px">2. 面接のこと</h2>
+    <label class="f" for="when">面接をした日</label>
+    <select id="when">
+      <option value="today">今日</option>
+      <option value="yday">昨日</option>
+      <option value="late">2日以上前</option>
+    </select>
+    <label class="f" for="stage">どの面接か</label>
+    <select id="stage">
+      <option value="first">一次面接</option>
+      <option value="second">二次面接</option>
+      <option value="final">最終面接</option>
+    </select>
+    <label class="f" for="topic">印象に残った話<span class="hint">面接で聞いた話を短く。空でも作れます</span></label>
+    <input type="text" id="topic" placeholder="例：入社後の研修の進め方">
+    <label class="f" for="feel">伝えたい気持ち</label>
+    <select id="feel">
+      <option value="more">ますます働きたいと思った</option>
+      <option value="image">働く姿が思い浮かんだ</option>
+      <option value="plain">お礼だけを伝えたい</option>
+    </select>
+  </div>
+  <button id="make" type="button">お礼メールを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>件名</h3>
+    <div class="mail" id="subj"></div>
+    <h3>本文</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" data-t="mail">本文をコピー</button>
+    <h3>印象に残った話を入れる1文</h3>
+    <div class="mail" id="ichibun"></div>
+    <h3>しないほうがいいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※文面の目安です。お礼メールを送らなくても、選考に響かない会社も多いです。送るなら、短く・早く・ていねいに。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var STAGE = { first: "一次面接", second: "二次面接", final: "最終面接" };
+  var DAY = { today: "本日", yday: "昨日", late: "先日" };
+  var FEEL = {
+    more: "お話をうかがい、貴社で働きたいという気持ちが、いっそう強くなりました。",
+    image: "お話をうかがい、貴社で働く自分の姿を、具体的に思い浮かべることができました。",
+    plain: ""
+  };
+  function make() {
+    var co = v("co") || "〇〇株式会社", tan = v("tan"), me = v("me") || "（自分の名前）";
+    var w = $("when").value, st = $("stage").value, topic = v("topic"), feel = $("feel").value;
+    var who = tan ? tan + "様" : "採用ご担当者様";
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">送るかどうか・送る時間</div><div class="v"></div><div class="s"></div>';
+    var when = w === "today" ? "今日の夕方〜夜9時ごろまでに送る" : w === "yday" ? "今日の午前中（始業のあと）に送る" : "送るなら今日の営業時間内。短めにする";
+    el.querySelector(".v").textContent = when;
+    el.querySelector(".s").textContent = (st === "final" ? "最終面接のあとは、結果が出る前に届くよう、早めに送るのがおすすめです。" : "お礼メールは、送らなくても選考に響かない会社が多いです。送るなら、面接の当日か翌日の朝が目安です。") + (w === "late" ? "2日以上たっているときは、「ご連絡が遅くなりましたが」を入れます。" : "");
+    s.appendChild(el);
+    $("subj").textContent = STAGE[st] + "のお礼（" + me + "）";
+    var line = topic ? "特に、" + topic + "についてのお話が印象に残っております。" : "";
+    var body = co + "\n" + who + "\n\n" + (w === "late" ? "ご連絡が遅くなりましたが、" : "") + DAY[w] + "、" + STAGE[st] + "を受けさせていただきました、" + me + "です。\nお忙しい中、お時間をいただき、ありがとうございました。\n\n" + (line ? line + "\n" : "") + (FEEL[feel] ? FEEL[feel] + "\n" : "") + (line || FEEL[feel] ? "\n" : "") + (st === "final" ? "結果のご連絡を、お待ちしております。\n" : "") + "まずはお礼を申し上げたく、メールいたしました。\nご返信には及びません。\n\n" + me;
+    $("mail").textContent = body;
+    $("ichibun").textContent = topic ? "「特に、" + topic + "についてのお話が印象に残っております。」\n\n書き方のコツ：面接で聞いた話を1つだけ、具体的に。自分のアピールは足さない。" : "（印象に残った話を入れると、この1文ができます）\n\n例：「特に、入社後の研修の進め方についてのお話が印象に残っております。」\n\n書き方のコツ：面接で聞いた話を1つだけ、具体的に。自分のアピールは足さない。";
+    $("ng").textContent = "・面接で言い足りなかったアピールを書き足す\n・「ご返信ください」と返事を求める\n・長い文章にする（読むのは1分以内に）\n・夜遅く（10時すぎ）や深夜に送る\n・合否を問い合わせる文を入れる";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $("subj").textContent + "\n\n" + $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("co").value = "〇〇株式会社"; $("tan").value = "佐藤"; $("me").value = "山田花子"; $("stage").value = "second"; $("topic").value = "入社後の研修の進め方"; make(); }
+})();
+</script>
+</body>
+</html>
