@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>最後の給料の社会保険料、何か月分？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 8px; padding: 9px; font-size: .92rem; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  ul.list { margin: 0; padding-left: 1.2em; font-size: .92rem; }
+  .msg { border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; white-space: pre-wrap; background: var(--input); }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #detail, .mihon #check, .mihon #msg, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>最後の給料の社会保険料、何か月分？</h1>
+  <p class="lead">退職日と、最後の給料が出る日、会社の保険料の引き方を選ぶと、最後の給料で引かれる健康保険・厚生年金の保険料が何か月分になりそうかの目安と、明細で確かめること、会社に聞く一言を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 退職日と最後の給料</h2>
+    <label class="f" for="out">退職日</label>
+    <input type="date" id="out">
+    <label class="f" for="payday">最後の給料が出る日<span class="hint">わからなければ、いつもの給料日から見込みで入れる</span></label>
+    <input type="date" id="payday">
+  </div>
+
+  <div class="card">
+    <h2>2. 会社の保険料の引き方</h2>
+    <label class="f" for="way">毎月の給料から引かれる保険料は</label>
+    <select id="way">
+      <option value="prev">前の月の分を引いている（多い）</option>
+      <option value="cur">その月の分を引いている</option>
+      <option value="unk">わからない</option>
+    </select>
+    <span class="hint">入社して最初の給料で保険料が引かれていなかったなら、「前の月の分」のことが多いです。</span>
+  </div>
+
+  <div class="card">
+    <h2>3. 明細の金額（わかれば）</h2>
+    <label class="f" for="usual">いつもの月の保険料（健康保険＋介護保険＋厚生年金、円）</label>
+    <input type="number" id="usual" inputmode="numeric" placeholder="例：41000">
+    <label class="f" for="last">最後の給料の保険料（同じく合計、円）</label>
+    <input type="number" id="last" inputmode="numeric" placeholder="例：82000">
+  </div>
+  <button id="make" type="button">何か月分か見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>月ごとの見込み</h3>
+    <div class="big" id="detail"></div>
+    <h3>明細で確かめること</h3>
+    <div class="big" id="check"></div>
+    <h3>会社に聞く一言</h3>
+    <div class="msg" id="msg"></div>
+    <button class="sub" id="copy" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※目安です。健康保険と厚生年金の保険料は、会社の保険をぬける日（退職日の翌日）がある月の、前の月の分までかかります。退職するときは、前の月の分とその月の分をまとめて最後の給料から引いてよいことになっています。実際にどの給料から引くかは会社ごとに違うので、明細と会社の担当者で確かめてください。入社した月に辞めた場合などは、このページでは扱いません。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var n = parseInt($(id).value, 10); return isNaN(n) ? 0 : n; }
+  function dt(id) { var v = $(id).value; if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ym(d) { return d.getFullYear() * 12 + d.getMonth(); }
+  function mname(n) { return (n % 12 + 1) + "月分"; }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function yen(n) { return Math.round(n).toLocaleString() + "円"; }
+  function box(id, k, v, s) {
+    var el = $(id); el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+  }
+  // way: prev=前の月の分を引く / cur=その月の分を引く
+  function months(way, out, pay) {
+    var loss = new Date(out.getFullYear(), out.getMonth(), out.getDate() + 1);
+    var lastM = ym(loss) - 1;          // 保険料がかかる最後の月
+    // ふだん引く月から、保険料がかかる最後の月まで（辞める月の給料なら、その月の分もまとめて引けることがある）
+    var from = way === "prev" ? ym(pay) - 1 : ym(pay), list = [];
+    for (var m = from; m <= lastM; m++) list.push(m);
+    return { list: list, lastM: lastM, loss: loss };
+  }
+  function make() {
+    var out = dt("out") || new Date(2026, 11, 31), pay = dt("payday") || new Date(out.getFullYear(), out.getMonth(), 25);
+    var way = $("way").value, usual = num("usual"), last = num("last");
+    var ways = way === "unk" ? ["prev", "cur"] : [way];
+    var r = ways.map(function (w) { return months(w, out, pay); });
+    var monthEnd = new Date(out.getFullYear(), out.getMonth(), out.getDate() + 1).getDate() === 1;
+    var n0 = r[0].list.length;
+    var v, s;
+    if (way === "unk") {
+      var n1 = r[1].list.length;
+      v = n0 === n1 ? "約" + n0 + "か月分の見込みです" : "前の月の分を引く会社なら約" + n0 + "か月分、その月の分を引く会社なら約" + n1 + "か月分です";
+      s = "会社の引き方で変わります。入社して最初の給料の明細を見るか、担当者に聞くとわかります。";
+    } else {
+      v = n0 === 0 ? "最後の給料では、保険料が引かれない見込みです" : "最後の給料で引かれるのは、約" + n0 + "か月分の見込みです";
+      s = n0 >= 2 ? "退職するときは、前の月の分とその月の分をまとめて引くことがあります。二重に引かれているわけではありません。" :
+          n0 === 1 ? "いつもの月と同じくらいの額が引かれる見込みです。" :
+          "保険料がかかる最後の月の分は、それより前の給料で引き終わっている見込みです。";
+    }
+    if (usual && last) {
+      var ratio = last / usual;
+      s += "　明細では、いつもの約" + (Math.round(ratio * 10) / 10) + "倍（約" + Math.round(ratio) + "か月分）引かれています。" +
+        (r.some(function (x) { return x.list.length === Math.round(ratio); }) ? "見込みと合っています。" : "見込みと違うので、下の一言で会社に聞いてみます。");
+    }
+    var s0 = $("sum"); s0.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big"; el.id = "sumbox"; s0.appendChild(el);
+    box("sumbox", "あなたの場合", v, s);
+    var lossTxt = "会社の保険をぬける日：" + md(r[0].loss) + "（退職日の翌日）";
+    var lastTxt = "保険料がかかる最後の月：" + mname(r[0].lastM) + (monthEnd ? "（月末に辞めたので、辞めた月の分までかかる）" : "（月の途中で辞めたので、辞めた月の分はかからない）");
+    var lines = r.map(function (x, i) {
+      var head = way === "unk" ? (i === 0 ? "前の月の分を引く会社：" : "その月の分を引く会社：") : "最後の給料（" + md(pay) + "）で引かれる分：";
+      return head + (x.list.length ? x.list.map(mname).join("と") : "なし");
+    });
+    box("detail", lossTxt, lastTxt, lines.join("\n"));
+    $("detail").querySelector(".s").style.whiteSpace = "pre-wrap";
+    box("check", "最後の給料の明細を開いたら",
+      "健康保険・厚生年金の欄が、いつもの何倍かを見る",
+      "・いつもの2倍前後なら、2か月分まとめて引かれている見込み\n・介護保険（40〜64歳）も同じ月の数だけ引かれる\n・雇用保険料は月の数ではなく、その給料の額にかかる\n・住民税がまとめて引かれていたら、それは別の話（保険料とは分けて見る）");
+    $("check").querySelector(".s").style.whiteSpace = "pre-wrap";
+    var mlist = r[0].list.length ? r[0].list.map(mname).join("と") : "";
+    $("msg").textContent = "お疲れさまです。最後の給与明細について、確認させてください。\n健康保険と厚生年金の保険料が" + (last && usual ? "いつもの約" + Math.round(last / usual) + "か月分" : "いつもと違う額") + "になっていますが、何月分の保険料が引かれているか、教えていただけますか。" + (mlist && way !== "unk" ? "\n（" + mlist + "と考えていますが、合っていますでしょうか）" : "") + "\nお手数をおかけしますが、よろしくお願いいたします。";
+    $("ng").textContent = "・2か月分引かれていても、すぐに「取られすぎ」とは決めない。何月分かを聞いてから考える\n・月の途中で辞めた場合、辞めた月は国民年金や国保などに自分で入る（退職日の翌日から14日以内）\n・明細の数字が見込みとずれるときは、会社の担当者に聞く。計算の正しさを決めるのは会社と保険の窓口";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("msg").textContent, b = $("copy");
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "コピーしました"; }, function () { b.textContent = "長押しでコピーしてください"; });
+  });
+  if (DEMO) { $("out").value = "2026-12-31"; $("payday").value = "2026-12-25"; $("way").value = "prev"; $("usual").value = "41000"; $("last").value = "82000"; make(); }
+})();
+</script>
+</body>
+</html>
