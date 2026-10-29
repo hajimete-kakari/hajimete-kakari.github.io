@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>年上の部下への頼み方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #msg, .mihon #ask, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>年上の部下への頼み方</h1>
+  <p class="lead">年上の部下やベテランの人に、仕事を頼むときの言い方を作ります。頼む仕事と期限、その人に頼む理由を入れると、言い方の組み立てと、口頭・チャットでそのまま使える一言が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 頼む仕事</h2>
+    <label class="f" for="task">頼みたい仕事<span class="hint">「〜を」まで。短く</span></label>
+    <input type="text" id="task" placeholder="例：来週の会議資料のグラフ">
+    <label class="f" for="due">期限</label>
+    <input type="text" id="due" placeholder="例：金曜の15時">
+    <label class="f" for="why">その人に頼む理由</label>
+    <select id="why">
+      <option value="exp">この仕事の経験がある</option>
+      <option value="exact">確認や数字が正確</option>
+      <option value="know">取引先や社内の事情にくわしい</option>
+      <option value="busy">ほかの人の手がいっぱい</option>
+    </select>
+    <label class="f" for="free">任せたい範囲</label>
+    <select id="free">
+      <option value="all">やり方は任せる（できあがりだけ決める）</option>
+      <option value="part">形は決まっている（前回と同じ形で）</option>
+    </select>
+    <h2 style="margin-top:20px">2. 相手と場面</h2>
+    <label class="f" for="nm">相手の名字</label>
+    <input type="text" id="nm" placeholder="例：田中">
+    <label class="f" for="mood">これまで</label>
+    <select id="mood">
+      <option value="first">頼むのは初めて</option>
+      <option value="usual">何度か頼んでいる</option>
+      <option value="hard">前に頼んだら、気が進まない様子だった</option>
+    </select>
+    <label class="f" for="how">伝え方</label>
+    <select id="how">
+      <option value="talk">口頭（席で・打ち合わせで）</option>
+      <option value="chat">チャット・メール</option>
+    </select>
+  </div>
+  <button id="make" type="button">言い方を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>そのまま言える一言</h3>
+    <div class="mail" id="msg"></div>
+    <button type="button" class="copy" data-t="msg">一言をコピー</button>
+    <h3>あとで添える一言</h3>
+    <div class="mail" id="ask"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※言い方の目安です。職場で決まっている呼び方や頼み方があれば、そちらに合わせてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var WHY = {
+    exp: "この仕事は経験がおありなので、ぜひお願いしたくて",
+    exact: "確認まで安心してお任せできるので",
+    know: "事情にくわしいので、ぜひ見ていただきたくて",
+    busy: "ほかの人の手がいっぱいでして"
+  };
+  var WHY_S = {
+    exp: "「経験がある」は、相手が自分の役目として受け取りやすい理由です。",
+    exact: "ほめ言葉を並べるより、何を頼りにしているかを1つだけ言うほうが伝わります。",
+    know: "事情を知っている人にしかできないこと、という形にすると、頼む理由がはっきりします。",
+    busy: "人手の理由は正直に言ってかまいません。ただ、そのぶん期限や形は相手の都合を先に聞きます。"
+  };
+  function make() {
+    var n = v("nm") || "（相手の名字）", task = v("task") || "（頼みたい仕事）", due = v("due") || "（期限）";
+    var why = $("why").value, free = $("free").value, mood = $("mood").value, chat = $("how").value === "chat";
+    var reason = WHY[why];
+    var range = free === "all" ? "進め方はお任せします。" : "形は前回と同じでお願いできればと思います。";
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">言い方の組み立て</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = "理由 → 頼みごと → 期限 → 任せる範囲 → 相手の都合を聞く";
+    el.querySelector(".s").textContent = "命令の形（〜してください）ではなく、お願いの形（〜お願いできますか）で、最後に相手に答える番を渡します。" + WHY_S[why];
+    s.appendChild(el);
+    var open = mood === "hard" ? "お忙しいところすみません。ひとつご相談なのですが、" : (mood === "first" ? "お手すきのときで大丈夫なのですが、" : "");
+    var msg;
+    if (chat) {
+      msg = n + "さん\nお疲れさまです。\n" + (open ? open + "\n" : "") + reason + "、" + task + "をお願いできますでしょうか。\n" +
+        "期限は" + due + "です。\n" + range + "\nもし難しければ、遠慮なく言ってください。";
+    } else {
+      msg = n + "さん、" + (open || "いま少しよろしいですか。") + "\n" + reason + "、" + task + "をお願いできますか。\n" +
+        due + "までにあると助かります。\n" + range + "\nご都合、どうでしょう。";
+    }
+    $("msg").textContent = msg;
+    var ask = mood === "hard"
+      ? "（引き受けてもらえたら）\nありがとうございます。途中で気になることがあれば、いつでも声をかけてください。\n\n（渋られたら）\nどこが難しそうですか。期限か、量か、教えてもらえると調整します。"
+      : "（引き受けてもらえたら）\nありがとうございます。途中で気になることがあれば、いつでも声をかけてください。\n\n（終わったら）\nありがとうございました。" + (why === "exact" ? "確認まで見ていただいて助かりました。" : "おかげで間に合いました。");
+    $("ask").textContent = ask;
+    $("ng").textContent = "・「〜しておいて」「やっといてください」と言い切る\n・「年上の方に申し訳ないのですが」と年齢にふれる\n・理由を言わずに、仕事だけ渡す\n・頼んだあと、やり方を細かく指定しなおす\n・ほかの人の前で、急に頼む";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("task").value = "来週の会議資料のグラフ"; $("due").value = "金曜の15時"; $("nm").value = "田中"; $("why").value = "exact"; make(); }
+})();
+</script>
+</body>
+</html>
