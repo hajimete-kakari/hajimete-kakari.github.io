@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の待期7日間の数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .day { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .day span { width: 7.5em; flex: none; font-size: .92rem; }
+  .day select { padding: 7px 8px; font-size: .95rem; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の待期7日間の数え方</h1>
+  <p class="lead">ハローワークで手続きした日と、その後の日ごとに働いたかどうかを選ぶと、失業保険の「待期」の7日間がいつ終わるか、その次に何が始まるかの目安を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 手続きした日と辞めた理由</h2>
+    <label class="f" for="start">受給資格が決まった日<span class="hint">ハローワークで離職票を出して、手続きをした日（1日目）</span></label>
+    <input type="date" id="start">
+    <label class="f" for="why">辞めた理由（離職票の内容）</label>
+    <select id="why">
+      <option value="kaisha">会社の都合（倒産・解雇など）</option>
+      <option value="jiko">自分の都合（自己都合）</option>
+      <option value="tokutei">体調・介護などのやむを得ない理由が認められた</option>
+      <option value="unk">まだわからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. それぞれの日に働いたか</h2>
+    <p class="hint">手続きした日から14日分。アルバイト・手伝い・内職も「働いた」に入れます</p>
+    <div id="days"></div>
+  </div>
+  <button id="make" type="button">待期が終わる日を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>日ごとの数え方</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>初回の認定日に申告すること</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険の基本手当（失業保険）の、一般的な決まりで出した目安です（受給資格が決まった日から、失業の状態の日を通算して7日間が待期。待期のあいだは手当が出ず、働いた日は待期に数えないため、その分だけ待期が終わる日が後ろにずれる）。働いたかどうかの扱いや給付制限の長さは、住んでいる地域のハローワークで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  var N = document.body.className === "mihon" ? 7 : 14, OPT = [["no", "働いていない"], ["wk", "働いた"]];
+  function draw() {
+    var s = d($("start").value) || new Date(), box = $("days"), old = [].map.call(box.querySelectorAll("select"), function (x) { return x.value; });
+    box.innerHTML = "";
+    for (var i = 0; i < N; i++) {
+      var dt = add(s, i), row = document.createElement("div"); row.className = "day";
+      var sp = document.createElement("span"); sp.textContent = f(dt); row.appendChild(sp);
+      var sel = document.createElement("select");
+      OPT.forEach(function (o) { var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1]; sel.appendChild(op); });
+      sel.value = old[i] || "no";
+      if (i === 0) { sel.value = "no"; sel.disabled = true; }
+      row.appendChild(sel); box.appendChild(row);
+    }
+  }
+  $("start").addEventListener("change", draw);
+  function make() {
+    var s = d($("start").value) || new Date(), why = $("why").value;
+    var v = [].map.call($("days").querySelectorAll("select"), function (x) { return x.value; });
+    var cnt = 0, done = -1, worked = [];
+    for (var i = 0; i < N; i++) {
+      if (v[i] === "wk") { worked.push(i); continue; }
+      cnt++; if (cnt === 7 && done < 0) done = i;
+    }
+    var wIn = worked.filter(function (i) { return done < 0 || i < done; });
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (done < 0 ? " no" : "");
+    el.innerHTML = '<div class="k">待期が終わる日と、その次</div><div class="v"></div><div class="s"></div>';
+    if (done < 0) {
+      el.querySelector(".v").textContent = "この14日の中では、待期の7日間がまだ終わっていません";
+      el.querySelector(".s").textContent = "働いていない日が、通算で7日になると待期が終わります（いまは" + cnt + "日）。働いた日の分だけ、終わる日が後ろにずれます。";
+    } else {
+      var nx = add(s, done + 1), next;
+      if (why === "kaisha") next = f(nx) + "から、手当の対象の日が始まります（振込は、初回の認定日のあと）。";
+      else if (why === "jiko") next = f(nx) + "から、給付制限（手当が出ない期間）が始まります。長さは、受給資格者のしおりと窓口で確かめます。";
+      else if (why === "tokutei") next = f(nx) + "から、手当の対象の日が始まる見込みです。給付制限がかからないかは、窓口で確かめます。";
+      else next = f(nx) + "から、手当の対象の日か、給付制限のどちらかが始まります。辞めた理由が決まると、どちらかがわかります。";
+      el.querySelector(".v").textContent = f(add(s, done)) + "で待期の7日間が終わります";
+      el.querySelector(".s").textContent = (wIn.length ? "働いた" + wIn.length + "日の分、" + wIn.length + "日後ろにずれました。" : "途中で働いていないので、ずれはありません。") + next;
+    }
+    $("sum").appendChild(el);
+    var c2 = 0;
+    for (var k = 0; k < N; k++) {
+      var t;
+      if (v[k] === "wk") t = (done < 0 || k < done) ? "働いた：待期に数えない（1日ずれる）" : "働いた：待期のあと。認定日に申告する";
+      else if (done < 0 || k <= done) { c2++; t = (k === 0 ? "手続きの日：" : "働いていない：") + "待期の" + c2 + "日目"; }
+      else t = "待期のあと";
+      var li = document.createElement("li"); li.innerHTML = '<span class="d"></span> <span class="t"></span>';
+      li.querySelector(".d").textContent = f(add(s, k)); li.querySelector(".t").textContent = t; $("tl").appendChild(li);
+    }
+    $("memo").textContent = worked.length
+      ? "失業認定申告書の、働いた日の欄に書く日：\n" + worked.map(function (i) { return "・" + f(add(s, i)); }).join("\n") + "\n\n働いた時間と、もらった（もらう予定の）金額もメモしておく。"
+      : "この14日のあいだに働いた日はありません。\n初回の認定日の申告書にも「働いていない」で書けます。";
+    $("ng").textContent = "・待期のあいだは、短い時間でも働くと、その日は待期に数えないのが一般的\n・働いたことは、黙っていないで申告する（あとでわかると、不正受給になることがある）\n・待期のあいだに働いて、そのまま続けて働くことになったら、先にハローワークに相談する\n・手続きした日より前に働いた日は、ここでは数えない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("start").value = "2026-11-04"; $("why").value = "jiko"; draw(); var sel = $("days").querySelectorAll("select"); sel[3].value = "wk"; sel[4].value = "wk"; make(); } else draw();
+})();
+</script>
+</body>
+</html>
