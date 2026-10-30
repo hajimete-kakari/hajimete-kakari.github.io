@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>隣の部屋の騒音を伝える手紙｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  ol.flow { margin: 0; padding-left: 1.4em; font-size: .92rem; }
+  ol.flow li { margin-bottom: 6px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #letter, .mihon #flow, .mihon #kanri, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>隣の部屋の騒音を伝える手紙</h1>
+  <p class="lead">集合住宅で、隣や上の階の音が続いて困っているときに、相手の郵便受けに入れる手紙を1枚作ります。音の種類と時間帯を選ぶと、責める調子にならない手紙の本文と、渡すまでの流れ、それでも続くときに管理会社へ送る一文が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 相手と自分</h2>
+    <label class="f" for="where">音がするほう</label>
+    <select id="where">
+      <option value="side">隣の部屋</option>
+      <option value="up">上の階の部屋</option>
+      <option value="down">下の階の部屋</option>
+      <option value="unknown">どこからかはっきりしない</option>
+    </select>
+    <label class="f" for="to">相手の部屋番号<span class="hint">わかる場合だけ。例：302</span></label>
+    <input type="text" id="to" placeholder="例：302">
+    <label class="f" for="me">自分の部屋番号<span class="hint">例：202</span></label>
+    <input type="text" id="me" placeholder="例：202">
+    <label class="f" for="sign">手紙に書く差出人</label>
+    <select id="sign">
+      <option value="room">部屋番号だけ</option>
+      <option value="name">部屋番号と名字</option>
+    </select>
+    <label class="f" for="nm">名字<span class="hint">「部屋番号と名字」のときだけ</span></label>
+    <input type="text" id="nm" placeholder="例：山田">
+    <label class="f" for="home">住まい</label>
+    <select id="home">
+      <option value="rent">賃貸</option>
+      <option value="own">分譲マンション</option>
+    </select>
+
+    <h2 style="margin-top:20px">2. 音のこと</h2>
+    <label class="f" for="kind">音の種類</label>
+    <select id="kind">
+      <option value="foot">足音・物を落とす音</option>
+      <option value="voice">話し声・テレビ・音楽</option>
+      <option value="chore">洗濯機・掃除機</option>
+      <option value="door">ドアや窓を閉める音</option>
+      <option value="music">楽器の音</option>
+    </select>
+    <label class="f" for="time">いちばん困る時間帯</label>
+    <select id="time">
+      <option value="night">夜（22時ごろ〜深夜）</option>
+      <option value="late">深夜〜明け方</option>
+      <option value="early">早朝（6時より前）</option>
+      <option value="day">休日の日中</option>
+    </select>
+    <label class="f" for="since">続いている期間</label>
+    <select id="since">
+      <option value="weeks">2〜3週間ほど</option>
+      <option value="month">1か月ほど</option>
+      <option value="months">数か月</option>
+    </select>
+  </div>
+  <button id="make" type="button">手紙を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3 id="lh">手紙の本文</h3>
+    <div class="mail" id="letter"></div>
+    <button type="button" class="copy" data-t="letter">本文をコピー</button>
+    <h3>渡すまでの流れ</h3>
+    <ol class="flow" id="flow"></ol>
+    <h3 id="kh">それでも続くとき、管理会社へ送る一文</h3>
+    <div class="mail" id="kanri"></div>
+    <button type="button" class="copy" data-t="kanri">一文をコピー</button>
+    <h3>気をつけたいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※伝え方の目安です。管理規約や賃貸の契約で、住人どうしのやりとりについて決まりがあれば、そちらに合わせてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  // 音の言い方と、お願いの中身
+  var KIND = {
+    foot: ["足音や、物を置くような音", "足音や物の置き方を、少しだけ気にかけていただけると"],
+    voice: ["話し声やテレビ・音楽の音", "音量を少しだけ下げていただけると"],
+    chore: ["洗濯機や掃除機の音", "洗濯機や掃除機を使う時間を、少しずらしていただけると"],
+    door: ["ドアや窓を閉める音", "ドアや窓を閉めるときに、少しだけ気にかけていただけると"],
+    music: ["楽器の音", "演奏する時間を、少しずらしていただけると"]
+  };
+  // 時間帯の言い方と、お願いする範囲
+  var TIME = {
+    night: ["夜22時ごろから深夜にかけて", "夜22時以降だけでも"],
+    late: ["深夜から明け方にかけて", "夜中の時間だけでも"],
+    early: ["朝6時より前の早い時間に", "朝早い時間だけでも"],
+    day: ["休日の日中に", "長く続く時間だけでも"]
+  };
+  var SINCE = { weeks: "ここ2〜3週間ほど", month: "この1か月ほど", months: "ここ数か月" };
+  var WHERE = { side: "お隣", up: "上の階", down: "下の階" };
+  function make() {
+    var where = $("where").value, kind = $("kind").value, time = $("time").value;
+    var unknown = where === "unknown", own = $("home").value === "own";
+    var to = v("to").replace(/号室$/, ""), me = v("me").replace(/号室$/, "") || "（自分の部屋番号）";
+    var nm = v("nm"), useName = $("sign").value === "name" && nm;
+    var K = KIND[kind], T = TIME[time], since = SINCE[$("since").value];
+    var kanriName = own ? "管理会社（管理組合）" : "管理会社";
+
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">手紙の組み立て</div><div class="v"></div><div class="s"></div>';
+    if (unknown) {
+      el.querySelector(".v").textContent = "手紙ではなく、" + kanriName + "に相談する";
+      el.querySelector(".s").textContent = "音の出どころがはっきりしないまま手紙を入れると、心当たりのない部屋に届いてしまうことがあります。この場合は、" + kanriName + "に時間帯と音の種類を伝えて、掲示や全戸への案内を頼むのが一般的です。";
+    } else {
+      el.querySelector(".v").textContent = "名のる → 音の種類と時間帯 → お互いさまの一言 → お願いは1つ → こちらの音も知らせてほしい";
+      el.querySelector(".s").textContent = "「うるさい」「迷惑」とは書かず、いつ・どんな音が聞こえるかだけを書きます。お願いは時間帯をしぼって1つにすると、相手が受け入れやすくなります。" +
+        (time === "day" ? "日中の生活音は、お互いさまと受け取られやすい時間帯です。「長く続くときだけ」のように、範囲を小さくしておきます。" : "");
+    }
+    s.appendChild(el);
+
+    var lh = $("lh"), letter;
+    if (unknown) {
+      lh.textContent = "手紙の本文（今回は使いません）";
+      letter = "音の出どころがはっきりしないため、手紙は作りません。\n下の「管理会社へ送る一文」を使ってください。";
+    } else {
+      lh.textContent = "手紙の本文";
+      var head = to ? to + "号室の方へ" : WHERE[where] + "のお部屋の方へ";
+      var who = me + "号室" + (useName ? "の" + nm + "です。" : "の者です。");
+      letter = head + "\n\n突然のお手紙、失礼いたします。\n" + who + "\n\n" +
+        since + "、" + T[0] + "、" + K[0] + "が、こちらの部屋まで響いてくることがあります。\n" +
+        "集合住宅ですので、ある程度の生活音はお互いさまと思っております。\n" +
+        "ただ、" + (time === "day" ? "長く続くと落ち着かないこともあり" : "その時間は眠りにくいことがあり") + "、お手紙させていただきました。\n\n" +
+        "もしお心当たりがありましたら、" + T[1] + "、" + K[1] + "助かります。\n" +
+        "こちらの音でご迷惑をおかけしていることがありましたら、遠慮なくお知らせください。\n\n" +
+        "どうぞよろしくお願いいたします。\n\n" +
+        "　　年　　月　　日\n" + me + "号室" + (useName ? "　" + nm : "");
+    }
+    $("letter").textContent = letter;
+
+    var flow = $("flow"); flow.innerHTML = "";
+    var steps = unknown ? [
+      "音がした日と時間、音の種類をメモに残す（1〜2週間ぶん）",
+      kanriName + "に、下の一文で相談する",
+      "掲示や全戸への案内が出たら、1〜2週間ようすを見る",
+      "変わらなければ、メモを添えてもう一度相談する"
+    ] : [
+      "下書きを1日置いて、責める言い方になっていないか読み返す",
+      "手書きで清書するか、印刷して日付を手で書き入れる",
+      "封筒の表に「" + (to ? to + "号室の方へ" : WHERE[where] + "のお部屋の方へ") + "」と書き、相手の郵便受けに入れる",
+      "入れたあとは、1〜2週間ようすを見る（その間に会っても、手紙の話は自分からしない）",
+      "変わらなければ、手紙を入れた日を添えて" + kanriName + "に相談する"
+    ];
+    steps.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; flow.appendChild(li); });
+
+    $("kh").textContent = unknown ? kanriName + "へ送る一文" : "それでも続くとき、" + kanriName + "へ送る一文";
+    var room = me + "号室の" + (nm || "（名字）") + "です。";
+    var src = unknown ? "どこからかははっきりしないのですが、" : (to ? to + "号室と思われる" : WHERE[where] + "の") + "お部屋から、";
+    $("kanri").textContent = "いつもお世話になっております。\n" + room + "\n" +
+      since + "、" + T[0] + "、" + src + K[0] + "が響いてきます。\n" +
+      (unknown ? "" : "　月　日に手紙でお願いしましたが、変わっていません。\n") +
+      "掲示や全戸への案内など、お願いできる方法があれば教えていただけますか。\n" +
+      "音がした日と時間のメモもありますので、必要でしたらお送りします。\n" +
+      "どうぞよろしくお願いいたします。";
+
+    var ng = "・「うるさい」「迷惑」「非常識」など、相手を決めつける言葉は使わない\n" +
+      "・直接ドアをたたいて伝えに行くのは、言い合いになりやすいので避ける\n" +
+      "・ドアに貼る、何通も続けて入れる、夜中に入れるのは避ける\n" +
+      "・差出人を書かない手紙は、相手が不安になり、受け取ってもらいにくくなります\n";
+    if (!own) ng += "・賃貸では、管理会社が「住人どうしで直接やりとりせず、まず連絡を」と案内していることがあります。心配なら、手紙の前に管理会社に聞いておくと安心です\n";
+    if (where === "up" && kind === "foot") ng += "・上の階の足音は、相手が気づいていないことが多い音です。気をつけてもらう時間をしぼると、受け入れられやすくなります\n";
+    ng += "・身の危険を感じるときや、言い合いになったときは、手紙で続けずに管理会社や警察の相談窓口（#9110）に相談します";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("where").value = "up"; $("to").value = "302"; $("me").value = "202"; $("sign").value = "room"; $("home").value = "rent"; $("kind").value = "foot"; $("time").value = "night"; $("since").value = "month"; make(); }
+})();
+</script>
+</body>
+</html>
