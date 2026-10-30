@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職の日に返すもの・もらうもの｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  .checks label { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: .95rem; }
+  .checks input { width: 18px; height: 18px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  ul.items { margin: 0; padding-left: 1.3em; } ul.items li { margin-bottom: 6px; }
+  ul.items .w { font-size: .85rem; color: var(--sub); display: block; }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #ret, .mihon #get, .mihon #tl, .mihon #mail, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職の日に返すもの・もらうもの</h1>
+  <p class="lead">辞める会社に返すものと、受け取る書類を、自分の分だけの一覧にします。いつ返すか、届かないときにいつ聞くかと、総務に確かめる文面も出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日にち</h2>
+    <div class="row">
+      <div><label class="f" for="last">最終出社日</label><input type="date" id="last"></div>
+      <div><label class="f" for="quit">退職日</label><input type="date" id="quit"></div>
+    </div>
+    <span class="hint">有給を使って休む人は、最終出社日と退職日がちがいます</span>
+  </div>
+
+  <div class="card">
+    <h2>2. 会社から借りているもの</h2>
+    <label class="f">手元にあるものを選びます</label>
+    <div class="checks">
+      <label><input type="checkbox" id="r_hoken" checked>健康保険証・資格確認書（自分の分）</label>
+      <label><input type="checkbox" id="r_kazoku">健康保険証・資格確認書（家族の分）</label>
+      <label><input type="checkbox" id="r_id" checked>社員証・入館証</label>
+      <label><input type="checkbox" id="r_kagi">鍵・ロッカーの鍵</label>
+      <label><input type="checkbox" id="r_pc">会社のパソコン・スマホ</label>
+      <label><input type="checkbox" id="r_seifuku">制服・作業着</label>
+      <label><input type="checkbox" id="r_meishi">名刺（自分の分・もらった分）</label>
+      <label><input type="checkbox" id="r_teiki">会社のお金で買った定期券</label>
+      <label><input type="checkbox" id="r_shiryo">仕事の書類・データ</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 辞めたあと</h2>
+    <label class="f" for="next">次の仕事</label>
+    <select id="next">
+      <option value="shitsugyo">しばらく休む・失業保険を受けたい</option>
+      <option value="kimari">次の会社が決まっている</option>
+      <option value="mitei">まだ決めていない</option>
+    </select>
+    <label class="f" for="ins">次の健康保険</label>
+    <select id="ins">
+      <option value="kokuho">国民健康保険</option>
+      <option value="fuyou">家族の扶養に入る</option>
+      <option value="nin">任意継続</option>
+      <option value="next">次の会社の健康保険</option>
+      <option value="mitei">まだ決めていない</option>
+    </select>
+    <label class="f" for="nenkin">年金手帳・雇用保険被保険者証を、会社が預かっているか</label>
+    <select id="nenkin">
+      <option value="wakaran">わからない</option>
+      <option value="yes">預かっている</option>
+      <option value="no">自分で持っている</option>
+    </select>
+    <div class="row">
+      <div><label class="f" for="co">会社の名前</label><input type="text" id="co" placeholder="例：〇〇株式会社"></div>
+      <div><label class="f" for="me">自分の名前</label><input type="text" id="me" placeholder="例：山田花子"></div>
+    </div>
+  </div>
+  <button id="make" type="button">一覧を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>返すもの</h3>
+    <ul class="items" id="ret"></ul>
+    <h3>もらうもの</h3>
+    <ul class="items" id="get"></ul>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>総務に確かめる文面</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" data-t="mail">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な流れの目安です。返すものや書類の届き方は、会社ごとに違います。源泉徴収票は、退職日から1か月以内に出すことが法律で決まっています。離職票は、失業保険を受ける人が会社に頼んで出してもらう書類です。届かないときの相談先は、源泉徴収票なら税務署、離職票ならハローワーク、退職証明書なら労働基準監督署です。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function item(ul, text, when) { var e = document.createElement("li"); e.textContent = text; if (when) { var w = document.createElement("span"); w.className = "w"; w.textContent = when; e.appendChild(w); } $(ul).appendChild(e); }
+  function li(date, text) { var e = document.createElement("li"); e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; $("tl").appendChild(e); }
+  function on(id) { return $(id).checked; }
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var quit = d($("quit").value) || add(today, 14), last = d($("last").value) || quit;
+    if (last > quit) last = quit;
+    var gap = Math.round((quit - last) / 86400000) > 0;
+    var next = $("next").value, ins = $("ins").value, nk = $("nenkin").value;
+    var co = v("co") || "〇〇株式会社", me = v("me") || "（自分の名前）";
+    var hoken = on("r_hoken") || on("r_kazoku");
+    ["sum", "ret", "get", "tl"].forEach(function (k) { $(k).innerHTML = ""; });
+
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">今の状況</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = gap && hoken
+      ? "最終出社日（" + md(last) + "）に保険証以外を返し、保険証は退職日（" + md(quit) + "）のあとに郵送で返します"
+      : "最終出社日（" + md(last) + "）に、借りているものをまとめて返します";
+    el.querySelector(".s").textContent = (gap ? "退職日までは在籍中なので、健康保険は退職日まで使えます。" : "") + "書類の多くは、退職日のあとに郵送で届きます。どれがいつ届くかを、最終出社日の前に総務に確かめておくと、あとで探さずに済みます。";
+    $("sum").appendChild(el);
+
+    var hokenWhen = gap ? "退職日のあと、郵送で返す（退職日の翌日からは使わない）" : "最終出社日に返す。退職日の翌日からは使わない";
+    if (on("r_hoken")) item("ret", "健康保険証・資格確認書（自分の分）", hokenWhen);
+    if (on("r_kazoku")) item("ret", "健康保険証・資格確認書（家族の分）", "自分の分と一緒に返す");
+    if (on("r_id")) item("ret", "社員証・入館証", "最終出社日の帰りに返す");
+    if (on("r_kagi")) item("ret", "鍵・ロッカーの鍵", "最終出社日に、中を空にしてから返す");
+    if (on("r_pc")) item("ret", "会社のパソコン・スマホ", "私物のデータを消してから返す。パスワードは総務の指示どおりに");
+    if (on("r_seifuku")) item("ret", "制服・作業着", "洗って返すか、クリーニングが要るかを総務に聞く");
+    if (on("r_meishi")) item("ret", "名刺（自分の分・もらった分）", "もらった名刺も会社の情報なので、持ち帰らない");
+    if (on("r_teiki")) item("ret", "会社のお金で買った定期券", "払い戻しのしかたを総務に聞く");
+    if (on("r_shiryo")) item("ret", "仕事の書類・データ", "私物のメモや自宅のパソコンに残していないかも見る");
+    if (!$("ret").children.length) item("ret", "借りているものはありません", "念のため、最終出社日に総務に聞く");
+
+    if (next !== "kimari") item("get", "離職票", "失業保険を受けるなら、会社に出してほしいと伝える。退職日のあと、郵送で届くことが多い");
+    item("get", "源泉徴収票", next === "kimari" ? "次の会社の年末調整に出す。退職日から1か月以内に出すことが法律で決まっている" : "確定申告や次の会社で使う。退職日から1か月以内に出すことが法律で決まっている");
+    if (nk !== "no") item("get", "雇用保険被保険者証", nk === "yes" ? "会社が預かっているので、返してもらう" : "会社が預かっていないか聞く。次の会社で番号を聞かれる");
+    if (nk !== "no") item("get", "年金手帳（基礎年金番号通知書）", nk === "yes" ? "会社が預かっているので、返してもらう" : "会社が預かっていないか聞く");
+    if (ins === "kokuho" || ins === "fuyou" || ins === "mitei") item("get", "健康保険の資格喪失証明書", ins === "fuyou" ? "家族の勤め先に出すことが多い。会社に頼んで出してもらう" : "国保に入る手続きで求められることが多い。会社に頼んで出してもらう");
+    if (ins === "nin") item("get", "任意継続の申し込みの書類", "退職日の翌日から20日以内に、自分で申し込む。書類の取り方を総務に聞く");
+    if (next === "kimari") item("get", "退職証明書（求められたときだけ）", "次の会社に出すよう言われたら、要る項目を聞いてから頼む");
+
+    li(f(add(last, -3)) + "ごろ", "総務に、返すものと書類の届け方を確かめる（下の文面）");
+    li(f(last), "最終出社日。" + (gap && hoken ? "保険証以外" : "借りているもの") + "を返し、返したものを総務と一緒に見る");
+    if (gap && hoken) li(f(add(quit, 1)) + "以降", "保険証・資格確認書を、総務に郵送で返す（手元から離れたことがわかる送り方で）");
+    if (ins === "nin") li(f(add(quit, 20)) + "まで", "任意継続の申し込みの期限");
+    if (ins === "kokuho") li(f(add(quit, 14)) + "まで", "国保の手続きの目安（退職日の翌日から14日以内）");
+    li(f(add(quit, 14)) + "ごろ", next !== "kimari" ? "離職票が届かなければ、総務に送った日を聞く" : "届いた書類を、次の会社に出す");
+    li(f(add(quit, 30)) + "まで", "源泉徴収票が届いているか確かめる。届かなければ総務に聞く");
+
+    var asks = [];
+    if (hoken) asks.push("・健康保険証" + (gap ? "は、退職日のあとに郵送でお返しすればよいか" : "の返し方"));
+    asks.push("・ほかに返すものと、返し方");
+    if (next !== "kimari") asks.push("・離職票の発行（失業保険の手続きに使います）");
+    if (ins === "kokuho" || ins === "fuyou" || ins === "mitei") asks.push("・資格喪失証明書の発行");
+    if (nk !== "no") asks.push("・預かっていただいている書類（年金手帳・雇用保険被保険者証）の返却");
+    asks.push("・源泉徴収票など、書類が届く時期と送り先");
+    $("mail").textContent = "件名：退職の手続きの確認（" + me + "）\n\n" + co + "\n総務ご担当者様\n\nお疲れさまです。" + md(quit) + "付けで退職予定の" + me + "です。\n最終出社日は" + md(last) + "です。\n\n退職にあたり、次のことを確かめさせてください。\n\n" + asks.join("\n") + "\n\n書類の送り先は、次の住所でお願いいたします。\n〒〇〇〇-〇〇〇〇 〇〇県〇〇市〇〇\n\nお忙しいところ恐れ入りますが、どうぞよろしくお願いいたします。";
+    $("ng").textContent = "・退職日の翌日からは、前の会社の保険証は使えない。使うと、あとで医療費を返すことになる\n・マイナンバーカードを保険証にしている人は、カードは返さない\n・返したものは、日付と相手の名前をメモしておく\n・書類が届いたら、名前と日付がちがっていないか読む";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    var t = new Date(); t.setHours(0, 0, 0, 0); var l = new Date(t); l.setDate(l.getDate() + 10); var q = new Date(t); q.setDate(q.getDate() + 30);
+    function iso(x) { return x.getFullYear() + "-" + ("0" + (x.getMonth() + 1)).slice(-2) + "-" + ("0" + x.getDate()).slice(-2); }
+    $("last").value = iso(l); $("quit").value = iso(q); $("r_kazoku").checked = true; $("r_pc").checked = true; $("r_meishi").checked = true;
+    $("co").value = "〇〇株式会社"; $("me").value = "山田花子"; make();
+  }
+})();
+</script>
+</body>
+</html>
