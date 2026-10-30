@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>離職票の離職理由がちがう｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f, .f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > .f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; font-size: .95rem; margin: 4px 0; }
+  label.c input { margin-top: 6px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #ran, .mihon #need, .mihon #tl, .mihon #say, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>離職票の離職理由がちがう</h1>
+  <p class="lead">離職票に会社が書いた「辞めた理由」が、実際とちがうときに、異議（ちがうと申し出ること）を伝える場面か、離職票のどこに書くか、持っていく記録、ハローワークの窓口で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="co">離職票に会社が書いた理由<span class="hint">離職票-2の「離職理由」の欄で、会社が○をつけたもの</span></label>
+    <select id="co">
+      <option value="jiko">自己都合（一身上の都合など、自分の意思で辞めた）</option>
+      <option value="manryo">契約期間の満了</option>
+      <option value="juseki">本人の責任による解雇（重責解雇）</option>
+      <option value="kaisha">会社の都合（解雇・退職勧奨・倒産など）</option>
+      <option value="sonota">そのほか・よくわからない</option>
+    </select>
+    <label class="f" for="real">実際の辞め方にいちばん近いもの</label>
+    <select id="real">
+      <option value="kansho">会社から辞めるよう勧められた（退職勧奨）</option>
+      <option value="kaiko">会社から解雇を言われた</option>
+      <option value="koshin">契約の更新を望んだのに、更新されなかった</option>
+      <option value="chingin">給料の未払いや、大きな減額があった</option>
+      <option value="zangyo">長い残業が何か月も続いた</option>
+      <option value="pawa">いやがらせ・パワハラを受けた</option>
+      <option value="taicho">体調や家族の介護で、続けられなかった</option>
+      <option value="jibun">自分の意思で辞めた（ほかの理由はない）</option>
+    </select>
+    <span class="f">手元にある記録<span class="hint">あてはまるものすべて</span></span>
+    <label class="c"><input type="checkbox" id="r1"> 会社とのメール・LINE・書面</label>
+    <label class="c"><input type="checkbox" id="r2"> 日付の入ったメモ・日記</label>
+    <label class="c"><input type="checkbox" id="r3"> 給与明細・タイムカード・勤怠の記録</label>
+    <label class="c"><input type="checkbox" id="r4"> 医師の診断書</label>
+    <label class="f" for="me">自分の名前<span class="hint">窓口で言うことの文面に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">進め方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>離職票に書くところ</h3>
+    <div class="mail" id="ran"></div>
+    <h3>持っていく記録</h3>
+    <ul class="w" id="need"></ul>
+    <h3>これからの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>ハローワークの窓口で言うこと</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。離職理由をどう扱うかを決めるのは、ハローワークです。このページは判定をするものではありません。用紙の形や案内は変わることがあるので、最後は、手続きをするハローワークで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  var CO = { jiko: "自己都合", manryo: "契約期間の満了", juseki: "本人の責任による解雇", kaisha: "会社の都合", sonota: "そのほかの理由" };
+  var R = {
+    kansho: { name: "会社から辞めるよう勧められた", word: "会社から辞めるよう勧められて退職しました", rec: "勧められた日・言われたことのメモ（日付・相手・言葉）", plus: "退職を勧めるメールや、面談の案内" },
+    kaiko: { name: "会社から解雇を言われた", word: "会社から解雇を言われて退職しました", rec: "解雇の通知や、解雇の理由を書いた書面（会社に頼むと出してもらえることが多い）", plus: "解雇を言われた日のメモ" },
+    koshin: { name: "更新を望んだのに、更新されなかった", word: "契約の更新を希望していましたが、更新されませんでした", rec: "雇用契約書（更新の回数と期間がわかるもの）", plus: "更新を希望したことがわかるメールや書面" },
+    chingin: { name: "給料の未払い・大きな減額", word: "給料の未払い（大きな減額）があり、退職しました", rec: "給与明細（減る前と後の数か月分）", plus: "給料が振り込まれた通帳の記録" },
+    zangyo: { name: "長い残業が続いた", word: "長い残業が何か月も続き、退職しました", rec: "タイムカードや勤怠の記録（辞める前の数か月分）", plus: "業務メールの送信時刻、帰った時間のメモ" },
+    pawa: { name: "いやがらせ・パワハラ", word: "職場でいやがらせを受け、退職しました", rec: "いつ・だれに・何をされたかの日付入りのメモ", plus: "メールやLINE、社内や外の窓口に相談した記録、通院していれば診断書" },
+    taicho: { name: "体調や家族の介護", word: "体調（家族の介護）のため、続けられずに退職しました", rec: "医師の診断書（働くのがむずかしかったことがわかるもの）", plus: "介護が必要なことがわかる書類" },
+    jibun: { name: "自分の意思で辞めた", word: "自分の意思で退職しました", rec: "退職届の控えや、辞めるときのやりとりのメール", plus: "" }
+  };
+  function make() {
+    var co = $("co").value, rk = $("real").value, r = R[rk];
+    var me = $("me").value.trim() || "（自分の名前）";
+    var has = [$("r1").checked, $("r2").checked, $("r3").checked, $("r4").checked];
+    var none = !(has[0] || has[1] || has[2] || has[3]);
+    var ask = rk === "jibun" && (co === "kaisha" || co === "manryo");
+    var same = (rk === "jibun" && co === "jiko") || (rk !== "jibun" && co === "kaisha") || ask;
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("tl").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (same ? " no" : "");
+    el.innerHTML = '<div class="k">異議を伝える場面か</div><div class="v"></div><div class="s"></div>';
+    var head, sub;
+    if (ask) { head = "自分に不利な書き方ではないことが多いです"; sub = "「" + CO[co] + "」と書かれていて、実際は自分の意思で辞めたなら、異議を出すかどうかは、手続きのときに窓口で事情を話して聞いてみます。"; }
+    else if (same) { head = "会社の書いた理由と、実際の辞め方は合っていそうです"; sub = "異議は「無し」でかまいません。迷う点があれば、手続きのときに窓口で聞いてみます。"; }
+    else { head = "「" + CO[co] + "」と書かれていて、実際は「" + r.name + "」なら、異議を伝えてよい場面です"; sub = "離職理由によって、失業保険の待つ期間や、もらえる日数が変わることがあります。決めるのはハローワークなので、事情と記録を出して見てもらいます。"; }
+    el.querySelector(".v").textContent = head; el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    $("ran").textContent = ask
+      ? "離職票-2の右側にある「離職者本人の判断」の欄は、\n窓口で事情を話してから書くと迷いません。"
+      : same
+      ? "離職票-2の右側にある「離職者本人の判断」の欄で、\n会社が○をつけた離職理由に「異議 無し」を選び、名前を書きます。"
+      : "離職票-2の右側にある「離職者本人の判断」の欄で、\n会社が○をつけた離職理由に「異議 有り」を選び、名前を書きます。\n実際の理由は、窓口で口で伝えて、記録を見せます。";
+    if (same) { li("need", "", "離職票-1・離職票-2"); li("need", "", "ほかの受給の手続きに要るもの（ハローワークの案内どおり）"); }
+    else {
+      li("need", "", "離職票-1・離職票-2（異議 有りを選んだもの）");
+      if (r.rec) li("need", "", r.rec + (has[rk === "zangyo" || rk === "chingin" ? 2 : rk === "taicho" ? 3 : 1] ? "（手元にある）" : ""));
+      if (r.plus) li("need", "", r.plus);
+      if (has[0] && rk !== "kansho" && rk !== "pawa" && rk !== "koshin") li("need", "", "会社とのメール・LINE・書面（手元にある）");
+      li("need", "", "ほかの受給の手続きに要るもの（ハローワークの案内どおり）");
+    }
+    if (same) {
+      li("tl", "受給の手続きの日", "ハローワークに離職票を出す。迷う点があれば、そのとき聞く");
+    } else {
+      li("tl", "ハローワークに行く前", "いつ・何があったかを、日付の順に紙1枚に書き出す。記録はコピーも用意する");
+      li("tl", "受給の手続きの日", "離職票を出すときに、異議があると伝えて、事情を話し、記録を見せる（下の文面）");
+      li("tl", "そのあと", "ハローワークが、会社にも事情を聞いて、離職理由を決める。追加の記録を頼まれたら出す");
+      li("tl", "結果が出たら", "どの理由で扱われるかを、窓口で確かめる。わからないことはその場で聞く");
+    }
+    $("say").textContent = ask
+      ? "失業保険の手続きに来ました。" + me + "と申します。\n離職票では「" + CO[co] + "」になっていますが、\n実際は、自分の意思で退職しました。\n離職者本人の判断の欄は、どう書けばよいでしょうか。"
+      : same
+      ? "失業保険の手続きに来ました。" + me + "と申します。\n離職票の理由は、実際と合っていると思いますが、確認していただけますか。"
+      : "失業保険の手続きに来ました。" + me + "と申します。\n離職票では「" + CO[co] + "」になっていますが、\n実際は、" + r.word + "。\n離職理由に異議があります。\n記録を持ってきたので、見ていただけますか。";
+    $("ng").textContent = same
+      ? "・離職票の理由が自分に不利でないか、手続きの前に一度読んでおく\n・用紙の形は変わることがあるので、書く場所は窓口でも確かめる"
+      : (none ? "・記録が何もないと、伝えた内容だけでは判断がむずかしいことがある。いまからでも、日付の入ったメモを作っておく\n" : "") +
+        "・記録は原本を出す前にコピーをとる\n・事実でないことを申し出ると、あとで問題になることがある。あったことだけを話す\n・会社にも事情を聞くので、結果が出るまで時間がかかることがある\n・決めるのはハローワーク。このページは、伝える準備のためのもの";
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("co").value = "jiko"; $("real").value = "kansho"; $("r1").checked = true; $("r2").checked = true; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
