@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接の日程変更のお願い｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #subj, .mihon #msg, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接の日程変更のお願い</h1>
+  <p class="lead">決まった面接の日に行けなくなったとき、日程を変えてもらう連絡を作ります。いつ気づいたか・理由・行ける候補日を入れると、電話が先かメールでよいかの目安と、件名・本文・電話で言う一言が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="when">面接の日まで<span class="hint">連絡する日から数えて</span></label>
+    <select id="when">
+      <option value="early">3日以上ある</option>
+      <option value="eve">明日（前日の連絡）</option>
+      <option value="today">今日（当日の連絡）</option>
+    </select>
+    <label class="f" for="why">行けなくなった理由<span class="hint">くわしい中身は書かなくてかまいません</span></label>
+    <select id="why">
+      <option value="work">いまの仕事の都合（急な出勤・会議）</option>
+      <option value="sick">体調をくずした</option>
+      <option value="home">家族の事情</option>
+      <option value="other">ほかの予定と重なった（他社の面接など）</option>
+    </select>
+    <label class="f" for="org">もとの面接の日時<span class="hint">相手が予定を探しやすいように</span></label>
+    <input type="text" id="org" placeholder="例：11月5日（水）14時">
+    <h2 style="margin-top:20px">2. 相手と候補日</h2>
+    <label class="f" for="co">会社名</label>
+    <input type="text" id="co" placeholder="例：株式会社〇〇">
+    <label class="f" for="nm">担当者のお名前<span class="hint">わからなければ空けておく</span></label>
+    <input type="text" id="nm" placeholder="例：佐藤">
+    <label class="f" for="me">自分の名前</label>
+    <input type="text" id="me" placeholder="例：田中 花子">
+    <label class="f" for="c1">行ける候補日 1</label>
+    <input type="text" id="c1" placeholder="例：11月7日（金）13時〜17時">
+    <label class="f" for="c2">行ける候補日 2</label>
+    <input type="text" id="c2" placeholder="例：11月10日（月）終日">
+    <label class="f" for="c3">行ける候補日 3<span class="hint">2つ以上あると決まりやすくなります</span></label>
+    <input type="text" id="c3" placeholder="例：11月11日（火）10時〜12時">
+  </div>
+  <button id="make" type="button">連絡を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>件名</h3>
+    <div class="mail" id="subj"></div>
+    <button type="button" class="copy" data-t="subj">件名をコピー</button>
+    <h3>本文</h3>
+    <div class="mail" id="msg"></div>
+    <button type="button" class="copy" data-t="msg">本文をコピー</button>
+    <h3>電話で言う一言</h3>
+    <div class="mail" id="tel"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※連絡の目安です。応募先から連絡の方法（応募サイトのメッセージ・電話など）を指定されている場合は、そちらに合わせてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  var WHY = {
+    work: "現在勤めている会社で、急な業務が入り",
+    sick: "体調をくずしてしまい",
+    home: "家族の事情により",
+    other: "やむを得ない予定が重なり"
+  };
+  function make() {
+    var co = v("co") || "（会社名）", nm = v("nm"), me = v("me") || "（自分の名前）";
+    var org = v("org") || "（もとの日時）";
+    var when = $("when").value, why = $("why").value;
+    var cs = [v("c1"), v("c2"), v("c3")].filter(function (x) { return x; });
+    var to = co + "\n" + (nm ? nm + "様" : "採用ご担当者様");
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    var tel = when !== "early";
+    card("連絡の順番", tel ? "先に電話 → 同じ内容をメールでも送る" : "メールでよい（今日のうちに送る）",
+      tel ? "面接の日が近いと、メールは相手が見る前に時間が来てしまうことがあります。採用の担当者がいる時間に電話し、つながらなければ留守電とメールの両方に残します。"
+          : "日に余裕があれば、メールで足ります。行けないとわかった日のうちに送ると、相手も次の予定を組みやすくなります。");
+    card("本文の組み立て", "おわび → 行けない理由をひとこと → 候補日 → 相手の都合に合わせると伝える",
+      "理由はくわしく書かなくてかまいません。" + (why === "other" ? "他社の面接と重なったときも、「予定が重なり」で十分です。" : "") + "候補日は2〜3個、幅をもたせて書くと、一度のやりとりで決まりやすくなります。");
+    $("subj").textContent = "面接日程の変更のお願い（" + me + "）";
+    var list = cs.length ? cs.map(function (c) { return "・" + c; }).join("\n") : "・（行ける日時を2〜3個）";
+    var head = when === "today" ? "本日" : (when === "eve" ? "明日" : org);
+    var msg = to + "\n\nお世話になっております。\n" + head + (when === "early" ? "" : "（" + org + "）") + "に\n面接のお時間をいただいている\n" + me + "です。\n\n" +
+      "大変申し訳ございませんが、\n" + WHY[why] + "、\nうかがうことが難しくなりました。\n" +
+      (tel ? "先ほどお電話でもお伝えしましたが、\n" : "") +
+      "ご調整いただいたにもかかわらず、\nご迷惑をおかけして申し訳ございません。\n\n" +
+      "もし可能でしたら、\n日程を改めていただけないでしょうか。\n以下の日時であれば、うかがえます。\n\n" + list + "\n\n" +
+      "上記以外でも、ご指定いただければ\nできるかぎり合わせます。\n" +
+      "お手数をおかけしますが、\nご検討いただけますと幸いです。\n\n" + me;
+    $("msg").textContent = msg;
+    $("tel").textContent = (tel
+      ? "お世話になっております。\n" + head + "の面接でお約束している\n" + me + "と申します。\n採用ご担当の" + (nm ? nm + "様" : "方") + "は\nいらっしゃいますでしょうか。\n\n（代わってもらったら）\n" +
+        "申し訳ございません。\n" + WHY[why] + "、\n" + head + "の面接にうかがえなくなりました。\n日程を改めていただくことは\nできますでしょうか。\n" +
+        (cs.length ? cs[0] + "などでしたら\nうかがえます。" : "")
+      : "（メールで足ります。電話をかける場合は）\n" + org + "の面接でお約束している\n" + me + "です。\n日程の変更をお願いしたく、\nメールをお送りしました。\nご確認いただけますと幸いです。") +
+      "\n\n（留守電のとき）\n" + me + "です。面接の日程の件で\nお電話しました。\nくわしくはメールでお送りします。";
+    var ng = "・「急用ができたので」とだけ書き、候補日を出さない\n・理由をくわしく書きすぎる（家の事情の中身など）\n・「〇日なら行けます」と、1つだけ指定する";
+    if (tel) ng += "\n・時間の直前に、メールだけを送って終わりにする";
+    if (why === "other") ng += "\n・「他社の面接があるので」と、そのまま書く";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("co").value = "株式会社〇〇"; $("nm").value = "佐藤"; $("me").value = "田中 花子";
+    $("org").value = "11月5日（水）14時"; $("when").value = "early"; $("why").value = "work";
+    $("c1").value = "11月7日（金）13時〜17時"; $("c2").value = "11月10日（月）終日"; $("c3").value = "11月11日（火）10時〜12時";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
