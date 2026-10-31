@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職後 保険証がないときの受診 払い戻しの進め方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #need, .mihon #tl, .mihon #say, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+<body>
+<main>
+  <h1>退職後、保険証がないときの受診 払い戻しの進め方</h1>
+  <p class="lead">会社を辞めたあと、新しい健康保険の手続きが終わる前に病院にかかったときの、払ったお金を戻してもらう進め方を出します。病院で言う一言、申し込み先への電話の文面、期限の目安もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="taishoku">退職日<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="taishoku">
+    <label class="f" for="jushin">病院にかかった日</label>
+    <input type="date" id="jushin">
+    <label class="f" for="paid">病院での払い方</label>
+    <select id="paid">
+      <option value="ten">保険なしで全額（10割）払った</option>
+      <option value="old">前の会社の保険証（マイナ保険証）で払った</option>
+      <option value="hold">まだ払っていない・預かり金を払った</option>
+    </select>
+    <label class="f" for="yen">払った金額（円）<span class="hint">わからなければ空のままでよい</span></label>
+    <input type="number" id="yen" inputmode="numeric" placeholder="例：8000">
+    <label class="f" for="next">新しい健康保険</label>
+    <select id="next">
+      <option value="kokuho">国民健康保険（国保）</option>
+      <option value="fuyou">家族の扶養に入る</option>
+      <option value="nini">任意継続（前の会社の保険を続ける）</option>
+      <option value="new">次の会社の保険</option>
+    </select>
+    <label class="f" for="done">新しい保険の手続き</label>
+    <select id="done">
+      <option value="yes">済んだ（資格がわかるものが手元にある）</option>
+      <option value="no">まだ</option>
+    </select>
+    <label class="f" for="again">同じ病院に、かかった月のうちにまた行けるか</label>
+    <select id="again">
+      <option value="yes">行ける（月内にもう一度行く予定がある）</option>
+      <option value="no">行けない・もう月が変わった</option>
+    </select>
+    <label class="f" for="me">自分の名前<span class="hint">電話の文面に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">進め方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>そろえるもの</h3>
+    <ul class="w" id="need"></ul>
+    <h3>やることの順番</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>病院の窓口で言う一言</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">一言をコピー</button>
+    <h3>申し込み先への電話の文面</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。病院での精算のしかた、申請の書類、戻る金額は、病院や保険によってちがいます。最後は、病院の窓口と、加入する保険の窓口で確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function fy(dt) { return dt.getFullYear() + "年" + f(dt); }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  var WHERE = { kokuho: "住んでいる市区町村の国保の窓口", fuyou: "家族の勤め先の担当者", nini: "任意継続を申し込んだ協会けんぽの支部か健康保険組合", new: "次の会社の担当者" };
+  var NAME = { kokuho: "国民健康保険", fuyou: "家族の健康保険", nini: "任意継続の健康保険", new: "次の会社の健康保険" };
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var ts = d($("taishoku").value) || add(today, -10);
+    var js = d($("jushin").value) || add(today, -3);
+    var paid = $("paid").value, next = $("next").value, done = $("done").value, again = $("again").value;
+    var amount = parseInt($("yen").value, 10);
+    var me = $("me").value.trim() || "（自分の名前）";
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("tl").innerHTML = "";
+    var need = [], ng = [], route, title;
+    var before = js <= ts;
+    var lim = new Date(js); lim.setFullYear(lim.getFullYear() + 2);
+    var where = WHERE[next];
+
+    if (before) { route = "out"; title = "退職日までの受診なので、前の会社の保険が使えます"; }
+    else if (paid === "hold" || (paid === "ten" && again === "yes")) { route = "clinic"; title = "まず病院で、新しい保険で精算し直せるか相談します"; }
+    else if (paid === "ten") { route = "ryoyo"; title = "加入した保険に「療養費」を申し込んで、払い戻してもらいます"; }
+    else { route = "back"; title = "前の保険に返すお金の通知を待ち、返してから新しい保険に申し込みます"; }
+
+    var sub = "";
+    if (route === "out") sub = "保険が使えるのは退職日まで。" + f(js) + "は在籍中なので、ふつうの受診と同じです。このページの対象外です。";
+    else if (route === "clinic") sub = "同じ月のうちなら、新しい保険の資格がわかるものを見せると、保険で計算し直して差額を返してくれる病院が多いです。できないと言われたら、療養費の申し込みに進みます。";
+    else if (route === "ryoyo") sub = "申し込み先は" + where + "。払った日の翌日から2年が期限の目安で、" + fy(lim) + "ごろまでです。" + (amount > 0 ? "3割負担の人なら、戻るのは保険で計算し直した額の7割で、多くて" + yen(amount * 0.7) + "円ほどの目安です。" : "");
+    else sub = "退職日の翌日からは、前の会社の保険は使えません。前の保険が払った分（3割負担なら7割）を返す通知が届きます。返したあと、" + where + "に療養費を申し込むと、払い戻しを受けられます。";
+    var el = document.createElement("div"); el.className = "big" + (route === "back" ? " no" : "");
+    el.innerHTML = '<div class="k">あなたの進め方</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = title;
+    el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+
+    if (route === "out") {
+      need.push("とくになし。病院で払ったときのレシート（領収書）は取っておく");
+    } else {
+      if (route !== "back") need.push("病院の領収書（なくさない。再発行できないことが多い）");
+      if (route === "clinic") need.push("新しい保険の資格がわかるもの（資格確認書、資格情報のお知らせ、マイナ保険証など）");
+      if (route === "ryoyo") {
+        need.push("診療報酬明細書（病院で「療養費の申請に使う明細」と言って頼む。病名が書かれたもの。お金がかかることがある）");
+        need.push("療養費の申請書（申し込み先でもらう）");
+        need.push("振込先の口座がわかるもの");
+        need.push("マイナンバーがわかるものと、本人確認の書類");
+      }
+      if (route === "back") {
+        need.push("前の保険から届く、返すお金の通知（納付書）");
+        need.push("返したときの領収書");
+        need.push("前の保険から届く診療報酬明細書の写し（届かなければ前の保険に頼む）");
+        need.push("療養費の申請書・振込先の口座・本人確認の書類（" + where + "に確かめる）");
+      }
+    }
+    need.forEach(function (x) { li("need", "", x); });
+
+    if (route === "out") {
+      li("tl", "", "前の会社の保険で受けた受診として、そのままでよい。保険証は会社に返す");
+    } else {
+      if (done === "no") li("tl", "いま", NAME[next] + "の手続きを先に済ませる（" + where + "）。加入は退職日の翌日" + f(add(ts, 1)) + "にさかのぼるのがふつう" + (next === "new" ? "。次の会社の入社日までにすき間があれば、そのあいだは国保に入る" : ""));
+      if (route === "clinic") {
+        li("tl", "次に病院へ行く日", "受付で下の一言を言い、資格がわかるものを見せる。差額を返してもらえたら終わり");
+        li("tl", "断られたら", "診療報酬明細書を頼み、" + where + "に療養費を申し込む");
+      }
+      if (route === "ryoyo") {
+        li("tl", "病院で", "下の一言で、診療報酬明細書を頼む");
+        li("tl", "申し込み先へ", "電話で持ち物を確かめてから、" + where + "に療養費を申し込む");
+        li("tl", fy(lim) + "ごろまで", "払った日の翌日から2年が期限の目安。早めに出す");
+      }
+      if (route === "back") {
+        li("tl", "まず病院へ", "新しい保険で請求し直せるかを聞く。できれば前の保険への返金はいらなくなる");
+        li("tl", "通知が来たら", "前の保険に、通知の金額を返す。領収書と明細の写しを取っておく");
+        li("tl", "返したあと", where + "に療養費を申し込む（返した日の翌日から2年が目安）");
+      }
+    }
+
+    if (route === "out") $("say").textContent = "（とくになし）";
+    else if (route === "back") $("say").textContent = "お世話になります。\n" + f(js) + "に受診しましたが、" + f(ts) + "に会社を辞めていて、前の会社の保険証が使えない日でした。\n" + NAME[next] + "に入ったので、こちらで請求し直していただけますか。";
+    else if (route === "clinic") $("say").textContent = "お世話になります。\n" + f(js) + "に保険証なしで受診した者です。\n" + NAME[next] + "に入ったので、資格がわかるものをお持ちしました。\n保険で精算し直していただけますか。";
+    else $("say").textContent = "お世話になります。\n" + f(js) + "に、保険証なしで全額払って受診しました。\n健康保険の療養費の申請に使うので、診療報酬明細書を出していただけますか。";
+
+    if (route === "out") $("tel").textContent = "（とくになし）";
+    else $("tel").textContent = "お世話になります。" + me + "と申します。\n" + f(ts) + "に会社を辞めました。\n" + f(js) + "に病院にかかり、" + (paid === "old" ? "前の会社の保険証で払ってしまいました" : "保険証がないまま払いました") + "。\n療養費の申し込みをしたいので、要る書類と、出し方を教えてください。" + (route === "back" ? "\n前の保険に返す手続きのあとに出せばよいかも、確かめたいです。" : "");
+
+    ng.push("・退職日の翌日からは、前の会社の保険証は使えない。手元にあれば会社に返す");
+    ng.push("・戻るのは、保険で決まった計算でし直した額のうち、自分の負担分を除いた分。払った額より少なくなることがある");
+    ng.push("・領収書と明細は、申し込みが終わるまで捨てない");
+    if (route === "back") ng.push("・前の保険から届く通知を放っておかない。返さないと督促が来る");
+    if (next === "new") ng.push("・次の会社の保険は入社日から。退職日と入社日のあいだに受診したときは、その期間の保険（国保など）に申し込む");
+    if (route !== "out") ng.push("・病院の扱いや必要な書類は、病院と保険でちがう。先に電話で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function iso(t) { return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); }
+  if (DEMO) { var t = new Date(); t.setHours(0, 0, 0, 0); $("taishoku").value = iso(add(t, -20)); $("jushin").value = iso(add(t, -12)); $("paid").value = "ten"; $("yen").value = "8000"; $("next").value = "kokuho"; $("done").value = "yes"; $("again").value = "no"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
