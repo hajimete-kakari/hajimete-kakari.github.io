@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>自治会・町内会をやめると伝える｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; font-size: .95rem; margin: 6px 0; }
+  label.c input { margin-top: 6px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .qa { margin: 0 0 10px; font-size: .92rem; }
+  .qa .q { font-weight: 700; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  ol.flow { margin: 0; padding-left: 1.4em; font-size: .92rem; }
+  ol.flow li { margin-bottom: 6px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #say, .mihon #letter, .mihon #qa .a, .mihon #flow, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>自治会・町内会をやめると伝える</h1>
+  <p class="lead">自治会（町内会）をやめたい、または役だけ外してほしいときに、班長さんや会長さんへ伝える最初の一言と、手渡しする退会のお願いの文面を作ります。聞かれやすいこと（ごみ置き場・回覧板・会費）への答えも出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 何を伝えるか</h2>
+    <label class="f" for="want">伝えたいこと</label>
+    <select id="want">
+      <option value="quit">自治会をやめたい</option>
+      <option value="yaku">やめずに、役（班長など）だけ外してほしい</option>
+    </select>
+    <label class="f" for="to">伝える相手</label>
+    <select id="to">
+      <option value="han">班長さん・組長さん</option>
+      <option value="kaicho">会長さん</option>
+    </select>
+    <label class="f" for="how">伝え方</label>
+    <select id="how">
+      <option value="face">会ったときに直接（文面も手渡し）</option>
+      <option value="paper">手紙・メモを郵便受けに入れる</option>
+    </select>
+    <label class="f" for="me">自分の名前の書き方<span class="hint">例：3丁目 山田、2班 山田</span></label>
+    <input type="text" id="me" placeholder="例：3丁目 山田">
+
+    <h2 style="margin-top:20px">2. 理由と時期</h2>
+    <label class="f" for="why">理由として伝えること</label>
+    <select id="why">
+      <option value="work">仕事や家族の世話で、行事や役に時間がとれない</option>
+      <option value="health">年齢や体調で、役や行事がむずかしい</option>
+      <option value="move">近いうちに引っ越す予定がある</option>
+      <option value="home">家の事情（くわしくは言わない）</option>
+    </select>
+    <label class="f" for="when">いつからにしたいか</label>
+    <select id="when">
+      <option value="end">今年度の終わり（次の役が決まる前）</option>
+      <option value="now">できるだけ早く</option>
+    </select>
+    <label class="f">聞かれそうなこと<span class="hint">あてはまるものに印を付けます</span></label>
+    <label class="c"><input type="checkbox" id="gomi"> ごみ置き場は使えるのか</label>
+    <label class="c"><input type="checkbox" id="kairan"> 回覧板や大事な知らせはどうなるか</label>
+    <label class="c"><input type="checkbox" id="hi"> 今年の会費はもう払っている</label>
+    <label class="c"><input type="checkbox" id="kodomo"> 子ども会や子どもの行事に出ている</label>
+  </div>
+  <button id="make" type="button">文面を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>最初の一言</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">一言をコピー</button>
+    <h3 id="lh">手渡しする文面</h3>
+    <div class="mail" id="letter"></div>
+    <button type="button" class="copy" data-t="letter">文面をコピー</button>
+    <h3>聞かれたときの答え</h3>
+    <div id="qa"></div>
+    <h3>伝えるまでの流れ</h3>
+    <ol class="flow" id="flow"></ol>
+    <h3>気をつけたいこと</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※伝え方の目安です。退会の届けの出し方や会費の扱いは、自治会ごとの決まり（会則）で変わります。わからないところは班長さん・会長さんに確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  // 理由の言い方（一言用・文面用）
+  var WHY = {
+    work: ["仕事と家族の世話で、行事や役の時間がとれそうになく", "仕事と家族の世話で、行事への参加や役のお務めが難しい状況です。"],
+    health: ["年齢と体調のことがあって、役や行事が難しくなってきて", "年齢と体調のことがあり、役のお務めや行事への参加が難しくなってまいりました。"],
+    move: ["近いうちに引っ越す予定があって", "近いうちに転居する予定があり、役のお務めを続けることが難しい状況です。"],
+    home: ["家の事情で、続けていくのが難しくなって", "家の事情により、これまでどおり続けていくことが難しくなりました。"]
+  };
+  var TO = { han: "班長さん", kaicho: "会長さん" };
+  function make() {
+    var yaku = $("want").value === "yaku", to = TO[$("to").value], face = $("how").value === "face";
+    var why = $("why").value, W = WHY[why], end = $("when").value === "end";
+    var me = v("me") || "（名前）";
+    var gomi = $("gomi").checked, kairan = $("kairan").checked, hi = $("hi").checked, kodomo = $("kodomo").checked;
+    var kaicho = $("to").value === "kaicho";
+    var timing = end ? "今年度いっぱいで" : "区切りのよいところで";
+
+    var s = $("sum"); s.innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">伝え方の組み立て</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = yaku
+      ? "お礼 → 役が難しい理由を1つ → 会員は続ける → できることを1つ添える"
+      : "お礼 → 理由を1つ → いつからやめたいか → 手続きを聞く";
+    el.querySelector(".s").textContent = (yaku
+      ? "「やめる」より受け取られやすい伝え方です。会員のままで、班の当番の順番を外してもらえるかを相談します。"
+      : "理由は1つだけ、短く言います。くわしく話すほど「それなら」と引き止めの材料になりやすいためです。") +
+      (end ? "次の役が決まる前（年度の終わりの2〜3か月前）に伝えると、班の順番を組み直してもらいやすくなります。" :
+        yaku ? "すぐに役が回ってくるときは、引き受ける前に伝えます。決まったあとだと、代わりの人を探す手間をかけることになります。" :
+        "早くやめたいときも、退会の届けの出し方と会費の扱いだけは、その場で聞いておきます。");
+    s.appendChild(el);
+
+    var say = "いつもお世話になっています。" + me.replace(/^.*\s/, "") + "です。\n" +
+      "少しご相談があって、お時間よろしいですか。\n\n" +
+      W[0] + "、\n" +
+      (yaku ? "次の役は、お引き受けできそうにないんです。\n会員は続けたいので、当番の順番を外していただくことはできますか。"
+            : timing + "、自治会を退会させていただきたいと思っています。\n手続きはどうすればいいか、教えていただけますか。");
+    if (!face) say = "（手紙で伝えるときは、一言の代わりに下の文面を入れます。会ったときに聞かれたら、この言い方で答えます）\n\n" + say;
+    $("say").textContent = say;
+
+    $("lh").textContent = face ? "手渡しする文面" : "郵便受けに入れる文面";
+    var letter = to + "\n\n" +
+      "いつも地域のことでお世話になり、ありがとうございます。\n" + me + "です。\n\n" + W[1] + "\n" +
+      (yaku ? "そのため、次の役（班長など）をお引き受けすることが難しく、当番の順番から外していただけないかご相談させていただきたく、お手紙いたしました。\n" +
+              "会員は続けて、会費もこれまでどおりお納めします。" + (why === "move" ? "" : "行事のお手伝いなど、できる範囲のことは協力いたします。") + "\n"
+            : "そのため、" + timing + "自治会を退会させていただきたく、お手紙いたしました。\n" +
+              "退会の届けなど、必要な手続きがありましたら教えていただけますと助かります。\n") +
+      (!yaku && gomi ? "ごみ置き場の使い方についても、決まりがありましたらお知らせください。\n" : "") +
+      (!yaku && kodomo ? "子ども会の行事のことも、あわせてご相談できればと思います。\n" : "") +
+      "\nこれまで大変お世話になりました。どうぞよろしくお願いいたします。\n\n" +
+      "　　年　　月　　日\n" + me + (face ? "" : "\n（お返事は、ご都合のよいときに直接でも郵便受けでもかまいません）");
+    if (yaku) letter = letter.replace("これまで大変お世話になりました。", "勝手なお願いで申し訳ありません。");
+    $("letter").textContent = letter;
+
+    var qa = [];
+    if (yaku) {
+      qa.push(["「みんな順番でやっているから」と言われたら", "「順番なのはわかっています。そのぶん、" + (why === "health" ? "回覧を回すなど、体に負担の少ないこと" : "行事の準備など、できる日のお手伝い") + "でお返しできればと思います」と、代わりにできることを1つだけ出します。"]);
+      qa.push(["それでも外せないと言われたら", "その場で引き受けず、「家で相談して、あらためてお返事します」と持ち帰ります。退会するかどうかは、そのあとで決めてもかまいません。"]);
+    } else {
+      qa.push(["「理由をもう少し」と聞かれたら", "「先ほどお話ししたとおりで、家で決めたことなんです」と、同じ理由をくり返します。理由を足していくと、ひとつずつ「それなら大丈夫」と返されやすくなります。"]);
+      qa.push(["「役だけ外せば続けられる？」と言われたら", "続けられそうなら、それも一つの道です。やめると決めているなら「ありがとうございます。ただ、家で決めたことなので」とお礼を言って、退会の手続きを聞きます。"]);
+      if (gomi) qa.push(["「ごみ置き場は使えなくなる」と言われたら", "ごみ置き場は、自治会が管理していることも、市区町村が決めていることもあります。その場で言い合わず「市のごみの担当にも聞いてみます」と答え、出し方は市区町村の窓口で確かめます。"]);
+      if (kairan) qa.push(["回覧板や大事な知らせはどうなるか", "市区町村からの知らせは、広報紙やホームページ、アプリで受け取れることが多いです。防災の連絡など、地域で受け取りたいものがあれば「災害のときの連絡だけは知りたい」と頼んでおきます。"]);
+      if (hi) qa.push(["今年の会費を払っているとき", "払った会費が戻るかどうかは、自治会の決まりによります。「今年の分はそのままで大丈夫です」と先に言うと、話がこじれにくくなります。戻してほしいときは、決まりがあるかだけを聞きます。"]);
+      if (kodomo) qa.push(["子ども会や子どもの行事", "子ども会は、自治会とは別の会になっていることがあります。子どもが続けたい行事があるなら、子ども会だけ残れるかを別に聞きます。"]);
+    }
+    var box = $("qa"); box.innerHTML = "";
+    qa.forEach(function (x) {
+      var p = document.createElement("p"); p.className = "qa";
+      p.innerHTML = '<span class="q"></span><br><span class="a"></span>';
+      p.querySelector(".q").textContent = "・" + x[0]; p.querySelector(".a").textContent = x[1];
+      box.appendChild(p);
+    });
+
+    var flow = $("flow"); flow.innerHTML = "";
+    var steps = [
+      "家の人と、" + (yaku ? "役を外してほしいこと" : "やめること") + "と、伝える理由を1つ決めておく",
+      (face ? "会ったときに、上の一言で切り出す（玄関先なら5分ほどで済ませる）" : "文面を清書して封筒に入れ、" + to + "の郵便受けに入れる"),
+      (face ? "その場で文面を手渡す（言いそびれたことが残るように）" : "1〜2週間たっても返事がなければ、会ったときに「お手紙を入れたのですが」と一言かける"),
+      yaku ? "外せるかどうかの返事を待つ（班の中で相談になることが多い）" : "退会の届けの紙があれば書いて出す。なければ、渡した文面を控えとして残す",
+      yaku ? "外してもらえたら、引き受けたお手伝いの日を手帳に書いておく" : "ごみの出し方と、市区町村からの知らせの受け取り方を確かめておく"
+    ];
+    if (!yaku && !kaicho) steps.splice(4, 0, "班長さんから会長さんに伝えてもらえるかを確かめる（自分で会長さんに出す決まりのこともある）");
+    steps.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; flow.appendChild(li); });
+
+    var ng = "・「意味がない」「入りたくて入ったわけではない」など、会の活動を悪く言わない\n" +
+      "・理由はひとつにしぼり、くわしく話しすぎない\n" +
+      "・役が決まる集まりの当日に言い出すと、その場がこじれやすいので、前もって伝える\n";
+    if (!yaku) ng += "・自治会は、入るかどうかを住む人が決める会とされています。ただ、言い合いで決めようとせず、お礼と手続きの確認だけにとどめる\n";
+    if (!yaku && gomi) ng += "・ごみ置き場の使い方でもめそうなときは、自治会と言い合わずに市区町村のごみの担当に相談する\n";
+    if (why === "home") ng += "・「家の事情」と伝えたら、それ以上は答えなくてかまいません。同じ言い方をくり返します\n";
+    ng += "・集合住宅（マンション）の管理組合は、自治会とは別のものです。管理組合のことは管理規約で確かめます";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("want").value = "quit"; $("to").value = "han"; $("how").value = "face"; $("me").value = "3丁目 山田"; $("why").value = "work"; $("when").value = "end"; $("gomi").checked = true; $("kairan").checked = true; $("hi").checked = true; make(); }
+})();
+</script>
+</body>
+</html>
