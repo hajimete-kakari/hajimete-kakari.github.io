@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>離職票の賃金の欄の確かめ方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input, select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-width: 0; }
+  .mon { border-top: 1px solid var(--line); padding: 10px 0 4px; }
+  .mon .t { font-size: .92rem; font-weight: 600; margin-bottom: 4px; }
+  .g3 { display: grid; grid-template-columns: 0.7fr 1fr 1fr; gap: 6px; }
+  .g3 label { font-size: .75rem; color: var(--sub); display: block; line-height: 1.3; margin-bottom: 2px; }
+  .g3 input { padding: 7px 6px; font-size: .95rem; }
+  .chk { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: .95rem; }
+  .chk input { width: auto; margin-top: 6px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #look, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>離職票の賃金の欄の確かめ方</h1>
+  <p class="lead">離職票（2枚目）の賃金の欄に書かれた日数と金額を、新しい月から入れると、失業保険の計算に使われる月と「賃金日額」の目安、給与明細と見比べるところ、ちがったときに窓口で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 給料の形</h2>
+    <label class="f" for="pay">給料の決まり方</label>
+    <select id="pay">
+      <option value="m">月給（毎月ほぼ同じ額）</option>
+      <option value="h">日給・時給（働いた日や時間で変わる）</option>
+    </select>
+    <label class="chk"><input type="checkbox" id="teiki"> 通勤の定期代を、何か月分かまとめてもらっていた</label>
+    <label class="chk"><input type="checkbox" id="bonus"> 辞める前の半年に、ボーナス（賞与）が出た</label>
+  </div>
+
+  <div class="card">
+    <h2>2. 離職票の賃金の欄</h2>
+    <p class="hint">退職日に近い月から順に、離職票の「基礎日数」と「賃金額」を入れます。給与明細の総支給額（ボーナスを除く）も入れると、見比べられます。わからない欄は空けたままで大丈夫です</p>
+    <div id="mons"></div>
+  </div>
+  <button id="make" type="button">確かめた結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>月ごとの見方</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>給与明細と見比べるところ</h3>
+    <div class="memo" id="look"></div>
+    <h3>ちがったときに窓口で言うこと</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険の基本手当（失業保険）の、一般的な決まりで出した目安です（基礎日数が11日以上の月を数え、退職日に近い6か月の賃金の合計を180で割ったものが賃金日額。賞与は入れず、残業代・通勤手当などの手当は入れる）。もらえる1日の額は、この賃金日額に年齢などで決まる割合をかけたもので、上限額は毎年見直されるため、このページでは出しません。実際の額は、ハローワークで受け取る受給資格者証などで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var N = document.body.className === "mihon" ? 4 : 8;
+  function yen(n) { return Math.round(n).toLocaleString("ja-JP") + "円"; }
+  function num(el) { var v = el.value.replace(/[,，円\s]/g, ""); return v === "" ? null : Number(v); }
+  var box = $("mons");
+  for (var i = 0; i < N; i++) {
+    var r = document.createElement("div"); r.className = "mon";
+    r.innerHTML = '<div class="t">' + (i + 1) + 'か月目' + (i === 0 ? '（退職日にいちばん近い月）' : '') + '</div>' +
+      '<div class="g3"><div><label>基礎日数</label><input inputmode="numeric" class="dd" placeholder="日"></div>' +
+      '<div><label>離職票の賃金額</label><input inputmode="numeric" class="ww" placeholder="円"></div>' +
+      '<div><label>明細の総支給額</label><input inputmode="numeric" class="mm" placeholder="円"></div></div>';
+    box.appendChild(r);
+  }
+  function make() {
+    var rows = [].map.call(box.querySelectorAll(".mon"), function (r) {
+      return { d: num(r.querySelector(".dd")), w: num(r.querySelector(".ww")), m: num(r.querySelector(".mm")) };
+    });
+    var used = [], diff = [], short = [], tl = $("tl"); tl.innerHTML = "";
+    rows.forEach(function (x, i) {
+      if (x.d === null && x.w === null) return;
+      var t, li = document.createElement("li");
+      if (x.d !== null && x.d < 11) { short.push(i); t = "基礎日数が" + x.d + "日：11日に足りないので、ふつうは数えない月"; }
+      else if (used.length < 6 && x.w !== null) { used.push(i); t = "数える月（" + used.length + "つ目）：" + yen(x.w); }
+      else if (x.w === null) t = "賃金額が空いています";
+      else t = "数える6か月より前の月：計算には入らない";
+      if (x.w !== null && x.m !== null && x.w !== x.m) { diff.push(i); t += "／明細と" + yen(Math.abs(x.w - x.m)) + "ちがう"; }
+      li.textContent = (i + 1) + "か月目：" + t; tl.appendChild(li);
+    });
+    var sum = used.reduce(function (a, i) { return a + rows[i].w; }, 0);
+    $("sum").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big" + (used.length < 6 || diff.length ? " no" : "");
+    el.innerHTML = '<div class="k">賃金日額の目安</div><div class="v"></div><div class="s"></div>';
+    if (used.length < 6) {
+      el.querySelector(".v").textContent = "数える月が" + used.length + "か月で、6か月に足りません";
+      el.querySelector(".s").textContent = "基礎日数が11日以上の月を、退職日に近い順に6か月そろえて計算します。足りないときは、さらに前の月の欄も入れてください。10日以下の月も、働いた時間が80時間以上なら数えることがあるので、窓口で確かめます。";
+    } else {
+      el.querySelector(".v").textContent = yen(sum) + " ÷ 180 ＝ およそ" + yen(Math.floor(sum / 180));
+      el.querySelector(".s").textContent = diff.length
+        ? "ただし、" + diff.map(function (i) { return (i + 1) + "か月目"; }).join("・") + "が給与明細とちがいます。下の見比べるところを確かめてから、窓口で相談します。"
+        : "入れた明細とのちがいはありません。この額に、年齢などで決まる割合をかけたものが、1日にもらえる額のもとになります。";
+    }
+    $("sum").appendChild(el);
+    var look = ["・残業代（時間外手当）が入っているか", "・通勤手当・家族手当などの手当が入っているか", "・ボーナス（賞与）が入っていないか", "・欠勤で引かれた月の、基礎日数と金額"];
+    if ($("teiki").checked) look.push("・まとめてもらった定期代が、1か月分ずつ各月に割り振られているか（1つの月にまとめて入っていないか）");
+    if ($("bonus").checked) look.push("・ボーナスが出た月の賃金額が、ふだんの月より大きくなっていないか");
+    if ($("pay").value === "h") look.push("・基礎日数が、実際に働いた日数（有給を使った日も入る）と合っているか");
+    else look.push("・基礎日数が、欠勤した日を引いた日数（休まなければその月の暦の日数）になっているか");
+    $("look").textContent = look.join("\n");
+    $("memo").textContent = "離職票の賃金の欄が、給与明細と\nちがうところがあります。\n" +
+      (diff.length ? diff.map(function (i) { return "（" + (i + 1) + "か月目：離職票" + yen(rows[i].w) + "、明細" + yen(rows[i].m) + "）"; }).join("\n") + "\n" : "") +
+      "明細を持ってきたので、\n確かめていただけますか。\n\n持っていくもの：離職票、その月の給与明細（なければ源泉徴収票や振込の記録）";
+    $("ng").textContent = "・ちがいに気づいたら、離職票を自分で書き直さない。明細を持ってハローワークの窓口で相談し、会社に直してもらうかどうかは窓口の案内に従う\n・会社に直してほしいと伝えるときも、いつの月の、どの金額がちがうかを先にメモする\n・1日にもらえる額の割合と上限は、年齢と年ごとの決まりで変わる。最終的な額は受給資格者証で確かめる\n" +
+      ($("pay").value === "h" ? "・日給・時給の人は、働いた日が少ない月があると、別の計算で額が決まることがある。窓口で確かめる\n" : "") +
+      "・このページは目安です。計算や書類を代わりに作るものではありません";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    var v = [[22, 268000, 283000], [30, 284000, 284000], [31, 291000, 291000], [30, 279000, 279000], [31, 286000, 286000], [8, 92000, 92000], [31, 280000, 280000], [30, 277000, 277000]];
+    [].forEach.call(box.querySelectorAll(".mon"), function (r, i) {
+      if (!v[i]) return; r.querySelector(".dd").value = v[i][0]; r.querySelector(".ww").value = v[i][1]; r.querySelector(".mm").value = v[i][2];
+    });
+    $("teiki").checked = true; make();
+  }
+})();
+</script>
+</body>
+</html>
