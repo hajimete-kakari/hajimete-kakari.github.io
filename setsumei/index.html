@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の説明会の日の準備｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #need, .mihon #get, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+<body>
+<main>
+  <h1>失業保険の説明会の日の準備</h1>
+  <p class="lead">ハローワークで失業保険（雇用保険の基本手当）を申し込んだあとの「説明会」の日に、持っていくもの、当日もらうもの、終わってから初回の認定日までにやること、行けないときの電話の文を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 説明会のこと</h2>
+    <label class="f" for="day">説明会の日<span class="hint">申し込みの日にもらった案内の紙に書いてある日</span></label>
+    <input type="date" id="day">
+    <label class="f" for="how">受け方</label>
+    <select id="how">
+      <option value="kaijo">会場（ハローワークなど）に行く</option>
+      <option value="douga">動画で受けるように言われた</option>
+      <option value="mada">よくわからない・紙をなくした</option>
+    </select>
+    <label class="f" for="photo">申し込みのときの写真</label>
+    <select id="photo">
+      <option value="photo">証明写真を出した</option>
+      <option value="mynum">マイナンバーカードを見せて、写真を省いた</option>
+    </select>
+    <label class="f" for="can">その日の都合</label>
+    <select id="can">
+      <option value="ok">行ける（受けられる）</option>
+      <option value="no">面接や体調などで、行けないかもしれない</option>
+    </select>
+    <label class="f" for="me">自分の名前<span class="hint">電話や窓口で言う文に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">準備を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>持っていくもの</h3>
+    <ul class="w" id="need"></ul>
+    <h3>当日もらうもの・わかること</h3>
+    <ul class="w" id="get"></ul>
+    <h3>説明会の前から、初回の認定日までの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>電話や窓口で言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。説明会のやり方（会場か動画か）、持っていくもの、日程を変えられるか、説明会を求職活動の1回に数えるかは、ハローワークによってちがいます。申し込みの日にもらった案内の紙を先に見て、最後は担当のハローワークで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function wd(dt) { while (dt.getDay() === 0 || dt.getDay() === 6) dt = add(dt, 1); return dt; }
+  function bwd(dt) { do { dt = add(dt, -1); } while (dt.getDay() === 0 || dt.getDay() === 6); return dt; }
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var how = $("how").value, photo = $("photo").value, can = $("can").value;
+    var day = d($("day").value);
+    var me = $("me").value.trim() || "（自分の名前）";
+    var ds = day ? f(day) : "説明会の日";
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("get").innerHTML = ""; $("tl").innerHTML = "";
+
+    var v, s, warn = false;
+    if (can === "no") {
+      warn = true;
+      v = (day ? ds + "より前に" : "わかった時点で") + "、ハローワークに電話する";
+      s = "日程を変えられるか、動画などで代えられるかは、ハローワークによってちがいます。説明会は初回の認定日の前までに受けることになっているので、連絡しないまま休まないようにします。";
+    } else if (how === "douga") {
+      v = ds + "までに、案内のとおり動画を見る";
+      s = "動画で受けたときに、受給資格者証などをいつ・どう受け取るかはハローワークによってちがいます。案内の紙で確かめ、書いていなければ電話で聞きます。";
+    } else if (how === "mada") {
+      warn = true;
+      v = "まず、説明会の日時と場所（受け方）を確かめる";
+      s = "申し込みの日にもらった案内の紙か「受給資格者のしおり」に書いてあることが多いです。見つからなければ、ハローワークに電話して聞きます。";
+    } else {
+      v = ds + "の説明会に、しおりと筆記用具を持って行く";
+      s = "説明会では、受給資格者証と失業認定申告書を受け取り、初回の認定日を確かめるのが一般的です。終わったら、初回の認定日までに求職活動が1回以上いるかを確かめます。";
+    }
+    var el = document.createElement("div"); el.className = "big" + (warn ? " no" : "");
+    el.innerHTML = '<div class="k">いちばん先にやること</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+
+    var need = [];
+    need.push("受給資格者のしおり（申し込みの日に渡された冊子や案内の紙）");
+    need.push("筆記用具（メモをとる・書類に書くことがある）");
+    if (photo === "mynum") need.push("マイナンバーカード（写真を省いた人は、本人確認に使うことが多い）");
+    else need.push("本人確認の書類（運転免許証など。念のため）");
+    need.push("申し込みの日に「持ってきて」と言われたもの（印鑑など。案内の紙に書いてあることが多い）");
+    need.push("自分の手帳かスマホ（初回の認定日を書きとめる）");
+    need.forEach(function (x) { li("need", "", x); });
+
+    ["雇用保険受給資格者証（このあと認定日のたびに持っていく）", "失業認定申告書（初回の認定日に書いて出す紙）", "初回の認定日の日時", "求職活動をどう数えるか（説明会を1回に数えるか）の説明"].forEach(function (x) { li("get", "", x); });
+
+    var pre = day ? bwd(day) : null;
+    if (can === "no") li("tl", (pre && pre >= today ? f(pre) + "まで" : "できるだけ早く"), "ハローワークの雇用保険の窓口に電話して、行けない理由を伝え、ほかの日や動画で代えられるかを聞く");
+    else if (how === "mada") li("tl", "今日", "案内の紙かしおりで、説明会の日時・場所・受け方を探す。なければハローワークに電話して聞く");
+    if (can !== "no") li("tl", pre ? f(pre) : "前の日", how === "douga" ? "案内の紙で、動画の見方と、見終わったあとにすること（届け出・書類の受け取り）を確かめる" : "案内の紙で、時刻と会場（何階のどの部屋か）を確かめ、持ち物をかばんに入れておく");
+    li("tl", can === "no" ? "電話のあと" : (day ? ds : "説明会の日"), can === "no" ? "電話で決まった日・やり方で受ける。受け取った書類と初回の認定日を確かめる" : how === "douga" ? "動画を最後まで見る。見たことを伝える手続きがあれば、その日のうちにする" : "説明会。受け取った書類の名前と初回の認定日を確かめ、「説明会は求職活動の1回に数えますか」と聞いておく");
+    li("tl", "説明会のあと", "受給資格者証に書いてある初回の認定日を、手帳やスマホに入れる。待期（最初の7日間）が明けた次の日から、初回の認定日の前の日までに、求職活動が1回以上いるのが一般的");
+    li("tl", "初回の認定日", "失業認定申告書を書いて、受給資格者証などと一緒に持って行く（初回は「しおり」も持ってくるように言われることがある）");
+
+    $("tel").textContent = "■行けないとき・電話で\n雇用保険の説明会の件で\nお電話しました。\n" + me + "と申します。\n" + (day ? ds + "の説明会に、" : "説明会に、") + "\n都合で行けなくなりそうです。\nほかの日や動画で\n代えることはできますか。\n\n■説明会の日に・窓口で\n今日の説明会は、\n求職活動の1回に数えますか。\n初回の認定日までに、\nほかに何か要りますか。";
+
+    var ng = [];
+    ng.push("・説明会の日は、変えられないとしているハローワークが多い。行けないとわかったら、その日より前に電話する");
+    ng.push("・説明会は、初回の認定日の前までに受けることになっている");
+    ng.push("・受給資格者証は、このあと認定日のたびに使う。なくさないように、しおりと一緒にしまう");
+    ng.push("・説明会を求職活動の1回に数えるかは、ハローワークによって扱いがちがう。その場で聞いておく");
+    if (how === "douga") ng.push("・動画を見ただけで終わりではないことがある。見たあとに届け出や来所が要るかを、案内の紙で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function iso(t) { return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); }
+  if (DEMO) { var t = new Date(); t.setHours(0, 0, 0, 0); $("day").value = iso(wd(add(t, 6))); $("how").value = "kaijo"; $("photo").value = "mynum"; $("can").value = "ok"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
