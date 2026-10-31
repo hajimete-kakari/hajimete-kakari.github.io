@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の振込口座を変えたいとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #need, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+<body>
+<main>
+  <h1>失業保険の振込口座を変えたいとき</h1>
+  <p class="lead">失業保険（雇用保険の基本手当）を受けている途中で、振込先の口座を変えたいときに、いつ出すか、持っていくもの、古い口座をいつまで残すか、窓口で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="why">変えたい理由</label>
+    <select id="why">
+      <option value="close">いまの口座を解約したい・別の口座にしたい</option>
+      <option value="shiten">支店の統合などで、支店名や口座番号が変わった</option>
+      <option value="name">名字が変わって、口座の名前が変わった</option>
+      <option value="kokin">マイナンバーにひもづけた公金受取口座にしたい</option>
+    </select>
+    <label class="f" for="bank">新しい口座<span class="hint">公金受取口座にする人は見ません</span></label>
+    <select id="bank">
+      <option value="book">自分の名前の通帳がある</option>
+      <option value="cash">キャッシュカードだけある</option>
+      <option value="net">ネット銀行で、通帳もカードもない</option>
+    </select>
+    <label class="f" for="nintei">次の認定日<span class="hint">受給資格者証に書いてある日</span></label>
+    <input type="date" id="nintei">
+    <label class="f" for="me">自分の名前<span class="hint">窓口で言う文に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>持っていくもの</h3>
+    <ul class="w" id="need"></ul>
+    <h3>認定日までと、そのあとの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>窓口で言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。届出の用紙は「払渡希望金融機関指定・変更届」といい、ハローワークの窓口でもらえます。持っていくものや、変更がどの回の振込から間に合うかは、ハローワークによってちがうことがあります。最後は、担当のハローワークで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function wd(dt) { while (dt.getDay() === 0 || dt.getDay() === 6) dt = add(dt, 1); return dt; }
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var why = $("why").value, bank = $("bank").value;
+    var ni = d($("nintei").value) || wd(add(today, 14));
+    var me = $("me").value.trim() || "（自分の名前）";
+    var kokin = why === "kokin";
+    $("sum").innerHTML = ""; $("need").innerHTML = ""; $("tl").innerHTML = "";
+    var need = [], ng = [];
+    need.push("受給資格者証（認定日にいつも持っていくもの）");
+    need.push("その回の失業認定申告書（認定日に出すとき）");
+    if (kokin) {
+      need.push("マイナンバーカード（公金受取口座が登録済みか、窓口で聞かれたときのため）");
+    } else {
+      if (bank === "book") need.push("新しい口座の、自分の名前の通帳");
+      else if (bank === "cash") need.push("新しい口座の、自分の名前のキャッシュカード");
+      else need.push("新しい口座の銀行名・支店名・口座番号・名前がわかるもの（アプリの画面など。何でよいかは先に電話で確かめる）");
+    }
+    if (why === "name") need.push("名字が変わったことがわかるもの（住民票の写しなど。何が要るかは先に電話で確かめる）");
+    need.push("本人確認の書類（マイナンバーカードや運転免許証など）");
+
+    var pay = add(ni, 7), keep = add(ni, 14);
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">出す日の目安</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = f(ni) + "の認定日に、窓口で一緒に出す";
+    el.querySelector(".s").textContent = "変更の届を出すまでは、前の口座に振り込まれます。古い口座は、新しい口座に1回振り込まれたのを確かめるまで（" + f(keep) + "ごろまでが目安）残しておきます。";
+    $("sum").appendChild(el);
+    need.forEach(function (x) { li("need", "", x); });
+
+    var call = wd(add(ni, -5)) > today ? wd(add(ni, -5)) : today;
+    if (kokin) li("tl", f(call) + "まで", "マイナポータルで、公金受取口座が登録されているか、口座の中身が合っているかを見ておく");
+    else if (why === "close") li("tl", f(call) + "まで", "新しい口座を用意する。" + (bank === "net" ? "ネット銀行は指定できないことがあるので、先にハローワークへ電話で確かめる" : "自分の名前の普通預金にする"));
+    else li("tl", f(call) + "まで", (why === "shiten" ? "変わったあとの支店名と口座番号" : "変わったあとの口座の名前") + "を、" + (bank === "net" ? "アプリの画面などで" : "通帳かカードで") + "すぐ見せられるようにしておく");
+    if (why === "name" || (!kokin && bank === "net" && why !== "close")) li("tl", f(call) + "まで", "ハローワークに電話して、持っていくものを確かめる");
+    li("tl", f(ni), "認定日。いつもの手続きのときに「振込の口座を変えたい」と伝え、払渡希望金融機関指定・変更届を書いて出す。" + "この回の振込から新しい口座になるかを、その場で聞く");
+    li("tl", f(pay) + "ごろ", "認定日からおよそ1週間で振り込まれるのが目安（土日祝をはさむとずれる）。どちらの口座に入ったかを見る");
+    li("tl", f(keep) + "ごろ", (why === "close" ? "新しい口座に入ったのを確かめてから、古い口座を解約する" : "新しい口座に入ったのを確かめる。入っていなければ、ハローワークに電話する"));
+
+    var reason = { close: "振込の口座を、別の口座に変えたい", shiten: "支店の統合で、口座の支店名・番号が変わった", name: "名字が変わり、口座の名前も変わった", kokin: "振込を、公金受取口座に変えたい" }[why];
+    $("tel").textContent = "■窓口で\n" + me + "です。認定日の手続きと一緒に、\n" + reason + "ので、\n届を出したいです。\n今回の振込から、新しい口座になりますか。" + (why === "name" ? "\n名字が変わったので、受給資格者証の名前の変更も\nお願いします。" : "") + "\n\n■前もって電話で\n失業保険を受けている" + me + "と申します。\n" + reason + "です。\n次の認定日は" + f(ni) + "です。\nその日に届を出すとき、持っていくものを\n教えてください。";
+
+    ng.push("・口座は自動では変わらない。支店の統合や口座番号の変更でも、届を出さないと振込が止まることがある");
+    if (why === "close") ng.push("・古い口座を先に解約しない。届を出す前の分は、古い口座に入る");
+    if (!kokin) ng.push("・口座は自分の名前の普通預金。指定できない金融機関もある");
+    if (kokin) ng.push("・公金受取口座にすると、通帳などを見せなくてよいとされている。ただし登録した口座の中身が古いと振り込めないので、先にマイナポータルで見ておく");
+    if (why === "name") ng.push("・名字が変わったら、口座だけでなく受給資格者証の名前の変更も伝える");
+    ng.push("・認定日まで待てない事情があるときは、認定日の前に出せるか、ハローワークに電話で聞く");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function iso(t) { return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); }
+  if (DEMO) { var t = new Date(); t.setHours(0, 0, 0, 0); $("why").value = "close"; $("bank").value = "book"; $("nintei").value = iso(wd(add(t, 12))); $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
