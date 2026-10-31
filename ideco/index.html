@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職したらiDeCoの届け出｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+<body>
+<main>
+  <h1>退職したらiDeCoの届け出</h1>
+  <p class="lead">会社を辞めたあと、iDeCo（個人型の確定拠出年金）で出す届けと、出す順番、加入先の金融機関に電話で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="taishoku">退職日<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="taishoku">
+    <label class="f" for="next">辞めたあとの年金<span class="hint">わからなければ「まだ決めていない」</span></label>
+    <select id="next">
+      <option value="1">国民年金の保険料を自分で払う</option>
+      <option value="m">国民年金の保険料の免除・猶予を申し込む</option>
+      <option value="3">配偶者の扶養（会社員の配偶者）に入る</option>
+      <option value="2">すぐ次の会社で働く（厚生年金に入る）</option>
+      <option value="u">まだ決めていない</option>
+    </select>
+    <label class="f" for="pay">いまの掛金の払い方<span class="hint">給与明細に「iDeCo」などの天引きがあれば会社から</span></label>
+    <select id="pay">
+      <option value="kyuyo">給与から天引き（会社から払っている）</option>
+      <option value="koza">自分の口座から引き落とし</option>
+      <option value="wakaran">わからない</option>
+    </select>
+    <label class="f" for="cont">掛金はどうしたい？</label>
+    <select id="cont">
+      <option value="yes">続けたい</option>
+      <option value="stop">しばらく止めたい（運用だけ続ける）</option>
+    </select>
+    <label class="f" for="bank">加入先の金融機関<span class="hint">年に一度届くお知らせや、口座のサイトに書いてある名前</span></label>
+    <input type="text" id="bank" placeholder="例：〇〇証券">
+    <label class="f" for="me">自分の名前<span class="hint">電話の文面に入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>出す届けと、そろえるもの</h3>
+    <ul class="w" id="todo"></ul>
+    <h3>やる順番</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>金融機関に電話で言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。届けの名前や用紙、書き方は、加入先の金融機関（運営管理機関）の案内で確かめてください。掛金の上限額は、年金の種類や制度の改正で変わります。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  var KIND = { "1": "国民年金の第1号被保険者（自分で保険料を払う人）", "3": "国民年金の第3号被保険者（会社員の配偶者の扶養に入る人）", "2": "第2号被保険者（会社員）のまま" };
+  function make() {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var ts = d($("taishoku").value) || add(today, -3);
+    var next = $("next").value, pay = $("pay").value, cont = $("cont").value;
+    var bank = $("bank").value.trim() || "加入先の金融機関";
+    var me = $("me").value.trim() || "（自分の名前）";
+    var after = add(ts, 1);
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("tl").innerHTML = "";
+    var todo = [], ng = [], head, sub, warn = false, ask;
+    var stop = next === "m" || (cont === "stop" && next !== "u");
+    if (next === "u") {
+      head = "先に、辞めたあとの年金を決める"; warn = true;
+      sub = "iDeCoの届けは、国民年金の種類（自分で払う・扶養・次の会社）で中身が変わります。決まってから金融機関に連絡します。";
+      todo.push("辞めたあとの年金をどれにするか決める（扶養に入るか、自分で払うか、次の会社がいつからか）");
+      todo.push("決まるまでのあいだに、加入先の金融機関の名前と、加入者の番号がわかるお知らせを探しておく");
+      ask = "退職したのですが、iDeCoで出す届けを教えてください。\n辞めたあとの年金が決まったら、どの用紙を出せばよいかも知りたいです。";
+    } else if (stop) {
+      head = "掛金を止めて、運用だけにする届けを出す";
+      sub = next === "m" ? "国民年金の保険料の免除・猶予を受けているあいだは、iDeCoの掛金を出せません。積み立てたお金は、運用の指図だけを続ける形で残ります。" : "掛金を止めても、それまでのお金はそのまま運用できます。届けのときに、辞めたあとの年金の種類も伝えます。";
+      todo.push("掛金を止めて運用だけにする届け（「加入者資格喪失届」など。名前は金融機関の案内で確かめる）");
+      todo.push("加入者の番号がわかるお知らせ（年に一度届く残高のお知らせなど）");
+      if (next === "m") todo.push("国民年金の免除・猶予を申し込んだ日がわかるメモ。免除が終わったら、また掛金を出す手続きができる");
+      ask = "退職したので、iDeCoの掛金を止めて、運用だけにしたいです。\n" + (next === "m" ? "国民年金の保険料の免除を申し込む予定です。\n" : "") + "出す用紙を送っていただけますか。";
+    } else {
+      head = next === "2" ? "次の会社で働き始めたら、勤め先の届けを出す" : "年金の種類が変わる届けを出す";
+      sub = "辞めたあとは「" + KIND[next] + "」になります。" + (next === "2" ? "勤め先が変わったことを、" + bank + "を通して届けます。" : "年金の種類が変わったことを、" + bank + "を通して届けます。届けは退職日を過ぎてから出します。");
+      if (next === "2") {
+        todo.push("勤め先が変わったことの届け（会社に書いてもらう欄がある用紙が多い）");
+        todo.push("次の会社の名前・所在地・企業年金があるかがわかるもの。人事の人に聞く");
+      } else {
+        todo.push("年金の種類が変わる届け（「加入者被保険者種別変更届」など。名前は金融機関の案内で確かめる）");
+        todo.push(next === "1" ? "国民年金に切り替えた日がわかるメモ（役所で手続きした日）" : "配偶者の扶養に入った日がわかるメモ（配偶者の会社に届けた日）");
+      }
+      todo.push("加入者の番号がわかるお知らせ（年に一度届く残高のお知らせなど）");
+      if (pay !== "koza" && next !== "2") { todo.push("掛金を引き落とす自分の口座の情報（会社からの払い込みは、辞めると続けられない）"); warn = pay === "kyuyo"; }
+      ask = "退職したので、iDeCoの届けを出したいです。\n" + f(ts) + "に退職し、" + (next === "1" ? "国民年金の保険料を自分で払います。" : next === "3" ? "配偶者の扶養に入ります。" : "次の会社で働き始めます。") + "\n出す用紙を送っていただけますか。" + (pay !== "koza" && next !== "2" ? "\n掛金は、これから自分の口座から払いたいです。" : "");
+    }
+    var el = document.createElement("div"); el.className = "big" + (warn ? " no" : "");
+    el.innerHTML = '<div class="k">あなたがやること</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = head;
+    el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    todo.forEach(function (x) { li("todo", "", x); });
+
+    if (next === "u") {
+      li("tl", "いま", "辞めたあとの年金を決める。迷うときは役所の国民年金の窓口で相談できる");
+      li("tl", "決まったら", "このページで選び直して、出す届けを確かめる");
+    } else {
+      if (next === "1" || next === "m") li("tl", f(after) + "以降", "役所で国民年金の切り替え" + (next === "m" ? "と、保険料の免除・猶予の申し込み" : "") + "をする");
+      if (next === "3") li("tl", f(after) + "以降", "配偶者の会社を通して、扶養に入る手続きをする");
+      if (next === "2") li("tl", "入社したら", "人事の人に、iDeCoの届けで会社に書いてもらう欄があると伝える");
+      li("tl", "そのあと", bank + "に電話して、用紙を取り寄せる（下の文面）。サイトから出せることもある");
+      li("tl", "用紙が届いたら", "書いて、" + bank + "に送る。控えをとっておく");
+      li("tl", "1〜2か月後", "届けが受け付けられたお知らせと、掛金の引き落としが" + (stop ? "止まったか" : "どうなったか") + "を確かめる");
+    }
+    $("tel").textContent = "お世話になります。iDeCoに加入している" + me + "と申します。\n" + ask + "\n加入者の番号は、お知らせを見てお伝えします。";
+
+    ng.push("・届けの用紙は、会社ではなく、加入先の金融機関から取り寄せる");
+    ng.push("・退職日より前には出せない。辞めてから出す");
+    if (pay === "kyuyo" && next === "2") ng.push("・前の会社の給与天引きは止まる。次の会社で天引きにするか、自分の口座から払うかを、届けのときに決める");
+    else if (pay === "kyuyo") ng.push("・給与天引きだった人は、辞めると会社からの払い込みが止まる。自分の口座に切り替えないと、掛金が出せない月ができる");
+    if (pay === "wakaran") ng.push("・掛金の払い方がわからないときは、給与明細の控除の欄と、通帳の引き落としを見る");
+    if (next === "m") ng.push("・免除・猶予のあいだは掛金を出せない。止める届けを出さずにいると、あとで手続きのやり直しになることがある");
+    ng.push("・届けが遅れると、掛金の引き落としが止まったり、あとで返金のやりとりになったりすることがある");
+    if (!stop) ng.push("・掛金の上限は、年金の種類で変わる。続けるときは金額も見直す");
+    ng.push("・前の会社に企業型の確定拠出年金があった人は、別の手続き（移す手続き）も要る");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function iso(t) { return t.getFullYear() + "-" + ("0" + (t.getMonth() + 1)).slice(-2) + "-" + ("0" + t.getDate()).slice(-2); }
+  if (DEMO) { var t = new Date(); t.setHours(0, 0, 0, 0); $("taishoku").value = iso(add(t, -5)); $("next").value = "1"; $("pay").value = "kyuyo"; $("cont").value = "yes"; $("bank").value = "〇〇証券"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
