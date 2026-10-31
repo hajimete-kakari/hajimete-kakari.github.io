@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の申し込みの期限の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .t, .mihon #tl .d, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の申し込みの期限の目安</h1>
+  <p class="lead">辞めた日・辞めた理由・給付の日数を入れると、失業保険を受け取れる期間の終わりと、全部の日数を受け取るためにハローワークへ申し込む日の目安を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と理由</h2>
+    <label class="f" for="ritu">辞めた日（離職日）<span class="hint">離職票に書かれている、最後に在籍した日</span></label>
+    <input type="date" id="ritu">
+    <label class="f" for="why">辞めた理由</label>
+    <select id="why">
+      <option value="jiko">自分の都合（自己都合）</option>
+      <option value="kaisha">会社の都合（倒産・解雇など）</option>
+      <option value="tokutei">体調・介護などのやむを得ない理由が認められた</option>
+      <option value="unk">まだわからない</option>
+    </select>
+    <label class="f" for="nisu">給付の日数（所定給付日数）<span class="hint">わからなければ、自己都合の目安を選びます。自己都合なら、雇用保険に入っていた期間が10年未満で90日、10年以上20年未満で120日、20年以上で150日が一般的です</span></label>
+    <select id="nisu">
+      <option value="90">90日</option>
+      <option value="120">120日</option>
+      <option value="150">150日</option>
+      <option value="180">180日</option>
+      <option value="210">210日</option>
+      <option value="240">240日</option>
+      <option value="270">270日</option>
+      <option value="300">300日</option>
+      <option value="330">330日</option>
+      <option value="360">360日</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 申し込む予定の日</h2>
+    <label class="f" for="mosi">ハローワークに離職票を出す予定の日<span class="hint">空のままなら、今日で計算します</span></label>
+    <input type="date" id="mosi">
+  </div>
+  <button id="make" type="button">申し込みの期限を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>予定の日に申し込んだときの流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>窓口で確かめる一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険の基本手当（失業保険）の、一般的な決まりで出した目安です（受け取れる期間は、辞めた日の翌日から原則1年。給付の日数が330日の人は30日、360日の人は60日長くなる。申し込んだ日から7日間は待期、自己都合はそのあと原則1か月の給付制限。期間の終わりを過ぎると、日数が残っていても受け取れない）。認定日の決まり方で数日ずれることがあります。病気・出産・育児・介護ですぐ働けないときは、期間を延ばす申請ができることがあります。くわしくは、住んでいる地域のハローワークで確かめてください。<br>
+  最終更新：2026年10月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function addM(dt, n) { var x = new Date(dt.getFullYear(), dt.getMonth() + n, 1), last = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate(); x.setDate(Math.min(dt.getDate(), last)); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function diff(a, b) { return Math.round((b - a) / 86400000); }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  // 申し込んだ日から、手当の対象の日が始まる日
+  function payStart(ap, seigen) { var s = add(ap, 7); return seigen ? addM(s, 1) : s; }
+  function make() {
+    var r = d($("ritu").value);
+    if (!r) { alert("辞めた日を入れてください"); return; }
+    var why = $("why").value, n = +$("nisu").value, ap = d($("mosi").value) || today();
+    var seigen = why === "jiko" || why === "unk";
+    var end = add(addM(add(r, 1), 12), -1);
+    if (n === 330) end = add(end, 30); if (n === 360) end = add(end, 60);
+    // 全部の日数が期間の中に入る、いちばん遅い申し込みの日
+    var last = add(end, -(n + 6 + (seigen ? 31 : 0)));
+    while (add(payStart(add(last, 1), seigen), n - 1) <= end) last = add(last, 1);
+    while (add(payStart(last, seigen), n - 1) > end) last = add(last, -1);
+    var safe = add(last, -14);
+    var ps = payStart(ap, seigen), got = Math.max(0, Math.min(n, diff(ps, end) + 1)), lost = n - got;
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    function box(k, v, s, no) {
+      var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+      $("sum").appendChild(el);
+    }
+    box("受け取れる期間の終わり", f(end) + "まで", "辞めた日の翌日から" + (n === 330 ? "1年と30日" : n === 360 ? "1年と60日" : "1年") + "。この日を過ぎた分は、日数が残っていても受け取れません。", false);
+    var r0 = ap < add(r, 1);
+    box("全部の日数を受け取る、申し込みの目安", f(last) + "まで", "認定日のずれや書類の不足を考えて、" + f(safe) + "までに申し込むと安心です。" + (why === "unk" ? "辞めた理由がわからないので、給付制限がある場合で数えています。" : ""), false);
+    if (r0) box("予定の日に申し込んだとき", "辞めた日より前の日になっています", "申し込む予定の日を、辞めた日の翌日以降にしてください。", true);
+    else if (lost <= 0) box("予定の日に申し込んだとき", n + "日分すべてが期間に入ります", "予定の日は、目安の日より" + diff(ap, last) + "日前です。" + (ap > safe ? "余裕は少なめなので、早めに動きます。" : ""), ap > safe);
+    else box("予定の日に申し込んだとき", "約" + lost + "日分が期間からはみ出します", "受け取れるのは約" + got + "日分の見込みです。予定を早めるか、病気などで働けなかった期間があれば、延長できないかを窓口で聞きます。", true);
+    if (!r0) {
+      var items = [[ap, "ハローワークで申し込み（離職票を出す）"], [add(ap, 6), "待期の7日間が終わる"]];
+      if (seigen) items.push([add(ps, -1), "給付制限（手当が出ない期間）が終わる"]);
+      items.push([ps, "手当の対象の日が始まる"]);
+      items.push([lost > 0 ? end : add(ps, n - 1), lost > 0 ? "期間の終わり（ここで打ち切り）" : n + "日目（最後の対象の日）"]);
+      items.forEach(function (it) {
+        var li = document.createElement("li"); li.innerHTML = '<span class="d"></span> <span class="t"></span>';
+        li.querySelector(".d").textContent = f(it[0]); li.querySelector(".t").textContent = it[1]; $("tl").appendChild(li);
+      });
+    }
+    $("memo").textContent = "〇月〇日に退職しました。\n受け取れる期間の終わりは\n" + f(end) + "の認識です。\n" + (lost > 0 && !r0 ? "日数を全部受け取れるか\n心配なので、\n" : "") + "給付の日数と、\n期間の終わりの日を\n確かめていただけますか。";
+    $("ng").textContent = "・離職票が届くのを待っているあいだも、期間は進む\n・離職票が遅いときは、届く前でも窓口に相談できることがある\n・病気・けが・出産・育児・介護で30日以上働けないときは、期間を延ばす申請ができることがある\n・給付の日数と期間の終わりは、手続きのあとにもらう受給資格者証で確かめる\n・自己都合でも、5年で3回目以上などは給付制限が長くなることがある";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ritu").value = "2026-10-31"; $("why").value = "jiko"; $("nisu").value = "90"; $("mosi").value = "2027-07-01"; make(); }
+})();
+</script>
+</body>
+</html>
