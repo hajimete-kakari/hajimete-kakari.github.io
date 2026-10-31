@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職の最終日のあいさつ（スピーチ）｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #talk, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職の最終日、みんなの前で話すあいさつ</h1>
+  <p class="lead">最終日の朝礼や送別会で「ひとことお願いします」と言われたときの、短いあいさつを作ります。場面・長さ・辞める理由の言い方を選び、思い出を1つ入れると、話す順番と、そのまま読める原稿、だいたいの秒数が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 話す場面</h2>
+    <label class="f" for="scene">どこで話す？</label>
+    <select id="scene">
+      <option value="chorei">朝礼・終礼など、仕事の場</option>
+      <option value="party">送別会・お別れの席</option>
+      <option value="small">部署の数人の前</option>
+    </select>
+    <label class="f" for="len">長さ<span class="hint">言われていなければ「1分くらい」が多いです</span></label>
+    <select id="len">
+      <option value="short">30秒くらい（短く）</option>
+      <option value="mid">1分くらい</option>
+    </select>
+    <label class="f" for="why">辞める理由の言い方<span class="hint">言わなくても失礼にはなりません</span></label>
+    <select id="why">
+      <option value="none">理由は言わない</option>
+      <option value="next">次の仕事に進む</option>
+      <option value="family">家庭の事情</option>
+      <option value="health">体調を整える</option>
+    </select>
+    <h2 style="margin-top:20px">2. 中身</h2>
+    <label class="f" for="years">いた期間</label>
+    <input type="text" id="years" placeholder="例：3年">
+    <label class="f" for="memory">心に残っていること（1つ）<span class="hint">「〜こと」で終わる形で。空でも作れます</span></label>
+    <input type="text" id="memory" placeholder="例：忙しい時期に、みなさんに助けてもらったこと">
+    <label class="f" for="me">自分の名前</label>
+    <input type="text" id="me" placeholder="例：田中">
+  </div>
+  <button id="make" type="button">あいさつを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>読み上げる原稿</h3>
+    <div class="mail" id="talk"></div>
+    <button type="button" class="copy" data-t="talk">原稿をコピー</button>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※あいさつの言い方の目安です。職場の習わし（花束を受け取る流れ・話す順番など）があれば、そちらに合わせてください。</p>
+</main>
+<script>
+(function () {
+  var q = location.search, DEMO = /demo/.test(q);
+  if (/mihon/.test(q)) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function make() {
+    var scene = v("scene"), len = v("len"), why = v("why");
+    var years = v("years"), memory = v("memory").replace(/。$/, ""), me = v("me") || "（名前）";
+    var open = scene === "party"
+      ? "本日は、このような会を開いていただき、\nありがとうございます。\n"
+      : "お時間をいただき、\nありがとうございます。\n";
+    var W = {
+      none: "本日で、退職することになりました。\n",
+      next: "本日で退職し、\n次の仕事に進むことになりました。\n",
+      family: "家庭の事情で、\n本日で退職することになりました。\n",
+      health: "体調を整えるため、\n本日で退職することになりました。\n"
+    }[why];
+    var Y = years ? years + "のあいだ、" : "これまで、";
+    var M = memory ? "いちばん心に残っているのは、\n" + memory + "です。\n" : "";
+    var thanks = Y + "\n本当にお世話になりました。\n";
+    var mid = "";
+    if (len === "mid") {
+      mid = (M || "わからないことばかりの私に、\nいつも声をかけていただきました。\n") +
+        "ここで教わったことは、\nこれからも大事にしていきます。\n";
+    } else if (M) {
+      mid = M;
+    }
+    var close = scene === "chorei"
+      ? "引き継ぎは済ませていますが、\n何かあれば今日中に\n声をかけてください。\n"
+      : "";
+    var end = "みなさんの、ますますの\nご活躍をお祈りしています。\n本当にありがとうございました。";
+    var talk = open + me + "です。\n" + W + "\n" + thanks + mid + "\n" + close + end;
+    $("talk").textContent = talk;
+    var chars = talk.replace(/\s/g, "").length;
+    var sec = Math.round(chars / 4 / 5) * 5;
+    $("sum").innerHTML =
+      '<div class="big"><div class="k">話す順番</div><div class="v">' +
+      (len === "mid" ? "あいさつ → 退職の報告 → お礼 → 思い出1つ → 結び" : "あいさつ → 退職の報告 → お礼 → 結び") +
+      '</div></div>' +
+      '<div class="big"><div class="k">だいたいの長さ</div><div class="v">約' + sec + '秒（' + chars + '字）</div>' +
+      '<div class="s">ゆっくり読んだ目安です。\n声に出して1回はかってみてください。</div></div>' +
+      '<div class="big"><div class="k">話すときのコツ</div><div class="s">' +
+      (scene === "party" ? "乾杯の前か、会の最後か、\n幹事さんに先に聞いておく。\n" : "") +
+      "紙やスマホを見てもかまいません。\n最初と最後の一文だけは、\n顔を上げて言う。</div></div>";
+    var ng = "・辞める本当の理由や、不満をここで話す\n・名前を挙げて、一部の人にだけお礼を言う\n・長い思い出話を、2つも3つも続ける";
+    if (scene === "chorei") ng += "\n・仕事の時間を長く使う（短めで十分です）";
+    if (why === "next") ng += "\n・次の会社の名前や条件をくわしく話す";
+    if (scene === "party") ng += "\n・お酒が回ってから話して、長くなる";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("scene").value = "chorei"; $("len").value = "mid"; $("why").value = "next";
+    $("years").value = "3年"; $("memory").value = "忙しい時期に、みなさんに助けてもらったこと"; $("me").value = "田中";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
