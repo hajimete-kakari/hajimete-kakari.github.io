@@ -143,6 +143,7 @@
     var left = diff(limit, now);
     var over = left < 0;
     var target = way === "post" ? weekdayBefore(add(limit, -5)) : weekdayBefore(limit);
+    if (!over && diff(target, now) < 0) target = now;
     var back = weekdayBefore(add(target, -3));
     var hasBack = diff(back, now) >= 1;
     var future = diff(start, now) > 0;
@@ -155,7 +156,7 @@
     el.querySelector(".v").textContent = md(limit) + (over ? "（" + (-left) + "日過ぎています）" : left === 0 ? "（今日まで）" : "（あと" + left + "日）");
     el.querySelector(".s").textContent = over
       ? "期限を過ぎても、時効の2年までは申請できると案内されています。あきらめず、今日ハローワークに電話します。"
-      : "働き始めた日の翌日から1か月以内が決まりです。" + (way === "post" ? "郵送は、余裕をみて" : "窓口は、開いている") + md(target) + "までに出すのを目安にします。";
+      : "働き始めた日の翌日から1か月以内が決まりです。" + (way === "post" ? "郵送なら、余裕をみて" : "窓口なら、") + md(target) + "までに出すのを目安にします。";
 
     if (future) row("働き始める前", "前の日までにハローワークで就職の手続きをする", "再就職手当の申請書は、このときに受け取れることがあります。");
     if (paper === "none") row("申請書がないとき", "ハローワークに電話して、もらい方を聞く", "受給の説明会でもらった冊子や封筒の中も見ます。");
@@ -164,7 +165,7 @@
       row("次にやること", "今日、ハローワークに電話する", "遅れた理由を長く話す必要はありません。今から出せるか、何をそろえるかを聞きます。");
       if (co !== "done") row("会社の記入", "電話のあと、すぐ会社に頼む", "期限を過ぎていることも、担当者に一言伝えます。");
     } else if (co === "ask") {
-      row("次にやること", "今日か次の出勤日に、会社の担当者に頼む", hasBack ? md(back) + "までに戻してもらえるようお願いします。" : "出す日まで日がないので、急いでいることを最初に伝えます。");
+      row("次にやること", future ? "入社の手続きのときに、会社の担当者に頼む" : "今日か次の出勤日に、会社の担当者に頼む", hasBack ? md(back) + "までに戻してもらえるようお願いします。" : "出す日まで日がないので、急いでいることを最初に伝えます。");
     } else if (co === "wait") {
       row("次にやること", "担当者に、戻してほしい日を伝え直す", hasBack ? md(back) + "までと、日付で伝えます。" : "期限の日付を伝えて、今日か明日の返事をお願いします。");
     } else {
