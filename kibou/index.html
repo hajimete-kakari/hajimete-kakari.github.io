@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接で希望年収を答える一言｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #say, .mihon #low, .mihon #prev, .mihon #doc, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接で希望年収を答える一言</h1>
+  <p class="lead">「希望の年収はいくらですか」と聞かれたときに答える金額と、そのまま言える一言を作ります。いまの年収・希望・ここを下回ると困る金額・求人の給与の幅を入れると、答える金額、面接で言う一言、「最低いくらなら？」と聞かれたときの返し方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="stage">どの場面で答えますか</label>
+    <select id="stage">
+      <option value="first">一次・二次の面接で聞かれそう</option>
+      <option value="final">最終面接・内定の前の面談で聞かれそう</option>
+      <option value="doc">応募書類の希望欄に書く</option>
+    </select>
+    <label class="f" for="work">いまの働き方</label>
+    <select id="work">
+      <option value="now">いまの会社で働いている</option>
+      <option value="left">もう辞めている</option>
+    </select>
+    <label class="f" for="ot">いまの（前の）年収に、残業代は</label>
+    <select id="ot">
+      <option value="yes">入っている</option>
+      <option value="no">ほとんど入っていない</option>
+    </select>
+    <h2 style="margin-top:20px">2. 金額（すべて税金などが引かれる前の額面）</h2>
+    <label class="f" for="now">いまの（前の）年収<span class="hint">源泉徴収票の「支払金額」が目安です。単位は万円</span></label>
+    <input type="text" id="now" inputmode="numeric" placeholder="例：380">
+    <label class="f" for="want">希望する年収（万円）</label>
+    <input type="text" id="want" inputmode="numeric" placeholder="例：420">
+    <label class="f" for="min">ここを下回ると困る年収（万円）<span class="hint">毎月の生活費から、自分で決めておく線です</span></label>
+    <input type="text" id="min" inputmode="numeric" placeholder="例：370">
+    <label class="f" for="jl">求人に書かれた年収の下（万円）<span class="hint">書かれていなければ空のまま</span></label>
+    <input type="text" id="jl" inputmode="numeric" placeholder="例：350">
+    <label class="f" for="jh">求人に書かれた年収の上（万円）<span class="hint">書かれていなければ空のまま</span></label>
+    <input type="text" id="jh" inputmode="numeric" placeholder="例：450">
+    <h2 id="sec3" style="margin-top:20px">3. 金額の理由</h2>
+    <label class="f" for="exp">活かせる経験を短く<span class="hint">なければ空のまま</span></label>
+    <input type="text" id="exp" placeholder="例：営業事務の5年の経験">
+  </div>
+  <button id="make" type="button">答え方を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>面接で言う一言</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">一言をコピー</button>
+    <h3>「最低いくらなら？」と聞かれたら</h3>
+    <div class="mail" id="low"></div>
+    <h3>「いまの年収は？」と聞かれたら</h3>
+    <div class="mail" id="prev"></div>
+    <h3>応募書類の希望欄なら</h3>
+    <div class="mail" id="doc"></div>
+    <button type="button" class="copy" data-t="doc">希望欄をコピー</button>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※答え方の目安です。金額が通るかどうかは、会社の決まりや経験によってちがいます。給与の条件は、内定のときに書面で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 見本画像では入力の一部だけにして、結果の並びが入るようにする
+  if (document.body.className === "mihon") {
+    ["work", "ot", "jl", "jh", "exp"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    $("sec3").hidden = true;
+  }
+  function v(id) { return $(id).value.trim(); }
+  // 全角・カンマ・「万円」を許す。空や数字でないものは null
+  function num(id) {
+    var s = v(id).replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 65248); }).replace(/[,，万円\s]/g, "");
+    return /^\d+(\.\d+)?$/.test(s) ? parseFloat(s) : null;
+  }
+  function yen(n) { return n === null ? "（金額）" : n + "万円"; }
+  function make() {
+    var stage = $("stage").value, left = $("work").value === "left", otIn = $("ot").value === "yes";
+    var now = num("now"), want = num("want"), min = num("min"), jl = num("jl"), jh = num("jh"), exp = v("exp");
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    // 下回ると困る線が希望より上なら、線のほうを希望として扱う
+    var swapped = want !== null && min !== null && min > want;
+    if (swapped) want = min;
+    // 求人の幅と比べて、答える金額を決める
+    var ans = want, jS, over = false;
+    if (want === null) {
+      jS = "希望する年収を入れると、ここに答える金額が出ます。";
+    } else if (jh !== null && min !== null && min > jh) {
+      ans = min; over = true;
+      jS = "下回ると困る金額が、求人の上（" + yen(jh) + "）を超えています。ごまかさずにこの金額を伝え、難しいと言われたら、ほかの会社と比べて考えます。応募の前なら、応募するかどうかから考え直してもよいところです。";
+    } else if (jh !== null && want > jh) {
+      ans = jh;
+      jS = "希望は求人の上（" + yen(jh) + "）を超えています。まず上の金額で答え、経験を説明してから相談するほうが、話が続きやすくなります。";
+    } else if (jl !== null && want < jl) {
+      ans = jl;
+      jS = "希望より求人の下（" + yen(jl) + "）のほうが高いので、求人より低い金額を言わずにすみます。";
+    } else if (jl !== null || jh !== null) {
+      jS = "希望が求人に書かれた範囲に入っています。希望の金額のまま答えます。";
+    } else {
+      jS = "求人に年収が書かれていないので、希望の金額で答えます。月給だけ書かれているときは、面接で賞与の有無を聞いてから考えます。";
+    }
+    if (swapped) jS += "（下回ると困る金額が希望より高かったので、そちらを希望として扱いました）";
+    card("答える金額", yen(ans), jS);
+    var timing = stage === "doc" ? ["金額を書く欄がなければ、書かない", "応募書類では「貴社の規定に従います」と書くことが多いです。金額を書くよう求められたときだけ、下の形で書きます。"] :
+      stage === "final" ? ["聞かれたら、金額をはっきり言う", "最終に近いほど、金額を具体的に聞かれやすくなります。「おまかせします」で終えると、あとから変えにくくなります。"] :
+      ["聞かれたら答える。自分からは切り出さない", "聞かれる前に金額の話から入ると、仕事より条件を見ている印象になることがあります。"];
+    card("いつ言うか", timing[0], timing[1]);
+    card("下回ると困る金額", min === null ? "（未入力）" : yen(min), ans === min ? "答える金額と同じです。これより下の話になったら、その場で受けずに持ち帰ります。" : "聞かれるまで自分からは言いません。先に言うと、その金額で話が進むことがあります。");
+    // 面接の一言
+    var nowWord = left ? "前の仕事の年収は" : "現在の年収は";
+    var otWord = otIn ? "残業代を含めて\n" : "";
+    var nowEnd = left ? "でした。\n" : "です。\n";
+    var say = now !== null ? nowWord + "、" + otWord + "約" + now + "万円" + nowEnd : "";
+    var up = now !== null && ans !== null && ans > now, down = now !== null && ans !== null && ans < now;
+    if (up && exp) say += exp + "を\n活かせると考えておりますので、\n" + yen(ans) + "を希望しております。\n";
+    else if (up) say += "担当する仕事を踏まえて、\n" + yen(ans) + "を希望しております。\n";
+    else if (down) say += "仕事の内容を大切に\n考えておりますので、\n" + yen(ans) + "を希望しております。\n";
+    else if (now !== null && ans !== null) say += "同じくらいの\n" + yen(ans) + "を希望しております。\n";
+    else say += yen(ans) + "を希望しております。\n";
+    if (over) say += "\n求人の金額より高いことは\n承知しておりますが、\n生活のこともあり、\n正直にお伝えいたしました。\n";
+    if (over) say += "\n難しいようでしたら、\nその旨をお聞かせいただければ\nと思います。";
+    else say += stage === "final" ? "\n担当する仕事の範囲を\nうかがったうえで、\nご相談できますと幸いです。" :
+      "\nただ、金額だけで\n決めているわけではなく、\n御社の規定や仕事の内容に合わせて\nご相談できればと思います。";
+    $("say").textContent = say;
+    // 最低ラインを聞かれたら
+    var low;
+    if (min === null) low = "下回ると困る金額を入れると、\nここに返し方が出ます。\n\n毎月の生活費をもとに、\n面接の前に決めておきます。";
+    else if (ans !== null && min >= ans) low = yen(min) + "が、\n無理なくお受けできる金額です。\nこれを下回ると、\n生活の面で難しくなります。";
+    else low = "生活のことを考えますと、\n" + yen(min) + "を下回ると\n難しくなります。\n\nその金額以上であれば、\n仕事の内容をうかがって\nご相談させていただきます。";
+    $("low").textContent = low;
+    // いまの年収を聞かれたら
+    var prev = now === null ? "源泉徴収票の「支払金額」を\n見ておき、その金額を\n「約〇万円です」と答えます。" :
+      "税金などが引かれる前の額面で、\n" + otWord + "約" + now + "万円" + (left ? "でした。" : "です。");
+    prev += "\n\n（少し高く言うのは避けます。\n入社の手続きで源泉徴収票を\n出すことがあります）";
+    $("prev").textContent = prev;
+    // 応募書類
+    var doc = "■金額を書く欄がないとき\n貴社の規定に従います。\n\n■金額を求められたとき\n希望年収：" + yen(ans);
+    if (now !== null) doc += "\n（" + (left ? "前職" : "現職") + "の年収：約" + now + "万円）";
+    doc += "\n詳しくは面接でご相談\nさせていただければ幸いです。";
+    $("doc").textContent = doc;
+    var ng = "・「おいくらでも大丈夫です」\n　→あとで困っても変えにくくなります\n・「手取りで〇万円」\n　→会社は額面で考えています\n・いまの年収を、少し高く言う\n・「生活が苦しいので」だけを理由にする";
+    if (stage !== "doc") ng += "\n・聞かれていないのに、最初に金額の話をする";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("stage").value = "first"; $("work").value = "now"; $("ot").value = "yes";
+    $("now").value = "380"; $("want").value = "420"; $("min").value = "370"; $("jl").value = "350"; $("jh").value = "450"; $("exp").value = "営業事務の5年の経験";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
