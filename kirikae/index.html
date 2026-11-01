@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金と失業保険、切り替えの順番｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #toHW, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金と失業保険、切り替えの順番</h1>
+  <p class="lead">病気やけがで辞めたあと、いま何をする順番かと、ハローワークへの一言を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="quit">退職日</label>
+    <input type="date" id="quit">
+    <label class="f" for="state">働けるかどうか</label>
+    <select id="state">
+      <option value="no">まだ働けない（療養中）</option>
+      <option value="yes">医師から働けると言われた</option>
+    </select>
+    <label class="f" for="sick">傷病手当金</label>
+    <select id="sick">
+      <option value="yes">受けている・これから申請する</option>
+      <option value="end">受け終わった</option>
+      <option value="none">受けていない</option>
+    </select>
+    <label class="f" for="ui">失業保険の手続き<span class="hint">ハローワークで何をしたかを選びます</span></label>
+    <select id="ui">
+      <option value="none">まだ何もしていない</option>
+      <option value="ext">受給期間の延長を申請した</option>
+      <option value="done">失業保険を申し込んだ</option>
+    </select>
+  </div>
+  <button id="make" type="button">順番を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの順番</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>ハローワークへの一言</h3>
+    <div class="mail" id="toHW"></div>
+    <button type="button" class="copy" data-t="toHW">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な進め方の目安です。受給期間の延長ができるか、失業保険を受けられるかはハローワークが、傷病手当金を受けられるかは加入していた健康保険が判断します。必要な書類は、住んでいる所を受け持つハローワークで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function addY(dt, n) { var x = new Date(dt); x.setFullYear(x.getFullYear() + n); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function iso(dt) { return dt.getFullYear() + "-" + ("0" + (dt.getMonth() + 1)).slice(-2) + "-" + ("0" + dt.getDate()).slice(-2); }
+  function li(text) { var e = document.createElement("li"); e.textContent = text; $("tl").appendChild(e); }
+  function big(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var quit = d($("quit").value);
+    if (!quit) { alert("退職日を入れてください"); return; }
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var state = $("state").value, sick = $("sick").value, ui = $("ui").value;
+    var lose = add(quit, 1), origEnd = add(addY(lose, 1), -1), from = add(lose, 30), maxEnd = add(addY(lose, 4), -1);
+    var over = today > origEnd;
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var v, s, no = false;
+    if (ui === "done" && state === "no") { v = "まずハローワークと健康保険に相談します"; s = "失業保険の申し込みは「働ける」ことが前提です。まだ働けないなら、申し込んだことと今の体調を、早めに両方へ伝えます。"; no = true; }
+    else if (ui === "done" && sick === "none") { v = "このまま失業保険を進めます"; s = "働けるようになってからの申し込みなので、順番はこのままで進められます。"; }
+    else if (ui === "done") { v = "傷病手当金は終わりにして、失業保険を進めます"; s = "傷病手当金と失業保険は、同じ時期には受けられません。働けないと言われていた期間の傷病手当金でまだ出していない分があれば、健康保険に出し方を確かめます。"; }
+    else if (state === "no" && ui === "ext") { v = "いまの順番のままで進められます"; s = "療養に専念し、傷病手当金を受ける分は申請を続けます。働けるようになったら、延長を終わらせて失業保険を申し込みます。"; }
+    else if (state === "no") { v = "失業保険は申し込まず、受給期間の延長へ進みます"; s = "傷病手当金は働けないとき、失業保険は働けるときのものです。延長は、辞めてから働けない状態が30日以上続くと申請できます。"; }
+    else if (ui === "ext") { v = "延長を終わらせて、失業保険を申し込みます"; s = "働けると診断された日の前日で、延長は終わる扱いです。早めにハローワークへ行きます。"; }
+    else if (over) { v = "まずハローワークに、受け取れるか聞きます"; s = "もとの受給期間の終わりを過ぎています。病気で働けなかった期間の延長ができるかを、早めに聞きます。"; no = true; }
+    else { v = "失業保険を申し込む番です"; s = "働けるようになったので、離職票を持ってハローワークへ行きます。受け取れる期間の終わりが近いときは、早めに動きます。"; }
+    big("今の順番", v, s, no);
+    big("もとの受給期間の終わり", f(origEnd), "失業保険を受け取れる期間です。退職日の翌日から原則1年。この日を過ぎると、残っていても受け取れません（延長をしていれば延びます）。", over && ui !== "ext");
+    if (state === "no" && ui === "none") big("延長の申請ができるようになる日", f(from), "辞めた翌日から働けない状態が続いている場合の目安です。延長しても、終わりは" + f(maxEnd) + "までです。", false);
+
+    if (ui === "done" && state === "no") {
+      li("ハローワークに電話し、「申し込んだが、まだ働けない」と伝え、どうすればよいか聞く");
+      li("加入していた健康保険に、傷病手当金がどうなるか聞く");
+      li("言われた書類をそろえて、案内どおりに進める");
+    } else if (ui === "done") {
+      if (sick !== "none") li("傷病手当金でまだ出していない分がないか確かめる");
+      li("ハローワークの案内どおり、説明会と認定日に進む");
+    } else if (state === "no") {
+      if (sick === "yes") li("傷病手当金の申請を続ける（申請書で延長の有無を聞かれることがある）");
+      if (ui === "none") {
+        li(f(from) + "以降に、ハローワークへ受給期間の延長を申請する（持参か郵送。代理人でもよい）");
+        li("持ち物をハローワークで確かめる。多いのは、離職票、本人確認書類、働けないことがわかる書類（診断書や傷病手当金の書類の写しなど）");
+      }
+      li("医師から働けると言われたら、そのことをメモしてハローワークへ連絡する");
+    } else {
+      if (sick === "yes") li("働けないと言われていた期間の、傷病手当金の最後の申請を出す");
+      li("働けることがわかる書類がいるか、ハローワークに電話で確かめる");
+      if (ui === "ext") li("ハローワークで受給期間の延長を終わらせる手続きをする");
+      li("離職票と本人確認書類などを持って、失業保険を申し込む（来所が必要）");
+    }
+
+    var hw;
+    if (ui === "done" && state === "no") hw = "失業保険を申し込みましたが、まだ体調が戻らず、すぐには働けません。退職日は" + f(quit) + "です。このあとどう進めればよいか、教えていただけますか。";
+    else if (ui === "done") hw = "失業保険を申し込んでいます。" + (sick === "none" ? "病気で療養していた時期があるので" : "傷病手当金を受けていた時期があるので") + "、認定日までに伝えておくことがあれば、教えていただけますか。";
+    else if (state === "no" && ui === "ext") hw = "受給期間の延長を申請しています。まだ療養中ですが、働けるようになったときの手続きと、持っていくものを教えていただけますか。";
+    else if (state === "no") hw = f(quit) + "に退職しました。病気で働けない状態が続いているので、失業保険の受給期間の延長を申請したいです。" + (sick === "yes" ? "傷病手当金を受けています。" : "") + "申請できる日と、必要な書類を教えていただけますか。";
+    else if (over && ui === "none") hw = f(quit) + "に退職しました。病気で働けない期間があり、延長の申請はしていません。医師から働けると言われたので、いまから失業保険を受けられるか、教えていただけますか。";
+    else hw = f(quit) + "に退職しました。" + (ui === "ext" ? "受給期間の延長をしていましたが、" : "") + "医師から働けると言われたので、失業保険を申し込みたいです。働けることがわかる書類は必要でしょうか。持っていくものを教えていただけますか。";
+    $("toHW").textContent = hw;
+
+    $("ng").textContent = "・傷病手当金と失業保険は、同じ時期には受けられない\n・傷病手当金が終わっても、働けないままなら失業保険へは進めない\n・雇用保険の「傷病手当」は、健康保険の傷病手当金とは別のもの。窓口では「健康保険の」と言うと話が早い\n・延長の申請が遅いと、受け取れる日数が残らないことがある" + (over ? "\n・もとの受給期間の終わりを過ぎている。延長ができるか、早めに聞く" : "");
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { var t = new Date(); t.setDate(t.getDate() - 20); $("quit").value = iso(t); $("state").value = "no"; $("sick").value = "yes"; $("ui").value = "none"; make(); }
+})();
+</script>
+</body>
+</html>
