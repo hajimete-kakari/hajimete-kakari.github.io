@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接の結果の問い合わせ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #subj, .mihon #mail, .mihon #tel, .mihon #next, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接の結果の問い合わせ</h1>
+  <p class="lead">面接を受けたのに結果の連絡が来ないときに、問い合わせてよいかの目安と、送るメールを作ります。結果の目安を聞いているか・何日たったか・応募の仕方を選ぶと、問い合わせてよいか、送る前に見るところ、メールの件名と本文、電話で言う一言が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="status">結果の連絡について</label>
+    <select id="status">
+      <option value="before">目安の日を聞いていて、まだその日が来ていない</option>
+      <option value="over1">目安の日を、1〜2日過ぎた</option>
+      <option value="over3">目安の日を、3日以上過ぎた</option>
+      <option value="n1">目安は聞いていない。面接から1週間たっていない</option>
+      <option value="n2">目安は聞いていない。面接から1週間以上たった</option>
+    </select>
+    <label class="f" for="urgent">急ぐ事情</label>
+    <select id="urgent">
+      <option value="none">とくにない</option>
+      <option value="other">ほかの会社に返事をする期限がある</option>
+    </select>
+    <label class="f" for="route">応募の仕方</label>
+    <select id="route">
+      <option value="direct">会社に直接（会社のメール・電話）</option>
+      <option value="site">求人サイトのメッセージ機能</option>
+      <option value="agent">転職エージェント（担当者）を通して</option>
+    </select>
+    <h2 style="margin-top:20px">2. 名前と日にち</h2>
+    <label class="f" for="co">会社名</label>
+    <input type="text" id="co" placeholder="例：〇〇株式会社">
+    <label class="f" for="tan">担当の方の名前<span class="hint">わからなければ空のまま</span></label>
+    <input type="text" id="tan" placeholder="例：山本">
+    <label class="f" for="job">応募した仕事</label>
+    <input type="text" id="job" placeholder="例：営業事務">
+    <label class="f" for="mdate">面接を受けた日</label>
+    <input type="text" id="mdate" placeholder="例：10月23日">
+    <label class="f" for="meyasu">結果の目安と言われた日<span class="hint">聞いていなければ空のまま</span></label>
+    <input type="text" id="meyasu" placeholder="例：10月30日">
+    <label class="f" for="kigen">ほかの会社への返事の期限<span class="hint">急ぐ事情があるときだけ</span></label>
+    <input type="text" id="kigen" placeholder="例：11月6日">
+    <label class="f" for="me">自分の名前</label>
+    <input type="text" id="me" placeholder="例：田中 花子">
+  </div>
+  <button id="make" type="button">問い合わせを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>件名</h3>
+    <div class="mail" id="subj"></div>
+    <button type="button" class="copy" data-t="subj">件名をコピー</button>
+    <h3>本文</h3>
+    <div class="mail" id="mail"></div>
+    <button type="button" class="copy" data-t="mail">本文をコピー</button>
+    <h3>電話で聞くなら</h3>
+    <div class="mail" id="tel"></div>
+    <h3>返事が来なかったら</h3>
+    <div class="mail" id="next"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※問い合わせの目安です。会社によって選考にかかる日数はちがいます。会社や求人サイトの案内に、結果の連絡について書かれているときは、そちらに合わせてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return $(id).value.trim(); }
+  function make() {
+    var st = $("status").value, urgent = $("urgent").value === "other", route = $("route").value;
+    var co = v("co") || "（会社名）", tan = v("tan"), job = v("job"), mdate = v("mdate"), meyasu = v("meyasu"), kigen = v("kigen"), me = v("me") || "（自分の名前）";
+    var known = st === "before" || st === "over1" || st === "over3";
+    var late = st === "over3" || st === "n2";
+    var ask = late || urgent;
+    var agent = route === "agent";
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    var j, jS;
+    if (urgent && !late) { j = "期限があるので、問い合わせてよい"; jS = "ほかの会社への返事の期限" + (kigen ? "（" + kigen + "）" : "") + "があるなら、待たずに結果の目安を聞いてかまいません。期限があることは、短く添えます。"; }
+    else if (late) { j = "問い合わせてよい"; jS = known ? "目安の日を3日ほど過ぎても連絡がなければ、問い合わせてよいころです。選考が長引いているだけのことも多いです。" : "目安を聞いていないときは、面接から1週間〜10日ほどたっても連絡がなければ、問い合わせてよいころです。選考が長引いているだけのことも多いです。"; }
+    else if (st === "before") { j = "まだ待つ"; jS = "目安の日までは待ちます。" + (meyasu ? meyasu + "を" : "その日を") + "3日ほど過ぎても連絡がなければ、問い合わせます。"; }
+    else if (st === "over1") { j = "あと1〜2日待つ"; jS = "目安の日を少し過ぎるのは、よくあることです。土日や祝日をはさむと、さらに遅れることがあります。3日ほど過ぎたら、問い合わせます。"; }
+    else { j = "まだ待つ"; jS = "目安を聞いていないときは、面接から1週間〜10日ほどが問い合わせの目安です。それまでは待ちます。"; }
+    card("問い合わせてよいか", j, jS);
+    card("送る前に見るところ", agent ? "担当者からの連絡を見直す" : "迷惑メールと着信を見直す",
+      agent ? "エージェント経由の結果は、担当者から届きます。担当者のメール・電話・アプリのメッセージを見直します。" :
+      (route === "site" ? "求人サイトのメッセージ、迷惑メールのフォルダ、知らない番号からの着信と留守電を見直します。結果がそこに届いていることがあります。" :
+      "迷惑メールのフォルダ、知らない番号からの着信と留守電を見直します。結果がそこに届いていることがあります。"));
+    card("送る手段と時間", agent ? "担当者へメールか電話で" : (route === "site" ? "求人サイトのメッセージで" : "まずメールで"),
+      (agent ? "会社へ直接聞かず、担当者に確かめてもらいます。" : "平日の営業時間内に送ります。夜中や休みの日に送るより、相手が読みやすくなります。") + (urgent && !agent ? "期限が2日以内なら、電話で聞いてもかまいません。" : ""));
+    var subj = agent ? co + "様の選考状況について／" + me : "選考結果についてのお問い合わせ（" + me + "）";
+    $("subj").textContent = subj;
+    var mid;
+    if (meyasu && known) mid = "結果は" + meyasu + "ごろに\nご連絡いただけると\nうかがっておりました。\n念のため、行き違いが\nないか確かめたく、\nご連絡いたしました。\n";
+    else mid = "その後の選考の状況と、\n結果のご連絡の目安を\nうかがいたく、\nご連絡いたしました。\n";
+    var urg = urgent ? "\n勝手を申し上げて恐縮ですが、\nほかの会社への返事を\n" + (kigen ? kigen + "までに" : "近いうちに") + "\nすることになっております。\nそれまでに目安だけでも\nうかがえますと助かります。\n" : "";
+    var mail;
+    if (agent) {
+      mail = "（担当者の名前）様\n\nお世話になっております。\n" + me + "です。\n\n" + (mdate ? mdate + "に面接を受けた\n" : "面接を受けた\n") + co + "様" + (job ? "の\n" + job + "の求人" : "") + "について、\n" +
+        (meyasu && known ? "結果の目安の" + meyasu + "を\n過ぎましたので、\n" : "") + "選考の状況を\n確かめていただけますでしょうか。\n" + urg +
+        "\nお手数をおかけしますが、\nよろしくお願いいたします。\n\n" + me;
+    } else {
+      mail = co + "\n" + (tan ? tan + "様" : "採用ご担当者様") + "\n\nお世話になっております。\n" +
+        (mdate ? mdate + "に" : "先日、") + (job ? job + "の\n面接を受けました、\n" : "面接を受けました、\n") + me + "です。\n\n" +
+        "その節は面接のお時間をいただき、\nありがとうございました。\n\n" + mid + urg +
+        "\nすでにご連絡をいただいて\nいましたら、行き違いを\nお許しください。\n\nお忙しいところ恐れ入りますが、\nご確認いただけますと幸いです。\n\n" + me;
+    }
+    $("mail").textContent = mail;
+    var tel;
+    if (agent) tel = "担当者に電話するときは、\n「" + co + "様の結果の見通しを\n聞いていただけますか」\nと伝えます。";
+    else tel = (tan ? tan + "様は" : "採用ご担当の方は") + "\nいらっしゃいますか。\n\n" + me + "と申します。\n" + (mdate ? mdate + "に" : "先日、") + (job ? job + "の\n" : "") +
+      "面接を受けました。\n選考の結果の目安を\nうかがいたく、お電話しました。\n今、少しよろしいでしょうか。";
+    $("tel").textContent = tel;
+    var next = agent ? "担当者から2〜3日たっても\n返事がなければ、\n電話で一度だけ聞きます。" :
+      "送ってから2〜3日たっても\n返事がなければ、\n平日の昼間に電話で\n一度だけ聞いてみます。\nそれでもわからなければ、\nほかの会社の選考を\n進めておきます。";
+    if (!ask) next = "いまは送らずに待ちます。\n問い合わせる日を\nカレンダーに入れておくと、\n毎日気にせずにすみます。\n\n問い合わせたあとに\n" + next.replace("送ってから", "");
+    $("next").textContent = next;
+    var ng = "・「まだですか」と急かす\n・「不合格でしょうか」と聞く\n・返事が来ないうちに、何度も送る\n・夜中や休みの日に電話する";
+    if ((st === "before" || st === "over1") && !urgent) ng += "\n・目安の日の前や当日に問い合わせる";
+    if (agent) ng += "\n・担当者を通さず、会社へ直接聞く";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("status").value = "over3"; $("urgent").value = "none"; $("route").value = "direct";
+    $("co").value = "〇〇株式会社"; $("tan").value = "山本"; $("job").value = "営業事務"; $("mdate").value = "10月23日"; $("meyasu").value = "10月30日"; $("me").value = "田中 花子";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
