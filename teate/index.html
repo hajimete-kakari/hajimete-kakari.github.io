@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>再就職手当の申請の期限と段取り｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>再就職手当の申請の期限と段取り</h1>
+  <p class="lead">働き始める日といまの様子を入れると、出す期限、次にやること、会社に頼む文を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 働き始める日</h2>
+    <label class="f" for="start">新しい会社で働き始める日<span class="hint">もう働いている方は、働き始めた日</span></label>
+    <input type="date" id="start">
+    <label class="f" for="way">出し方の予定<span class="hint">郵送を受けるかは、ハローワークに確かめます</span></label>
+    <select id="way">
+      <option value="go">窓口に持っていく</option>
+      <option value="post">郵送したい</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 書類の様子</h2>
+    <label class="f" for="paper">申請書（再就職手当支給申請書）</label>
+    <select id="paper">
+      <option value="have">手元にある</option>
+      <option value="none">まだない・どれかわからない</option>
+    </select>
+    <label class="f" for="co">新しい会社の記入</label>
+    <select id="co">
+      <option value="ask">まだ頼んでいない</option>
+      <option value="wait">頼んだが、まだ戻ってこない</option>
+      <option value="done">書いてもらった</option>
+    </select>
+  </div>
+  <button id="make" type="button">期限と段取りを見る</button>
+  <p class="err" id="err" hidden>働き始める日を入れてください。</p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの段取り</h3>
+    <div id="list"></div>
+    <h3 id="memoHead">そのまま使える文</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>そろえるもの</h3>
+    <div class="memo" id="prep"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法施行規則（就職した日の翌日から1か月以内に提出）、厚生労働省・ハローワークの案内（期限を過ぎても時効の2年までは申請できる）、ハローワークの提出書類の案内をもとにしています。出す日の目安（窓口は休みの日の前、郵送は5日前、会社の記入は3日前）は、このページの目安で、決まった期限ではありません。そろえる書類や郵送の扱いはハローワークによってちがうことがあるので、窓口で確かめてください。このページは、手当の条件に当たるかどうかを判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var DAY = 86400000;
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function diff(a, b) { return Math.round((a - b) / DAY); }
+  // 翌日から数えて1か月：1か月後の同じ日（その日がない月は月末）
+  function oneMonth(dt) {
+    var last = new Date(dt.getFullYear(), dt.getMonth() + 2, 0).getDate();
+    return new Date(dt.getFullYear(), dt.getMonth() + 1, Math.min(dt.getDate(), last));
+  }
+  function weekdayBefore(dt) {
+    var x = dt;
+    while (x.getDay() === 0 || x.getDay() === 6) x = add(x, -1);
+    return x;
+  }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function make() {
+    var start = d($("start").value);
+    $("err").hidden = !!start;
+    if (!start) { $("result").hidden = true; return; }
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (DEMO) now = new Date(2026, 10, 2);
+    var way = $("way").value, paper = $("paper").value, co = $("co").value;
+    var limit = oneMonth(start);
+    var left = diff(limit, now);
+    var over = left < 0;
+    var target = way === "post" ? weekdayBefore(add(limit, -5)) : weekdayBefore(limit);
+    var back = weekdayBefore(add(target, -3));
+    var hasBack = diff(back, now) >= 1;
+    var future = diff(start, now) > 0;
+    var ng = [], prep = [];
+
+    $("sum").innerHTML = ""; $("list").innerHTML = "";
+    var el = document.createElement("div"); el.className = over ? "big no" : "big";
+    el.innerHTML = '<div class="k">申請の期限</div><div class="v"></div><div class="s"></div>';
+    $("sum").appendChild(el);
+    el.querySelector(".v").textContent = md(limit) + (over ? "（" + (-left) + "日過ぎています）" : left === 0 ? "（今日まで）" : "（あと" + left + "日）");
+    el.querySelector(".s").textContent = over
+      ? "期限を過ぎても、時効の2年までは申請できると案内されています。あきらめず、今日ハローワークに電話します。"
+      : "働き始めた日の翌日から1か月以内が決まりです。" + (way === "post" ? "郵送は、余裕をみて" : "窓口は、開いている") + md(target) + "までに出すのを目安にします。";
+
+    if (future) row("働き始める前", "前の日までにハローワークで就職の手続きをする", "再就職手当の申請書は、このときに受け取れることがあります。");
+    if (paper === "none") row("申請書がないとき", "ハローワークに電話して、もらい方を聞く", "受給の説明会でもらった冊子や封筒の中も見ます。");
+
+    if (over) {
+      row("次にやること", "今日、ハローワークに電話する", "遅れた理由を長く話す必要はありません。今から出せるか、何をそろえるかを聞きます。");
+      if (co !== "done") row("会社の記入", "電話のあと、すぐ会社に頼む", "期限を過ぎていることも、担当者に一言伝えます。");
+    } else if (co === "ask") {
+      row("次にやること", "今日か次の出勤日に、会社の担当者に頼む", hasBack ? md(back) + "までに戻してもらえるようお願いします。" : "出す日まで日がないので、急いでいることを最初に伝えます。");
+    } else if (co === "wait") {
+      row("次にやること", "担当者に、戻してほしい日を伝え直す", hasBack ? md(back) + "までと、日付で伝えます。" : "期限の日付を伝えて、今日か明日の返事をお願いします。");
+    } else {
+      row("次にやること", (way === "post" ? "郵送してよいかハローワークに確かめて、送る" : "窓口に持っていく"), "写しを手元に残しておくと、問い合わせのときに話が早くなります。");
+    }
+    if (!over) row("出す日の目安", md(target), left <= 3 ? "日がないときは、先にハローワークへ電話して相談します。" : "決まった期限は上の日付です。これはこのページの目安です。");
+    row("出したあと", "審査の結果を待つ", "すぐには振り込まれません。いつごろ結果が出るかは、出すときに窓口で聞きます。");
+
+    var text;
+    if (over) {
+      $("memoHead").textContent = "ハローワークへの電話";
+      text = "再就職手当の申請について\nお聞きします。\n" + md(start).replace(/（.*/, "") + "から働いています。\n1か月の期限を過ぎましたが、\n今から申請できますか。\n必要なものと\n出し方を教えてください。";
+    } else if (co === "done") {
+      $("memoHead").textContent = "ハローワークへの電話";
+      text = "再就職手当の申請書を\n出したいのですが、\n" + (way === "post" ? "郵送でもよいでしょうか。\n送り先と、\n入れるものを\n教えてください。" : "窓口に持っていくものを\n教えてください。\n受付の時間も\nお聞きしたいです。");
+    } else {
+      $("memoHead").textContent = "会社の担当者への文";
+      text = (co === "wait"
+        ? "先日お願いした\n再就職手当の書類について\nご連絡しました。\n"
+        : "再就職手当の申請に使う\n書類の記入をお願いしたく\nご連絡しました。\n")
+        + "ハローワークへの期限が\n" + md(limit) + "のため、\n"
+        + (hasBack ? md(back) + "までに\n戻していただけると\n助かります。" : "できるだけ早く\n戻していただけると\n助かります。")
+        + "\nお手数をおかけしますが、\nよろしくお願いいたします。";
+    }
+    $("memo").textContent = text;
+
+    prep.push("再就職手当支給申請書", "受給資格者証", "採用証明書（出していなければ）", "離職前事業主との関連についての証明書", "失業認定申告書（案内があれば）");
+    $("prep").textContent = prep.map(function (x) { return "・" + x; }).join("\n") + "\n※そろえるものはハローワークによってちがうことがあります。";
+
+    ng.push("会社の書類が遅れても、期限の日は延びない。先に日付を伝える");
+    ng.push("前の会社との関係を書く紙は、記入の間違いが多いと案内されている。わからない欄は窓口に聞く");
+    if (way === "post") ng.push("郵送は着く日に余裕をみる。消印でよいかは電話で聞く");
+    ng.push("期限の日が休みにあたるときは、前の平日に出す。祝日も休みのことがある");
+    ng.push("このページは条件に当たるかを判定しない。当たるかは窓口で確かめる");
+    $("ng").textContent = ng.map(function (x) { return "・" + x; }).join("\n");
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  if (DEMO) { $("start").value = "2026-10-20"; make(); }
+})();
+</script>
+</body>
+</html>
