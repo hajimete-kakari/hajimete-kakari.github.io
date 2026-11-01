@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金の振込が来ないときの確認｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金の振込が来ないときの確認</h1>
+  <p class="lead">申請書を出した日と、出し方、届いた連絡を選ぶと、待つ日か問い合わせてよい日かの目安と、問い合わせ先、電話で言うことを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 出したとき</h2>
+    <label class="f" for="route">申請書の出し方</label>
+    <select id="route">
+      <option value="self">自分で健康保険へ送った</option>
+      <option value="company">会社に渡した（会社が送る）</option>
+    </select>
+    <label class="f" for="sent"><span id="sentLabel">健康保険へ送った日</span><span class="hint" id="sentHint">郵便で送った日</span></label>
+    <input type="date" id="sent">
+    <div id="companyBox" hidden>
+      <label class="f" for="sent2">会社が健康保険へ送った日<span class="hint">わかれば。わからなければ空のままで</span></label>
+      <input type="date" id="sent2">
+    </div>
+    <label class="f" for="org">加入している健康保険</label>
+    <select id="org">
+      <option value="kyokai">協会けんぽ</option>
+      <option value="kumiai">健康保険組合</option>
+      <option value="unknown">わからない</option>
+    </select>
+    <label class="f" for="times">何回目の申請か</label>
+    <select id="times">
+      <option value="first">はじめて</option>
+      <option value="again">2回目以降</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの様子</h2>
+    <label class="f" for="st">健康保険から届いたもの</label>
+    <select id="st">
+      <option value="none">何も届いていない</option>
+      <option value="fubi">不備や確認の連絡が届いた</option>
+      <option value="ok">支給の決定の通知が届いた</option>
+    </select>
+  </div>
+  <button id="make" type="button">今やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>日付と問い合わせ先</h3>
+    <div id="list"></div>
+    <h3>電話で言うこと</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>電話の前に手元に置くもの</h3>
+    <div class="memo" id="prep"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※協会けんぽの案内（書類の不備や調査・照会がなければ、受付からおおむね2週間ほどで振込）をもとに、郵送の日数と余裕を足して「出した日から3週間」を問い合わせの目安にしています。この3週間はこのページの目安で、決まった期限ではありません。会社に渡した場合の「1週間」も同じです。健康保険組合の日数は組合ごとにちがいます。土日祝日は数えに入れていません。審査の結果を予想するページではありません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function where(org) {
+    return org === "kyokai" ? "協会けんぽの、加入している都道府県の支部"
+      : org === "kumiai" ? "健康保険組合の、給付の担当"
+      : "保険証や資格確認書に書かれた保険者（わからなければ会社の担当者に聞く）";
+  }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function syncRoute() {
+    var c = $("route").value === "company";
+    $("companyBox").hidden = !c;
+    $("sentLabel").textContent = c ? "会社に渡した日" : "健康保険へ送った日";
+    $("sentHint").textContent = c ? "手渡しや郵送で、会社に出した日" : "郵便で送った日";
+  }
+  function make() {
+    var route = $("route").value, org = $("org").value, st = $("st").value, times = $("times").value;
+    var s = d($("sent").value), s2 = d($("sent2").value), now = DEMO ? new Date(2026, 10, 2) : today();
+    $("sum").innerHTML = ""; $("list").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">今やること</div><div class="v"></div><div class="s"></div>';
+    $("sum").appendChild(el);
+    var V = el.querySelector(".v"), S = el.querySelector(".s");
+    if (!s) { el.className = "big no"; V.textContent = "出した日を入れてください"; S.textContent = ""; $("memo").textContent = ""; $("prep").textContent = ""; $("ng").textContent = ""; $("result").hidden = false; return; }
+    if (s > now || (s2 && s2 > now)) { el.className = "big no"; V.textContent = "出した日が、今日より後になっています"; S.textContent = "日付を確かめてください。"; $("memo").textContent = ""; $("prep").textContent = ""; $("ng").textContent = ""; $("result").hidden = false; return; }
+    if (s2 && s2 < s) { el.className = "big no"; V.textContent = "会社が送った日が、会社に渡した日より前になっています"; S.textContent = "日付を確かめてください。"; $("memo").textContent = ""; $("prep").textContent = ""; $("ng").textContent = ""; $("result").hidden = false; return; }
+
+    var askCompany = route === "company" && !s2;     // 会社がいつ送ったか、まだわからない
+    var base = route === "company" && s2 ? s2 : s;   // 3週間を数える始まりの日
+    var goal = askCompany ? add(s, 7) : add(base, 21);
+    var left = Math.round((goal - now) / 86400000);
+    var who = askCompany ? "会社の担当者（総務・人事など）" : where(org);
+    var talk, baseWord = md(base);
+
+    if (st === "ok") {
+      V.textContent = "通知に書かれた振込の日と口座を確かめます";
+      S.textContent = "決定の通知が届いているなら、審査は終わっています。書かれた日を過ぎても入金がなければ、通知に書かれた窓口へ電話します。";
+      row("確かめる所", "振込の日・金額・支給の期間・口座", "支給の期間が、申請した期間より短いときは、理由が通知に書かれていることがあります。");
+      row("問い合わせ先", "通知に書かれた窓口", "");
+      talk = "傷病手当金の支給決定の\n通知をいただきました。\n書かれた振込日を\n過ぎましたが、\n入金が確認できません。\n振込の状況を\n確認していただけますか。";
+    } else if (st === "fubi") {
+      el.className = "big no";
+      V.textContent = "連絡に書かれたことを直して、先に返します";
+      S.textContent = "不備や確認が残っているあいだは、待っていても振込に進まないことがあります。わからない所は、連絡に書かれた窓口に聞きます。";
+      row("問い合わせ先", "届いた連絡に書かれた窓口", "ほかの窓口より話が早く進みます。連絡を手元に置いて電話します。");
+      row("次に数える日", "返した日からもう一度数える", "返したあと3週間たっても案内がなければ、受け付けられたかを聞きます（このページの目安）。");
+      talk = "傷病手当金の申請について\n確認の連絡をいただきました。\n直す所を教えて\nいただけますか。\n会社や病院に頼む所が\nあれば、それも\n教えてください。";
+    } else if (askCompany) {
+      if (left > 0) {
+        V.textContent = md(goal) + "までは待ちます";
+        S.textContent = "あと" + left + "日。それを過ぎても連絡がなければ、健康保険より先に会社に、いつ送ったかを聞きます。";
+      } else {
+        el.className = "big no";
+        V.textContent = "まず会社に、いつ送ったかを聞く日です";
+        S.textContent = "会社に渡してから" + Math.round((now - s) / 86400000) + "日たっています。会社で止まっていることもあるので、健康保険に聞く前に確かめます。";
+      }
+      row("会社に聞く目安", md(goal) + "ごろ", "会社に渡した日から1週間（このページの目安）");
+      row("問い合わせ先", who, "送った日がわかったら、このページの「会社が健康保険へ送った日」に入れると、次の目安が出ます。");
+      talk = md(s) + "にお渡しした\n傷病手当金の申請書は、\nもう健康保険へ\n送っていただけましたか。\n送った日を\n教えていただけると\n助かります。\nまだでしたら、\nいつごろになるかを\n教えてください。";
+    } else {
+      if (left > 0) {
+        V.textContent = md(goal) + "までは待ちます";
+        S.textContent = "あと" + left + "日。" + (org === "kumiai" ? "組合によって支給の日が決まっていることがあるので、早く知りたいときは先に聞いてもかまいません。" : "急ぎの事情があるときは、先に聞いてもかまいません。");
+      } else {
+        el.className = "big no";
+        V.textContent = "問い合わせてよい日です";
+        S.textContent = "送ってから" + Math.round((now - base) / 86400000) + "日たっています。不備の連絡が行き違っていることもあるので、まず受け付けられているかを聞きます。";
+      }
+      row("問い合わせの目安", md(goal) + "ごろ", baseWord + "に送った日から3週間（このページの目安）");
+      row("問い合わせ先", who, org === "kumiai" ? "組合によっては、支給の日が月ごとに決まっていることがあります。" : "");
+      talk = "傷病手当金の申請について\nお聞きします。\n" + baseWord + "に\n送った申請書が\n受け付けられているか、\n不備がないかを\n確認していただけますか。\n振込の予定がわかれば、\nそれも教えてください。";
+    }
+    $("memo").textContent = talk;
+    $("prep").textContent = askCompany && st === "none"
+      ? "・会社に渡した日：" + md(s) + "\n・申請した期間（手元の控え）\n・担当者の名前"
+      : "・保険証や資格確認書の記号・番号\n・申請した期間（手元の控え）\n・出した日：" + baseWord + "\n・振込先の口座";
+    var ng = [];
+    if (times === "first") ng.push("はじめての申請は、確認に時間がかかることがある");
+    else ng.push("2回目以降は、前の回にかかった日数も目安になる");
+    ng.push("病院や会社への確認（照会）が入ると、2週間より長くなることがある");
+    ng.push("控えがないときは、申請した期間を先に思い出してメモしておく");
+    ng.push("生活費が足りないときは、問い合わせのときに、いつ入るかの見込みを聞く");
+    $("ng").textContent = ng.map(function (x) { return "・" + x; }).join("\n");
+    $("result").hidden = false;
+  }
+  $("route").addEventListener("change", syncRoute);
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  syncRoute();
+  if (DEMO) { $("sent").value = "2026-10-05"; make(); }
+})();
+</script>
+</body>
+</html>
