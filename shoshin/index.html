@@ -48,7 +48,8 @@
   .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
   .note { font-size: .8rem; color: var(--sub); }
   [hidden] { display: none !important; }
-  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .mihon-cut { display: none; }
+  .mihon #sum .v,.mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
 </style>
 </head>
 <body>
@@ -74,7 +75,7 @@
     <input type="text" id="when" placeholder="例：平成30年4月ごろ">
   </div>
 
-  <div class="card">
+  <div class="card mihon-cut">
     <h2>2. ほかの病院の記録</h2>
     <label class="f" for="second">2番目以降に行った病院<span class="hint">最初の病院のあとに、同じ病気で受診した病院です</span></label>
     <select id="second">
