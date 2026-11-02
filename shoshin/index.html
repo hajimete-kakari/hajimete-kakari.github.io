@@ -226,12 +226,12 @@
       $("memo").textContent = "障害年金の請求で、\n受診状況等証明書を\nお願いしたいのですが、\n書いていただけますか。\n" + line + "カルテがないときは、\n受付や入院の記録が\n残っているかも\n教えてください。";
     } else {
       $("memoh").textContent = "年金事務所への電話で言うこと";
-      var why = hosp === "closed" ? "病院が閉院していて" : "カルテがないと言われて";
+      var why = hosp === "closed" ? "最初の病院が閉院していて、\n" : "最初の病院で\nカルテがないと言われ、\n";
       var has = [];
       if (ref) has.push("当時の受診の資料");
       if (before) has.push("発病前の資料");
       if (techo) has.push("障害者手帳");
-      $("memo").textContent = "障害年金の初診日の\n証明で相談です。\n最初の病院の証明が\n" + why + "\n取れません。\n" + line + (has.length ? "手元には\n" + has.join("、\n") + "\nがあります。\n" : "") + "そろえる書類を\n相談したいです。";
+      $("memo").textContent = "障害年金の初診日の\n証明で相談です。\n" + why + "証明が取れません。\n" + line + (has.length ? "手元には\n" + has.join("、\n") + "\nがあります。\n" : "") + "そろえる書類を\n相談したいです。";
     }
 
     var prep = [];
