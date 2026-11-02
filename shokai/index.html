@@ -80,8 +80,8 @@
     <input type="text" id="duty" placeholder="例：受注の入力と納期の調整">
     <label class="f" for="detail">力を入れたことを1つ<span class="hint">なければ空のまま。「〜ことに力を入れた」に続く形で</span></label>
     <input type="text" id="detail" placeholder="例：入力ミスを減らす確認の手順を作る">
-    <label class="f" for="result">その結果どうなったか<span class="hint">なければ空のまま。数字は実際のものだけ</span></label>
-    <input type="text" id="result" placeholder="例：入力の間違いが減りました">
+    <label class="f" for="effect">その結果どうなったか<span class="hint">なければ空のまま。数字は実際のものだけ</span></label>
+    <input type="text" id="effect" placeholder="例：入力の間違いが減りました">
     <label class="f" for="why">応募した理由を一言<span class="hint">なければ空のまま。「〜応募いたしました」に続く形で</span></label>
     <input type="text" id="why" placeholder="例：調整の仕事に長く携わりたいと考え">
     <label class="f" for="hope">応募先で活かしたいこと<span class="hint">なければ空のまま。「〜を活かして」に続く形で</span></label>
@@ -115,7 +115,7 @@
   function $(id) { return document.getElementById(id); }
   // 見本画像では入力の一部だけにして、結果の並びが入るようにする
   if (document.body.className === "mihon") {
-    ["work", "before", "duty", "detail", "result", "why", "hope"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    ["work", "before", "duty", "detail", "effect", "why", "hope"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
     $("sec3").hidden = true;
   }
   // 前後の空白と、文の終わりの記号を取る
@@ -129,7 +129,7 @@
     var years = v("years").replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 65248); }).replace(/年(間)?$/, "");
     var before = v("before").replace(/の?経験$/, ""), duty = v("duty").replace(/を担当$/, "");
     var detail = v("detail").replace(/こと$/, ""), hope = v("hope").replace(/を活かして$/, "");
-    var result = v("result"), why = v("why").replace(/[、,]?応募(いた)?(し|します|しました)?$/, "").replace(/、$/, "");
+    var effect = v("effect"), why = v("why").replace(/[、,]?応募(いた)?(し|します|しました)?$/, "").replace(/、$/, "");
     // 経歴の1文
     var role = job ? job + "として" : "";
     var yr = years ? years + "年" : "";
@@ -148,7 +148,7 @@
     one += career + "\n";
     if (duty) one += "主に" + duty + "を\n担当" + (left ? "しておりました。" : "しております。") + "\n";
     if (detail) one += "なかでも、" + detail + "ことに\n力を入れてきました。\n";
-    if (result) one += "その結果、" + result + "。\n";
+    if (effect) one += "その結果、" + effect + "。\n";
     if (why) one += "\n" + why + "、\n応募いたしました。\n";
     one += "\n" + close + "\n\n本日は、どうぞよろしくお願いいたします。";
     $("one").textContent = one;
@@ -198,7 +198,7 @@
   if (DEMO) {
     $("work").value = "now"; $("target").value = "same";
     $("name").value = "佐藤 花子"; $("company").value = "食品メーカー"; $("job").value = "営業事務"; $("years").value = "5";
-    $("duty").value = "受注の入力と納期の調整"; $("detail").value = "入力ミスを減らす確認の手順を作る"; $("result").value = "入力の間違いが減りました"; $("why").value = "調整の仕事に長く携わりたいと考え"; $("hope").value = "取引先と納期を調整してきた経験";
+    $("duty").value = "受注の入力と納期の調整"; $("detail").value = "入力ミスを減らす確認の手順を作る"; $("effect").value = "入力の間違いが減りました"; $("why").value = "調整の仕事に長く携わりたいと考え"; $("hope").value = "取引先と納期を調整してきた経験";
     make();
   }
 })();
