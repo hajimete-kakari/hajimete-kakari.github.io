@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の初診日の証明が取れないときの確認｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の初診日の証明が取れないときの確認</h1>
+  <p class="lead">いまの様子を選ぶと、次に頼む先、進める道、そろえるもの、電話で言うことを出します。認められるかどうかの判定はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 最初の病院</h2>
+    <label class="f" for="age">初めて受診したとき</label>
+    <select id="age">
+      <option value="over">20歳以降</option>
+      <option value="under">20歳前（厚生年金に入っていない）</option>
+      <option value="underk">20歳前（会社勤めで厚生年金に入っていた）</option>
+    </select>
+    <label class="f" for="hosp">最初の病院の証明</label>
+    <select id="hosp">
+      <option value="ask">まだ病院に聞いていない</option>
+      <option value="nokarte">カルテがないと言われた</option>
+      <option value="closed">病院が閉院している</option>
+    </select>
+    <label class="f" for="when">初めて受診した時期<span class="hint">電話で言う文に入ります。「平成30年春ごろ」のような書き方でかまいません</span></label>
+    <input type="text" id="when" placeholder="例：平成30年4月ごろ">
+  </div>
+
+  <div class="card">
+    <h2>2. ほかの病院の記録</h2>
+    <label class="f" for="second">2番目以降に行った病院<span class="hint">最初の病院のあとに、同じ病気で受診した病院です</span></label>
+    <select id="second">
+      <option value="yes">ある（記録が残っていそう）</option>
+      <option value="no">ない・記録が残っていなさそう</option>
+    </select>
+    <div id="u20a">
+      <label class="f" for="secondage">その病院を受診した年齢</label>
+      <select id="secondage">
+        <option value="early">18歳6か月より前</option>
+        <option value="late">18歳6か月から20歳の間</option>
+        <option value="after">20歳を過ぎてから</option>
+        <option value="unk">わからない</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 手元の資料と、頼める人</h2>
+    <label class="f" for="ref">当時の受診がわかる資料<span class="hint">診察券、領収書、入院の記録、保険の請求に使った診断書、健康保険の給付の記録など</span></label>
+    <select id="ref">
+      <option value="no">ない・まだ探していない</option>
+      <option value="yes">ある</option>
+    </select>
+    <label class="f" for="before">発病の前の様子がわかる資料<span class="hint">就職のときの診断書、異常がなかった人間ドックの結果など</span></label>
+    <select id="before">
+      <option value="no">ない・まだ探していない</option>
+      <option value="yes">ある</option>
+    </select>
+    <label class="f" for="techo">障害者手帳</label>
+    <select id="techo">
+      <option value="no">持っていない</option>
+      <option value="yes">持っている</option>
+    </select>
+    <div id="u20b">
+      <label class="f" for="techoage">手帳の交付を受けた年齢</label>
+      <select id="techoage">
+        <option value="early">18歳6か月より前</option>
+        <option value="later">それ以降・わからない</option>
+      </select>
+    </div>
+    <label class="f" for="who">当時の受診を証明してくれそうな人<span class="hint">親・きょうだい・おじおばなど、三親等内の親族は証明できません</span></label>
+    <select id="who">
+      <option value="none">思いつかない</option>
+      <option value="one">友人や隣人などが1人</option>
+      <option value="two">友人や隣人などが2人以上</option>
+      <option value="med">当時の担当医師や看護師</option>
+    </select>
+  </div>
+  <button id="make" type="button">次にやることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>進める道</h3>
+    <div id="list"></div>
+    <h3 id="memoh">電話で言うこと</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>そろえるもの</h3>
+    <div class="memo" id="prep"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構の「障害年金の初診日証明書類のご案内」と「受診状況等証明書が添付できない申立書」、厚生労働省の通知（平成27年9月28日 年管管発0928第6号）をもとにしています。ここに出る道は、書類をそろえる順番の目安です。初診日として認められるかは、出した書類をもとに審査で決まります。自分の場合の進め方は、年金事務所や年金相談センターで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function sync() {
+    var u = $("age").value === "under";
+    $("u20a").hidden = !(u && $("second").value === "yes");
+    $("u20b").hidden = !(u && $("techo").value === "yes");
+  }
+  var OTHER = "申立書のほかに、証明書を1通。";
+  var RT = {
+    second: ["2番目以降の病院の証明で進める", "その病院の受診状況等証明書か診断書を用意します。その受診より前に厚生年金の期間がないことが条件です。"],
+    techo: ["申立書と障害者手帳で進める", "18歳6か月より前の交付日が書かれた手帳と申立書を用意します。その交付日より前に厚生年金の期間がないことが条件です。"],
+    med: ["当時の担当医師や看護師の証明で進める", OTHER + "当時の受診の様子を直接見ていた人に、第三者証明書を書いてもらいます。"],
+    two: ["友人や隣人など2人の証明で進める", "第三者証明書を2人に1通ずつ書いてもらいます。受診の様子を見ていた人か、当時や請求の5年ほど前までに聞いていた人です。"],
+    period: ["初診日がある期間を資料で示す", "発病前の資料（始まり）と、2番目以降の病院の証明や手帳の交付日（終わり）で期間を示します。その期間ずっと、保険料の条件を満たしていることが前提です。"],
+    karte: ["2番目以降の病院の古いカルテを確かめる", "請求の5年以上前に作られたカルテに、最初の病院での初診日が書かれていれば、その写しと申立書で進める道があります。"]
+  };
+  function make() {
+    sync();
+    var age = $("age").value, hosp = $("hosp").value, second = $("second").value === "yes",
+        sa = $("secondage").value, ref = $("ref").value === "yes", before = $("before").value === "yes",
+        techo = $("techo").value === "yes", ta = $("techoage").value, who = $("who").value;
+    var when = $("when").value.trim();
+    var u20 = age === "under";
+    $("sum").innerHTML = ""; $("list").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">今やること</div><div class="v"></div><div class="s"></div>';
+    $("sum").appendChild(el);
+    var V = el.querySelector(".v"), S = el.querySelector(".s");
+
+    // 使えそうな道を、手元の様子に合わせて並べる
+    var routes = [], periodOk = before && (second || techo);
+    function add(k, need) { routes.push({ k: k, need: need || "" }); }
+    if (u20) {
+      if (second && sa === "early") add("second");
+      if (second && sa === "late") add("second", "18歳6か月から20歳の間の受診は、20歳までに症状が固定した場合に限られます。");
+      if (techo && ta === "early") add("techo");
+      if (who === "med") add("med");
+      if (who === "two") add("two");
+      if (who === "one") add("two", "証明は2人分が基本です。もう1人を探しながら、1人のときの扱いを年金事務所で聞きます。");
+    } else {
+      if (who === "med") add("med");
+      if (who === "two") add("two", ref ? "当時の受診がわかる資料も一緒に出します。" : "20歳以降の初診日では、当時の受診がわかる資料も要ります。先に資料を探します。");
+      if (who === "one") add("two", "証明は2人分が基本です。もう1人を探しながら、1人のときの扱いを年金事務所で聞きます。");
+    }
+    if (periodOk) add("period", age === "under" ? "" : "期間の途中で国民年金と厚生年金が切り替わるときは、当時の受診がわかる資料も要ることがあります。");
+    if (second) add("karte");
+
+    var first = routes.length ? routes[0].k : "";
+    if (hosp === "ask") {
+      V.textContent = "まず最初の病院に電話して、証明を書いてもらえるか聞きます";
+      S.textContent = "カルテがなくても、受付の記録や入院の記録をもとに書いてもらえることがあります。下の道は、出せないと言われたときのものです。";
+    } else {
+      V.textContent = "申立書に理由と確かめた日を書いて、" + (first ? "「" + RT[first][0] + "」から始めます" : "年金事務所に相談します");
+      S.textContent = first
+        ? "病院に確かめた日は、申立書に書く欄があります。電話でもかまいません。"
+        : "いま手元にある範囲では、道が決めにくい様子です。資料が何もなくても申立書の欄はあります。先に相談すると、探すものが絞れます。";
+    }
+    routes.forEach(function (r, i) {
+      row(i === 0 ? "はじめに試す道" : "ほかの道", RT[r.k][0], RT[r.k][1] + (r.need ? " " + r.need : ""));
+    });
+    if (!routes.length) row("はじめに試す道", "資料を探しながら、年金事務所に相談する", "健康保険の給付の記録や、保険の請求に使った診断書など、自分で思いつかない資料が見つかることがあります。");
+    if (age === "underk") row("あなたの場合", "20歳以降の方と同じ道になります", "20歳前でも、初診日に厚生年金に入っていたときは、障害厚生年金の扱いになるためです。");
+
+    var line = when ? when + "に\n受診しました。\n" : "";
+    if (hosp === "ask") {
+      $("memoh").textContent = "病院への電話で言うこと";
+      $("memo").textContent = "障害年金の請求で、\n受診状況等証明書を\nお願いしたいのですが、\n書いていただけますか。\n" + line + "カルテがないときは、\n受付や入院の記録が\n残っているかも\n教えてください。";
+    } else {
+      $("memoh").textContent = "年金事務所への電話で言うこと";
+      var why = hosp === "closed" ? "病院が閉院していて" : "カルテがないと言われて";
+      var has = [];
+      if (ref) has.push("当時の受診の資料");
+      if (before) has.push("発病前の資料");
+      if (techo) has.push("障害者手帳");
+      $("memo").textContent = "障害年金の初診日の\n証明で相談です。\n最初の病院の証明が\n" + why + "\n取れません。\n" + line + (has.length ? "手元には\n" + has.join("、\n") + "\nがあります。\n" : "") + "そろえる書類を\n相談したいです。";
+    }
+
+    var prep = [];
+    if (hosp !== "ask") prep.push("受診状況等証明書が添付できない申立書（年金機構の様式）");
+    else prep.push("受診状況等証明書の用紙（年金機構の様式）");
+    if (routes.some(function (r) { return r.k === "med" || r.k === "two"; })) prep.push("初診日に関する第三者証明書と記入要領（年金機構の様式）");
+    if (ref) prep.push("当時の受診がわかる資料のコピー（診察日や診療科がわかるもの）");
+    if (before) prep.push("発病前の様子がわかる資料のコピー");
+    if (techo) prep.push("障害者手帳のコピー（交付日の欄も）");
+    if (second) prep.push("2番目以降の病院の名前と、受診した時期のメモ");
+    prep.push("年金手帳や基礎年金番号通知書（相談のとき）");
+    $("prep").textContent = prep.map(function (x) { return "・" + x; }).join("\n");
+
+    var ng = [];
+    ng.push("確かめた日と相手をメモしておく。申立書に確かめた日を書く");
+    if (!ref) ng.push("探す先の例：健康保険組合や協会けんぽ（給付の記録）、保険会社（給付申請の診断書）、当時の勤務先（健康診断）、市区町村の障害福祉の窓口（手帳申請の診断書）");
+    if (who === "one" || who === "two" || who === "med") ng.push("証明を頼む相手には、書く前に記入要領を読んでもらう");
+    ng.push("健康診断の日は、原則として初診日になりません");
+    ng.push("初診日として認められるかは審査で決まります。書類を出す前に年金事務所で確かめる");
+    $("ng").textContent = ng.map(function (x) { return "・" + x; }).join("\n");
+    $("result").hidden = false;
+  }
+  ["age", "second", "techo"].forEach(function (id) { $(id).addEventListener("change", sync); });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  sync();
+  if (DEMO) {
+    $("hosp").value = "nokarte"; $("when").value = "平成30年4月ごろ"; $("ref").value = "yes"; $("who").value = "two";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
