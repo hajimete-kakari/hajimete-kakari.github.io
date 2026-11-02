@@ -50,7 +50,7 @@
 <body>
 <main>
   <h1>面接の自己紹介を作る</h1>
-  <p class="lead">面接の最初の「自己紹介をお願いします」で、そのまま話せる原稿を作ります。いまの状況と経歴を入れると、1分以内の原稿、30秒の原稿、長さの目安、「もう少し詳しく」と言われたときの足し方が出ます。入力した内容は、このページの外には送られません。</p>
+  <p class="lead">面接の最初の「自己紹介をお願いします」で、そのまま話せる原稿を作ります。いまの状況と経歴を入れると、1分以内の原稿、30秒以内の原稿、長さの目安、「もう少し詳しく」と言われたときの足し方が出ます。入力した内容は、このページの外には送られません。</p>
 
   <div class="card">
     <h2>1. いまの状況</h2>
@@ -94,10 +94,10 @@
     <div id="sum"></div>
     <h3>1分以内の自己紹介</h3>
     <div class="mail" id="one"></div>
-    <button type="button" class="copy" data-t="one">1分の原稿をコピー</button>
-    <h3>30秒の自己紹介</h3>
+    <button type="button" class="copy" data-t="one">1分以内の原稿をコピー</button>
+    <h3>30秒以内の自己紹介</h3>
     <div class="mail" id="half"></div>
-    <button type="button" class="copy" data-t="half">30秒の原稿をコピー</button>
+    <button type="button" class="copy" data-t="half">30秒以内の原稿をコピー</button>
     <h3>「もう少し詳しく」と言われたら</h3>
     <div class="mail" id="more"></div>
     <h3>避けたい言い方</h3>
@@ -142,17 +142,19 @@
     var close = isNew ?
       "未経験の仕事ではありますが、\n" + useHope + "を活かしながら、\n早く仕事を覚えたいと考えております。" :
       useHope + "を活かして、\n御社のお役に立ちたいと考えております。";
-    // 1分の原稿
+    // 1分以内の原稿
     var one = "本日はお時間をいただき、\nありがとうございます。\n" + hello + "\n\n";
     if (before) one += before + "の経験を経て、\n";
     one += career + "\n";
     if (duty) one += "主に" + duty + "を\n担当" + (left ? "しておりました。" : "しております。") + "\n";
-    if (detail) one += "なかでも、" + detail + "ことに\n力を入れてきました。\n";
+    // 動詞で終わるときだけ「こと」を足す（「客先回り」のような名詞はそのまま）
+    var detailWord = detail ? detail + (/[うくぐすつぬぶむるたい]$/.test(detail) ? "こと" : "") : "";
+    if (detail) one += (duty ? "なかでも、" : "特に、") + detailWord + "に\n力を入れてきました。\n";
     if (effect) one += "その結果、" + effect + "。\n";
     if (why) one += "\n" + why + "、\n応募いたしました。\n";
     one += "\n" + close + "\n\n本日は、どうぞよろしくお願いいたします。";
     $("one").textContent = one;
-    // 30秒の原稿：名前・経歴・活かすこと・あいさつだけ
+    // 30秒以内の原稿：名前・経歴・活かすこと・あいさつだけ
     var half = hello + "\n" + career + "\n\n" + close + "\n\nどうぞよろしくお願いいたします。";
     $("half").textContent = half;
     // 結果の見出し
@@ -168,10 +170,10 @@
     if (n > 330) judge = "1分を少し超えそうです。その前の経歴か、力を入れたことを短くします。";
     else if (n < 180) judge = "短めです。" + (!duty ? "主にしていたことを入れると、仕事の中身が伝わります。" : !detail ? "力を入れたことを1つ足すと、1分に近づきます。" : "このままで話し、詳しく聞かれたら足します。");
     else judge = "1分以内に収まりそうな長さです。声に出して計ると、自分の速さがわかります。";
-    card("1分の原稿の長さ", n + "字・およそ" + t + "秒", judge);
-    card("30秒の原稿の長さ", len(half) + "字・およそ" + sec(half) + "秒", "「手短に」「30秒で」と言われたときは、こちらを話します。");
+    card("1分以内の原稿の長さ", n + "字・およそ" + t + "秒", judge);
+    card("30秒以内の原稿の長さ", len(half) + "字・およそ" + sec(half) + "秒", "「手短に」「30秒で」と言われたときは、こちらを話します。");
     // 詳しくと言われたら
-    var more = (detail ? "「" + detail + "こと」について、\n" : "力を入れた仕事を1つ選んで、\n") +
+    var more = (detail ? "「" + detailWord + "」について、\n" : "力を入れた仕事を1つ選んで、\n") +
       "次の順で足します。\n\n1 どんな場面だったか\n2 自分が何をしたか\n3 そのあとどうなったか\n\n話を広げず、1つの仕事だけを話します。\n数字を出すなら、説明できるものだけにします。";
     $("more").textContent = more;
     // 避けたい言い方
