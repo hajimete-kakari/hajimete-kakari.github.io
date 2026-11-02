@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card mihon-cut">
     <h2>3. 手元の資料と、頼める人</h2>
     <label class="f" for="ref">当時の受診がわかる資料<span class="hint">診察券、領収書、入院の記録、保険の請求に使った診断書、健康保険の給付の記録など</span></label>
     <select id="ref">
@@ -191,6 +191,7 @@
     if (u20) {
       if (second && sa === "early") add("second");
       if (second && sa === "late") add("second", "18歳6か月から20歳の間の受診は、20歳までに症状が固定した場合に限られます。");
+      if (second && sa === "unk") add("second", "受診した年齢で使えるかが変わります。先にその病院で受診した日を聞きます。");
       if (techo && ta === "early") add("techo");
       if (who === "med") add("med");
       if (who === "two") add("two");
