@@ -142,7 +142,7 @@
   function len(t) { return t.replace(/\s/g, "").length; }
   function sec(t) { return Math.round(len(t) / 5); }
   function make() {
-    var course = v("course"), job = v("job"), learn = v("learn"), prev = v("prev"), use = v("use"), act = v("act");
+    var course = v("course"), job = v("job").replace(/の?仕事$/, ""), learn = v("learn"), prev = v("prev"), use = v("use"), act = v("act");
     var why = v("why").replace(/(こと(です)?)$/, "");
     var commute = v("commute").replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 65248); }).replace(/(分|分ほど|分くらい)$/, "");
     var near = $("exp").value === "near", reason = $("reason").value, search = $("search").value, issue = $("issue").value;
@@ -151,7 +151,7 @@
     var a1 = jobW + "の仕事に就きたいと考え、\n" + courseW + "を志望しました。\n";
     if (why) a1 += "きっかけは、" + why + "ことです。\n";
     a1 += near ? "これまでの経験に加えて、" + learnW + "を身につけて、\n仕事に就きたいと考えています。" :
-      "未経験の分野なので、" + learnW + "を基礎から身につけて、\n仕事に就きたいと考えています。";
+      "未経験の分野なので、" + learnW + "をはじめから学んで、\n仕事に就きたいと考えています。";
     $("a1").textContent = a1;
     // 2 修了後の仕事
     var a2 = "修了後は、" + jobW + "として働きたいと考えています。\n";
@@ -162,7 +162,7 @@
     $("a2").textContent = a2;
     // 3 なぜ自分で勉強しないのか
     var a3;
-    if (reason === "basic") a3 = "自分で勉強するだけでは、\n抜けているところに気づきにくいと考えました。\n" + learnW + "を基礎から順に学んで、\n" + jobW + "の仕事につなげたいと考えています。";
+    if (reason === "basic") a3 = "自分で勉強するだけでは、\n抜けているところに気づきにくいと考えました。\n" + learnW + "を順に学んで、\n" + jobW + "の仕事につなげたいと考えています。";
     else if (reason === "hands") a3 = "本で読むだけでなく、\n実際に手を動かしながら\n" + learnW + "を身につけたいと考えました。\n仕事で使える形で覚えて、\n" + jobW + "の仕事につなげたいと考えています。";
     else a3 = learnW + "を学びながら、\n就職の相談もできることに魅力を感じました。\n修了後に" + jobW + "の仕事に就くところまで、\n進めたいと考えています。";
     $("a3").textContent = a3;
@@ -172,7 +172,7 @@
     else if (issue === "ill") a4 += "通院がありますが、\n主治医に通うことを相談したうえで申し込みました。\n通院は、訓練のない時間に入れるように調整します。";
     else if (issue === "family") a4 += "家族の世話がありますが、\n訓練の時間に代わってもらう先を決めています。\n急なときの連絡先も決めています。";
     else if (issue === "baito") a4 += "いまアルバイトをしていますが、\n訓練の時間と重ならないように調整します。\n訓練を優先します。";
-    else a4 += "通う時間は少し長いですが、\n朝の電車の時間を確かめ、\n通えると考えて申し込みました。";
+    else a4 += "通う時間は少し長いですが、\n朝の時間帯の道のりを確かめ、\n通えると考えて申し込みました。";
     $("a4").textContent = a4;
     // 5 就職活動
     var a5;
@@ -201,7 +201,8 @@
     if (issue === "ill") todo.push("主治医にまだ相談していないときは、先に相談します。答えは実際に合わせて直します。");
     if (issue === "family") todo.push("代わってもらう先がまだ決まっていないときは、先に決めます。");
     if (issue === "baito") todo.push("給付金を受ける人には収入の決まりがあります。アルバイトを続けられるかは、ハローワークで確かめます。");
-    if (issue === "none" && !todo.length) todo.push("大きく足りないところはありません。訓練の内容と、施設の案内をもう一度読んでおきます。");
+    if (issue === "far") todo.push("朝の時間帯にかかる時間を、調べておきます。");
+    if (!todo.length) todo.push("大きく足りないところはありません。訓練の内容と、施設の案内をもう一度読んでおきます。");
     card("面接の前にしておくこと", todo.length + "つ", todo.join(""));
     // 避けたい言い方
     var ng = "・「学びたいからです」だけで終える\n　→就きたい仕事まで話します\n・「無料だから」「給付金があるから」\n　→受けたい理由にはなりにくい言い方です\n・「どんな仕事でもいいです」\n　→訓練と仕事のつながりが見えません\n・前の職場の不満から話す\n・していないことを、したように話す\n　→続けて聞かれると答えにつまります";
