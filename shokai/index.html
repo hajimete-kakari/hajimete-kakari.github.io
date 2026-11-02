@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接の自己紹介を作る｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #one, .mihon #half, .mihon #more, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接の自己紹介を作る</h1>
+  <p class="lead">面接の最初の「自己紹介をお願いします」で、そのまま話せる原稿を作ります。いまの状況と経歴を入れると、1分以内の原稿、30秒の原稿、長さの目安、「もう少し詳しく」と言われたときの足し方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="work">いまの働き方</label>
+    <select id="work">
+      <option value="now">いまの会社で働いている</option>
+      <option value="left">もう辞めている</option>
+    </select>
+    <label class="f" for="target">応募する仕事は</label>
+    <select id="target">
+      <option value="same">いままでと同じか、近い仕事</option>
+      <option value="new">未経験の仕事</option>
+    </select>
+    <h2 id="sec2" style="margin-top:20px">2. 経歴</h2>
+    <label class="f" for="name">名前</label>
+    <input type="text" id="name" placeholder="例：佐藤 花子">
+    <label class="f" for="company">いちばん新しい会社<span class="hint">会社名か「食品メーカー」のような言い方で</span></label>
+    <input type="text" id="company" placeholder="例：食品メーカー">
+    <label class="f" for="job">そこでの仕事の名前</label>
+    <input type="text" id="job" placeholder="例：営業事務">
+    <label class="f" for="years">働いた年数（年）</label>
+    <input type="text" id="years" inputmode="numeric" placeholder="例：5">
+    <label class="f" for="before">その前の経歴を一言<span class="hint">なければ空のまま。会社が多いときはまとめて、「経験」の前まで書きます</span></label>
+    <input type="text" id="before" placeholder="例：販売の仕事を2社で6年">
+    <h2 id="sec3" style="margin-top:20px">3. 話す中身</h2>
+    <label class="f" for="duty">主にしていたこと</label>
+    <input type="text" id="duty" placeholder="例：受注の入力と納期の調整">
+    <label class="f" for="detail">力を入れたことを1つ<span class="hint">なければ空のまま。「〜ことに力を入れた」に続く形で</span></label>
+    <input type="text" id="detail" placeholder="例：入力ミスを減らす確認の手順を作る">
+    <label class="f" for="result">その結果どうなったか<span class="hint">なければ空のまま。数字は実際のものだけ</span></label>
+    <input type="text" id="result" placeholder="例：入力の間違いが減りました">
+    <label class="f" for="why">応募した理由を一言<span class="hint">なければ空のまま。「〜応募いたしました」に続く形で</span></label>
+    <input type="text" id="why" placeholder="例：調整の仕事に長く携わりたいと考え">
+    <label class="f" for="hope">応募先で活かしたいこと<span class="hint">なければ空のまま。「〜を活かして」に続く形で</span></label>
+    <input type="text" id="hope" placeholder="例：取引先と納期を調整してきた経験">
+  </div>
+  <button id="make" type="button">自己紹介を作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>1分以内の自己紹介</h3>
+    <div class="mail" id="one"></div>
+    <button type="button" class="copy" data-t="one">1分の原稿をコピー</button>
+    <h3>30秒の自己紹介</h3>
+    <div class="mail" id="half"></div>
+    <button type="button" class="copy" data-t="half">30秒の原稿をコピー</button>
+    <h3>「もう少し詳しく」と言われたら</h3>
+    <div class="mail" id="more"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※話し方の目安です。長さは1分300字で数えた目安で、話す速さによって変わります。時間や話す内容を指定されたときは、その指定に合わせてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 見本画像では入力の一部だけにして、結果の並びが入るようにする
+  if (document.body.className === "mihon") {
+    ["work", "before", "duty", "detail", "result", "why", "hope"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    $("sec3").hidden = true;
+  }
+  // 前後の空白と、文の終わりの記号を取る
+  function v(id) { return $(id).value.trim().replace(/[。、．，]+$/, ""); }
+  // 1分300字で数える（改行は数えない）
+  function sec(t) { return Math.round(t.replace(/\s/g, "").length / 5); }
+  function len(t) { return t.replace(/\s/g, "").length; }
+  function make() {
+    var left = $("work").value === "left", isNew = $("target").value === "new";
+    var name = v("name"), company = v("company"), job = v("job");
+    var years = v("years").replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 65248); }).replace(/年(間)?$/, "");
+    var before = v("before").replace(/の?経験$/, ""), duty = v("duty").replace(/を担当$/, "");
+    var detail = v("detail").replace(/こと$/, ""), hope = v("hope").replace(/を活かして$/, "");
+    var result = v("result"), why = v("why").replace(/[、,]?応募(いた)?(し|します|しました)?$/, "").replace(/、$/, "");
+    // 経歴の1文
+    var role = job ? job + "として" : "";
+    var yr = years ? years + "年" : "";
+    var where = company ? company + (role || yr ? "で、" : "で") : "";
+    if (!where && !role) role = "（仕事の名前）として";
+    var head = left ? (before ? "直近は" : "前職は") : "現在は";
+    var career = head + where + role + yr + (left ? "働いておりました。" : "働いております。");
+    var hello = (name || "（名前）") + "と申します。";
+    var useHope = hope || (isNew ? "これまでの仕事で身につけたこと" : "これまでの経験");
+    var close = isNew ?
+      "未経験の仕事ではありますが、\n" + useHope + "を活かしながら、\n早く仕事を覚えたいと考えております。" :
+      useHope + "を活かして、\n御社のお役に立ちたいと考えております。";
+    // 1分の原稿
+    var one = "本日はお時間をいただき、\nありがとうございます。\n" + hello + "\n\n";
+    if (before) one += before + "の経験を経て、\n";
+    one += career + "\n";
+    if (duty) one += "主に" + duty + "を\n担当" + (left ? "しておりました。" : "しております。") + "\n";
+    if (detail) one += "なかでも、" + detail + "ことに\n力を入れてきました。\n";
+    if (result) one += "その結果、" + result + "。\n";
+    if (why) one += "\n" + why + "、\n応募いたしました。\n";
+    one += "\n" + close + "\n\n本日は、どうぞよろしくお願いいたします。";
+    $("one").textContent = one;
+    // 30秒の原稿：名前・経歴・活かすこと・あいさつだけ
+    var half = hello + "\n" + career + "\n\n" + close + "\n\nどうぞよろしくお願いいたします。";
+    $("half").textContent = half;
+    // 結果の見出し
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    card("話す順番", "名前→経歴→していたこと→応募の理由と活かしたいこと→あいさつ", "順番を覚えておけば、言葉が少し変わってもかまいません。一字一句覚えようとしないほうが、話しやすくなります。");
+    var n = len(one), t = sec(one), judge;
+    if (n > 330) judge = "1分を少し超えそうです。その前の経歴か、力を入れたことを短くします。";
+    else if (n < 180) judge = "短めです。" + (!duty ? "主にしていたことを入れると、仕事の中身が伝わります。" : !detail ? "力を入れたことを1つ足すと、1分に近づきます。" : "このままで話し、詳しく聞かれたら足します。");
+    else judge = "1分以内に収まりそうな長さです。声に出して計ると、自分の速さがわかります。";
+    card("1分の原稿の長さ", n + "字・およそ" + t + "秒", judge);
+    card("30秒の原稿の長さ", len(half) + "字・およそ" + sec(half) + "秒", "「手短に」「30秒で」と言われたときは、こちらを話します。");
+    // 詳しくと言われたら
+    var more = (detail ? "「" + detail + "こと」について、\n" : "力を入れた仕事を1つ選んで、\n") +
+      "次の順で足します。\n\n1 どんな場面だったか\n2 自分が何をしたか\n3 そのあとどうなったか\n\n話を広げず、1つの仕事だけを話します。\n数字を出すなら、説明できるものだけにします。";
+    $("more").textContent = more;
+    // 避けたい言い方
+    var ng = "・職務経歴書を、はじめから順に読み上げる\n　→1分を超えやすく、聞く側が追えません\n・志望動機や自己PRまで全部入れる\n　→このあと聞かれるので、一言で十分です\n・「特にありません」「書類のとおりです」";
+    if (left) ng += "\n・聞かれていないのに、辞めた理由から話す\n　→辞めた理由は、聞かれてから答えます";
+    else ng += "\n・いまの会社の不満を話す";
+    if (isNew) ng += "\n・「未経験ですが、がんばります」だけで終える\n　→活かせることを1つ添えます";
+    if (before) ng += "\n・会社ごとに順番に説明する\n　→いちばん新しい会社を中心にします";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("work").value = "now"; $("target").value = "same";
+    $("name").value = "佐藤 花子"; $("company").value = "食品メーカー"; $("job").value = "営業事務"; $("years").value = "5";
+    $("duty").value = "受注の入力と納期の調整"; $("detail").value = "入力ミスを減らす確認の手順を作る"; $("result").value = "入力の間違いが減りました"; $("why").value = "調整の仕事に長く携わりたいと考え"; $("hope").value = "取引先と納期を調整してきた経験";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
