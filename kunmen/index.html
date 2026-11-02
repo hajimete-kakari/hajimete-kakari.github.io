@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の面接の答えを作る｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #a1, .mihon #a2, .mihon #a3, .mihon #a4, .mihon #a5, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の面接の答えを作る</h1>
+  <p class="lead">職業訓練の選考の面接で聞かれやすい5つの問いに、そのまま話せる答えを作ります。受けたい訓練と就きたい仕事を入れると、答えの文、長さの目安、足りないところ、避けたい言い方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 受ける訓練と仕事</h2>
+    <label class="f" for="course">受ける訓練の名前</label>
+    <input type="text" id="course" placeholder="例：経理事務科">
+    <label class="f" for="job">訓練のあとに就きたい仕事</label>
+    <input type="text" id="job" placeholder="例：経理事務">
+    <label class="f" for="exp">その仕事の経験は</label>
+    <select id="exp">
+      <option value="none">未経験</option>
+      <option value="near">近い経験がある</option>
+    </select>
+    <label class="f" for="why">その仕事に就きたいと思ったきっかけ<span class="hint">実際のことだけ。「〜こと」に続く形で</span></label>
+    <input type="text" id="why" placeholder="例：前の職場で請求書の確認を手伝い、向いていると感じた">
+    <label class="f" for="learn">訓練で身につけたいこと</label>
+    <input type="text" id="learn" placeholder="例：簿記と会計ソフトの使い方">
+    <label class="f" for="reason">自分で勉強するのではなく、訓練を選ぶ理由</label>
+    <select id="reason">
+      <option value="basic">基礎から順に学びたい</option>
+      <option value="hands">手を動かしながら身につけたい</option>
+      <option value="support">就職の相談もしながら進めたい</option>
+    </select>
+    <h2 id="sec2" style="margin-top:20px">2. これまでの仕事と就職活動</h2>
+    <label class="f" for="prev">前の仕事<span class="hint">なければ空のまま</span></label>
+    <input type="text" id="prev" placeholder="例：販売">
+    <label class="f" for="use">前の仕事で身につけて、活かせること<span class="hint">なければ空のまま</span></label>
+    <input type="text" id="use" placeholder="例：お客様と丁寧にやりとりする力">
+    <label class="f" for="search">いまの就職活動は</label>
+    <select id="search">
+      <option value="look">求人を見ている</option>
+      <option value="apply">応募もしている</option>
+      <option value="yet">これから始める</option>
+    </select>
+    <label class="f" for="act">その仕事について調べたこと<span class="hint">なければ空のまま。実際にしたことを、「〜ました」までの文で</span></label>
+    <input type="text" id="act" placeholder="例：求人を10件見て、求められる技能を確かめました">
+    <h2 id="sec3" style="margin-top:20px">3. 通えるか</h2>
+    <label class="f" for="commute">訓練先までの時間（分）<span class="hint">わからなければ空のまま</span></label>
+    <input type="text" id="commute" inputmode="numeric" placeholder="例：40">
+    <label class="f" for="issue">通うときに気がかりなこと</label>
+    <select id="issue">
+      <option value="none">特にない</option>
+      <option value="ill">通院がある</option>
+      <option value="family">子どもや家族の世話がある</option>
+      <option value="baito">アルバイトをしている</option>
+      <option value="far">通う時間が長い</option>
+    </select>
+  </div>
+  <button id="make" type="button">答えを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>「なぜこの訓練を受けたいのですか」</h3>
+    <div class="mail" id="a1"></div>
+    <button type="button" class="copy" data-t="a1">この答えをコピー</button>
+    <h3>「修了したあと、どんな仕事に就きたいですか」</h3>
+    <div class="mail" id="a2"></div>
+    <button type="button" class="copy" data-t="a2">この答えをコピー</button>
+    <h3>「自分で勉強するのではだめですか」</h3>
+    <div class="mail" id="a3"></div>
+    <button type="button" class="copy" data-t="a3">この答えをコピー</button>
+    <h3>「毎日通えますか」</h3>
+    <div class="mail" id="a4"></div>
+    <button type="button" class="copy" data-t="a4">この答えをコピー</button>
+    <h3>「いま就職活動はしていますか」</h3>
+    <div class="mail" id="a5"></div>
+    <button type="button" class="copy" data-t="a5">この答えをコピー</button>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※話し方の目安です。質問の内容や面接の進め方は、訓練や施設によってちがいます。合格を約束するものではありません。答えは、実際の状況に合わせて直してください。長さは1分300字で数えた目安です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 見本画像では入力の一部だけにして、結果の並びが入るようにする
+  if (document.body.className === "mihon") {
+    ["exp", "why", "reason", "prev", "use", "search", "act", "commute", "issue"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    $("sec2").hidden = true; $("sec3").hidden = true;
+  }
+  // 前後の空白と、文の終わりの記号を取る
+  function v(id) { return $(id).value.trim().replace(/[。、．，]+$/, ""); }
+  // 1分300字で数える（改行は数えない）
+  function len(t) { return t.replace(/\s/g, "").length; }
+  function sec(t) { return Math.round(len(t) / 5); }
+  function make() {
+    var course = v("course"), job = v("job"), learn = v("learn"), prev = v("prev"), use = v("use"), act = v("act");
+    var why = v("why").replace(/(こと(です)?)$/, "");
+    var commute = v("commute").replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 65248); }).replace(/(分|分ほど|分くらい)$/, "");
+    var near = $("exp").value === "near", reason = $("reason").value, search = $("search").value, issue = $("issue").value;
+    var courseW = course || "（訓練の名前）", jobW = job || "（就きたい仕事）", learnW = learn || "（身につけたいこと）";
+    // 1 なぜこの訓練か
+    var a1 = jobW + "の仕事に就きたいと考え、\n" + courseW + "を志望しました。\n";
+    if (why) a1 += "きっかけは、" + why + "ことです。\n";
+    a1 += near ? "これまでの経験に加えて、" + learnW + "を身につけて、\n仕事に就きたいと考えています。" :
+      "未経験の分野なので、" + learnW + "を基礎から身につけて、\n仕事に就きたいと考えています。";
+    $("a1").textContent = a1;
+    // 2 修了後の仕事
+    var a2 = "修了後は、" + jobW + "として働きたいと考えています。\n";
+    if (act) a2 += act + "。\n";
+    if (use) a2 += (prev ? prev + "の仕事で身につけた" : "これまでに身につけた") + use + "も、\n活かしたいと考えています。";
+    else if (prev) a2 += prev + "の仕事の経験も、\n活かしたいと考えています。";
+    else a2 += "訓練で学んだことを活かして、\n早く仕事に慣れたいと考えています。";
+    $("a2").textContent = a2;
+    // 3 なぜ自分で勉強しないのか
+    var a3;
+    if (reason === "basic") a3 = "自分で勉強するだけでは、\n抜けているところに気づきにくいと考えました。\n" + learnW + "を基礎から順に学んで、\n" + jobW + "の仕事につなげたいと考えています。";
+    else if (reason === "hands") a3 = "本で読むだけでなく、\n実際に手を動かしながら\n" + learnW + "を身につけたいと考えました。\n仕事で使える形で覚えて、\n" + jobW + "の仕事につなげたいと考えています。";
+    else a3 = learnW + "を学びながら、\n就職の相談もできることに魅力を感じました。\n修了後に" + jobW + "の仕事に就くところまで、\n進めたいと考えています。";
+    $("a3").textContent = a3;
+    // 4 通えるか
+    var a4 = commute ? "自宅から" + commute + "分ほどで通えます。\n" : "通う道のりは確かめています。\n";
+    if (issue === "none") a4 += "訓練の期間中は、通うことを優先します。";
+    else if (issue === "ill") a4 += "通院がありますが、\n主治医に通うことを相談したうえで申し込みました。\n通院は、訓練のない時間に入れるように調整します。";
+    else if (issue === "family") a4 += "家族の世話がありますが、\n訓練の時間に代わってもらう先を決めています。\n急なときの連絡先も決めています。";
+    else if (issue === "baito") a4 += "いまアルバイトをしていますが、\n訓練の時間と重ならないように調整します。\n訓練を優先します。";
+    else a4 += "通う時間は少し長いですが、\n朝の電車の時間を確かめ、\n通えると考えて申し込みました。";
+    $("a4").textContent = a4;
+    // 5 就職活動
+    var a5;
+    if (search === "look") a5 = "いまは" + jobW + "の求人を見て、\nどんな技能が求められるかを確かめています。\n";
+    else if (search === "apply") a5 = jobW + "の求人にも応募していますが、\n" + learnW + "を身につけてから\n応募したほうがよいと考えました。\n";
+    else a5 = "これからハローワークで相談しながら、\n" + jobW + "の求人を探していきます。\n";
+    a5 += "訓練の期間中も、修了後の就職に向けて\n求人を確かめていきます。";
+    $("a5").textContent = a5;
+    // 結果の見出し
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    card("答えで伝えること", "就職したい仕事→訓練で学びたいこと→毎日通えること", "公的な訓練施設の案内には、面接で就職の意欲、受講の意欲、受講に支障がないかを確かめると書かれているものがあります。5つの答えは、この3つに沿っています。");
+    var longest = 0; [a1, a2, a3, a4, a5].forEach(function (t) { if (len(t) > longest) longest = len(t); });
+    var longestSec = Math.round(longest / 5);
+    card("いちばん長い答えの長さ", longest + "字・およそ" + longestSec + "秒", longestSec > 40 ? "少し長めです。1つの答えは30秒ほどを目安に、きっかけや調べたことを短くします。" : "1つの答えが30秒ほどなら、聞く側も次の質問をしやすくなります。声に出して計ると、自分の速さがわかります。");
+    var todo = [];
+    if (!course || !job || !learn) todo.push("（ ）の所に、訓練の名前や仕事を入れます。");
+    if (!why) todo.push("きっかけを1つ足すと、なぜその仕事かが伝わります。");
+    if (!act) todo.push("求人を5〜10件見て、求められる技能を確かめておくと、修了後の話が具体的になります。");
+    if (!commute) todo.push("訓練先までの道のりと時間を、調べておきます。");
+    if (issue === "ill") todo.push("主治医にまだ相談していないときは、先に相談します。答えは実際に合わせて直します。");
+    if (issue === "family") todo.push("代わってもらう先がまだ決まっていないときは、先に決めます。");
+    if (issue === "baito") todo.push("給付金を受ける人には収入の決まりがあります。アルバイトを続けられるかは、ハローワークで確かめます。");
+    if (issue === "none" && !todo.length) todo.push("大きく足りないところはありません。訓練の内容と、施設の案内をもう一度読んでおきます。");
+    card("面接の前にしておくこと", todo.length + "つ", todo.join(""));
+    // 避けたい言い方
+    var ng = "・「学びたいからです」だけで終える\n　→就きたい仕事まで話します\n・「無料だから」「給付金があるから」\n　→受けたい理由にはなりにくい言い方です\n・「どんな仕事でもいいです」\n　→訓練と仕事のつながりが見えません\n・前の職場の不満から話す\n・していないことを、したように話す\n　→続けて聞かれると答えにつまります";
+    if (!near) ng += "\n・「未経験ですが、がんばります」だけで終える\n　→何を身につけて、何に就くかを添えます";
+    if (issue !== "none") ng += "\n・気がかりなことを隠す\n　→どう調整するかと一緒に話します";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("course").value = "経理事務科"; $("job").value = "経理事務"; $("why").value = "前の職場で請求書の確認を手伝い、向いていると感じた"; $("learn").value = "簿記と会計ソフトの使い方";
+    $("prev").value = "販売"; $("use").value = "お客様と丁寧にやりとりする力"; $("act").value = "求人を10件見て、求められる技能を確かめました"; $("commute").value = "40";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
