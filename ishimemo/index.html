@@ -106,7 +106,7 @@
 
   <div class="card">
     <h2>3. 7つの場面の様子</h2>
-    <p class="note" style="margin-top:0">診断書の様式にある場面です。診察の日だけでなく、この1年ほどの様子で選びます。家族の手伝いがある人は、手伝いがなく一人で暮らすとしたらどうかで選びます。例は1つで十分です。</p>
+    <p class="note" style="margin-top:0">診断書の様式にある場面です。診察の日だけでなく、この1年ほどの様子で選びます。手伝いを受けている人は、手伝いがなく一人で暮らすとしたらどうかで選びます。例は1つで十分です。</p>
     <div id="scenes"></div>
     <label class="f mihon-cut" for="change">この1年の変化</label>
     <select id="change" class="mihon-cut">
@@ -232,6 +232,7 @@
     if (help) L.push("受けている手伝い：" + help);
     else if (live !== "alone") L.push("受けている手伝い：（あれば書き足す）");
     if (live !== "alone") L.push("下の様子は、手伝いがなく一人で暮らすとしたら、と考えて書きました。");
+    else if (help) L.push("下の様子は、手伝いがないとしたら、と考えて書きました。");
     L.push("");
     L.push("【この1年ほどの様子】");
     var missing = 0;
