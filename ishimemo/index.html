@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の診断書で医師に渡すメモ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  input[type=text] { margin-top: 6px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .mihon-cut { display: none; }
+  .mihon #sum .v,.mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #say, .mihon #check, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の診断書で医師に渡すメモ</h1>
+  <p class="lead">うつ病など、心の病気の診断書（精神の障害用）を頼む人向けです。ふだんの様子を選ぶと、医師に渡すメモと受付で言う一言を作ります。もらえるかどうか、何級かの判定はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 時期と病院</h2>
+    <label class="f" for="timing">初診日から数えて今は<span class="hint">初診日は、その病気で初めて受診した日です</span></label>
+    <select id="timing">
+      <option value="under">1年6か月たっていない</option>
+      <option value="y1">1年6か月から、まだ1年たっていない</option>
+      <option value="y2">1年6か月から、1年以上たっている</option>
+      <option value="none">1年6か月のころは受診していなかった</option>
+    </select>
+    <div id="hospbox">
+      <label class="f" for="hosp">1年6か月のころに通っていた病院</label>
+      <select id="hosp">
+        <option value="same">いまの病院と同じ</option>
+        <option value="diff">いまの病院とちがう</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 暮らしと仕事</h2>
+    <label class="f" for="live">いまの暮らし</label>
+    <select id="live">
+      <option value="alone">一人暮らし</option>
+      <option value="family">家族と暮らしている</option>
+      <option value="facility">施設やグループホーム</option>
+    </select>
+    <label class="f" for="help">受けている手伝い<span class="hint">なければ空けてください。例：母が週2回、食事を作りに来る</span></label>
+    <input type="text" id="help" placeholder="例：母が週2回、食事を作りに来る">
+    <label class="f" for="work">仕事</label>
+    <select id="work">
+      <option value="no">していない</option>
+      <option value="leave">休職中</option>
+      <option value="reg">一般の雇用で働いている</option>
+      <option value="dis">障害者雇用で働いている</option>
+      <option value="sup">就労支援の施設に通っている</option>
+    </select>
+    <div id="workbox">
+      <label class="f" for="wdays">働く日数や時間<span class="hint">例：週3日、1日4時間</span></label>
+      <input type="text" id="wdays" placeholder="例：週3日、1日4時間">
+      <label class="f" for="wcare">職場で受けている配慮<span class="hint">なければ空けてください。例：電話は担当から外してもらっている</span></label>
+      <input type="text" id="wcare" placeholder="例：電話は担当から外してもらっている">
+    </div>
+    <label class="f" for="leave">この1年に休職した時期<span class="hint">なければ空けてください。例：今年4月から6月まで休職</span></label>
+    <input type="text" id="leave" placeholder="例：今年4月から6月まで休職">
+  </div>
+
+  <div class="card">
+    <h2>3. 7つの場面の様子</h2>
+    <p class="note" style="margin-top:0">診断書の様式にある場面です。診察の日だけでなく、この1年ほどの様子で選びます。家族の手伝いがある人は、手伝いがなく一人で暮らすとしたらどうかで選びます。例は1つで十分です。</p>
+    <div id="scenes"></div>
+    <label class="f" for="change">この1年の変化</label>
+    <select id="change">
+      <option value="wave">よい時期と悪い時期の波がある</option>
+      <option value="same">あまり変わらない</option>
+      <option value="worse">悪くなってきた</option>
+      <option value="better">よくなってきた</option>
+    </select>
+    <label class="f" for="bad">悪い日の多さ<span class="hint">わかる範囲で。例：月に10日ほど起き上がれない</span></label>
+    <input type="text" id="bad" placeholder="例：月に10日ほど起き上がれない">
+  </div>
+  <button id="make" type="button">メモを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>頼む診断書</h3>
+    <div id="list"></div>
+    <h3>医師に渡すメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">メモをコピー</button>
+    <h3>受付で言う一言</h3>
+    <div class="memo" id="say"></div>
+    <button class="copy" id="copy2" type="button">一言をコピー</button>
+    <h3>受け取ったら確かめること</h3>
+    <div class="memo" id="check"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構の「障害年金の診断書（精神の障害用）記載要領」「障害基礎年金を受けられるとき」「障害年金ガイド」などをもとにしています。メモは、医師に様子を伝えるための下書きです。診断書の内容は医師が判断し、年金が受けられるかは審査で決まります。自分の場合の書類は、年金事務所や年金相談センターで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var SCENES = [
+    ["food", "食事", "準備も含めて、適当な量をバランスよくとること", "例：週の半分はコンビニのパンだけ"],
+    ["clean", "身のまわりの清潔", "入浴、洗面、着替え、部屋の片付け", "例：入浴は週1回、声をかけられて入る"],
+    ["money", "お金の管理と買い物", "お金の管理、計画的な買い物", "例：不要な物を買い続けて家族が管理している"],
+    ["med", "通院と服薬", "決まった通院、指示どおりの服薬", "例：夜の薬を週2回ほど飲み忘れる"],
+    ["talk", "人とのやりとり", "話を聞く、自分の考えを伝える、集団で動く", "例：電話が取れず、宅配にも出られない"],
+    ["safe", "身の安全と急なできごと", "危険から身を守る、困ったときに人に助けを求める", "例：予定が変わると動けなくなる"],
+    ["soc", "手続きや外での用事", "銀行、役所の手続き、公共の施設や交通機関", "例：役所の手続きは家族が付き添う"]
+  ];
+  var LEVEL = {
+    a: "一人でできている",
+    b: "おおむねできるが、ときどき声かけや手伝いが要る",
+    c: "声かけや手伝いがあればできる",
+    d: "手伝いがあってもできないことが多い"
+  };
+  var box = $("scenes");
+  SCENES.forEach(function (s) {
+    var d = document.createElement("div");
+    var lab = document.createElement("label"); lab.className = "f"; lab.setAttribute("for", "lv_" + s[0]);
+    lab.textContent = s[1];
+    var h = document.createElement("span"); h.className = "hint"; h.textContent = s[2]; lab.appendChild(h);
+    var sel = document.createElement("select"); sel.id = "lv_" + s[0];
+    Object.keys(LEVEL).forEach(function (k) {
+      var o = document.createElement("option"); o.value = k; o.textContent = LEVEL[k]; sel.appendChild(o);
+    });
+    sel.value = "b";
+    var inp = document.createElement("input"); inp.type = "text"; inp.id = "ex_" + s[0]; inp.placeholder = s[3];
+    d.appendChild(lab); d.appendChild(sel); d.appendChild(inp);
+    box.appendChild(d);
+  });
+  function row(h, p, e) {
+    var b = document.createElement("div"); b.className = "per";
+    b.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    b.querySelector(".h").textContent = h;
+    b.querySelector(".p").textContent = p;
+    b.querySelector(".e").textContent = e || "";
+    $("list").appendChild(b);
+  }
+  function sync() {
+    var t = $("timing").value;
+    $("hospbox").hidden = !(t === "y1" || t === "y2");
+    var w = $("work").value;
+    $("workbox").hidden = !(w === "reg" || w === "dis" || w === "sup");
+  }
+  function make() {
+    sync();
+    var t = $("timing").value, hosp = $("hosp").value, live = $("live").value, work = $("work").value;
+    var help = $("help").value.trim(), wdays = $("wdays").value.trim(), wcare = $("wcare").value.trim(),
+        leave = $("leave").value.trim(), bad = $("bad").value.trim(), change = $("change").value;
+    var old = (t === "y1" || t === "y2");
+    var other = old && hosp === "diff";
+    $("sum").innerHTML = ""; $("list").innerHTML = "";
+    var el = document.createElement("div"); el.className = "big";
+    el.innerHTML = '<div class="k">今やること</div><div class="v"></div><div class="s"></div>';
+    $("sum").appendChild(el);
+    var V = el.querySelector(".v"), S = el.querySelector(".s");
+
+    if (t === "under") {
+      V.textContent = "年金事務所で、請求できる時期を聞きます。メモは先に作っておけます";
+      S.textContent = "初診日から1年6か月を過ぎた日が、障害の状態を見る日（障害認定日）です。それより前に請求できるのは限られた場合なので、診断書を頼む前に聞きます。";
+      row("頼む診断書", "時期を確かめてから頼む", "年金事務所や年金相談センターで、用紙と時期を確かめます。");
+    } else if (t === "y1") {
+      V.textContent = other ? "当時の病院に診断書を頼みます。メモは当時の様子に直してから渡します" : "用紙を用意して、受付に頼み、メモを渡します";
+      S.textContent = "初診日から1年6か月を過ぎた日（障害認定日）のころの様子を書いてもらう診断書です。年金事務所で、1枚でよいかを確かめます。";
+      row("障害認定日のころの様子", "1枚（障害認定日から3か月以内の様子）", other ? "当時の病院に頼みます。下のメモは今の様子で作ってあるので、当時の様子に書き直します。" : "下のメモは今の様子で作ってあるので、当時とちがうところを書き足してから渡します。");
+    } else if (t === "y2") {
+      V.textContent = other ? "2つの病院に、1枚ずつ頼みます" : "同じ病院に、2枚頼みます";
+      S.textContent = "さかのぼって請求するときは、障害認定日のころの様子と、今の様子の2枚が要ります。年金事務所で確かめてから頼みます。";
+      row("障害認定日のころの様子", "1枚（障害認定日から3か月以内の様子）", other ? "当時の病院に頼みます。メモを渡すなら、当時の様子で別に作ります。" : "いまの病院に頼みます。当時の様子は、メモの最後に書き足します。");
+      row("今の様子", "1枚（請求の日より前3か月以内の様子）", "下のメモは、こちらの1枚のためのものです。出す日より前3か月を過ぎないよう、仕上がりの日を聞きます。");
+    } else {
+      V.textContent = "今の様子の診断書を頼みます";
+      S.textContent = "障害認定日のころの診断書が取れないときは、今の様子で請求する形（事後重症）を年金事務所で確かめます。この形は、請求した月の翌月分からの受け取りになります。";
+      row("今の様子", "1枚（請求の日より前3か月以内の様子）", "請求が遅れると、受け取りの始まりも遅れます。出す日より前3か月を過ぎないよう、仕上がりの日を聞きます。");
+    }
+
+    var L = [];
+    L.push("障害年金の診断書をお願いするにあたり、ふだんの様子をまとめました。");
+    L.push("診察では伝えきれないので、参考にしてください。");
+    L.push("");
+    L.push("【暮らし】");
+    L.push(live === "alone" ? "一人暮らしです。" : live === "family" ? "家族と暮らしています。" : "施設やグループホームで暮らしています。");
+    if (help) L.push("受けている手伝い：" + help);
+    else if (live !== "alone") L.push("受けている手伝い：（あれば書き足す）");
+    if (live !== "alone") L.push("下の様子は、手伝いがなく一人で暮らすとしたら、と考えて書きました。");
+    L.push("");
+    L.push("【この1年ほどの様子】");
+    var missing = 0;
+    SCENES.forEach(function (s) {
+      var lv = LEVEL[$("lv_" + s[0]).value], ex = $("ex_" + s[0]).value.trim();
+      L.push("■" + s[1] + "：" + lv);
+      if (ex) L.push("　" + ex);
+      else if ($("lv_" + s[0]).value !== "a") { L.push("　（例を1つ書き足す）"); missing++; }
+    });
+    L.push("");
+    L.push("【波や変化】");
+    L.push(change === "wave" ? "よい時期と悪い時期の波があります。" : change === "same" ? "この1年、あまり変わっていません。" : change === "worse" ? "この1年で悪くなってきました。" : "この1年でよくなってきました。");
+    if (bad) L.push("悪い日：" + bad);
+    L.push("");
+    L.push("【仕事】");
+    if (work === "no") L.push("働いていません。");
+    if (work === "leave") L.push("休職中です。");
+    if (work === "reg" || work === "dis" || work === "sup") {
+      L.push(work === "reg" ? "一般の雇用で働いています。" : work === "dis" ? "障害者雇用で働いています。" : "就労支援の施設に通っています。");
+      L.push("日数や時間：" + (wdays || "（書き足す）"));
+      if (wcare) L.push("受けている配慮：" + wcare);
+      else L.push("受けている配慮：（あれば書き足す）");
+    }
+    if (leave) L.push("この1年の休職：" + leave);
+    $("memo").textContent = L.join("\n");
+
+    $("say").textContent = "障害年金の請求で、\n診断書をお願いしたいです。\n精神の障害用の用紙は\n" + (t === "under" ? "これから用意します。\n" : "持ってきました。\n") + "ふだんの様子をまとめた\nメモがあるので、\n先生に渡していただくか、\n診察で渡してよいか\n教えてください。\n仕上がりの日も\n教えてください。";
+
+    var c = [];
+    c.push("名前、生年月日、傷病名の字に誤りがないか");
+    c.push("初診日が、年金請求書に書く日と合っているか");
+    c.push("様子を書いた日（現症日）が、頼んだ時期に合っているか");
+    c.push("空いたままの欄がないか");
+    c.push("暮らしや仕事の欄が、実際の様子と合っているか");
+    $("check").textContent = c.map(function (x) { return "・" + x; }).join("\n");
+
+    var ng = [];
+    if (missing) ng.push("「（例を1つ書き足す）」の所に、実際にあったことを書く。何がどのくらいできないかが伝わる");
+    ng.push("大げさにも、控えめにも書かない。ありのままを書く");
+    if (change === "better") ng.push("よくなってきたときも、そのまま書く。よい日と悪い日の差があれば、悪い日のことも書く");
+    if (work === "reg" || work === "dis" || work === "sup") ng.push("記載要領には、働いている事実だけで支給は判断しないとあります。受けている配慮や休んだ日を具体的に書く");
+    ng.push("中身は医師が判断します。ちがうと感じたら、書き直しを迫らず、どこがどうちがうかを伝えて相談する");
+    ng.push("渡し方や仕上がりの日数は病院によってちがいます。受付で聞く");
+    $("ng").textContent = ng.map(function (x) { return "・" + x; }).join("\n");
+    $("result").hidden = false;
+  }
+  ["timing", "work"].forEach(function (id) { $(id).addEventListener("change", sync); });
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  function copyOf(btnId, srcId, label) {
+    $(btnId).addEventListener("click", function () {
+      var t = $(srcId).textContent, b = this;
+      function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+    });
+  }
+  copyOf("copy", "memo", "メモをコピー");
+  copyOf("copy2", "say", "一言をコピー");
+  sync();
+  if (DEMO) {
+    $("timing").value = "y2"; $("live").value = "family"; $("help").value = "母が週2回、食事を作りに来る";
+    $("work").value = "no"; $("bad").value = "月に10日ほど起き上がれない";
+    ["food", "clean", "soc"].forEach(function (k) { $("lv_" + k).value = "c"; });
+    $("ex_food").value = "週の半分はパンだけで済ませる"; $("ex_clean").value = "入浴は週1回";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
