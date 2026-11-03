@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接で他社の選考状況を答える｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #say, .mihon #short, .mihon #more, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接で他社の選考状況を答える</h1>
+  <p class="lead">面接で「他社の選考状況はいかがですか」と聞かれたときに、そのまま言える答えを作ります。いまの状況と志望の気持ちを入れると、答え、短い答え、続けて聞かれたときの返し方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="status">ほかの会社の状況</label>
+    <select id="status">
+      <option value="none">ほかは受けていない</option>
+      <option value="plan">これからほかにも応募するつもり</option>
+      <option value="apply">ほかにも応募して、結果を待っている</option>
+      <option value="iv">ほかの会社でも面接に進んでいる</option>
+      <option value="offer">ほかの会社の内定が出ている</option>
+    </select>
+    <div id="others">
+      <label class="f" for="count">その状態の会社の数</label>
+      <select id="count">
+        <option value="1">1社</option>
+        <option value="2">2社</option>
+        <option value="3">3社</option>
+        <option value="many">4社以上</option>
+      </select>
+      <label class="f" for="kind">その会社の仕事は</label>
+      <select id="kind">
+        <option value="same">今回の応募と同じ職種</option>
+        <option value="mix">ちがう職種もある</option>
+      </select>
+    </div>
+    <div id="dl">
+      <label class="f" for="limit">内定の回答期限<span class="hint">わからなければ空のまま</span></label>
+      <input type="date" id="limit">
+    </div>
+    <h2 id="sec2" style="margin-top:20px">2. この会社への気持ち</h2>
+    <label class="f" for="level">いまの正直な気持ち</label>
+    <select id="level">
+      <option value="first">第一志望だと言える</option>
+      <option value="high">第一志望の一つ（まだ決めきれない）</option>
+      <option value="compare">関心はあるが、まだ比べている</option>
+    </select>
+    <h2 id="sec3" style="margin-top:20px">3. 言葉を足す</h2>
+    <label class="f" for="job">応募している職種<span class="hint">なければ空のまま</span></label>
+    <input type="text" id="job" placeholder="例：営業事務">
+    <label class="f" for="axis">会社を選ぶ軸<span class="hint">なければ空のまま。「〜を軸に」に続く形で</span></label>
+    <input type="text" id="axis" placeholder="例：納期の調整の経験を活かせるかどうか">
+    <label class="f" for="why">この会社にひかれた点<span class="hint">なければ空のまま。「〜ため」に続く形で</span></label>
+    <input type="text" id="why" placeholder="例：取引先と直接やり取りできる仕事である">
+  </div>
+  <button id="make" type="button">答えを作る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>そのまま言える答え</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">答えをコピー</button>
+    <h3>短く答えるとき</h3>
+    <div class="mail" id="short"></div>
+    <button type="button" class="copy" data-t="short">短い答えをコピー</button>
+    <h3>続けて聞かれたら</h3>
+    <div class="mail" id="more"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※話し方の目安です。受かるかどうかを約束するものではありません。長さは1分300字で数えた目安で、話す速さによって変わります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 見本画像では入力の一部だけにして、結果の並びが入るようにする
+  if (document.body.className === "mihon") {
+    ["job", "axis", "why"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    $("sec3").hidden = true;
+  }
+  // 前後の空白と、文の終わりの記号を取る
+  function v(id) { return $(id).value.trim().replace(/[。、．，]+$/, ""); }
+  function sec(t) { return Math.round(t.replace(/\s/g, "").length / 5); }
+  function len(t) { return t.replace(/\s/g, "").length; }
+  // 状況に合わせて、入力欄を出し分ける
+  function show() {
+    var st = $("status").value, has = st === "apply" || st === "iv" || st === "offer";
+    $("others").hidden = !has;
+    $("dl").hidden = st !== "offer";
+  }
+  function make() {
+    var st = $("status").value, level = $("level").value;
+    var has = st === "apply" || st === "iv" || st === "offer", offer = st === "offer";
+    var c = $("count").value, one = c === "1", word = c === "many" ? "数社" : c + "社", same = $("kind").value === "same";
+    var job = v("job").replace(/の仕事$/, ""), axis = v("axis").replace(/(を軸に(して)?|という軸)$/, ""), why = v("why").replace(/(ため|ので|から)$/, "");
+    // 回答期限（offer のときだけ使う）
+    var lim = $("limit").value, limWord = "", limPast = false;
+    if (offer && lim) {
+      var p = lim.split("-"), d = new Date(+p[0], +p[1] - 1, +p[2]), now = new Date(); now.setHours(0, 0, 0, 0);
+      limWord = (+p[1]) + "月" + (+p[2]) + "日"; limPast = d < now;
+    }
+    // 1 いまの状況
+    var a;
+    if (st === "none") a = "現在、選考が進んでいる会社は、\nほかにございません。";
+    else if (st === "plan") a = "現在、選考が進んでいる会社は\nございませんが、ほかにも\n応募を考えている会社があります。";
+    else if (st === "apply") a = "現在、ほかに" + word + "応募しており、\n結果を待っているところです。";
+    else if (st === "iv") a = "現在、ほかに" + word + "、\n面接に進んでおります。";
+    else a = "現在、ほかに" + word + "から内定をいただいており、\nお返事を待っていただいております。\n" +
+      (limWord ? "回答の期限は" + limWord + "です。" : "回答の期限は、確認のうえお伝えいたします。");
+    // 2 選ぶ軸
+    var b = "";
+    if (has) {
+      if (same) b = (one ? "同じ" : "いずれも") + (job ? job + "の仕事で、\n" : (one ? "職種で、\n" : "同じ職種で、\n")) + (axis ? axis + "を軸に\n選んでおります。" : "これまでの経験を活かせるかどうかで\n選んでおります。");
+      else b = (one ? "職種は少しちがいますが、\n" : "少しちがう職種も含みますが、\n") + (axis ? axis + "を軸にしている点は\n同じです。" : "これまでの経験を活かせる点は\n同じです。");
+    } else if (axis) b = axis + "を軸に\n探しております。";
+    // 3 この会社への気持ち（言い切れない人に第一志望と言わせない）
+    var w = why ? "御社は、" + why + "ため、\n" : "", c3;
+    if (level === "first") c3 = (has ? "そのなかでも、" : "") + (why ? w + "第一志望と考えております。" : "御社を第一志望と考えております。");
+    else if (level === "high") c3 = has ?
+      (why ? "そのなかでも、" + w : "そのなかでも、御社は\n") + "特に入社したいと考えている\n会社の一つです。" :
+      (why ? w : "御社には、\n") + "ぜひ入社したいと考えております。";
+    else c3 = (why ? w + "強く関心を持っております。" : "御社には、強く関心を持っております。") + "\n本日のお話もうかがって、\nしっかり考えたいと思っております。";
+    // 4 内定があるときの相談
+    var d4 = "";
+    if (offer) d4 = (level === "first" ? "できれば御社のお返事を\nいただいてから決めたいと\n考えております。\n" : "") + "選考の日程の見通しを\nうかがえますと、助かります。";
+    var say = a + (b ? "\n\n" + b : "") + "\n\n" + c3 + (d4 ? "\n\n" + d4 : "");
+    $("say").textContent = say;
+    // 短い答え：状況と気持ちを一言ずつ
+    var shortB = level === "first" ? "御社を第一志望と考えております。" : level === "high" ? "御社は、特に入社したい会社の一つです。" : "御社には、強く関心を持っております。";
+    var shortA = st === "none" ? "ほかに選考中の会社はございません。" : st === "plan" ? "選考中の会社はございませんが、ほかにも応募を考えております。" :
+      st === "apply" ? "ほかに" + word + "応募して、結果を待っております。" : st === "iv" ? "ほかに" + word + "、面接に進んでおります。" :
+      "ほかに" + word + "から内定をいただいております。";
+    var sh = shortA + "\n" + shortB;
+    $("short").textContent = sh;
+    // 結果の見出し
+    var s = $("sum"); s.innerHTML = "";
+    function card(k, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    card("答える順番", (offer ? "いまの状況と期限" : "いまの状況") + (b ? "→選ぶ軸" : "") + "→この会社への気持ち" + (offer ? "→選考の見通しの相談" : ""), "順番を覚えておけば、言葉が少し変わってもかまいません。");
+    var note = st === "none" ? "ほかを受けていないこと自体は、悪いことではありません。そのまま伝えて、この会社への気持ちを続けます。" :
+      st === "plan" ? "まだ応募していない会社を、選考中のように言わないようにします。" :
+      st === "apply" ? "結果待ちの会社を、面接に進んでいるように言わないようにします。" :
+      st === "iv" ? "何次の面接かまでは、聞かれてから答えれば足ります。" :
+      (limPast ? "入れた回答期限が今日より前です。日付を見直すか、内定先に確かめます。" : limWord ? "期限を先に伝えておくと、会社も日程を考えやすくなります。" : "面接の前に、内定先に回答の期限を確かめておきます。");
+    card("いまの状況で気をつけること", { none: "正直に、ほかはないと言う", plan: "予定は予定として言う", apply: "結果待ちは結果待ちと言う", iv: "社数と段階を短く言う", offer: "内定と期限を隠さず言う" }[st], note);
+    card("話す長さ", len(say) + "字・およそ" + sec(say) + "秒", sec(say) > 40 ? "長めです。聞かれたことへの答えなので、「短く答えるとき」から話しはじめてもかまいません。" : "ひと息で話せる長さです。声に出して計ると、自分の速さがわかります。");
+    // 続けて聞かれたら
+    var more = "";
+    if (has) more += "■「どちらの会社ですか」\n" + (same && job ? job + "の仕事の会社です。\n" : "") + "社名は、差し支えなければ\n控えさせていただけますと\n幸いです。\n\n";
+    more += "■「うちは第一志望ですか」\n" + (level === "first" ? "はい、第一志望です。" + (why ? "\n" + why + "ためです。" : "") :
+      level === "high" ? "第一志望の一つです。" + (why ? "\n" + why + "点に、\n特にひかれております。" : "") :
+      "まだ決めきれておりませんが、\n関心は強く持っております。\n本日のお話も踏まえて、\n考えたいと思っております。");
+    if (st === "apply" || st === "iv") more += "\n\n■「他社から先に内定が出たら」\n" + (level === "first" ? "御社のお返事をいただくまで、\n待っていただけないか\n相談するつもりです。" : "回答の期限を確かめたうえで、\n御社の選考の状況も\nご相談させていただきます。");
+    if (offer) more += "\n\n■「期限までに決められますか」\n" + (limWord ? limWord + "までにお返事できれば\n助かりますが、難しければ、\n" : "") + "期限を延ばせないか、\n内定先に相談してみます。";
+    if (!has) more += "\n\n■「ほかは受けないのですか」\n" + (st === "plan" ? "ほかにも応募を考えておりますが、\nいまは御社の選考を\n中心に考えております。" : "いまは御社の選考を\n中心に考えております。");
+    $("more").textContent = more;
+    // 避けたい言い方
+    var ng = "";
+    if (has) ng += "・受けているのに「受けていません」と言う\n　→あとで日程の話になると、話が合わなくなります\n・他社の社名や選考の中身を、くわしく話す\n　→聞かれたことへの答えだけで足ります\n";
+    if (st === "apply" || st === "iv") ng += "・社数を多く見せるために、受けていない会社を足す\n";
+    if (!has) ng += "・ほかもあるように見せるために、作り話をする\n　→くわしく聞かれると答えられません\n";
+    if (level !== "first") ng += "・言い切れないのに「第一志望です」と言う\n　→内定のあとの話がしにくくなります\n";
+    else ng += "・他社の悪いところと比べて、第一志望と言う\n";
+    if (offer) ng += "・内定を理由に、選考を急がせる言い方をする\n　→期限を伝えて、相談する形にします\n";
+    ng += "・「特にありません」だけで終える";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("status").addEventListener("change", show);
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("status").value = "iv"; $("count").value = "2"; $("kind").value = "same"; $("level").value = "first";
+    $("job").value = "営業事務"; $("axis").value = "納期の調整の経験を活かせるかどうか"; $("why").value = "取引先と直接やり取りできる仕事である";
+    make();
+  }
+  show();
+})();
+</script>
+</body>
+</html>
