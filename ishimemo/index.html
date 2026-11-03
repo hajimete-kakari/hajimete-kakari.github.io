@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card mihon-cut">
     <h2>2. 暮らしと仕事</h2>
     <label class="f" for="live">いまの暮らし</label>
     <select id="live">
@@ -108,15 +108,15 @@
     <h2>3. 7つの場面の様子</h2>
     <p class="note" style="margin-top:0">診断書の様式にある場面です。診察の日だけでなく、この1年ほどの様子で選びます。家族の手伝いがある人は、手伝いがなく一人で暮らすとしたらどうかで選びます。例は1つで十分です。</p>
     <div id="scenes"></div>
-    <label class="f" for="change">この1年の変化</label>
-    <select id="change">
+    <label class="f mihon-cut" for="change">この1年の変化</label>
+    <select id="change" class="mihon-cut">
       <option value="wave">よい時期と悪い時期の波がある</option>
       <option value="same">あまり変わらない</option>
       <option value="worse">悪くなってきた</option>
       <option value="better">よくなってきた</option>
     </select>
-    <label class="f" for="bad">悪い日の多さ<span class="hint">わかる範囲で。例：月に10日ほど起き上がれない</span></label>
-    <input type="text" id="bad" placeholder="例：月に10日ほど起き上がれない">
+    <label class="f mihon-cut" for="bad">悪い日の多さ<span class="hint">わかる範囲で。例：月に10日ほど起き上がれない</span></label>
+    <input type="text" id="bad" class="mihon-cut" placeholder="例：月に10日ほど起き上がれない">
   </div>
   <button id="make" type="button">メモを作る</button>
 
@@ -162,8 +162,9 @@
     d: "手伝いがあってもできないことが多い"
   };
   var box = $("scenes");
-  SCENES.forEach(function (s) {
+  SCENES.forEach(function (s, i) {
     var d = document.createElement("div");
+    if (i > 0) d.className = "mihon-cut";
     var lab = document.createElement("label"); lab.className = "f"; lab.setAttribute("for", "lv_" + s[0]);
     lab.textContent = s[1];
     var h = document.createElement("span"); h.className = "hint"; h.textContent = s[2]; lab.appendChild(h);
