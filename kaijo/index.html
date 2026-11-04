@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>給付制限と教育訓練の申し出の期限を確かめるページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>給付制限と教育訓練の申し出の期限を確かめる</h1>
+  <p class="lead">辞め方、手続きの日、講座の日付を入れると、給付制限が解除されそうか、解除される日、ハローワークへ申し出る期限、出す書類を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞め方と日付</h2>
+    <label class="f" for="how">辞め方</label>
+    <select id="how">
+      <option value="self">自己都合（下にあてはまらない）</option>
+      <option value="self3">自己都合（5年のうちに2回以上、自己都合で受給の手続きをした）</option>
+      <option value="free">会社都合、または正当な理由があると認められた</option>
+      <option value="juseki">自分の重大な理由で解雇された</option>
+    </select>
+    <label class="f" for="quit">辞めた日（予定でもかまいません）</label>
+    <input type="date" id="quit">
+    <label class="f" for="kettei">ハローワークで手続きをする日（予定でもかまいません）<span class="hint">受給資格決定日です。受給資格者証に書かれています</span></label>
+    <input type="date" id="kettei">
+    <label class="f" for="nintei">初回の認定日<span class="hint">わからなければ空のままで。手続きの日の4週間後を目安にします</span></label>
+    <input type="date" id="nintei">
+  </div>
+
+  <div class="card">
+    <h2>2. 講座のこと</h2>
+    <label class="f" for="kind">講座の種類</label>
+    <select id="kind">
+      <option value="kyufu">教育訓練給付金の対象の講座</option>
+      <option value="kokyo">公共職業訓練など（ハロートレーニング）</option>
+      <option value="tanki">短期訓練受講費の対象の講座</option>
+      <option value="other">わからない、それ以外</option>
+    </select>
+    <label class="f" for="state">いまの状況</label>
+    <select id="state">
+      <option value="plan">これから受ける</option>
+      <option value="now">受けている</option>
+      <option value="done">修了した</option>
+      <option value="drop">途中でやめた</option>
+    </select>
+    <label class="f" for="start">受講を始める日（始めた日）</label>
+    <input type="date" id="start">
+    <label class="f" for="end">修了した日、やめた日<span class="hint">修了した方、途中でやめた方だけ入れます</span></label>
+    <input type="date" id="end">
+  </div>
+  <button id="make" type="button">申し出の期限を見る</button>
+  <p class="err" id="err" hidden></p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの段取り</h3>
+    <div id="list"></div>
+    <h3>そのまま使える文</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・都道府県労働局・ハローワークのリーフレット「令和7年4月以降に教育訓練等を受ける場合、給付制限が解除され、基本手当を受給できます」（LL070228保01）をもとにしています。認定日は4週間ごととして数えた目安で、祝日などで動くことがあります。実際の認定日は受給資格者証で確かめてください。解除されるかの最終の判断はハローワークが行います。このページは金額を計算しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var DAY = 86400000;
+  var FROM = new Date(2025, 3, 1);
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ymd(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function plain(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function addM(dt, n) {
+    var last = new Date(dt.getFullYear(), dt.getMonth() + n + 1, 0).getDate();
+    return new Date(dt.getFullYear(), dt.getMonth() + n, Math.min(dt.getDate(), last));
+  }
+  function diff(a, b) { return Math.round((a - b) / DAY); }
+
+  function card(k, v, s, no) {
+    var el = document.createElement("div"); el.className = no ? "big no" : "big";
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k;
+    el.querySelector(".v").textContent = v;
+    el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function fail(msg) { $("err").textContent = msg; $("err").hidden = false; $("result").hidden = true; }
+  function list(a) { return a.map(function (x) { return "・" + x; }).join("\n"); }
+
+  // 受講の日付と状況から、当たりそうか（yes / maybe / no）と理由を出す
+  function judge(quit, start, end, state, kind) {
+    if (start < FROM) return ["no", "2025年4月1日より前に始めた講座は対象外", "対象は、2025年4月1日以降に受講を始めたものに限られています。"];
+    var yearAgo = new Date(quit.getFullYear() - 1, quit.getMonth(), quit.getDate());
+    var r;
+    if (state === "drop") {
+      if (end < quit) return ["no", "辞める前に途中でやめた講座は当たらない見込み", "辞める前1年以内の受講は、途中でやめた場合は当たらないと案内されています。"];
+      r = ["maybe", "窓口で確かめる", "辞めたあとに途中でやめた場合の扱いは、リーフレットだけでは確かめられません。やめた日を伝えて聞きます。"];
+    } else if (state === "done" && end < quit) {
+      if (end < yearAgo) return ["no", "辞める前1年より前に修了した講座は当たらない見込み", "辞めた日の1年前は" + plain(yearAgo) + "です。これより前に受け終えた講座は当たらない見込みです。"];
+      if (start < yearAgo) r = ["maybe", "窓口で確かめる", "受講の途中に、辞めた日の1年前（" + plain(yearAgo) + "）がはさまっています。この場合の扱いは窓口で聞きます。"];
+      else r = ["yes", "当たりそうです", "辞める前1年以内に受けて修了した講座です。"];
+    } else if (start < yearAgo && state !== "done") {
+      r = ["yes", "当たりそうです", "辞めた日以後も受けている講座です。"];
+    } else if (start < quit && state === "plan") {
+      r = ["yes", "当たりそうです", "辞める前に受け終える場合は、修了することが条件です。途中でやめると当たりません。"];
+    } else if (start < quit && state === "now") {
+      r = ["yes", "当たりそうです", "辞めた日以後も受けている講座です。辞める前に受け終える場合は、修了することが条件です。"];
+    } else if (state === "done") {
+      r = ["yes", "当たりそうです", "辞めた日以後も受けて修了した講座です。"];
+    } else {
+      r = ["yes", "当たりそうです", "辞めた日以後に受ける講座です。"];
+    }
+    if (kind === "other") r = ["maybe", "講座が対象かを先に確かめる", "対象は、教育訓練給付金の対象の講座、公共職業訓練など、短期訓練受講費の対象の講座などです。講座の指定番号や、教育訓練給付の検索システムで確かめ、わからなければ窓口で聞きます。"];
+    return r;
+  }
+
+  function make() {
+    var how = $("how").value, kind = $("kind").value, state = $("state").value;
+    var quit = d($("quit").value), kettei = d($("kettei").value), nin = d($("nintei").value);
+    var start = d($("start").value), end = d($("end").value);
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (DEMO) now = new Date(2026, 10, 5);
+    $("err").hidden = true;
+    $("sum").innerHTML = ""; $("list").innerHTML = ""; $("memo").textContent = ""; $("ng").textContent = "";
+    if (!quit || !kettei) { fail("辞めた日と、手続きをする日を入れてください。"); return; }
+    if (quit < FROM) { fail("このページは、2025年4月1日以降に辞める方向けです。それより前に辞めた方は、ハローワークに聞いてください。"); return; }
+    if (kettei < quit) { fail("手続きをする日が、辞めた日より前になっています。日付を確かめてください。"); return; }
+    if (nin && nin <= kettei) { fail("初回の認定日が、手続きの日より前になっています。日付を確かめてください。"); return; }
+
+    if (how === "free") {
+      card("給付制限", "解除の申し出はいらない見込みです", "会社都合や、正当な理由があると認められた方には、給付制限がかかりません。7日の待期のあとから対象です。");
+      row("次にやること", "離職票の離職理由を確かめて、手続きへ", "離職票の理由が自己都合になっているときは、手続きのときに相談します。");
+      $("memo").textContent = "■ハローワークへの電話\n" + plain(quit) + "に退職しました。\n給付制限はかからない理由だと\n思うのですが、手続きのときに\n何を持っていけばよいでしょうか。";
+      $("ng").textContent = list(["扱いの判断はハローワークが行う。離職票の理由と自分の認識がちがうときは、手続きのときに伝える"]);
+      $("result").hidden = false; return;
+    }
+    if (how === "juseki") {
+      card("給付制限の解除", "対象外です", "自分の重大な理由で解雇された場合（重責解雇）は、この取り扱いの対象外と案内されています。給付制限は3か月です。", true);
+      row("次にやること", "ハローワークで、給付制限の日付を確かめる", "離職票の理由に納得できないときは、手続きのときに伝えます。");
+      $("memo").textContent = "■ハローワークへの電話\n" + plain(quit) + "に退職しました。\n給付制限の期間と、\n手続きの持ち物を\n教えてください。";
+      $("ng").textContent = list(["扱いの判断はハローワークが行う"]);
+      $("result").hidden = false; return;
+    }
+
+    if (!start) { fail("受講を始める日（始めた日）を入れてください。"); return; }
+    if ((state === "done" || state === "drop") && !end) { fail("修了した日、やめた日を入れてください。"); return; }
+    if (end && (state === "done" || state === "drop") && end < start) { fail("修了した日、やめた日が、始めた日より前になっています。"); return; }
+    if ((state === "done" || state === "drop") && end > now) { fail("修了した日、やめた日が、今日より先になっています。「受けている」を選んでください。"); return; }
+    if (state === "plan" && start < now) { fail("受講を始める日が過ぎています。「受けている」か「修了した」を選んでください。"); return; }
+    if (state !== "plan" && start > now) { fail("始めた日が今日より先になっています。「これから受ける」を選んでください。"); return; }
+
+    var months = how === "self3" ? 3 : 1;
+    var restStart = add(kettei, 7);
+    var restEnd = add(addM(restStart, months), -1);
+    var first = nin || add(kettei, 28);
+    var guess = nin ? "" : "（手続きの日の4週間後を初回の認定日とした目安）";
+    var j = judge(quit, start, end, state, kind);
+    var usesEnd = state === "done" && end < kettei;
+
+    card("解除の対象か", j[1], j[2], j[0] === "no");
+
+    if (j[0] === "no") {
+      card("給付制限の期間", ymd(restStart) + "〜" + ymd(restEnd), "待期の7日のあと、原則" + months + "か月です。この間は基本手当が支給されません。");
+      row("次にやること", "給付制限の日付で、生活費の見通しを立てる", "これから別の対象の講座を受ける場合は、その開始日で入れ直します。");
+      $("memo").textContent = "■ハローワークへの電話\n" + plain(quit) + "に退職" + (quit > now ? "の予定です" : "しました") + "。\n" + plain(start) + "に始めた講座が\nあります。給付制限の解除に\n当たらないと思うのですが、\n念のため確かめさせてください。";
+      $("ng").textContent = list(["当たらない見込みでも、判断はハローワークが行う。迷うときは手続きの日に聞く", "途中でやめた講座は、辞める前1年以内の受講に当たらない"]);
+      $("result").hidden = false; return;
+    }
+
+    card("給付制限の期間", ymd(restStart) + "〜" + ymd(restEnd), "待期の7日のあと、原則" + months + "か月です。" + (nin ? "" : "手続きの日が動くと、この日付も動きます。"));
+
+    if (start > restEnd) {
+      card("解除の申し出", "早くなる分はない見込みです", "講座を始める日は、給付制限が終わったあとです。給付制限の終わりを待って、ふつうの認定日に進みます。");
+      row("次にやること", "開始日を早められるか、講座の窓口に聞く", ymd(restEnd) + "より前に始められるなら、入れ直してください。");
+      $("memo").textContent = "■ハローワークへの電話\n" + plain(start) + "から講座を受けます。\n給付制限が終わったあとですが、\n認定日に伝えることはありますか。";
+      $("ng").textContent = list(["給付制限の解除は、受講を始めた日以降の分の話。給付制限が終わったあとに始めても、早くはならない", "受講の時間が、すぐ働ける状態の確認に関わるかは窓口で聞く"]);
+      $("result").hidden = false; return;
+    }
+
+    var from = start <= restStart ? restStart : start;
+    card(
+      "解除されると、支給の対象になる日",
+      ymd(from) + "から",
+      start <= restStart ? "受講の開始が給付制限の始まりより前なので、待期が終わった次の日から対象になる見込みです。" : "受講を始めた日から対象になる見込みです。その前の給付制限の分は、受けられません。"
+    );
+
+    // 申し出の期限：開始日が初回の認定日までなら初回の認定日。以後はその直後の認定日
+    var limit = first, same = false;
+    if (start > first) { limit = add(first, Math.ceil(diff(start, first) / 28) * 28); }
+    if (start >= first && diff(start, first) % 28 === 0) same = true;
+    var early = start <= kettei;
+    var left = diff(limit, now);
+    card(
+      "ハローワークへ申し出る期限",
+      ymd(limit) + "まで" + (left < 0 ? "（" + (-left) + "日過ぎています）" : left === 0 ? "（今日まで）" : "（あと" + left + "日）"),
+      (left < 0
+        ? "期限を過ぎると、受講を始めてからその日までの分が受けられないことがあります。今日、ハローワークに電話します。"
+        : early
+        ? "手続きの日（" + plain(kettei) + "）に出せば間に合います。遅くとも初回の認定日までです。"
+        : start <= first
+        ? "受講を始めたあと、初回の認定日までに申し出ます。"
+        : "受講を始めた日のすぐあとの認定日（または、それにあたる日）までに申し出ます。") + guess + (same ? "開始日が認定日に重なるので、当日に申し出るつもりで動き、窓口でも確かめます。" : ""),
+      left < 0
+    );
+
+    var docName = usesEnd ? "修了日が書かれた修了証明書、または訓練施設の修了日の証明書" : "開始日が書かれた領収書、または訓練施設の開始日の証明書";
+    card("申し出に出す書類", docName, "教育訓練給付金の申請で出した書類なら、その旨を伝えます。提出がいらないことがあります。");
+
+    if (j[0] === "maybe") row("次にやること", "先に窓口で、対象になるかを確かめる", "講座の名前と日付を伝えて聞きます。");
+    if (usesEnd || early) row("手続きの日までに", "書類をそろえて、手続きの日に持っていく", "修了証明書や領収書を探します。なければ、訓練施設に証明書を頼みます。厚生労働省に証明書の参考の様式があります。");
+    else row("受講を始めたら", "開始日がわかる書類を手元にそろえる", "領収書に開始日が書かれていなければ、訓練施設に証明書を頼みます。厚生労働省に証明書の参考の様式があります。");
+    row(ymd(limit) + "までに", "ハローワークに、受講を申し出る", "この日は給付制限中でも認定を受ける日になることがあります。行く日と時間は、窓口で確かめます。");
+    row("認定の日に向けて", "求職活動の実績も用意する", "解除されても、ふつうの失業の認定と同じで、認定日数に応じた職業相談などの実績が要ります。");
+
+    var isFuture = quit > now;
+    var head = isFuture ? plain(quit) + "に退職の予定です。\n" : plain(quit) + "に退職しました。\n";
+    var hw = "■ハローワークへの電話\n" + head + "教育訓練を受ける（受けた）ので、\n給付制限の解除について\n相談したいです。\n講座は" + plain(start) + "に\n始まり" + (state === "plan" ? "ます" : "ました") + "。\n申し出の日と書類を\n教えてください。";
+    var sc = "■訓練施設へのメール\n雇用保険の手続きで、受講の\n" + (usesEnd ? "修了日" : "開始日") + "がわかる書類が必要です。\n給付制限解除に係る証明書を\nお願いできますでしょうか。\n厚生労働省に参考の様式が\nあります。\nよろしくお願いいたします。";
+    $("memo").textContent = hw + "\n\n" + sc;
+
+    var ng = [];
+    ng.push("期限は受給資格者証の認定日で確かめる。このページの認定日は4週間ごとの目安");
+    ng.push("期限を過ぎると、そのあとに申し出ても、受講を始めてからその日までの分が受けられないことがある");
+    ng.push("講座に申し込んだだけでは足りない。解除の対象は、受講を始めた日以降の分");
+    if (state !== "done") ng.push("辞める前に受け終える講座は、途中でやめると当たらない");
+    ng.push("受講の時間が、すぐ働ける状態の確認に関わるかは窓口で聞く");
+    ng.push("講座が対象かどうかと、教育訓練給付金を受けられるかどうかは別の話");
+    ng.push("解除されるかの判断はハローワークが行う。このページは金額を計算しない");
+    $("ng").textContent = list(ng);
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  if (DEMO) { $("how").value = "self"; $("quit").value = "2026-11-30"; $("kettei").value = "2026-12-08"; $("kind").value = "kyufu"; $("state").value = "plan"; $("start").value = "2026-12-14"; make(); }
+})();
+</script>
+</body>
+</html>
