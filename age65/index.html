@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険と65歳の境目を確かめるページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #prep, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険と65歳の境目を確かめる</h1>
+  <p class="lead">生まれた日と辞める日を入れると、基本手当と高年齢求職者給付金のどちらの扱いになりそうか、境目の日、日数、申し込みの期限を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 生まれた日と辞める日</h2>
+    <label class="f" for="birth">生まれた日</label>
+    <input type="date" id="birth">
+    <label class="f" for="quit">辞める日（予定でもかまいません）<span class="hint">最後に出勤する日ではなく、退職日です</span></label>
+    <input type="date" id="quit">
+  </div>
+
+  <div class="card">
+    <h2>2. 雇用保険と辞め方</h2>
+    <label class="f" for="term">雇用保険に入っていた期間<span class="hint">前の会社の分を足せることがあります。迷うときは今の会社の分で選びます</span></label>
+    <select id="term">
+      <option value="u6">6か月未満</option>
+      <option value="m6">6か月以上1年未満</option>
+      <option value="y1">1年以上5年未満</option>
+      <option value="y5">5年以上10年未満</option>
+      <option value="y10">10年以上20年未満</option>
+      <option value="y20">20年以上</option>
+    </select>
+    <label class="f" for="how">辞め方</label>
+    <select id="how">
+      <option value="self">自己都合</option>
+      <option value="teinen">定年</option>
+      <option value="kaisha">会社都合（解雇・倒産など）</option>
+    </select>
+    <label class="f" for="pen">65歳になるまでの老齢厚生年金<span class="hint">年金の通知で確かめられます</span></label>
+    <select id="pen">
+      <option value="no">受け取っていない</option>
+      <option value="yes">受け取っている</option>
+      <option value="unknown">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">境目と日数を見る</button>
+  <p class="err" id="err" hidden></p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これからの段取り</h3>
+    <div id="list"></div>
+    <h3>そのまま使える文</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>ハローワークに持っていくもの</h3>
+    <div class="memo" id="prep"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・ハローワークの案内（基本手当の所定給付日数、高年齢求職者給付金の30日分・50日分、受給期限）、東京労働局の案内（誕生日の前日に満年齢に達する扱い）、日本年金機構の案内（65歳になるまでの老齢厚生年金と基本手当の調整）をもとにしています。「境目の日」は、この数え方に辞める日を当てはめたものです。扱いの最終の判断はハローワークが行うので、窓口で確かめてください。申し込みの目安の日は、このページの目安で、決まった期限ではありません。このページは金額を計算しません。就職が難しい事情のある方、特定理由離職者の方などは、日数や条件がちがうことがあります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var DAY = 86400000;
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function ymd(dt) { return dt.getFullYear() + "年" + md(dt); }
+  function plain(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function diff(a, b) { return Math.round((a - b) / DAY); }
+  var NORMAL = { u6: null, m6: null, y1: 90, y5: 90, y10: 120, y20: 150 };
+  var KAISHA = { u6: null, m6: 90, y1: 150, y5: 180, y10: 210, y20: 240 };
+  var KOREI = { u6: null, m6: 30, y1: 50, y5: 50, y10: 50, y20: 50 };
+
+  function card(k, v, s, no) {
+    var el = document.createElement("div"); el.className = no ? "big no" : "big";
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k;
+    el.querySelector(".v").textContent = v;
+    el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function fail(msg) { $("err").textContent = msg; $("err").hidden = false; $("result").hidden = true; }
+
+  function make() {
+    var birth = d($("birth").value), quit = d($("quit").value);
+    $("err").hidden = true;
+    if (!birth || !quit) { fail("生まれた日と辞める日を入れてください。"); return; }
+    var y = birth.getFullYear(), m = birth.getMonth(), dd = birth.getDate();
+    var b60 = new Date(y + 60, m, dd), b65 = new Date(y + 65, m, dd);
+    if (quit < add(b60, -1)) { fail("このページは、60歳になったあとに辞める方向けです。辞める日を確かめてください。"); return; }
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (DEMO) now = new Date(2026, 10, 4);
+    var term = $("term").value, how = $("how").value, pen = $("pen").value;
+    var reach = add(b65, -1), lastBefore = add(b65, -2);
+    var over = quit >= reach;
+    var next = add(quit, 1);
+    var limit = add(new Date(next.getFullYear() + 1, next.getMonth(), next.getDate()), -1);
+    var left = diff(limit, now);
+    var notYet = quit > now;
+    var basic = (how === "kaisha" ? KAISHA : NORMAL)[term], korei = KOREI[term];
+    var days = over ? korei : basic;
+    var wait = 7 + (how === "self" ? 31 : 0);
+    var apply = days ? add(limit, -(days + wait + 28)) : null;
+    var canMove = notYet && now <= lastBefore;
+
+    $("sum").innerHTML = ""; $("list").innerHTML = "";
+
+    card(
+      "辞める日の扱い",
+      plain(quit) + "に辞めると：" + (over ? "高年齢求職者給付金（一時金）の扱い" : "基本手当（いわゆる失業保険）の扱い"),
+      over ? "この日は、雇用保険の数え方で65歳に達したあとです。" : "この日は、雇用保険の数え方で65歳に達する前です。"
+    );
+    card(
+      "境目の日",
+      md(lastBefore) + "までは基本手当、" + md(reach) + "からは高年齢求職者給付金",
+      "65歳の誕生日は" + ymd(b65) + "です。雇用保険では、その前日に65歳に達する扱いです。"
+    );
+    card(
+      "日数のくらべ（基本手当の日額の何日分か）",
+      "基本手当 " + (basic ? basic + "日分" : "条件に足りない見込み") + "／高年齢 " + (korei ? korei + "日分" : "条件に足りない見込み"),
+      "基本手当は認定日ごとに分けて、高年齢求職者給付金は1回の認定で一度に受けます。日額の計算は年齢で少しちがうので、これだけでは金額を比べられません。"
+    );
+    if (days) {
+      card(
+        "申し込みの期限",
+        ymd(limit) + "まで" + (left < 0 ? "（" + (-left) + "日過ぎています）" : left === 0 ? "（今日まで）" : "（あと" + left + "日）"),
+        left < 0
+          ? "期限を過ぎた分は受けられないと案内されています。今から何かできるかは、ハローワークに電話して確かめます。"
+          : "辞めた日の翌日から1年が受けられる期限です。" + (over ? "申し込みが遅れると、期限を過ぎた分は受けられません。" : "この日を過ぎると、残りの日数があっても受けられないのが原則です。"),
+        left < 0
+      );
+    } else {
+      card(
+        "条件",
+        over ? "6か月に足りない見込みです" : (how === "kaisha" ? "6か月に足りない見込みです" : "12か月に足りない見込みです"),
+        over
+          ? "高年齢求職者給付金は、辞めた日以前の1年間に、通算6か月以上の加入が条件です。"
+          : how === "kaisha"
+          ? "会社都合は、辞めた日以前の1年間に通算6か月以上が基本の条件です。前の会社の分を足せるかは窓口で聞きます。"
+          : "基本手当は、辞めた日以前の2年間に通算12か月以上が基本の条件です。前の会社の分を足せるかは窓口で聞きます。",
+        true
+      );
+    }
+
+    if (notYet) {
+      row("次にやること", "会社に、退職日の日付を確かめる", "定年の日や契約の終わりは、会社の決まりで決まっていることが多いです。誕生日の前日か当日かも含めて、日付で確かめます。");
+    } else if (days && left >= 0) {
+      row("次にやること", "離職票がそろったら、住所を受け持つハローワークへ行く", "先に電話で、受けられる給付と持ち物を確かめると確実です。");
+    } else {
+      row("次にやること", "ハローワークに電話する", "生まれた日と辞めた日を伝えて、受けられるものがあるかを聞きます。");
+    }
+    if (canMove && over) {
+      row("辞める日を変えられるか考えるとき", md(lastBefore) + "までなら基本手当の扱いになる", "辞める日を動かせるかは、会社との話です。退職金・賞与・保険料・再雇用の話が変わることがあるので、そちらも一緒に確かめます。");
+    } else if (canMove && diff(lastBefore, quit) <= 31) {
+      row("日付がずれないように", "辞める日が" + md(reach) + "以降になると、扱いが変わる", "境目まであと" + diff(lastBefore, quit) + "日の余裕です。書類の退職日を確かめておきます。");
+    } else if (notYet && over) {
+      row("境目について", "境目の日は過ぎているか、間に合わない見込み", "辞める日の扱いは上のとおりです。高年齢求職者給付金の手続きを進めます。");
+    }
+    if (days && left >= 0) {
+      if (diff(apply, now) > 0 && !notYet) row("申し込む日の目安", md(apply) + "ごろまで", "待つ期間と認定日を見込んだこのページの目安です。早いほど余裕があります。");
+      else if (notYet) row("申し込む日の目安", "辞めて離職票がそろったら、早めに", "期限は辞めた日の翌日から1年です。" + (how === "self" ? "自己都合は、7日の待期のあと原則1か月は支給されません。" : "7日の待期があります。"));
+      else row("申し込む日の目安", "今週中を目安に", "期限までの日が少なくなっています。足りない分は受けられないことがあります。");
+    }
+    if (pen !== "no" && !over) {
+      row("年金が止まることがある", pen === "yes" ? "求職の申込みの前に、年金事務所に聞く" : "まず、年金の通知を見る", "65歳になるまでの老齢厚生年金は、ハローワークで求職の申込みをすると、全額止まる月が出ると案内されています。");
+    }
+    if (pen !== "no" && over) {
+      row("年金との関係", "年金事務所で確かめておくと安心", "年金機構の案内で調整の対象に挙げられているのは基本手当です。ご自分の年金のことは年金事務所で聞きます。");
+    }
+
+    var name = over ? "高年齢求職者給付金" : "基本手当";
+    var co = "退職日について確認です。\n私の退職日は\n" + plain(quit) + "の扱いで\nよろしいでしょうか。\n離職票もお願いしたいです。\nよろしくお願いいたします。";
+    var hw = (notYet ? plain(quit) + "に\n退職の予定です。\n" : plain(quit) + "に\n退職しました。\n") + "生年月日は" + plain(birth) + "です。\n受けられるのは" + name + "の\n扱いでよいでしょうか。\n持ち物と、いつまでに行けば\nよいかも教えてください。";
+    $("memo").textContent = (notYet ? "■会社の担当者へ\n" + co + "\n\n" : "") + "■ハローワークへの電話\n" + hw;
+
+    $("prep").textContent = [
+      "離職票-1と離職票-2",
+      "マイナンバーカード（ない方は、番号がわかる書類と身元がわかる書類）",
+      "写真1枚（縦3.0cm×横2.4cm。マイナンバーカードを手続きで提示するなら省略できることがあります）",
+      "本人名義の通帳かキャッシュカード"
+    ].map(function (x) { return "・" + x; }).join("\n") + "\n※そろえるものは窓口で確かめてください。";
+
+    var ng = [];
+    ng.push("境目は誕生日の当日ではなく、前日。前日に辞めると65歳に達した扱いになる見込み");
+    ng.push("高年齢求職者給付金は、受けられる期限を延ばす制度がない");
+    ng.push("働く意思と働ける状態が条件。しばらく休むつもりのときは受けられないと案内されている");
+    if (how === "self") ng.push("自己都合は、7日の待期のあと原則1か月、支給されない期間がある");
+    ng.push("日額は辞める前6か月の賃金がもとになる。賞与は入らない");
+    ng.push("このページは金額を計算しない。受けられるかどうかの判断はハローワークが行う");
+    $("ng").textContent = ng.map(function (x) { return "・" + x; }).join("\n");
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  if (DEMO) { $("birth").value = "1962-01-20"; $("quit").value = "2027-01-31"; $("term").value = "y10"; $("how").value = "teinen"; make(); }
+})();
+</script>
+</body>
+</html>
