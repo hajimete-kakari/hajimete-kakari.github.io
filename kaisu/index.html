@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>給付制限が3か月になるか、回数を数えるページ｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .past { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 4px; }
+  .past .t { font-weight: 700; color: var(--accent); margin-top: 8px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 7px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .per { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .per .h { font-size: .85rem; color: var(--sub); }
+  .per .p { font-weight: 700; }
+  .per .e { font-size: .88rem; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .per .p, .mihon .per .e, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>給付制限が3か月になるか、回数を数える</h1>
+  <p class="lead">今回と過去の退職を入れると、数える回数と、給付制限が1か月か3か月かの見込みを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今回の退職</h2>
+    <label class="f" for="how">辞め方</label>
+    <select id="how">
+      <option value="self">自己都合（正当な理由がない）</option>
+      <option value="ok">会社都合、または正当な理由があると認められた</option>
+      <option value="juseki">自分の重大な理由で解雇された</option>
+      <option value="unk">どれに当たるかわからない</option>
+    </select>
+    <label class="f" for="quit">辞めた日（予定でもかまいません）</label>
+    <input type="date" id="quit">
+    <label class="f" for="kettei">ハローワークで手続きをする日<span class="hint">わからなければ空のままで。入れると給付制限の日付も出します</span></label>
+    <input type="date" id="kettei">
+  </div>
+
+  <div class="card">
+    <h2>2. 過去の退職</h2>
+    <p class="note" style="margin:0">新しいものから順に入れます。古いものや、なければ空のままでかまいません。</p>
+    <div id="pasts"></div>
+  </div>
+  <button id="make" type="button">回数を数える</button>
+  <p class="err" id="err" hidden></p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>1回ずつの数え方</h3>
+    <div id="list"></div>
+    <h3>ハローワークに聞くときの文</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="copy" type="button">文をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省の雇用保険に関する業務取扱要領（52205-1、令和8年4月版）と「Q&amp;A～労働者の皆様へ」をもとにしています。給付制限の日付は、手続きの日と待期7日から数えた目安です。扱いの最終の判断はハローワークが行います。このページは金額を計算しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var N = 4, NEAR = 14;
+  var FROM = new Date(2025, 3, 1), OLD = new Date(2020, 9, 1);
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ymd(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function plain(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function addM(dt, n) {
+    var last = new Date(dt.getFullYear(), dt.getMonth() + n + 1, 0).getDate();
+    return new Date(dt.getFullYear(), dt.getMonth() + n, Math.min(dt.getDate(), last));
+  }
+  function diff(a, b) { return Math.round((a - b) / 86400000); }
+
+  var html = "";
+  for (var i = 1; i <= N; i++) {
+    html += '<div class="past"><div class="t">' + (i === 1 ? "いちばん新しい退職" : i + "つ前の退職") + '</div>' +
+      '<label class="f" for="pd' + i + '">辞めた日</label><input type="date" id="pd' + i + '">' +
+      '<label class="f" for="pr' + i + '">辞め方<span class="hint">離職票や受給資格者証に書かれた扱いで選びます</span></label><select id="pr' + i + '">' +
+      '<option value="self">自己都合（正当な理由がない）</option>' +
+      '<option value="ok">会社都合、または正当な理由があると認められた</option>' +
+      '<option value="unk">わからない、解雇の扱いだった</option></select>' +
+      '<label class="f" for="pa' + i + '">そのとき、失業保険の手続きをしたか<span class="hint">ハローワークで求職の申し込みをしたか、です</span></label><select id="pa' + i + '">' +
+      '<option value="yes">した（受け取らなかった場合も）</option>' +
+      '<option value="no">していない（すぐ転職した、など）</option>' +
+      '<option value="unk">覚えていない</option></select></div>';
+  }
+  $("pasts").innerHTML = html;
+
+  function card(k, v, s, no) {
+    var el = document.createElement("div"); el.className = no ? "big no" : "big";
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k;
+    el.querySelector(".v").textContent = v;
+    el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function row(h, p, e) {
+    var box = document.createElement("div"); box.className = "per";
+    box.innerHTML = '<div class="h"></div><div class="p"></div><div class="e"></div>';
+    box.querySelector(".h").textContent = h;
+    box.querySelector(".p").textContent = p;
+    box.querySelector(".e").textContent = e || "";
+    $("list").appendChild(box);
+  }
+  function fail(msg) { $("err").textContent = msg; $("err").hidden = false; $("result").hidden = true; }
+  function list(a) { return a.map(function (x) { return "・" + x; }).join("\n"); }
+  function fiveBack(dt) { return addM(dt, -60); }
+
+  // 過去の退職1つを数える（count / skip / ask）
+  function judge(pd, pr, pa, y) {
+    var near = Math.abs(diff(pd, y)) <= NEAR;
+    if (pr === "ok") return ["skip", "数えません", "会社都合や、正当な理由がある退職は、回数に入らない見込みです。"];
+    if (pa === "no") return ["skip", "数えません", "手続き（求職の申し込み）をしていない退職は、回数に入らない見込みです。"];
+    if (pd < OLD) return ["skip", "数えません", "2020年10月1日より前の退職は、回数に入りません。"];
+    if (pd < y && !near) return ["skip", "数えません", "5年の範囲より前の退職です。"];
+    if (near) return ["ask", "窓口で確かめます", "5年の境目（" + plain(y) + "）に近い日です。境目の日の扱いは、日付を伝えて聞きます。"];
+    if (pr === "unk") return ["ask", "窓口で確かめます", "辞め方がわからないので、前の離職票や受給資格者証を見るか、窓口で聞きます。自己都合で正当な理由がなければ数えます。"];
+    if (pa === "unk") return ["ask", "窓口で確かめます", "手続きをしたかわからないので、窓口で聞きます。手続きをしていれば数えます。"];
+    return ["count", "1回と数えます", "5年の範囲の、自己都合の退職で、手続きもしています。"];
+  }
+
+  function make() {
+    var how = $("how").value, quit = d($("quit").value), kettei = d($("kettei").value);
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (DEMO) now = new Date(2026, 10, 5);
+    $("err").hidden = true;
+    $("sum").innerHTML = ""; $("list").innerHTML = ""; $("memo").textContent = ""; $("ng").textContent = "";
+    if (!quit) { fail("今回の辞めた日を入れてください。"); return; }
+    if (quit < FROM) { fail("このページは、2025年4月1日以降に辞める方向けです。それより前に辞めた方の給付制限は原則2か月なので、ハローワークに聞いてください。"); return; }
+    if (kettei && kettei < quit) { fail("手続きの日が、辞めた日より前になっています。日付を確かめてください。"); return; }
+
+    var y = fiveBack(quit), rows = [], i;
+    for (i = 1; i <= N; i++) {
+      var pd = d($("pd" + i).value);
+      if (!pd) continue;
+      if (pd >= quit) { fail("過去の退職の日が、今回の辞めた日より後になっています。日付を確かめてください。"); return; }
+      var j = judge(pd, $("pr" + i).value, $("pa" + i).value, y);
+      rows.push({ d: pd, j: j });
+    }
+    rows.sort(function (a, b) { return b.d - a.d; });
+    var cnt = 0, ask = 0, olds = [];
+    rows.forEach(function (r) {
+      if (r.j[0] === "count") { cnt++; olds.push(r.d); }
+      if (r.j[0] === "ask") ask++;
+    });
+
+    var months = 0, verdict = "", sub = "", no = false;
+    if (how === "ok") {
+      verdict = "給付制限はかからない見込みです";
+      sub = "会社都合や、正当な理由があると認められた退職には、給付制限がかかりません。7日の待期のあとから対象です。";
+    } else if (how === "juseki") {
+      months = 3; no = true;
+      verdict = "3か月の見込みです";
+      sub = "自分の重大な理由で解雇された場合（重責解雇）は、回数にかかわらず3か月です。";
+    } else if (how === "unk") {
+      verdict = "辞め方を先に確かめます";
+      sub = "今回の辞め方で話が変わります。離職票の離職理由を見るか、窓口で聞きます。自己都合で正当な理由がないときの回数は、下のとおりです。";
+    } else if (cnt >= 2) {
+      months = 3; no = true;
+      verdict = "3か月の見込みです";
+      sub = "辞めた日からさかのぼって5年のうちに、数える退職が2回以上あります。";
+    } else if (cnt + ask >= 2) {
+      verdict = "1か月か3か月か、窓口で確かめます";
+      sub = "確かめる退職が数える扱いなら、5年のうちに2回以上となり3か月です。数えない扱いなら1か月です。";
+    } else {
+      months = 1;
+      verdict = "1か月の見込みです";
+      sub = "数える退職が、5年のうちに2回に届いていません。";
+    }
+    card("給付制限の長さ", verdict, sub, no);
+    card("数える範囲", plain(y) + "〜" + plain(quit), "今回の辞めた日からさかのぼった5年です。今回の退職そのものは数えません。");
+    if (how === "ok" || how === "juseki") card("過去の退職の回数", "この辞め方では、回数は関わりません", "");
+    else card("数える回数", cnt + "回" + (ask ? "（ほかに、窓口で確かめるものが" + ask + "つ）" : ""), "2回以上で3か月です。");
+
+    if (kettei && months) {
+      var s = add(kettei, 7), e = add(addM(s, months), -1);
+      card("給付制限の日付の目安", ymd(s) + "〜" + ymd(e), "手続きの日から7日の待期のあと、" + months + "か月です。手続きの日が動くと、この日付も動きます。");
+    }
+    if (how === "self" && cnt === 2 && quit > now) {
+      var older = olds[olds.length - 1], out = add(addM(older, 60), 1);
+      card("回数の参考", "古いほうの退職が範囲から外れるのは、" + plain(out) + "ごろ", "この日より後に辞めると、古いほうの退職（" + plain(older) + "）が5年の範囲から外れて、数える回数が減ります。ちょうど境目の日は、窓口で確かめます。");
+    }
+    if (months === 3) card("3か月と言われても", "教育訓練で解除される場合があります", "対象の教育訓練を受けている（受けた）と、給付制限が解除されることがあります。重大な理由の解雇は対象外です。");
+
+    var fixed = how === "ok" || how === "juseki";
+    if (fixed) row("過去の退職", "数えなくてかまいません", "今回の辞め方では、過去の回数で長さは変わりません。");
+    else if (!rows.length) row("過去の退職", "入っていません", "5年のうちに数える退職がなければ、回数は0回です。");
+    else rows.forEach(function (r) { row(plain(r.d) + "の退職", r.j[1], r.j[2]); });
+
+    var head = plain(quit) + (quit > now ? "に退職の予定です。\n" : "に退職しました。\n");
+    var dates = rows.filter(function (r) { return r.j[0] !== "skip"; }).map(function (r) { return plain(r.d); }).join("、\n");
+    var body;
+    if (how === "ok") body = "給付制限はかからない理由だと\n思うのですが、手続きのときに\n何を持っていけばよいでしょうか。";
+    else if (how === "juseki") body = "給付制限の期間と、\n手続きの持ち物を\n教えてください。";
+    else body = (dates ? "ほかに自己都合の退職が\nあります。\n" + dates + "に\n辞めています。\n" : "") + "給付制限は1か月と3か月の\nどちらになるか、\n確かめたいです。\n手続きのときに持っていく\n書類も教えてください。";
+    $("memo").textContent = "■ハローワークへの電話\n" + head + body;
+
+    var ng = [];
+    ng.push("回数に入るのは、正当な理由のない自己都合の退職で、求職の申し込みをしたもの。すぐ転職して手続きをしなかった退職は、数えない見込み");
+    ng.push("手続きをしたが受け取らなかった回も、文面上は数える扱いと読める。迷うときは窓口で聞く");
+    ng.push("5年の範囲は、手続きの日ではなく、辞めた日で数える");
+    ng.push("待期の間に再就職してまた辞めた場合などは、別の決まりで短くなることがある。この場合は窓口で聞く");
+    ng.push("扱いの最終の判断はハローワークが行う。このページは金額を計算しない");
+    $("ng").textContent = list(ng);
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("copy").addEventListener("click", function () {
+    var t = $("memo").textContent, b = this;
+    function done() { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = "文をコピー"; }, 1500); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () {});
+  });
+  if (DEMO) { $("quit").value = "2026-12-31"; $("kettei").value = "2027-01-12"; $("pd1").value = "2025-03-31"; $("pd2").value = "2023-06-30"; $("pa2").value = "yes"; $("pd3").value = "2022-08-31"; $("pa3").value = "no"; make(); }
+})();
+</script>
+</body>
+</html>
