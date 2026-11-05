@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>面接で失敗した経験を答える｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .mail { white-space: pre-wrap; word-break: break-all; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #say, .mihon #short, .mihon #more, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>面接で失敗した経験を答える</h1>
+  <p class="lead">面接で「これまでの失敗した経験を教えてください」と聞かれたときに、そのまま話せる答えを作ります。実際にあった失敗と、そのときの対応、今している工夫を選ぶと、答え、短い答え、続けて聞かれたときの返し方が出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 話す失敗</h2>
+    <label class="f" for="kind">近い失敗<span class="hint">実際にあったものを選んでください</span></label>
+    <select id="kind">
+      <option value="check">確認が足りず、書類やデータに誤りを出した</option>
+      <option value="late">期限に間に合わなかった</option>
+      <option value="report">報告が遅れて、問題が大きくなった</option>
+      <option value="comm">伝え方が足りず、行き違いが起きた</option>
+      <option value="hold">一人で抱え込んで、進まなくなった</option>
+      <option value="plan">準備が足りず、思った結果が出なかった</option>
+      <option value="other">どれも近くない（自分で入れる）</option>
+    </select>
+    <label class="f" for="where">どこでの失敗か</label>
+    <select id="where">
+      <option value="前の仕事で">前の仕事</option>
+      <option value="今の仕事で">今の仕事</option>
+      <option value="アルバイトで">アルバイト</option>
+    </select>
+    <label class="f" for="size">失敗の大きさ</label>
+    <select id="size">
+      <option value="small">自分の仕事の中で直せた</option>
+      <option value="mid">周りや相手にも影響が出た</option>
+      <option value="big">会社に大きな損失や問題が出た</option>
+    </select>
+    <h2 id="sec2" style="margin-top:20px">2. そのあとのこと</h2>
+    <div id="actRow">
+      <label class="f" for="act">その場でしたこと<span class="hint">していないことは選ばないでください</span></label>
+      <select id="act"></select>
+    </div>
+    <div id="actBox">
+      <label class="f" for="actFree">自分がしたこと<span class="hint">「〜ました」に続く形で</span></label>
+      <input type="text" id="actFree" placeholder="例：上司に報告して、やり直し">
+    </div>
+    <div id="causeRow">
+      <label class="f" for="cause">自分の側の原因<span class="hint">実際に当てはまるものを選んでください</span></label>
+      <select id="cause"></select>
+    </div>
+    <div id="causeBox">
+      <label class="f" for="causeFree">自分の側の原因<span class="hint">「〜こと」で終わる形で</span></label>
+      <input type="text" id="causeFree" placeholder="例：手順を確かめずに始めたこと">
+    </div>
+    <div id="fixRow">
+      <label class="f" for="fix">それからしている工夫<span class="hint">していないことは選ばないでください</span></label>
+      <select id="fix"></select>
+    </div>
+    <div id="fixBox">
+      <label class="f" for="fixFree">自分の工夫<span class="hint">「〜ようにしております」に続く形で</span></label>
+      <input type="text" id="fixFree" placeholder="例：始める前に手順を確かめる">
+    </div>
+    <h2 id="sec3" style="margin-top:20px">3. 言葉を足す</h2>
+    <label class="f" for="what">実際に起きたこと<span class="hint" id="whatHint">なければ空のまま。「〜ことがありました」に続く形で</span></label>
+    <input type="text" id="what" placeholder="例：見積書の金額を確かめずに送って、指摘を受けた">
+    <label class="f" for="res">工夫して変わったこと<span class="hint">なければ空のまま。「〜ようになりました」に続く形で</span></label>
+    <input type="text" id="res" placeholder="例：送る前に誤りに気づける">
+    <label class="f" for="job">応募している職種<span class="hint">なければ空のまま</span></label>
+    <input type="text" id="job" placeholder="例：営業事務">
+  </div>
+  <button id="make" type="button">答えを作る</button>
+  <p class="err" id="err" hidden></p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>そのまま話せる答え</h3>
+    <div class="mail" id="say"></div>
+    <button type="button" class="copy" data-t="say">答えをコピー</button>
+    <h3>短く答えるとき</h3>
+    <div class="mail" id="short"></div>
+    <button type="button" class="copy" data-t="short">短い答えをコピー</button>
+    <h3>続けて聞かれたら</h3>
+    <div class="mail" id="more"></div>
+    <h3>避けたい言い方</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※話し方の目安です。受かるかどうかを約束するものではありません。実際とちがうところは、自分の言葉に直してから使ってください。長さは1分300字で数えた目安で、話す速さによって変わります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  var MIHON = location.search.indexOf("mihon") >= 0;
+  if (MIHON) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 失敗ごとの言葉：t=失敗の文、a=その場でしたこと（「ました」に続く）、c=自分の側の原因、f=工夫
+  var D = {
+    check: { t: "確認が足りないまま書類を出して、誤りが見つかった",
+      a: ["上司に報告し、正しい内容を出し直し", "相手に連絡して、誤りをおわびし", "ほかに同じ誤りがないか確かめ"],
+      c: ["確認の手順を決めていなかったこと", "急いでいて、見直しを省いたこと"],
+      f: ["出す前に、確認する項目を一つずつ見る", "大事な書類は、ほかの人にも見てもらう", "見直す時間を先に予定に入れる"] },
+    late: { t: "仕事の期限に間に合わず、相手をお待たせした",
+      a: ["相手に連絡して、新しい日を伝え", "上司に相談して、手伝いをお願いし", "優先順位を見直して、大事な仕事から仕上げ"],
+      c: ["かかる時間の見込みが甘かったこと", "遅れそうだと早めに相談しなかったこと"],
+      f: ["作業を細かく分けて、途中の期限を決める", "遅れそうなときは、早めに相談する", "かかった時間を記録して、次の見込みに使う"] },
+    report: { t: "報告が遅れて、問題が大きくなった",
+      a: ["上司に経緯を伝え、対応を相談し", "関係する人に連絡して、状況を伝え", "解決するまで、進みぐあいをこまめに報告し"],
+      c: ["自分で何とかしようとして、伝えるのが遅くなったこと", "小さなことだと自分で判断したこと"],
+      f: ["問題に気づいたら、小さなことでも先に伝える", "報告する日時を先に決めておく", "事実と見込みを分けて、短く伝える"] },
+    comm: { t: "伝え方が足りず、相手と行き違いが起きた",
+      a: ["相手に確かめて、内容を合わせ直し", "おわびをして、決まったことを文章で送り", "関係する人に、正しい内容を伝え直し"],
+      c: ["口頭だけで済ませて、記録を残さなかったこと", "相手がわかっているものと思いこんだこと"],
+      f: ["大事なことは、文章でも送る", "話の終わりに、決まったことを確かめる", "相手の言葉で言い直して、確かめる"] },
+    hold: { t: "仕事を一人で抱え込んで、予定どおりに進まなくなった",
+      a: ["上司に今の状況を伝え、仕事の分け方を相談し", "周りの人に手伝いをお願いし", "残っている仕事を書き出して、順番を決め直し"],
+      c: ["忙しいことを周りに伝えなかったこと", "自分だけで終わらせようとしたこと"],
+      f: ["抱えている仕事を一覧にして、周りと共有する", "引き受ける前に、今の仕事の量と期限を確かめる", "困った時点で、早めに相談する"] },
+    plan: { t: "準備が足りず、思っていた結果が出なかった",
+      a: ["うまくいかなかった点を書き出し、やり方を見直し", "上司や先輩に意見を聞き、やり直し", "関係する人に結果を伝えて、次の進め方を相談し"],
+      c: ["はじめに目標をはっきり決めなかったこと", "人の意見を聞かずに進めたこと"],
+      f: ["始める前に、目標と手順を書き出す", "途中で一度、人に見てもらう", "終わったあとに、よかった点と直す点をまとめる"] }
+  };
+  // 見本画像では入力の一部だけにして、結果の並びが入るようにする
+  if (MIHON) {
+    ["what", "res", "job", "where", "size"].forEach(function (id) { $(id).hidden = true; document.querySelector('label[for="' + id + '"]').hidden = true; });
+    $("sec3").hidden = true;
+  }
+  // 前後の空白と、文の終わりの記号を取る
+  function v(id) { return $(id).value.trim().replace(/[。、．，]+$/, ""); }
+  function len(t) { return t.replace(/\s/g, "").length; }
+  function sec(t) { return Math.round(len(t) / 5); }
+  function opts(sel, list) {
+    sel.innerHTML = "";
+    list.forEach(function (x) { var o = document.createElement("option"); o.value = x; o.textContent = x; sel.appendChild(o); });
+    var m = document.createElement("option"); m.value = "__free"; m.textContent = "自分で入れる"; sel.appendChild(m);
+  }
+  // 失敗に合わせて、選択肢と入力欄を出し分ける
+  function fill() {
+    var k = $("kind").value, d = k === "other" ? { a: [], c: [], f: [] } : D[k];
+    opts($("act"), d.a); opts($("cause"), d.c); opts($("fix"), d.f);
+    show();
+  }
+  function show() {
+    var other = $("kind").value === "other";
+    [["act", "actRow", "actBox"], ["cause", "causeRow", "causeBox"], ["fix", "fixRow", "fixBox"]].forEach(function (x) {
+      $(x[1]).hidden = other;
+      $(x[2]).hidden = $(x[0]).value !== "__free";
+    });
+    $("whatHint").textContent = other ? "「〜ことがありました」に続く形で" : "なければ空のまま。「〜ことがありました」に続く形で";
+  }
+  function make() {
+    var k = $("kind").value, size = $("size").value, where = $("where").value, other = k === "other", err = "";
+    var what = v("what").replace(/(ことが(ありました|あります|あった|ある))$/, "");
+    var act = $("act").value === "__free" ? v("actFree").replace(/(ました|ます)$/, "") : $("act").value;
+    var cause = $("cause").value === "__free" ? v("causeFree").replace(/(が原因(でした|です|だ)?)$/, "") : $("cause").value;
+    if (cause && !/こと$/.test(cause)) cause += "こと";
+    var fix = $("fix").value === "__free" ? v("fixFree").replace(/(ように(して(おります|います|いる)|する)|ようにします)$/, "") : $("fix").value;
+    if (other && !what) err = "実際に起きたことを入れてください。";
+    else if (!act) err = "その場でしたことを入れてください。";
+    else if (!cause) err = "自分の側の原因を入れてください。";
+    else if (!fix) err = "それからしている工夫を入れてください。";
+    $("err").textContent = err; $("err").hidden = !err;
+    if (err) { $("result").hidden = true; return false; }
+    var t = what || D[k].t;
+    var res = v("res").replace(/(ようになりました|ようになった|ようになる)$/, "");
+    var job = v("job").replace(/の仕事$/, "");
+    // 答え：失敗→その場の対応→原因→工夫→変わったこと→この仕事で
+    var a = where + "、\n" + t + "\nことがありました。";
+    var b = { small: "その場では、\n", mid: "周りにも影響が出たため、\nその場で、\n", big: "周りに大きなご迷惑をおかけしたため、\nその場で、\n" }[size] + act + "ました。";
+    var c = "原因は、\n" + cause + "\nだと考えております。";
+    var d = "それからは、\n" + fix + "\nようにしております。" + (res ? "\nその結果、\n" + res + "\nようになりました。" : "");
+    var e = (job ? "御社の" + job + "の仕事でも、\n" : "御社でも、\n") + "この経験を生かして、\n取り組みたいと考えております。";
+    var say = a + "\n\n" + b + "\n\n" + c + "\n\n" + d + "\n\n" + e;
+    $("say").textContent = say;
+    var sh = where + "、\n" + t + "\nことがありました。\nそれからは、\n" + fix + "\nようにしております。";
+    $("short").textContent = sh;
+    // 結果の見出し
+    var s = $("sum"); s.innerHTML = "";
+    function card(key, val, sub) {
+      var el = document.createElement("div"); el.className = "big";
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = key; el.querySelector(".v").textContent = val; el.querySelector(".s").textContent = sub;
+      s.appendChild(el);
+    }
+    card("話す順番", "失敗→その場の対応→原因→今の工夫" + (res ? "→変わったこと" : "") + "→入社後", "順番を覚えておけば、言葉が少し変わってもかまいません。");
+    card("失敗の大きさ", { small: "順番どおりに話す", mid: "影響と対応まで話す", big: "話す失敗を選び直すことも考える" }[size],
+      { small: "小さな失敗でも、対応と工夫まで話せば答えになります。",
+        mid: "どんな影響が出たかを一言入れて、対応と今の工夫に時間を使います。",
+        big: "ほかに本当にあった失敗があれば、そちらを話すことも考えます。話すなら、軽く言わず、対応と今の工夫に時間を使います。" }[size]);
+    card("話す長さ", len(say) + "字・およそ" + sec(say) + "秒", sec(say) > 60 ? "長めです。聞かれたことへの答えなので、「短く答えるとき」から話しはじめてもかまいません。" : sec(say) > 40 ? "少し長めです。時間がなさそうなときは、「短く答えるとき」を話します。" : "短く話せる長さです。声に出して計ると、自分の速さがわかります。");
+    // 続けて聞かれたら
+    var more = "■「同じことが起きたら、どうしますか」\nまず、" + act + "ます。\nふだんから、\n" + fix + "\nようにしておきます。";
+    more += "\n\n■「そのとき、周りの反応はどうでしたか」\n（実際に言われたことを1つ、\n短く話します）\nそれもあって、今は、\n" + fix + "\nようにしております。";
+    if (size !== "small") more += "\n\n■「影響はどのくらいでしたか」\n（実際にあった範囲を短く話します。\n取引先の名前や金額など、\n社外に出せないことは話しません）\n今は、\n" + fix + "\nようにしております。";
+    more += "\n\n■「ほかに大きな失敗はありますか」\n（ほかにあれば、同じ順番で短く話します。\nなければ次のように答えます）\n仕事で思い浮かぶのは、\n今お話ししたことです。";
+    $("more").textContent = more;
+    // 避けたい言い方
+    var ng = "・「失敗したことはありません」と言う\n　→聞かれたことに答えていないと受け取られることがあります\n" +
+      "・失敗の話だけで終える\n　→今の工夫まで話します\n" +
+      "・周りや前の会社のせいにする\n　→自分の側の原因を話します\n" +
+      "・作った話をする\n　→くわしく聞かれると答えられません\n" +
+      "・取引先の名前や金額、社内の事情を話す\n";
+    if (size === "big") ng += "・「大したことではありません」と軽く言う\n　→影響が出たことは認めて、対応を話します\n";
+    ng += "・遅刻や連絡なしの欠勤など、働くうえでの基本にかかわることを、工夫なしで話す";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+    return true;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
+        ta.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(ta);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("kind").addEventListener("change", fill);
+  ["act", "cause", "fix"].forEach(function (id) { $(id).addEventListener("change", show); });
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  fill();
+  if (DEMO) {
+    $("kind").value = "check"; fill(); $("act").value = D.check.a[0]; $("cause").value = D.check.c[0]; $("fix").value = D.check.f[0]; $("size").value = "mid";
+    $("what").value = "見積書の金額を確かめずに送って、指摘を受けた"; $("res").value = "送る前に誤りに気づける"; $("job").value = "営業事務";
+    show(); make();
+  }
+})();
+</script>
+</body>
+</html>
