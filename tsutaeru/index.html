@@ -142,8 +142,8 @@
     var r = y > 0 ? addWk(l, y) : l;         // 退職日
     var moved = false;
     if (r < e) {                             // 期限に届かない → 退職日を期限に合わせ、出社を後ろへ
-      r = onOrAfterWk(e);
-      l = y > 0 ? subWk(r, y) : r;
+      r = e;                                 // 退職日は暦の日のまま（休みの日でもよい）
+      l = y > 0 ? subWk(r, y) : (wk(r) ? r : subWk(r, 1));
       moved = true;
     }
     var v = mds(t) + "に伝え、退職日は" + mds(r) + "が目安です";
