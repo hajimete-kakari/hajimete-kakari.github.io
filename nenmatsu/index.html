@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>12月に辞めるときの年末調整｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>12月に辞めるときの年末調整</h1>
+  <p class="lead">辞める日と12月の給料日を入れると、今の会社で年末調整をしてもらえそうか、もらえないときに次に何をするかを出します。国税庁の案内（年末調整の対象となる人）で出した目安です。税額の計算はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞める日と給料日</h2>
+    <label class="f" for="ritu">辞める日（退職日）<span class="hint">会社に在籍する最後の日</span></label>
+    <input type="date" id="ritu">
+    <label class="f" for="kyu">12月の給料日<span class="hint">12月に支給日がくる給与の、支給日です（何月分の給与かは問いません）</span></label>
+    <input type="date" id="kyu">
+  </div>
+
+  <div class="card">
+    <h2>2. 働き方と、このあと</h2>
+    <label class="f" for="kata">働き方</label>
+    <select id="kata">
+      <option value="sei">正社員・契約社員など</option>
+      <option value="p136">パート・アルバイトで、今年の給与が136万円以下</option>
+      <option value="pover">パート・アルバイトで、今年の給与が136万円を超える</option>
+    </select>
+    <label class="f" for="tsugi">年内に、次の会社から給与をもらう予定<span class="hint">12月31日までに、次の勤め先で給与が支払われるか</span></label>
+    <select id="tsugi">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+      <option value="mitei">まだわからない</option>
+    </select>
+    <label class="f" for="shin">扶養控除等申告書を、今の会社に出している<span class="hint">入社のときや年の初めに配られる「給与所得者の扶養控除等（異動）申告書」</span></label>
+    <select id="shin">
+      <option value="yes">出している</option>
+      <option value="unk">わからない</option>
+      <option value="no">出していない（副業先など）</option>
+    </select>
+  </div>
+  <button id="make" type="button">年末調整を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社の担当者に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁タックスアンサー No.2665「年末調整の対象となる人」で出した目安です（年の途中で辞めた人のうち、12月に支給期の到来する給与の支払を受けた後に退職した人などは年末調整の対象。パートタイマーなどが辞めて、その年の給与の総額が136万円以下で、年内にほかの勤め先から給与をもらう見込みがない人も対象。対象になるのは扶養控除等申告書を出している人で、その年の給与が2,000万円を超える人などは除く）。死亡・海外転勤・心身の障害による退職は、このページでは扱っていません。最後は、会社の担当者や税務署で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function make() {
+    var r = d($("ritu").value), k = d($("kyu").value);
+    if (!r || !k) { alert("辞める日と、12月の給料日を入れてください"); return; }
+    if (k.getMonth() !== 11) { alert("給料日は、12月の日付を入れてください"); return; }
+    var kata = $("kata").value, tsugi = $("tsugi").value, shin = $("shin").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var sameYear = r.getFullYear() === k.getFullYear();
+    var after = sameYear && r.getMonth() === 11 && r > k;      // 給料日の後に辞める
+    var same = sameYear && r.getMonth() === 11 && r.getTime() === k.getTime();
+    var p136 = kata === "p136" && tsugi === "no";
+    var state;
+    if (r.getFullYear() > k.getFullYear()) state = "next";
+    else if (after) state = "ok";
+    else if (same) state = "same";
+    else if (p136) state = "p136";
+    else state = "out";
+
+    if (state === "next") {
+      box("今の会社での年末調整", "年末まで在籍する形です", "辞める日が年明けなら、12月の時点ではまだ在籍しています。年末まで勤めている人として、ふだんどおり会社の年末調整の対象になるのが一般的です。", false);
+    } else if (state === "ok") {
+      box("今の会社での年末調整", "対象になりそうです", "12月の給料日（" + f(k) + "）に給与を受け取ったあと、" + f(r) + "に辞める順番です。年の途中で辞めても、12月に支給日がくる給与を受け取ったあとに辞める人は、年末調整の対象になります。", false);
+    } else if (state === "same") {
+      box("今の会社での年末調整", "会社に確かめます", "辞める日と12月の給料日が同じ日です。給与を受け取ったあとに辞める扱いになるかは、会社の担当者に確かめます。", true);
+    } else if (state === "p136") {
+      box("今の会社での年末調整", "対象になることがあります", "12月の給料日より前に辞める順番ですが、パートなどで今年の給与が136万円以下、年内にほかで給与をもらう見込みがない人は、辞めるときに年末調整の対象になります。会社がしてくれるかを確かめます。", false);
+    } else {
+      box("今の会社での年末調整", "対象にならない見込みです", f(r) + "に辞めて、そのあと" + f(k) + "の給料日がくる順番です。12月に支給日がくる給与を受け取る前に辞めるので、今の会社では年末調整をしない形になります。", true);
+    }
+    if (shin !== "yes") {
+      box("扶養控除等申告書", shin === "no" ? "出していないと対象になりません" : "出しているか確かめます", "年末調整の対象になるのは、扶養控除等申告書を会社に出している人です。" + (shin === "no" ? "副業先など、申告書を出していない会社では年末調整はされません。" : "入社のときの書類を思い出すか、担当者に聞きます。"), true);
+    }
+
+    if (state === "out") {
+      if (tsugi === "yes") box("年内に次の会社で給与をもらうなら", "次の会社でまとめてもらえます", "年の途中で入った人も、年末まで勤めていれば次の会社で年末調整の対象です。今の会社の源泉徴収票を次の会社に出すと、今の会社の分も合わせて精算されます。", false);
+      else box("年内にほかの給与がないなら", "翌年に自分で申告します", "今年の所得税は年末調整で精算されないまま年を越します。引かれすぎた分は、翌年の確定申告（還付申告）で戻ることがあります。", false);
+    }
+
+    if (state === "ok" || state === "next") {
+      todo("扶養控除等申告書を出しているか確かめる");
+      todo("12月の年末調整の書類（保険料控除の申告書など）が配られたら、期限までに出す");
+      todo("辞めたあとに届く源泉徴収票を、なくさずに取っておく");
+      todo("医療費控除などは年末調整で扱えないので、使う人は翌年に確定申告する");
+    } else if (state === "same" || state === "p136") {
+      todo("担当者に、辞めるときに年末調整をしてもらえるかを聞く");
+      todo("してもらえるなら、保険料控除などの書類を先に出す");
+      todo("してもらえないなら、源泉徴収票を受け取り、翌年の確定申告に回す");
+    } else {
+      todo("辞める日をまだ動かせるなら、12月の給料日より後にできるか考える（社会保険料などほかの影響も見る）");
+      todo("辞めたあと1か月以内をめどに、今の会社から源泉徴収票を受け取る");
+      if (tsugi !== "no") todo("年内に次の会社で給与をもらうなら、次の会社の年末調整に源泉徴収票を出す");
+      if (tsugi !== "yes") todo("年内にほかの給与がなければ、翌年1月以降に確定申告（還付申告）をするか考える");
+      todo("生命保険料などの控除証明書は、捨てずに取っておく");
+    }
+
+    var q = state === "out"
+      ? "12月" + k.getDate() + "日の給料日より前に\n退職する予定です。\n源泉徴収票は\nいつごろ届きますか。\n届け先の住所は〇〇です。"
+      : (r.getMonth() + 1) + "月" + r.getDate() + "日に\n退職する予定です。\n" + (state === "next" ? "12月の年末調整は\nいつもどおり\n受けられますか。\n" : "退職のときに、\n年末調整を\nしていただけますか。\n") + "出す書類と、その期限を\n教えてください。\n源泉徴収票が届く時期も\n知りたいです。";
+    $("memo").textContent = q;
+    $("ng").textContent = "・12月に辞めても、給料日より前に辞めると年末調整の対象にならない\n・「12月分」の給与かではなく、12月に支給日がくる給与を受け取ったあとかで見る\n・年末調整を受けても、医療費控除や、ワンストップ特例を使わないふるさと納税は確定申告が要る\n・源泉徴収票は次の会社や確定申告で使うので、なくさない\n・税額の計算や、自分の場合の細かい扱いは、会社の担当者や税務署で確かめる";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ritu").value = "2026-12-20"; $("kyu").value = "2026-12-25"; $("kata").value = "sei"; $("tsugi").value = "no"; $("shin").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
