@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>住民税の納付書を天引きに戻す｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .t, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>住民税の納付書を、天引きに戻す</h1>
+  <p class="lead">会社に頼む日と、払い終わった期を選ぶと、給料からの天引き（特別徴収）に回せそうな期と、納付書で払う期の目安、会社に頼むときの一言を出します。市区町村の案内をもとにした目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いつ頼むか</h2>
+    <label class="f" for="irai">新しい会社に切り替えを頼む日<span class="hint">入社した日か、人事・総務に伝えられる日</span></label>
+    <input type="date" id="irai">
+  </div>
+
+  <div class="card">
+    <h2>2. 納付書の状況</h2>
+    <label class="f" for="sumi">いま届いている納付書で、払い終わった期<span class="hint">納税通知書の「第1期〜第4期」で見ます</span></label>
+    <select id="sumi">
+      <option value="0">まだ1回も払っていない</option>
+      <option value="1">第1期まで払った</option>
+      <option value="2">第2期まで払った</option>
+      <option value="3">第3期まで払った</option>
+      <option value="4">全部払った</option>
+    </select>
+    <label class="f" for="kyu">去年（1〜12月）に、会社から給料をもらっていた<span class="hint">住民税は、去年の収入をもとに決まっています</span></label>
+    <select id="kyu">
+      <option value="yes">はい</option>
+      <option value="no">いいえ（自営業・無職だった）</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">切り替えの目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>期ごとの目安</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>会社に頼むときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※市区町村の案内で出した目安です（普通徴収の納期は6月・8月・10月・翌年1月の4回が多く、日付は市区町村の条例で決まる。このページでは各月の月末を期限の目安にしている。再就職先で特別徴収を希望すると申し出れば切り替えられる。特別徴収に変えられるのは、納期限が来ていない分だけで、期限が過ぎた分と払った分は変えられない。切替の届出は会社から、その年の1月1日に住んでいた市区町村へ出す。天引きが始まる月は、届出が着いた日と市区町村の処理によって変わる。前の年に給料の収入がないと、その年度の分は切り替えられず翌年度からになる市区町村がある）。最後は、納税通知書と市区町村の窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var r = d($("irai").value);
+    if (!r) { alert("頼む日を入れてください"); return; }
+    var sumi = +$("sumi").value, kyu = $("kyu").value;
+    var fy = r.getMonth() >= 5 ? r.getFullYear() : r.getFullYear() - 1;
+    var ki = [
+      { n: 1, dl: new Date(fy, 6, 0) },
+      { n: 2, dl: new Date(fy, 8, 0) },
+      { n: 3, dl: new Date(fy, 10, 0) },
+      { n: 4, dl: new Date(fy + 1, 1, 0) }
+    ];
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    var ok = [], giri = [], pay = [];
+    ki.forEach(function (k) {
+      var st, t;
+      var days = Math.round((k.dl - r) / 86400000);
+      if (k.n <= sumi) { st = "sumi"; t = "払い済み。この分は天引きになりません。"; }
+      else if (days < 0) { st = "pay"; t = "期限（目安 " + f(k.dl) + "）が頼む日より前です。天引きには回せないので、納付書で払います。"; pay.push(k.n); }
+      else if (days <= 30) { st = "giri"; t = "期限（目安 " + f(k.dl) + "）まで" + days + "日。会社の届出が市区町村に着く前に期限が来ると、天引きに回せません。納付書で払う用意をしておき、会社に間に合うか聞きます。"; giri.push(k.n); }
+      else { st = "ok"; t = "期限（目安 " + f(k.dl) + "）まで" + days + "日あります。早めに頼めば、天引きに回せる見込みです。"; ok.push(k.n); }
+      var li = document.createElement("li"); li.innerHTML = '<span class="d"></span> <span class="t"></span>';
+      li.querySelector(".d").textContent = "第" + k.n + "期（" + (k.dl.getMonth() + 1) + "月）";
+      li.querySelector(".t").textContent = t;
+      $("tl").appendChild(li);
+    });
+    function list(a) { return a.map(function (n) { return "第" + n + "期"; }).join("・"); }
+    if (sumi === 4) {
+      box("天引きに回せる期", "この年度の分は払い終わっています", "切り替えは要りません。次の年度（6月から）の分を天引きにできるかは、新しい会社に確かめます。", false);
+    } else if (ok.length) {
+      box("天引きに回せる期", list(ok) + (giri.length ? "（" + list(giri) + "はぎりぎり）" : ""), "頼む日の時点で期限が来ていない期は、新しい会社に頼むと、給料からの天引きに切り替えられることがあります。" + (pay.length ? list(pay) + "は、先に納付書で払います。" : ""), false);
+    } else if (giri.length) {
+      box("天引きに回せる期", list(giri) + "は、ぎりぎり", "会社が届出を出すまでに期限が来ると、天引きに回せません。今日のうちに会社に伝え、間に合わなければ納付書で払います。", true);
+    } else {
+      box("天引きに回せる期", "この年度は残っていない見込み", "残っている期の期限が、頼む日より前です。この年度の残りは、納付書で払います。次の年度（6月から）の分を天引きにできるかは、新しい会社に確かめます。", true);
+    }
+    if (sumi < 4 && (ok.length || giri.length)) {
+      box("天引きが始まる時期", "届出が着いてから、翌月か翌々月が多い", "会社が市区町村へ届出を出し、市区町村が処理してからになります。それまでに期限が来た期は、納付書で払います（二重に払わないよう、どの期から天引きか会社に確かめます）。", false);
+    }
+    if (kyu !== "yes" && sumi < 4 && (ok.length || giri.length)) {
+      box("去年の給料について", kyu === "no" ? "この年度は切り替えられないことがあります" : "去年の収入を確かめます", "去年に給料の収入がないと、その年度の分は特別徴収にできず、翌年度からになる市区町村があります。市区町村の住民税の窓口に確かめます。", true);
+    }
+    var rest = 4 - sumi;
+    $("memo").textContent = sumi === 4
+      ? "住民税は、前の会社を\n辞めたあと、納付書で\n払い終えました。\n来年度（6月から）の分を、\n給料からの天引きに\nしてもらえますか。"
+      : (!ok.length && !giri.length)
+      ? "住民税は、いま納付書で\n払っています。\n今年度の残りは\n納付書で払います。\n来年度（6月から）の分を、\n給料からの天引きに\nしてもらえますか。"
+      :"住民税を、給料からの\n天引き（特別徴収）に\n切り替えたいです。\nいまは納付書で払っていて、\n" + (sumi === 0 ? "まだ1回も払っていません。\n" : "第" + sumi + "期まで払いました。\n") + "納税通知書の表紙の\nコピーをお渡しします。\n切替の届出を、市区町村に\n出していただけますか。\nどの月の給料から\n引かれるかも教えてください。";
+    $("ng").textContent = "・期限が来た期は、天引きを待たずに納付書で払う（遅れると延滞金がかかることがある）\n・届出が通る前に払った期は、会社に伝える（二重払いを防ぐため）\n・届出の先は、いま住んでいる所ではなく、その年の1月1日に住んでいた市区町村\n・納税通知書の原本は自分で持っておく（会社にはコピーを渡す）\n・切り替えの扱いや天引きが始まる月は、市区町村と会社によって違う";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("irai").value = "2026-11-20"; $("sumi").value = "2"; $("kyu").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
