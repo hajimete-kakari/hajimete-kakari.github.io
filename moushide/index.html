@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>任意継続の申し込み 20日目の期限｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .t, .mihon #tl .d, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>任意継続の申し込み 20日目の期限</h1>
+  <p class="lead">辞めた日と出し方を選ぶと、任意継続の申出書を出す期限（20日目）と、土日・祝日のずれ、郵送なら出す日の目安、添えるもの、過ぎてしまったときに最初にすることを出します。協会けんぽの決まりで出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と加入先</h2>
+    <label class="f" for="ritu">辞めた日（退職日）<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="ritu">
+    <label class="f" for="kumi">在職中の健康保険<span class="hint">保険証やお知らせに書かれている名前で選びます</span></label>
+    <select id="kumi">
+      <option value="kyokai">協会けんぽ（全国健康保険協会）</option>
+      <option value="kumiai">〇〇健康保険組合</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 出し方と今日の日付</h2>
+    <label class="f" for="dasu">申出書の出し方</label>
+    <select id="dasu">
+      <option value="yuso">郵送で出す</option>
+      <option value="mado">支部の窓口に持っていく</option>
+      <option value="denshi">電子申請で出す</option>
+      <option value="mitei">まだ決めていない</option>
+    </select>
+    <label class="f" for="fam">家族も一緒に入れるか<span class="hint">在職中に扶養に入れていた家族</span></label>
+    <select id="fam">
+      <option value="no">自分だけ</option>
+      <option value="yes">家族も一緒に入れる</option>
+    </select>
+    <label class="f" for="kyo">今日の日付<span class="hint">残りの日数を出すのに使います</span></label>
+    <input type="date" id="kyo">
+  </div>
+  <button id="make" type="button">期限を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>出すまでの順番</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>申出書に添えるもの</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※協会けんぽの任意継続の決まりで出した目安です（申出書は、退職日の翌日から20日以内に、住んでいる地域の協会けんぽの支部へ出す。20日目が土日・祝日なら翌営業日。郵送は20日以内に届くように送る。退職日までに続けて2か月以上加入していたことが条件。資格は退職日の翌日から）。法律では、正当な理由があると保険者が認めたときは、20日を過ぎた申出も受理できることになっていますが、認められるかは保険者の判断です。祝日は主なものだけで判定しているため、最後は支部で確かめてください。健康保険組合の任意継続は、組合の案内で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(x) { return x.getFullYear() + "-" + ("0" + (x.getMonth() + 1)).slice(-2) + "-" + ("0" + x.getDate()).slice(-2); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function diff(a, b) { return Math.round((b - a) / 86400000); }
+  function nthMon(y, m, n) { var x = new Date(y, m, 1); var off = (8 - x.getDay()) % 7; return 1 + off + (n - 1) * 7; }
+  function equinox(y, m) { var b = y - 1980; return m === 2 ? Math.floor(20.8431 + 0.242194 * b - Math.floor(b / 4)) : Math.floor(23.2488 + 0.242194 * b - Math.floor(b / 4)); }
+  function hol0(x) {
+    var y = x.getFullYear(), m = x.getMonth(), dd = x.getDate();
+    var fixed = { "0-1": 1, "1-11": 1, "1-23": 1, "3-29": 1, "4-3": 1, "4-4": 1, "4-5": 1, "7-11": 1, "10-3": 1, "10-23": 1 };
+    if (fixed[m + "-" + dd]) return true;
+    if (m === 0 && dd === nthMon(y, 0, 2)) return true;
+    if (m === 6 && dd === nthMon(y, 6, 3)) return true;
+    if (m === 8 && dd === nthMon(y, 8, 3)) return true;
+    if (m === 9 && dd === nthMon(y, 9, 2)) return true;
+    if (m === 2 && dd === equinox(y, 2)) return true;
+    if (m === 8 && dd === equinox(y, 8)) return true;
+    return false;
+  }
+  function hol(x) {
+    if (hol0(x)) return true;
+    if (x.getDay() === 0) return false;
+    var p = add(x, -1);
+    while (hol0(p)) { if (p.getDay() === 0) return true; p = add(p, -1); }
+    return false;
+  }
+  function off(y) { return y.getDay() === 0 || y.getDay() === 6 || hol(y); }
+  function nextBiz(x) { var y = new Date(x); while (off(y)) y = add(y, 1); return y; }
+  function prevBiz(x) { var y = new Date(x); while (off(y)) y = add(y, -1); return y; }
+  function nenmatsu(x) { var m = x.getMonth(), dd = x.getDate(); return (m === 11 && dd >= 29) || (m === 0 && dd <= 3); }
+  function li(dt, t) {
+    var el = document.createElement("li"); el.innerHTML = '<span class="d"></span> <span class="t"></span>';
+    el.querySelector(".d").textContent = dt; el.querySelector(".t").textContent = t; $("tl").appendChild(el);
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var r = d($("ritu").value);
+    if (!r) { alert("辞めた日を入れてください"); return; }
+    var today = d($("kyo").value);
+    if (!today) { var n = new Date(); today = new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+    var kumi = $("kumi").value, dasu = $("dasu").value, fam = $("fam").value;
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+
+    var saki = kumi === "kumiai" ? "加入していた健康保険組合" : "住んでいる地域の協会けんぽの支部";
+    var lose = add(r, 1);          // 資格を失う日＝任意継続が始まる日
+    var day20 = add(lose, 19);     // 退職日の翌日から数えて20日目
+    var due = nextBiz(day20);      // 土日・祝日なら翌営業日
+    var shifted = due.getTime() !== day20.getTime();
+    var post = prevBiz(add(due, -3)); // 郵送で出す日の目安（期限の3日前より前の平日）
+    var left = diff(today, due);
+    var past = left < 0;
+    var before = diff(today, lose) > 0; // まだ辞めていない
+
+    if (kumi !== "kyokai") box("加入先について", kumi === "kumiai" ? "組合の案内が先です" : "まず加入先を確かめます", kumi === "kumiai" ? "健康保険組合でも、申し出は資格を失った日から20日以内と法律で決まっています。ただ、土日の扱いや出し方は組合ごとなので、下の目安は組合の案内と見比べてください。" : "保険証やお知らせで、協会けんぽか健康保険組合かを確かめます。出す先がちがいます。下は協会けんぽの決まりでの目安です。", true);
+
+    box("任意継続が始まる日", f(lose), "辞めた日の翌日です。この日に会社の健康保険の資格がなくなり、申し込めば同じ日から任意継続の資格が始まります。20日は、この日を1日目として数えます。", false);
+    box("申出書を出す期限", f(due) + "まで", shifted
+      ? "20日目は " + f(day20) + " ですが、土日・祝日にあたるので、期限は次の営業日になります。ただ、ぎりぎりは避けて、20日目より前に届くようにしておくと安心です。"
+      : "退職日の翌日から数えて20日目です。この日までに出す先に届いている必要があります。", past);
+    var nenEnd = new Date(due.getFullYear(), 0, 6);
+    if (nenmatsu(day20) || nenmatsu(due) || (due.getMonth() === 0 && due <= nenEnd) || (post.getMonth() === 11 && post.getDate() >= 25)) box("年末年始にかかります", "休みの日を先に確かめます", "期限の前後が年末年始です。窓口が休みになる日の扱いは、このページでは判定していません。年内に届くように出すか、早めに出す先に電話して確かめます。", true);
+
+    if (before) {
+      box("今日の時点では", "まだ辞める前です", "期限まで " + left + " 日あります。辞める前に申出書を用意しておき、退職日を書いて出せるようにしておくと、20日に追われません。", false);
+    } else if (past) {
+      box("今日の時点では", "期限を過ぎています（" + (-left) + " 日）", "法律では、正当な理由があると保険者が認めたときは、20日を過ぎた申出も受け付けられることになっています。ただ、認められるかは保険者の判断で、うっかり忘れが通るとは限りません。今日のうちに出す先（協会けんぽなら支部）に電話して、事情と退職日を伝えます。受け付けられないときは、国民健康保険か家族の扶養を考えます。", true);
+    } else {
+      box("今日の時点では", "期限まであと " + left + " 日", left <= 5 ? "日がありません。郵送では間に合わないことがあるので、窓口に持っていくか、出す先に電話して出し方を確かめます。" : "保険料を比べている途中でも、申出書は先に用意しておきます。比べ終わってから出す、の順だと間に合わないことがあります。", left <= 5);
+    }
+
+    if (!past) {
+      if (dasu === "yuso" || dasu === "mitei") box("郵送で出すなら", f(post) + "ごろまでに", "郵送は、消印ではなく20日以内に届くことが決まりです。届くまでの日数は地域や曜日でちがうので、これは余裕を見た目安です。" + (diff(today, post) < 0 ? "目安の日を過ぎているので、窓口に持っていく方法も考えます。" : ""), diff(today, post) < 0);
+      if (dasu === "denshi") box("電子申請で出すなら", "受付の扱いを確かめます", "電子申請でも手続きできます。期限の日に送ったものがいつの受付になるかは、このページでは判定していません。期限の前日までに送っておくと安心です。", false);
+      if (dasu === "mado") box("窓口に持っていくなら", "受付時間内に", saki + "に持っていきます。受付時間は、出す先で確かめます。期限の日に行くなら、時間に余裕を持って出かけます。", false);
+    }
+
+    li("1. 申出書を手に入れる", kumi === "kumiai" ? "健康保険組合のサイトや案内から、任意継続の申出書を用意する" : "協会けんぽのサイトから「任意継続被保険者資格取得申出書」を用意する");
+    li("2. 辞めた日を書く", "申出書の「健康保険資格喪失証明欄」に会社に退職日を書いてもらうか、退職日がわかる書類の写しを添える");
+    if (fam === "yes") li("3. 家族の欄を書く", "2ページ目の「被扶養者届」に家族を書き、家族の収入がわかる書類をそろえる");
+    li((fam === "yes" ? "4" : "3") + ". 期限までに出す", f(due) + "までに、" + saki + "に届くようにする");
+    li((fam === "yes" ? "5" : "4") + ". 初回の保険料を払う", "あとで届く納付書の期限までに払う（払わないと、任意継続に入らなかった扱いになる）");
+
+    $("memo").textContent = "・任意継続被保険者\n　資格取得申出書\n・辞めた日がわかるもの\n　（申出書の資格喪失\n　証明欄に会社が記入、\n　または退職証明書・\n　離職票などの写し）" + (fam === "yes" ? "\n・家族の収入がわかる\n　書類（収入がない人は\n　所得証明書や非課税\n　証明書、退職した人は\n　離職票の写しなど）" : "") + "\n\n辞めた日がわかるものを\n添えると、会社からの\n届けの連携を待たずに\n手続きが進みます。";
+
+    var ng = "・20日目は、退職日の翌日を1日目として数える。退職日から数えると1日ずれる\n・郵送は消印ではなく、届いた日で見る\n・「保険料を比べてから出そう」で期限が過ぎることが多い。申出書は先に用意しておく\n・任意継続に入れるのは、退職日までに続けて2か月以上加入していた人\n・申し込んだあとも、初回の保険料を期限までに払わないと、入らなかった扱いになる";
+    if (fam === "yes") ng += "\n・家族の書類は、そろえるのに日数がかかることがある。先に取り寄せを始める";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  var n0 = new Date(); $("kyo").value = iso(n0);
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ritu").value = "2026-11-30"; $("kyo").value = "2026-12-05"; $("kumi").value = "kyokai"; $("dasu").value = "yuso"; $("fam").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
