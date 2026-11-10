@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>マイナ保険証、退職後すぐ使える？切り替え中に病院へ行くとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>マイナ保険証、退職後すぐ使える？切り替え中に病院へ行くとき</h1>
+  <p class="lead">会社を辞めて健康保険を切り替える途中で、病院にかかりたい人のためのページです。退職日・次の保険・手続きをした日・病院へ行く日を入れると、その日にマイナ保険証で受け付けてもらえそうか、持っていくもの、受付での一言を出します。厚生労働省のよくある質問などをもとにした目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と、次の保険</h2>
+    <label class="f" for="taishoku">退職日<span class="hint">最後に出社した日ではなく、会社の籍がなくなる日</span></label>
+    <input type="date" id="taishoku">
+    <label class="f" for="tsugi">次に入る健康保険</label>
+    <select id="tsugi">
+      <option value="kokuho">国民健康保険（市区町村）</option>
+      <option value="ninkei">前の会社の保険の任意継続</option>
+      <option value="fuyou">家族の会社の保険の扶養</option>
+      <option value="shoku">次の会社の保険（もう入社した）</option>
+      <option value="mada">まだ決めていない</option>
+    </select>
+    <label class="f" for="te">加入の手続き</label>
+    <select id="te">
+      <option value="done">済んだ（書類を出した）</option>
+      <option value="mada">まだ</option>
+    </select>
+    <label class="f" for="todoke"><span id="todokeLabel">手続きをした日</span><span class="hint" id="todokeHint">窓口で届け出た日。郵送なら届いた日</span></label>
+    <input type="date" id="todoke">
+  </div>
+
+  <div class="card">
+    <h2>2. 病院へ行く日と、手元のもの</h2>
+    <label class="f" for="byoin">病院へ行く日</label>
+    <input type="date" id="byoin">
+    <label class="f" for="toroku">マイナンバーカードを保険証として使う登録</label>
+    <select id="toroku">
+      <option value="yes">している（マイナ保険証）</option>
+      <option value="no">していない・わからない</option>
+    </select>
+    <label class="f" for="oshirase">新しい保険から「資格情報のお知らせ」か「資格確認書」が届いた<span class="hint">窓口で渡されることもあります</span></label>
+    <select id="oshirase">
+      <option value="no">まだ届いていない</option>
+      <option value="yes">届いた・持っている</option>
+    </select>
+    <label class="f" for="portal">スマホでマイナポータルにログインできる</label>
+    <select id="portal">
+      <option value="yes">できる</option>
+      <option value="no">できない・わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">受け付けてもらえるか見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>病院の受付での一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「マイナンバーカードの健康保険証利用についてよくある質問」（転職・退職で保険が変わったときの再登録・受付がうまくいかないとき・資格情報のお知らせ・マイナポータルでの確かめ方）と、社会保障審議会医療保険部会の資料（保険者は届出から5日以内にシステムに登録するよう求められている）をもとにした目安です。扶養や次の会社の保険は、会社から保険者への届けの日数もかかるため、このページでは手続きから10日を区切りにしています。登録が実際にいつ終わるかは、保険者によってちがいます。マイナポータルの「健康保険証」の画面か、入った保険に確かめてください。払い戻しの手続きや必要な書類は、入った保険（国保は市区町村）でちがいます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  var NAME = { kokuho: "国民健康保険", ninkei: "任意継続", fuyou: "家族の会社の保険（扶養）", shoku: "次の会社の保険" };
+  var MADO = { kokuho: "市区町村の国保の窓口", ninkei: "前の会社の保険（協会けんぽの支部か健康保険組合）", fuyou: "家族の会社の担当", shoku: "次の会社の担当", mada: "入る予定の保険の窓口" };
+  function sync() {
+    var t = $("tsugi").value;
+    if (t === "mada") $("te").value = "mada";
+    $("te").disabled = (t === "mada");
+    $("todoke").disabled = ($("te").value === "mada");
+    if (t === "shoku") { $("todokeLabel").textContent = "入社日"; $("todokeHint").textContent = "保険の届けは会社が出します"; }
+    else if (t === "fuyou") { $("todokeLabel").textContent = "家族の会社に書類を出した日"; $("todokeHint").textContent = "保険者への届けは家族の会社が出します"; }
+    else { $("todokeLabel").textContent = "手続きをした日"; $("todokeHint").textContent = "窓口で届け出た日。郵送なら届いた日"; }
+  }
+  $("tsugi").addEventListener("change", sync); $("te").addEventListener("change", sync);
+  function make() {
+    var ta = d($("taishoku").value), by = d($("byoin").value), td = d($("todoke").value);
+    var t = $("tsugi").value, done = $("te").value === "done" && t !== "mada";
+    var maina = $("toroku").value === "yes", osh = $("oshirase").value === "yes", portal = $("portal").value === "yes";
+    if (!ta) { alert("退職日を入れてください"); return; }
+    if (!by) { alert("病院へ行く日を入れてください"); return; }
+    if (done && !td) { alert($("todokeLabel").textContent + "を入れてください"); return; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var kireru = add(ta, 1);
+    var memo, state;
+
+    if (by < kireru) {
+      state = "mae";
+      box("病院へ行く日の保険", "前の会社の保険が使えます", "退職日（" + f(ta) + "）までは、前の会社の保険に入っています。最後の出社日のあとでも、退職日までなら使えます。", false);
+      box("持っていくもの", maina ? "マイナ保険証" : "前の会社の資格確認書（または保険証）", "いつもどおり受付に出します。前の会社に返すものは、退職日のあとに返す段取りを担当と決めておきます。", false);
+      todo("病院へは、退職日（" + f(ta) + "）までに行く");
+      todo(f(kireru) + "からは前の会社の保険が使えないので、次の保険の手続きを進める");
+      memo = "いつもどおりの受付で大丈夫です。";
+    } else if (!done || by < td) {
+      state = "nashi";
+      var gen = (t === "kokuho" || t === "mada");
+      var gap = (t === "shoku" && done);
+      box("病院へ行く日の保険", gap ? "次の会社に入る前の日です" : "次の保険の手続きが、まだです", "前の会社の保険は" + f(kireru) + "から使えません。" + (gap ? "入社日（" + f(td) + "）より前は、次の会社の保険にも入っていません。このあいだも国民健康保険などに入る手続きが要ります（市区町村で確かめます）。" : t === "mada" ? "次の保険を決めて手続きをするまでは、保険で受け付けてもらえません。" : NAME[t] + "の手続きが済むまでは、マイナ保険証を出しても、新しい保険の情報が出てきません。"), true);
+      box("持っていくもの", "マイナンバーカードと、お金を多めに", "受付で保険の確かめができないと、いったん医療費の全額を払うことがあります。あとで新しい保険に入ったら、保険で払う分の払い戻しを申請します。" + (gen ? "国保の加入が遅れると、届け出の前日までの医療費はいったん全額になると案内している市区町村があります。" : ""), true);
+      if (t === "mada") todo("次の保険を決める。国保は前の保険が切れた日から14日以内、任意継続は20日以内が目安");
+      else if (gap) todo("入社日までのあいだの保険を、市区町村の国保の窓口で確かめる");
+      else todo("病院へ行く前に、" + MADO[t] + "で加入の手続きを済ませる");
+      todo("受付では、保険を切り替えている途中だと伝える");
+      todo("全額を払ったら、領収書となるべく診療明細書を取っておく。新しい保険に入ってから、払い戻しの申請をする（国保は市区町村の窓口。支払いの翌日から2年で時効になると案内している市区町村があります）");
+      memo = "最近会社を辞めて、\n健康保険を切り替える\n途中です。\nまだ新しい保険の\n手続きが済んでいません。\nどうすればよいですか。";
+    } else {
+      var n = days(td, by);
+      var kugiri = (t === "fuyou" || t === "shoku") ? 10 : 5;
+      var ready = add(td, kugiri);
+      var maybe = n >= kugiri;
+      state = maybe ? "ok" : "machi";
+      box("病院へ行く日の保険", NAME[t] + "に入っています", (t === "shoku" ? "入社日（" + f(td) + "）から次の会社の保険に入っています。" : "加入の手続きは済んでいます。") + "あとは、新しい保険の情報がマイナ保険証の仕組みに登録されているかです。", false);
+      if (!maina) {
+        box("持っていくもの", osh ? "資格確認書" : "資格確認書（届くまでは新しい保険に相談）", osh ? "マイナ保険証の登録をしていない人には、新しい保険から資格確認書が申請なしで届きます。それを受付に出します。" : "マイナ保険証の登録をしていない人には、新しい保険から資格確認書が申請なしで届きます。病院の日までに届かなければ、" + MADO[t] + "に、受診したいことを伝えて相談します。", !osh);
+      } else {
+        box("マイナ保険証で受け付けてもらえるか", maybe ? "登録されているころです" : "まだ登録されていないかもしれません",
+          (maybe ? "" : "新しい保険の情報が登録されるまで、日数がかかります。") + "目安は" + f(ready) + "ごろです。" + (portal ? "行く前に、マイナポータルの「健康保険証」で、新しい保険の名前が出ているか確かめます。" : "登録が済んだかは、" + MADO[t] + "に聞けます。"), !maybe);
+        var mot, ms;
+        if (osh && portal) { mot = "マイナンバーカード＋資格情報のお知らせ"; ms = "カードで受付ができなかったときは、資格情報のお知らせを一緒に見せます。マイナポータルの「健康保険証」の画面（PDFでも可）でも代わりになります。"; }
+        else if (osh) { mot = "マイナンバーカード＋資格情報のお知らせ"; ms = "カードで受付ができなかったときは、資格情報のお知らせを一緒に見せます。お知らせだけでは受け付けてもらえないので、カードと2つで持っていきます。"; }
+        else if (portal) { mot = "マイナンバーカード＋マイナポータルの画面"; ms = "カードで受付ができなかったときは、スマホでマイナポータルの「健康保険証」の画面を見せます。新しい保険の情報が出ていなければ、受付でそう伝えます。"; }
+        else { mot = "マイナンバーカード"; ms = "カードで受付ができず、ほかに見せるものもないときは、初めての病院なら「被保険者資格申立書」を書くと、ふつうの負担で受け付けてもらえる、と国は案内しています。再診なら受付が口頭で確かめることがあります。"; }
+        box("持っていくもの", mot, ms, !maybe && !osh && !portal);
+      }
+      if (maina && portal) todo("病院へ行く前に、マイナポータルにログインし、「健康保険証」の画面で新しい保険の名前が出ているか見る");
+      if (maina && !maybe) todo("新しい保険の名前が出ていなければ、資格情報のお知らせか、その画面を受付で見せる。どちらもなければ受付に相談する（初診なら被保険者資格申立書を書く方法がある）");
+      if (maina && maybe) todo("受付で、いつもどおりマイナンバーカードを読み取る");
+      if (!maina && !osh) todo(MADO[t] + "に、資格確認書がいつ届くか聞く");
+      if (t === "fuyou" || t === "shoku") todo(MADO[t] + "に、保険の届けを出してもらえたかを聞いておく");
+      todo("受付でうまくいかず全額を払ったときは、領収書を取っておき、" + NAME[t] + "に払い戻しを相談する");
+      memo = maybe ? "最近、健康保険が\n" + NAME[t] + "に\n変わりました。\nマイナ保険証で\nお願いします。" : "最近、健康保険が\n" + NAME[t] + "に\n変わったばかりです。\n新しい保険の情報が\nまだ出ないかもしれません。\n" + (osh ? "資格情報のお知らせを\n一緒にお見せします。" : "マイナポータルの画面を\n一緒にお見せします。");
+      if (maina && !osh && !portal && !maybe) memo = "最近、健康保険が\n" + NAME[t] + "に\n変わったばかりで、\n新しい保険の情報が\nまだ出ないかもしれません。\nその場合はどうすれば\nよいですか。";
+      if (!maina) memo = osh ? "最近、健康保険が\n" + NAME[t] + "に\n変わりました。\n資格確認書で\nお願いします。" : "最近、健康保険が\n" + NAME[t] + "に\n変わったばかりで、\n資格確認書が\nまだ届いていません。\nどうすればよいですか。";
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = "・退職日の翌日（" + f(kireru) + "）からは、前の会社の保険は使えない。前の会社の資格確認書や保険証を出して受診すると、あとで前の保険から医療費の返還を求められることがある\n・マイナ保険証の登録は、転職や退職のたびにやり直さなくてよい。ただ、新しい保険への加入の手続きは別に要る\n・資格情報のお知らせだけでは受け付けてもらえない。マイナンバーカードと一緒に出す\n・マイナンバーカードは前の会社に返さない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("taishoku").value = "2026-10-31"; $("tsugi").value = "kokuho"; $("te").value = "done"; $("todoke").value = "2026-11-09"; $("byoin").value = "2026-11-11"; $("toroku").value = "yes"; $("oshirase").value = "no"; $("portal").value = "yes"; }
+  sync();
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
