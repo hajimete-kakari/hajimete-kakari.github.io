@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>任意継続の保険料の前納｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .t, .mihon #tl .d, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>任意継続の保険料の前納</h1>
+  <p class="lead">辞めた日といまの状況を選ぶと、保険料をまとめて前払い（前納）できる期間と、その納付期限の目安、間に合わなかったときの次の機会を出します。協会けんぽの決まりで出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と加入先</h2>
+    <label class="f" for="ritu">辞めた日（退職日）<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="ritu">
+    <label class="f" for="kumi">任意継続の加入先<span class="hint">在職中の保険証やお知らせに書かれている名前で選びます</span></label>
+    <select id="kumi">
+      <option value="kyokai">協会けんぽ（全国健康保険協会）</option>
+      <option value="kumiai">〇〇健康保険組合</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="jo">任意継続の申し込み</label>
+    <select id="jo">
+      <option value="mae">これから申出書を出す</option>
+      <option value="dashita">申出書で前納を申し込んだ</option>
+      <option value="tsuki">毎月払いで払っている</option>
+      <option value="sugi">前納の期限を過ぎてしまった</option>
+    </select>
+    <label class="f" for="kyo">今日の日付<span class="hint">次の前納の機会を出すのに使います</span></label>
+    <input type="date" id="kyo">
+    <label class="f" for="shu">この先の予定</label>
+    <select id="shu">
+      <option value="mitei">まだ決まっていない</option>
+      <option value="shushoku">半年以内に就職しそう</option>
+      <option value="fuyou">家族の扶養に入るかもしれない</option>
+      <option value="nagaku">しばらく任意継続を続ける</option>
+    </select>
+  </div>
+  <button id="make" type="button">前納の期限を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>前納できる期間と期限の目安</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>支部に電話するときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※協会けんぽの任意継続の決まりで出した目安です（前納できるのは4月分〜9月分・10月分〜翌年3月分の6か月分と、4月分〜翌年3月分の12か月分。年度の途中で加入したときは、資格を取った月の翌月分から9月分または3月分まで。前納の期限は前納が始まる月の前月末日、年度の途中で加入したときは資格を取った月の月末日で、末日が土日・祝日なら翌営業日。口座振替では前納できない。期限までに払わないと、前納を申し込まなかった扱いになり、毎月の納付書が届く。就職して健康保険に入った・本人の申出でやめたなどのときは、その月以降の分が戻る）。祝日は主なものだけで判定しているため、最後は納付書に書かれた期限で確かめてください。健康保険組合の任意継続は、前納の扱いが組合ごとに決まっています。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(x) { return x.getFullYear() + "-" + ("0" + (x.getMonth() + 1)).slice(-2) + "-" + ("0" + x.getDate()).slice(-2); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function ym(y, m) { var x = new Date(y, m, 1); return x.getFullYear() + "年" + (x.getMonth() + 1) + "月分"; }
+  function nthMon(y, m, n) { var x = new Date(y, m, 1); var off = (8 - x.getDay()) % 7; return 1 + off + (n - 1) * 7; }
+  function equinox(y, m) { var b = y - 1980; return m === 2 ? Math.floor(20.8431 + 0.242194 * b - Math.floor(b / 4)) : Math.floor(23.2488 + 0.242194 * b - Math.floor(b / 4)); }
+  function hol0(x) {
+    var y = x.getFullYear(), m = x.getMonth(), dd = x.getDate();
+    var fixed = { "0-1": 1, "1-11": 1, "1-23": 1, "3-29": 1, "4-3": 1, "4-4": 1, "4-5": 1, "7-11": 1, "10-3": 1, "10-23": 1 };
+    if (fixed[m + "-" + dd]) return true;
+    if (m === 0 && dd === nthMon(y, 0, 2)) return true;
+    if (m === 6 && dd === nthMon(y, 6, 3)) return true;
+    if (m === 8 && dd === nthMon(y, 8, 3)) return true;
+    if (m === 9 && dd === nthMon(y, 9, 2)) return true;
+    if (m === 2 && dd === equinox(y, 2)) return true;
+    if (m === 8 && dd === equinox(y, 8)) return true;
+    return false;
+  }
+  function hol(x) {
+    if (hol0(x)) return true;
+    if (x.getDay() === 0) return false;
+    var p = add(x, -1);
+    while (hol0(p)) { if (p.getDay() === 0) return true; p = add(p, -1); }
+    return false;
+  }
+  function closed(y) { return y.getDay() === 0 || y.getDay() === 6 || hol(y) || (y.getMonth() === 0 && y.getDate() <= 3) || (y.getMonth() === 11 && y.getDate() === 31); }
+  function biz(x) { var y = new Date(x); while (closed(y)) y = add(y, 1); return y; }
+  // 月末（m は 0 始まり、年をまたいでもよい）の翌営業日調整
+  function endOf(y, m) { var x = new Date(y, m + 1, 0); while (x.getDay() === 0 || x.getDay() === 6 || hol(x)) x = add(x, 1); return x; }
+  function li(dt, t) {
+    var el = document.createElement("li"); el.innerHTML = '<span class="d"></span> <span class="t"></span>';
+    el.querySelector(".d").textContent = dt; el.querySelector(".t").textContent = t; $("tl").appendChild(el);
+  }
+  // 決まった前納期間（4月始まり・10月始まり）のうち、start より後に始まる最初のもの
+  function nextReg(y, m) {
+    var x = new Date(y, m + 1, 1);
+    while (x.getMonth() !== 3 && x.getMonth() !== 9) x = new Date(x.getFullYear(), x.getMonth() + 1, 1);
+    return x;
+  }
+  function make() {
+    var r = d($("ritu").value);
+    if (!r) { alert("辞めた日を入れてください"); return; }
+    var today = d($("kyo").value) || new Date();
+    var kumi = $("kumi").value, jo = $("jo").value, shu = $("shu").value;
+    var st = add(r, 1), sy = st.getFullYear(), sm = st.getMonth();
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+    function box(k, v, s, no) {
+      var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+      $("sum").appendChild(el);
+    }
+    if (kumi !== "kyokai") box("加入先について", kumi === "kumiai" ? "組合の案内が先です" : "まず加入先を確かめます", kumi === "kumiai" ? "健康保険組合の任意継続は、前納の扱いが組合ごとに決まっています。下は協会けんぽの決まりでの目安なので、組合から届く案内と見比べてください。" : "在職中の保険証やお知らせで、協会けんぽか健康保険組合かを確かめます。下は協会けんぽの決まりでの目安です。", true);
+    box("任意継続が始まる月", ym(sy, sm).replace("分", ""), "辞めた日の翌日（" + f(st) + "）から資格が始まります。この月の分は、初回の納付書で払います。前納の対象は、その翌月分からです。", false);
+
+    // 年度の途中の前納（資格を取った月の翌月分から）
+    var nm = new Date(sy, sm + 1, 1), nmm = nm.getMonth();
+    var midOk = nmm !== 3 && nmm !== 9; // 4月・10月始まりなら決まった期間と同じ
+    var firstDl = endOf(sy, sm);
+    var shortEnd, longEnd;
+    if (nmm >= 3 && nmm <= 8) { shortEnd = new Date(nm.getFullYear(), 8, 1); longEnd = new Date(nm.getFullYear() + 1, 2, 1); }
+    else if (nmm >= 9) { shortEnd = null; longEnd = new Date(nm.getFullYear() + 1, 2, 1); }
+    else { shortEnd = null; longEnd = new Date(nm.getFullYear(), 2, 1); }
+    if (nmm === 3) { shortEnd = new Date(nm.getFullYear(), 8, 1); longEnd = new Date(nm.getFullYear() + 1, 2, 1); }
+    if (nmm === 9) { shortEnd = null; longEnd = new Date(nm.getFullYear() + 1, 2, 1); }
+    function lab(x) { return x.getFullYear() + "年" + (x.getMonth() + 1) + "月分"; }
+    var firstTxt = ym(sy, sm + 1) + "から" + (shortEnd ? lab(shortEnd) + "まで（短い方）か、" + lab(longEnd) + "まで（長い方）" : lab(longEnd) + "まで");
+    var passed = today > firstDl;
+
+    if (jo === "mae" || jo === "dashita") {
+      box("最初に前納できる期間", firstTxt, "納付期限は " + f(firstDl) + " まで（資格を取った月の月末。土日祝なら翌営業日）。" + (midOk ? "年度の途中で加入したときの決まりです。" : "") + (jo === "mae" ? "申出書を出すときに、前納を申し込みます。" : "前納の納付書が届いたら、期限までに払います。"), passed);
+      if (passed) box("今日の時点では", "この期間には間に合いません", "期限の " + f(firstDl) + " を過ぎています。下の「次の機会」から前納できます。それまでは毎月の納付書で、各月10日（土日祝は翌営業日）までに払います。", true);
+      else box("間に合わないことも", "初回の納付書の届く時期しだい", "初回の納付書が届く時期によっては、この期間の前納に間に合わないことがあります。そのときは次の前納の時期に納付書が届き、それまでは毎月払いです。", false);
+    } else if (jo === "sugi") {
+      box("前納の期限を過ぎたとき", "前納を申し込まなかった扱いです", "期限までに払わなかった前納は、申し込まなかったものとして扱われ、あらためて毎月の納付書が届きます。早めに支部に連絡し、毎月の分を各月10日（土日祝は翌営業日）までに払います。", true);
+    } else {
+      box("毎月払いから切り替えるとき", "途中の月からは前納できません", "資格を取った月の翌月以降に申し込んだときは、前納期間の途中からは前納できず、次の前納期間からになります。支部に連絡して申し込みます。", false);
+    }
+
+    // 次の決まった前納期間
+    var ns;
+    if ((jo === "mae" || jo === "dashita") && !passed) {
+      var base = shortEnd && shu !== "nagaku" ? shortEnd : longEnd;
+      ns = nextReg(base.getFullYear(), base.getMonth());
+    } else {
+      ns = nextReg(today.getFullYear(), today.getMonth() - 1);
+      if (endOf(ns.getFullYear(), ns.getMonth() - 1) < today) ns = nextReg(ns.getFullYear(), ns.getMonth());
+      if (ns < nm) ns = nextReg(nm.getFullYear(), nm.getMonth() - 1);
+    }
+    var nsDl = endOf(ns.getFullYear(), ns.getMonth() - 1);
+    var nsTxt = ns.getMonth() === 3
+      ? lab(ns) + "から" + ns.getFullYear() + "年9月分まで（6か月）か、" + (ns.getFullYear() + 1) + "年3月分まで（12か月）"
+      : lab(ns) + "から" + (ns.getFullYear() + 1) + "年3月分まで（6か月）";
+
+    if ((jo === "mae" || jo === "dashita") && !passed) {
+      li("最初の前納：" + firstTxt, f(firstDl) + "までに納付");
+      li("その次：" + nsTxt, f(nsDl) + "までに納付");
+    } else {
+      li("今日から見た次の前納：" + nsTxt, f(nsDl) + "までに納付");
+      li("それまでの月", "毎月の納付書で、各月10日（土日祝は翌営業日）までに払う");
+    }
+    li("2年の満了が近いとき", "前納の期間は、満了で資格がなくなる月の前月分までになる");
+
+    var choose = shu === "shushoku" ? "就職して会社の健康保険に入ると、前納した分のうち、その月以降の分は戻ります。戻るまでの手続きと時期は支部の案内で確かめます。手元のお金を残したいなら、短い期間を選ぶ方法もあります。"
+      : shu === "fuyou" ? "扶養に入るために本人の申出で任意継続をやめたときも、前納した分のうち、その月以降の分は戻ります。やめる日の決まりは別にあるので、前納の前にやめる時期の見通しを立てておきます。"
+      : shu === "nagaku" ? "続けるなら、長い期間の方が払う回数が減ります。まとめて払うと、毎月払うより少し安くなるのが決まりです（割引の額は支部の保険料の案内で確かめます）。"
+      : "前納すると毎月より少し安くなり、払い忘れも防げます。ただ、まとまったお金が先に出ていきます。就職や扶養の見通しが立つまでは、短い期間か毎月払いにする方法もあります。";
+    box("短い方か長い方か", shu === "nagaku" ? "長い方も考えられます" : (shu === "mitei" ? "迷うなら短い方から" : "戻る決まりを先に知っておく"), choose, false);
+
+    $("memo").textContent = jo === "sugi"
+      ? "任意継続の加入者です。\n記号と番号は〇〇です。\n前納の期限を過ぎて\nしまいました。\n毎月の納付書が届く時期と、\n次に前納できる期間を\n教えてください。"
+      : jo === "tsuki"
+      ? "任意継続の加入者です。\n記号と番号は〇〇です。\nいまは毎月払いですが、\n次の期間から前納に\n切り替えたいです。\n申し込み方と、\n納付書が届く時期を\n教えてください。"
+      : "任意継続の加入の\n手続き中です。\n" + (jo === "dashita" ? "申出書で前納を\n申し込みました。\n" : "前納を考えています。\n") + "最初の前納の納付書が\n届く時期と、\n間に合わないときの\n扱いを教えてください。";
+    var dec = ((jo === "mae" || jo === "dashita") && !passed && firstDl.getMonth() === 11) || nsDl.getMonth() === 11 ? "・期限が12月末のときは、年末は金融機関が休みの日があるので、早めに払う\n" : "";
+    $("ng").textContent = dec + "・前納は口座振替ではできない。前納の納付書で、金融機関・コンビニ・スマホ決済などから払う\n・ATMの現金は10万円まで、コンビニは30万円までなど、払える額に上限がある\n・期限までに払わないと、前納を申し込まなかった扱いになり、毎月払いに戻る\n・前納した分が戻るのは、就職して健康保険に入った・本人の申出でやめた・75歳で後期高齢者医療に入った・亡くなったときだけ\n・割引の額や、健康保険組合の扱いは、加入先の案内で確かめる";
+    $("result").hidden = false;
+  }
+  $("kyo").value = iso(new Date());
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ritu").value = "2026-11-30"; $("kyo").value = "2026-11-10"; $("kumi").value = "kyokai"; $("jo").value = "mae"; $("shu").value = "mitei"; make(); }
+})();
+</script>
+</body>
+</html>
