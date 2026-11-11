@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>国保の保険料 退職後いつ下がる｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; display: block; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .t, .mihon #tl .d, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>国保の保険料、退職後いつ下がる？</h1>
+  <p class="lead">辞めた日と、前後の年の収入の様子を選ぶと、国民健康保険の年度（4月〜翌年3月）ごとに「どの年の所得で保険料が決まるか」と、下がりはじめる年度の目安を出します。保険料の金額は計算しません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日</h2>
+    <label class="f" for="ritu">辞めた日（退職日）<span class="hint">会社に在籍した最後の日。国保に入るのは、その翌日からです</span></label>
+    <input type="date" id="ritu">
+    <label class="f" for="mae">辞めた年の前の年の働き方<span class="hint">1年目の保険料のもとになることが多い年です</span></label>
+    <select id="mae">
+      <option value="full">1年を通して働いていた</option>
+      <option value="part">途中から働いた・短い時間で働いた</option>
+      <option value="none">働いていなかった</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めたあと</h2>
+    <label class="f" for="ato">辞めた次の年の収入の見込み<span class="hint">この年の所得が、さらに次の年度の保険料のもとになります</span></label>
+    <select id="ato">
+      <option value="none">収入はない見込み（失業保険だけなど）</option>
+      <option value="part">パート・アルバイトで少し働く</option>
+      <option value="job">会社に入って、会社の健康保険に入る</option>
+    </select>
+    <label class="f" for="riyu">辞めた理由<span class="hint">倒産・解雇・雇い止めなどは、別の軽減があります</span></label>
+    <select id="riyu">
+      <option value="ji">自分の都合</option>
+      <option value="kai">倒産・解雇・雇い止めなど</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">年度ごとに見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>年度ごとの、もとになる所得</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>窓口で聞くこと</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※市区町村の国民健康保険の案内で出した目安です（保険料の所得割は前年〔1〜12月〕の所得をもとに計算し、翌年度〔4月〜翌年3月〕の保険料になる。国保に入るのは前の健康保険をやめた日〔退職日の翌日〕から。保険料は月単位で、加入した月から計算する。届け出は14日以内。遅れても保険料は加入した時までさかのぼる）。所得割の率や、均等割などの決まった額は、市区町村と年度で違います。所得割が小さくなっても、均等割など人数で決まる分は残ります。最後は市区町村の国民健康保険の窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function li(dt, t) {
+    var el = document.createElement("li"); el.innerHTML = '<span class="d"></span><span class="t"></span>';
+    el.querySelector(".d").textContent = dt; el.querySelector(".t").textContent = t; $("tl").appendChild(el);
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var r = d($("ritu").value);
+    if (!r) { alert("辞めた日を入れてください"); return; }
+    var mae = $("mae").value, ato = $("ato").value, riyu = $("riyu").value;
+    $("sum").innerHTML = ""; $("tl").innerHTML = "";
+
+    var join = add(r, 1);                       // 国保に入る日＝退職日の翌日
+    var ry = r.getFullYear();                   // 辞めた年
+    var jm = join.getMonth() + 1;
+    var jfy = jm >= 4 ? join.getFullYear() : join.getFullYear() - 1; // 4月始まりの年度
+    var months = (jm >= 4 ? 16 - jm : 4 - jm); // 加入月から3月までの月数
+    // 辞めた年に給料があった月数（退職日の月まで。12月31日は12か月）
+    var workM = r.getMonth() + 1;
+    if (join.getFullYear() > ry) workM = 12;
+    var lastFull = (r.getMonth() === 11 && r.getDate() === 31);
+
+    box("国保に入る日", f(join), "退職日の翌日です。届け出はこの日から14日以内が目安です。保険料は " + join.getFullYear() + "年" + jm + "月分からかかります（月の途中でも、その月から）。", false);
+
+    var firstDown = null, bigDown = null;
+    var n = 0;
+    for (var y = jfy; y <= ry + 2; y++) {
+      var base = y - 1, t, lab;
+      n++;
+      var head = y + "年度（" + y + "年4月〜" + (y + 1) + "年3月）← " + base + "年の所得";
+      if (n === 1) head = y + "年度（" + join.getFullYear() + "年" + jm + "月〜" + (y + 1) + "年3月の" + months + "か月）← " + base + "年の所得";
+      if (base < ry - 1) {
+        t = "辞める2年以上前の年です。働いていたなら、給料1年分の所得で決まります。";
+      } else if (base === ry - 1) {
+        if (mae === "full") t = "辞める前の年で、給料1年分の所得で決まります。会社にいたころの感覚より高く感じやすい年度です。";
+        else if (mae === "part") t = "辞める前の年です。働いた分の所得で決まります。";
+        else { t = "辞める前の年で、働いていなかったなら所得割は小さくなります（均等割などは残ります）。"; }
+      } else if (base === ry) {
+        if (lastFull || workM === 12) t = "辞めた年です。12月まで働いたので、給料1年分の所得で決まります。まだ下がりません。";
+        else t = "辞めた年です。" + (workM === 1 ? "1月分" : "1月から" + workM + "月まで") + "の給料（と、その年のパートなどの収入）の所得で決まります。前の年度より下がることがあります。";
+        if (!(lastFull || workM === 12) && workM <= 9 && firstDown === null) firstDown = y;
+      } else {
+        if (ato === "none") { t = "辞めた次の年です。収入がなければ、所得割は小さくなります。均等割など人数で決まる分は残ります。"; if (bigDown === null) bigDown = y; }
+        else if (ato === "part") { t = "辞めた次の年です。パートなどの収入の所得で決まります。収入が少なければ、ここで下がります。"; if (bigDown === null) bigDown = y; }
+        else t = "辞めた次の年です。会社の健康保険に入れば、その月の前の月までで国保の保険料は終わります。";
+      }
+      li(head, t);
+    }
+
+    if (ato === "job") {
+      box("下がる年度より先に", "会社の健康保険に移る見込み", "次の会社の健康保険に入ったら、国保をやめる届け出をします（14日以内が目安）。国保の保険料は、加入していた月の分だけです。", false);
+    } else {
+      var fy = bigDown || (ry + 2);
+      if (firstDown !== null && firstDown < fy) {
+        box("少し下がりはじめる年度", firstDown + "年度（" + firstDown + "年4月〜）", "もとになる年の給料が少ないため、前の年度より下がることがあります。", false);
+      }
+      box("はっきり下がる目安の年度", fy + "年度（" + fy + "年4月〜）", "辞めた次の年（" + (ry + 1) + "年）の所得で決まる年度です。それまでの年度は、働いていた年の所得で決まります。辞めてすぐには下がりません。", false);
+      var wait = (fy - jfy);
+      if (wait >= 2) box("それまでの年度の数", wait + "年度ぶん", "国保に入ってから、この年度数は働いていた年の所得で決まります。その間の分を先に見込んでおきます。", true);
+    }
+    if (riyu !== "ji") {
+      box("辞めた理由が倒産・解雇・雇い止めなどなら", "別の軽減の対象かもしれません", "会社の都合で辞めた人などは、届け出ると前の年の給与所得を少なく見て計算する軽減があります。対象かどうかと期間は、市区町村の窓口で確かめます。", false);
+    }
+
+    var memo = "・" + jfy + "年度の保険料は\n　いくらになるか\n・月ごとの納め方と\n　1回目の納付書が届く時期\n・" + (ry + 1) + "年度・" + (ry + 2) + "年度は\n　どの年の所得で決まるか\n";
+    if (riyu !== "ji") memo += "・離職理由での軽減の対象か\n　（雇用保険受給資格者証を\n　持っていく）\n";
+    memo += "・収入が減ったときの\n　減免の相談ができるか\n・収入がない年の\n　所得の申告はいつ・どこで";
+    $("memo").textContent = memo;
+
+    var ng = "・辞めてすぐは、前の年の所得で決まるので、保険料は下がらない\n・年度は4月〜翌年3月。所得は1〜12月で数えるので、1年ずれる\n・収入がなかった年も、所得の申告をしておく。しないと、所得が少ない世帯の軽減が受けられないことがある\n・届け出が遅れても、保険料は国保に入った時までさかのぼる（最高2年）\n・所得割が小さくなっても、均等割など人数で決まる分は残る";
+    if (mae !== "full") ng += "\n・前の年に働いていなかった・少しだけなら、1年目から所得割は小さめのことがある";
+    if (jm >= 1 && jm <= 3) ng += "\n・1〜3月に入ると、その年度は残り" + months + "か月だけ。4月から新しい年度の保険料になる";
+    $("ng").textContent = ng;
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ritu").value = "2026-12-15"; $("mae").value = "full"; $("ato").value = "none"; $("riyu").value = "ji"; make(); }
+})();
+</script>
+</body>
+</html>
