@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>高額療養費の多数回該当、保険が変わったときの数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=month], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .mrow { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .mrow .ml { flex: 0 0 6.2em; font-size: .9rem; }
+  .mrow select { flex: 1; min-width: 0; font-size: .92rem; padding: 7px 8px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>高額療養費の多数回該当、保険が変わったときの数え方</h1>
+  <p class="lead">退職などで健康保険が変わったあと、高額療養費の「多数回該当」（4回目から上限が下がるしくみ）の回数を、どこから数え直すかを確かめるページです。69歳以下の人向けの目安で、決めるのは加入している保険者です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今の保険と、知りたい月</h2>
+    <label class="f" for="t">上限を知りたい月<span class="hint">これから受診する月、または高額療養費を申請したい月です</span></label>
+    <input type="month" id="t">
+    <label class="f" for="w">今の保険<span class="hint">知りたい月に入っている健康保険です</span></label>
+    <select id="w">
+      <option value="kokuho">国民健康保険（市区町村）</option>
+      <option value="ninkei">前の会社の健康保険の任意継続</option>
+      <option value="fuyou">家族の健康保険の扶養</option>
+      <option value="shin">次の会社の健康保険</option>
+    </select>
+    <label class="f" for="z">所得の区分（69歳以下）<span class="hint">わからないときは、保険者に聞けます。限度額適用認定証や資格確認書に書かれていることもあります</span></label>
+    <select id="z">
+      <option value="a">ア（いちばん高い区分）</option>
+      <option value="i">イ</option>
+      <option value="u" selected>ウ</option>
+      <option value="e">エ</option>
+      <option value="o">オ（住民税が非課税の人など）</option>
+      <option value="x">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. その前の12か月</h2>
+    <p class="hint" style="margin:0 0 10px">月ごとに、高額療養費の対象になった（上限をこえた）かと、そのときの保険を選びます。対象にならなかった月は「なし」のままにします。</p>
+    <div id="months"></div>
+  </div>
+  <button id="make" type="button">回数を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>保険者に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※協会けんぽの「高額な医療費を支払ったとき（高額療養費）」の、多数回該当の説明（直近12か月で3月以上払い戻しを受けたとき、4月目から上限が下がる。保険者が変わったとき、退職して被保険者から被扶養者に変わったときは通算されない）と、令和8年8月からの69歳以下の上限額で出した目安です。任意継続のときや、国民健康保険で引っ越したときの数え方は、加入している保険者・市区町村に確かめてください。窓口で上限までの支払いで済んだ月の数え方も、保険者に確かめられます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 令和8年8月〜 69歳以下（協会けんぽ）
+  var LIM = {
+    a: { m: "270,300円＋（医療費−901,000円）×1%", t: "140,100円" },
+    i: { m: "179,100円＋（医療費−597,000円）×1%", t: "93,000円" },
+    u: { m: "85,800円＋（医療費−286,000円）×1%", t: "44,400円" },
+    e: { m: "61,500円", t: "44,400円" },
+    o: { m: "36,900円", t: "24,600円" }
+  };
+  var WN = { kokuho: "国民健康保険", ninkei: "任意継続", fuyou: "家族の扶養", shin: "次の会社の健康保険" };
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function ym(y, m) { while (m < 1) { m += 12; y--; } return { y: y, m: m }; }
+  function lbl(o) { return o.y + "年" + o.m + "月"; }
+  function build() {
+    var v = $("t").value, box = $("months");
+    var keep = {};
+    [].forEach.call(box.querySelectorAll("select"), function (s) { keep[s.getAttribute("data-k")] = s.value; });
+    box.innerHTML = "";
+    if (!/^\d{4}-\d{2}$/.test(v)) { box.innerHTML = '<p class="hint">先に「上限を知りたい月」を入れてください。</p>'; return; }
+    var y = +v.slice(0, 4), m = +v.slice(5, 7);
+    for (var i = 12; i >= 1; i--) {
+      var o = ym(y, m - i), k = o.y + "-" + o.m;
+      var row = document.createElement("div"); row.className = "mrow";
+      row.innerHTML = '<span class="ml"></span><select><option value="">なし</option><option value="old">前の保険で対象</option><option value="now">今の保険で対象</option></select>';
+      row.querySelector(".ml").textContent = lbl(o);
+      var s = row.querySelector("select"); s.setAttribute("data-k", k); s.setAttribute("aria-label", lbl(o));
+      if (keep[k]) s.value = keep[k];
+      box.appendChild(row);
+    }
+  }
+  function make() {
+    var v = $("t").value;
+    $("result").hidden = true;
+    if (!/^\d{4}-\d{2}$/.test(v)) { alert("上限を知りたい月を入れてください"); return false; }
+    var sels = $("months").querySelectorAll("select");
+    if (!sels.length) build(), sels = $("months").querySelectorAll("select");
+    var old = 0, now = 0, seenNow = false, mixErr = false;
+    [].forEach.call(sels, function (s) {
+      if (s.value === "old") { old++; if (seenNow) mixErr = true; }
+      if (s.value === "now") { now++; seenNow = true; }
+    });
+    if (mixErr) { alert("「今の保険で対象」の月より後に「前の保険で対象」の月があります。保険が変わった順に合っているか見直してください"); return false; }
+    var w = $("w").value, z = $("z").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var y = +v.slice(0, 4), m = +v.slice(5, 7), tl = y + "年" + m + "月";
+    var hit = now >= 3;
+    box("今の保険（" + WN[w] + "）で数える回数", "直近12か月で " + now + "回", old ? "前の保険で対象になった " + old + "回は、保険が変わったので数えない見込みです。" : "前の保険で対象になった月はありません。", false);
+    if (w === "ninkei" && old > 0) box("任意継続のとき", "前の会社のときの回数を続けて数えるかは、保険者に確かめます", "任意継続は、在職中と同じ保険者の健康保険に続けて入るしくみです。協会けんぽのページには任意継続の書き方がないため、このページでは数え直しの見込みで出しています。続けて数えるなら、回数は " + (now + old) + "回になります。", true);
+    if (w === "fuyou") box("家族の扶養のとき", "自分が被保険者だったときの回数は数えません", "退職して被保険者から被扶養者に変わったときは、通算されないと協会けんぽのページにあります。扶養に入ったあとは、家族（被保険者）の世帯の回数として数えます。家族や、ほかの扶養の人が対象になった月があれば、それも保険者に確かめます。", false);
+    if (hit) {
+      box(tl + "の上限", "多数回該当で、上限が下がる見込みです（" + (now + 1) + "回目）", z === "x" ? "区分がわからないので額は出していません。69歳以下の多数回該当の上限は、区分により 24,600円〜140,100円 です。" : "多数回該当の上限は " + LIM[z].t + " です（令和8年8月からの額）。", false);
+    } else {
+      var rest = 3 - now;
+      box(tl + "の上限", "多数回該当にはまだならない見込みです（あと" + rest + "回）", z === "x" ? "区分がわからないので額は出していません。区分を保険者に聞いて確かめます。" : "ふだんの上限は " + LIM[z].m + (/[aiu]/.test(z) ? "（医療費は10割の額）" : "") + " です（令和8年8月からの額）。今の保険で対象の月が3回たまると、4回目から " + LIM[z].t + " に下がります。", true);
+    }
+    todo("今の保険の保険者（" + (w === "kokuho" ? "市区町村の国保の窓口" : w === "fuyou" ? "家族の勤め先の健康保険" : w === "ninkei" ? "任意継続の保険者" : "次の会社の健康保険") + "）に、" + tl + "が何回目にあたるかを聞く");
+    if (z === "x") todo("所得の区分を保険者に聞く。限度額適用認定証や資格確認書に書かれていることもある");
+    if (old > 0) todo("前の保険のときに受診した分の高額療養費は、前の保険者に申請の窓口と書類を聞いて出す");
+    todo("入院などで窓口の支払いを上限までにしたいときは、今の保険の限度額適用認定証かマイナ保険証の使い方を確かめる");
+    $("memo").textContent = "高額療養費の\n多数回該当について\nお聞きしたいです。\n" + tl + "は、この保険で\n何回目にあたりますか。" + (old ? "\n前の保険で対象に\nなった月が" + old + "回あります。\nその分は数えますか。" : "\n上限の区分も\n教えてください。");
+    $("ng").textContent = "・回数は、同じ保険者・同じ被保険者で数える\n・退職して保険が変わると、前の回数は通算されない\n・扶養に入ったときも、自分のときの回数は通算されない\n・任意継続や、国保で引っ越したときは保険者に確かめる\n・前の保険の月の申請は、前の保険者に出す\n・ここでの回数と上限は目安。決まるのは保険者の通知";
+    $("result").hidden = false;
+    return true;
+  }
+  $("t").addEventListener("change", build);
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("t").value = "2027-01"; $("w").value = "kokuho"; $("z").value = "u"; build();
+    var s = $("months").querySelectorAll("select");
+    s[3].value = "old"; s[4].value = "old"; s[5].value = "old"; s[9].value = "now"; s[10].value = "now";
+    make();
+  } else {
+    var d = new Date(); $("t").value = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2); build();
+  }
+})();
+</script>
+</body>
+</html>
