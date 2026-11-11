@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金の「2年」の期限の数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金の「2年」の期限の数え方</h1>
+  <p class="lead">まだ申請していない、休んだ期間と、申請書を出す日を入れると、どの日の分まで間に合うか、いちばん古い日の期限、もう2年を過ぎた日数を出します。傷病手当金は、休んだ日ごとに、その翌日から2年で請求できなくなります。もらえるかどうかや金額を決めるものではありません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. まだ申請していない期間</h2>
+    <label class="f" for="s">休んだ期間の、最初の日<span class="hint">待期の3日（はじめに続けて休んだ3日）のあとの、手当が出る最初の日です</span></label>
+    <input type="date" id="s">
+    <label class="f" for="e">休んだ期間の、最後の日<span class="hint">まだ休んでいる途中なら、昨日までで試せます</span></label>
+    <input type="date" id="e">
+  </div>
+
+  <div class="card">
+    <h2>2. 申請書のこと</h2>
+    <label class="f" for="t">申請書を出す日（予定）<span class="hint">郵送なら、届く日を目安に入れます</span></label>
+    <input type="date" id="t">
+    <label class="f" for="j">申請書の準備は<span class="hint">申請書には医師の欄があり、在職中の日があれば会社の欄もあります</span></label>
+    <select id="j">
+      <option value="0">まだ何もしていない</option>
+      <option value="1">医師の欄は書いてもらった</option>
+      <option value="2">医師の欄も会社の欄もそろった</option>
+    </select>
+  </div>
+  <button id="make" type="button">期限を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>保険者（協会けんぽ・健康保険組合）に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※健康保険法193条（保険給付を受ける権利は2年で時効）と、厚生労働省の事務連絡（令和3年12月27日）の「労務不能であった日ごとにその翌日から起算して2年間」で出した目安です。期限の日が土日祝のときの扱いや、郵送で出したときにどの日を出した日とするかは、このページでは決めていません。期限の前後2週間に入るときは、加入している保険者に確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function iso(dt) { return dt.getFullYear() + "-" + ("0" + (dt.getMonth() + 1)).slice(-2) + "-" + ("0" + dt.getDate()).slice(-2); }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function md(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function add(dt, n) { return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + n); }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  // 休んだ日 D の分を出せる最後の日：D の翌日から数えて2年
+  function last(D) {
+    var st = add(D, 1), y = st.getFullYear() + 2, m = st.getMonth(), day = st.getDate();
+    var lastDay = new Date(y, m + 1, 0).getDate();
+    if (day > lastDay) return new Date(y, m, lastDay);
+    return add(new Date(y, m, day), -1);
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function make() {
+    var s = d($("s").value), e = d($("e").value), t = d($("t").value), j = $("j").value;
+    if (!s || !e) { alert("休んだ期間の最初の日と最後の日を入れてください"); return false; }
+    if (!t) { alert("申請書を出す日を入れてください"); return false; }
+    if (e < s) { alert("最後の日が、最初の日より前になっています"); return false; }
+    if (t <= s) { alert("申請書を出す日が、休んだ最初の日と同じか、前になっています"); return false; }
+    var e2 = e, cut = false;
+    if (t <= e) { e2 = add(t, -1); cut = true; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var total = days(s, e2) + 1;
+    var ok = null, D = s;
+    while (D <= e2) { if (last(D) >= t) { ok = D; break; } D = add(D, 1); }
+    var lost = ok ? days(s, ok) : total;
+    var lastS = last(s), lastE = last(e2);
+    var restS = days(t, lastS);
+    var hurry = false;
+    if (cut) box("数えた期間", f(s) + "〜" + f(e2), "出す日より前の日だけを数えました。出す日から後に休む分は、次の申請に回ります。", false);
+    if (!ok) {
+      box("間に合う日", "この期間は、すべて2年を過ぎています", "いちばん新しい日（" + f(e2) + "）の分も、" + f(lastE) + "が出せる最後の日でした。" + total + "日分すべてが、出す日（" + f(t) + "）にはもう過ぎている見込みです。", true);
+      box("2年を過ぎた日数", total + "日分", "休んだ日ごとに、その翌日から2年で請求できなくなります。", true);
+    } else if (lost > 0) {
+      box("間に合う日", f(ok) + "の分から", f(ok) + "〜" + f(e2) + "の" + (total - lost) + "日分が、" + f(t) + "に出せば間に合う見込みです。", false);
+      box("2年を過ぎた日数", lost + "日分", f(s) + "〜" + f(add(ok, -1)) + "の分は、出す日にはもう2年を過ぎている見込みです。出す日が1日遅れるごとに、1日分ずつ増えます。", true);
+      hurry = true;
+    } else {
+      box("間に合う日", "この期間は、すべて間に合う見込みです", f(s) + "〜" + f(e2) + "の" + total + "日分が、" + f(t) + "に出せば2年の中に入ります。", false);
+      box("いちばん古い日の期限", f(lastS), "最初の日（" + f(s) + "）の分を出せる最後の日です。" + (restS === 0 ? "出す日が、ちょうどこの日です。" : "出す日から数えて、あと" + restS + "日あります。") + "この日を過ぎると、古い日の分から1日ずつ請求できなくなります。", restS <= 30);
+      if (restS <= 30) hurry = true;
+    }
+    if (ok) box("いちばん新しい日の期限", f(lastE), "最後の日（" + f(e2) + "）の分を出せる最後の日です。期限は、休んだ日ごとに1日ずつ後ろへずれます。", false);
+    var near = (ok && lost > 0 && days(t, last(ok)) <= 14) || (ok && lost === 0 && restS <= 14) || (!ok && days(lastE, t) <= 14);
+    if (near) box("期限の日", "期限に近い日です", "出す日が、期限の日の前後2週間に入っています。土日祝や郵送の扱いで結果が変わることがあるので、先に保険者へ電話で確かめてください。", true);
+    if (!ok) {
+      todo("2年を過ぎた分は、原則として請求できません。ほかにまだ申請していない期間がないか、休んだ日をメモで確かめる");
+      todo("事情があって出せなかったときは、そのことも伝えて、加入している保険者に電話で聞く");
+    } else {
+      if (hurry) todo("期限が近いので、今日のうちに保険者へ電話して、書類がそろわないときの出し方を聞く");
+      if (j === "0") todo("医師に、申請書の医師の欄（働けなかった期間の意見）を頼む。書き上がるまでの日数も聞いておく");
+      if (j !== "2") todo("在職中の日が入っていれば、会社に会社の欄（休んだ日と給料の証明）を頼む。退職後の日だけなら、会社の欄はいらないことが多い");
+      todo("本人の欄を書いて、" + md(t) + "までに保険者に届くように出す（郵送なら届く日で考える）");
+      todo("期間が長いときは、1か月ごとなどに分けて出すと、古い日の分を先に出せる");
+    }
+    $("memo").textContent = (!ok ? "傷病手当金について\nお聞きしたいです。\n" + f(s) + "から\n" + f(e2) + "まで休んだ分を\nまだ申請していません。\n2年を過ぎているか、\n出せる分があるか\n確かめたいです。"
+      : "傷病手当金を\nまだ申請していません。\n" + f(s) + "から\n" + f(e2) + "まで休んだ分を、\n" + md(t) + "ごろに出す予定です。\n期限に間に合うか、\n郵送のときは\nどの日で数えるか\n教えてください。");
+    $("ng").textContent = "・期限は「休んだ日ごと」。申請書を出した日でまとめて決まるのではない\n・待期の3日は手当が出ない日なので、数えに入れない\n・郵送のときに、出した日と届いた日のどちらで数えるかは保険者に確かめる\n・期限の日が土日祝のときの扱いも、保険者に確かめる\n・医師や会社の欄を書いてもらう日数も見込んで、早めに頼む\n・1年6か月の支給期間とは別の話。2年は申請の期限";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("s").value = "2024-11-01"; $("e").value = "2024-12-20"; $("t").value = "2026-11-20"; $("j").value = "1"; }
+  else { $("t").value = iso(new Date()); }
+  if (DEMO) make();
+  window.__last = function (s) { return iso(last(d(s))); };
+})();
+</script>
+</body>
+</html>
