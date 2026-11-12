@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>医療費控除、退職した年の境目（10万円か所得の5%か）｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>医療費控除、退職した年の境目</h1>
+  <p class="lead">その年の給料・退職金・ほかの所得と、払った医療費を入れると、医療費控除の境目（10万円か、所得の5%か）と、控除になる額の目安を出します。2026年（令和8年分）の決まりで計算します。税金がいくら戻るかは出しません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. その年の給料</h2>
+    <label class="f" for="pay">給料の支払金額の合計（円）<span class="hint">源泉徴収票の「支払金額」です。辞めた会社と、そのあと働いた会社の分を足します。なければ0</span></label>
+    <input type="number" id="pay" inputmode="numeric" min="0" step="1" placeholder="例 1800000">
+  </div>
+
+  <div class="card">
+    <h2>2. 退職金</h2>
+    <label class="f" for="tk">その年に退職金を受け取りましたか<span class="hint">退職所得の源泉徴収票が届いていれば「受け取った」です</span></label>
+    <select id="tk">
+      <option value="no">受け取っていない</option>
+      <option value="yes">受け取った</option>
+    </select>
+    <div id="tkbox" hidden>
+      <label class="f" for="tpay">退職金の支払金額（円）<span class="hint">税金が引かれる前の額。退職所得の源泉徴収票の「支払金額」です</span></label>
+      <input type="number" id="tpay" inputmode="numeric" min="0" step="1" placeholder="例 3000000">
+      <label class="f" for="yrs">勤続年数（年）<span class="hint">1年に満たない端数は1年に切り上げます（10年2か月なら11年）</span></label>
+      <input type="number" id="yrs" inputmode="numeric" min="1" max="60" step="1" placeholder="例 6">
+      <label class="f" for="kind">働き方<span class="hint">勤続5年以下のときは、計算のしかたが変わります</span></label>
+      <select id="kind">
+        <option value="n">会社員で、勤続6年以上</option>
+        <option value="s">会社員で、勤続5年以下</option>
+        <option value="y">役員として5年以下</option>
+      </select>
+      <label class="f" for="sho">障害者になったことが、直接の理由の退職ですか</label>
+      <select id="sho">
+        <option value="no">いいえ</option>
+        <option value="yes">はい</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. ほかの所得</h2>
+    <label class="f" for="oth">給料・退職金のほかの所得の金額（円）<span class="hint">副業・年金などの「所得」（収入から経費などを引いた額）です。なければ0。失業保険・傷病手当金は入れません</span></label>
+    <input type="number" id="oth" inputmode="numeric" min="0" step="1" placeholder="例 0">
+  </div>
+
+  <div class="card">
+    <h2>4. 医療費</h2>
+    <label class="f" for="med">その年に払った医療費の合計（円）<span class="hint">1月1日から12月31日までに払った分。生計を一にする家族の分も足せます</span></label>
+    <input type="number" id="med" inputmode="numeric" min="0" step="1" placeholder="例 80000">
+    <label class="f" for="hot">保険などで戻る額（円）<span class="hint">高額療養費・入院給付金など。その医療費の額までを入れます。なければ0</span></label>
+    <input type="number" id="hot" inputmode="numeric" min="0" step="1" placeholder="例 0">
+    <label class="f" for="gen">源泉徴収票の「源泉徴収税額」<span class="hint">給料から所得税が引かれていたかです</span></label>
+    <select id="gen">
+      <option value="yes">0円ではない（引かれていた）</option>
+      <option value="zero">すべて0円</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">境目を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>税務署に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁タックスアンサー No.1120（医療費控除）・No.1410（給与所得控除、令和8年分）・No.1420（退職所得）・用語集「総所得金額等」で出した目安です。給料の支払金額が660万円未満のときは、正しくは所得税法別表第五の表で給与所得を出すため、数千円ほどずれることがあります。前の年以前に退職金を受け取ったことがある人、同じ年に2か所以上から退職金を受け取った人は、退職所得控除の計算が変わります。セルフメディケーション税制は扱いません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = $(id).value; if (v === "" || v === null) return null; v = Number(v); return isFinite(v) ? v : NaN; }
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  // 令和8年分の給与所得（国税庁 No.1410）
+  function kyuyo(s) {
+    if (s < 741000) return 0;
+    if (s < 2191000) return s - 740000;
+    if (s < 2193000) return 1451000;
+    if (s < 2196000) return 1453000;
+    if (s < 2200000) return 1456000;
+    var k;
+    if (s <= 3600000) k = s * 0.3 + 80000;
+    else if (s <= 6600000) k = s * 0.2 + 440000;
+    else if (s <= 8500000) k = s * 0.1 + 1100000;
+    else k = 1950000;
+    return Math.floor(s - k);
+  }
+  function kojo(a, sho) {
+    var k = a <= 20 ? Math.max(400000 * a, 800000) : 8000000 + 700000 * (a - 20);
+    return k + (sho ? 1000000 : 0);
+  }
+  function syncTk() { $("tkbox").hidden = $("tk").value !== "yes"; }
+  $("tk").addEventListener("change", syncTk);
+  function bad(v) { return v === null || isNaN(v) || v < 0; }
+  function make() {
+    $("result").hidden = true;
+    var pay = num("pay"), oth = num("oth"), med = num("med"), hot = num("hot");
+    if (pay === null) pay = 0; if (oth === null) oth = 0; if (hot === null) hot = 0;
+    if (bad(pay)) { alert("給料の支払金額は、0以上の数で入れてください"); return false; }
+    if (bad(oth)) { alert("ほかの所得は、0以上の数で入れてください"); return false; }
+    if (bad(med) || med === 0) { alert("払った医療費の合計を入れてください"); return false; }
+    if (bad(hot)) { alert("保険などで戻る額は、0以上の数で入れてください"); return false; }
+    if (hot > med) { alert("保険などで戻る額が、医療費の合計より多くなっています。その医療費の額までを入れてください"); return false; }
+    var tk = $("tk").value === "yes", tinc = 0, tpay = 0, yrs = 0, kind = "n", tko = 0, tnote = "";
+    if (tk) {
+      tpay = num("tpay"); yrs = num("yrs"); kind = $("kind").value;
+      if (bad(tpay) || tpay === 0) { alert("退職金の支払金額を入れてください"); return false; }
+      if (yrs === null || isNaN(yrs) || yrs < 1 || Math.floor(yrs) !== yrs) { alert("勤続年数を1以上の整数で入れてください（端数は切り上げ）"); return false; }
+      if (kind !== "n" && yrs > 5) { alert("勤続5年以下を選んだときは、勤続年数を5年以下で入れてください"); return false; }
+      if (kind === "n" && yrs <= 5) { alert("勤続5年以下のときは、働き方で「勤続5年以下」を選んでください"); return false; }
+      tko = kojo(yrs, $("sho").value === "yes");
+      var rest = Math.max(0, tpay - tko);
+      if (kind === "y") { tinc = rest; tnote = "役員として5年以下なので、1/2にしません。"; }
+      else if (kind === "s") { tinc = rest <= 3000000 ? Math.floor(rest / 2) : 1500000 + (rest - 3000000); tnote = rest <= 3000000 ? "勤続5年以下で、控除のあとが300万円以下なので1/2にしました。" : "勤続5年以下で、控除のあとの300万円を超える部分は1/2にしません。"; }
+      else { tinc = Math.floor(rest / 2); tnote = "（支払金額−退職所得控除）×1/2 です。"; }
+    }
+    var g = kyuyo(pay);
+    var total = g + tinc + oth;
+    var line = total < 2000000 ? Math.floor(total * 0.05) : 100000;
+    var net = med - hot;
+    var ded = Math.min(2000000, Math.max(0, net - line));
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    box("給与所得の目安", yen(g), "支払金額 " + yen(pay) + " から、令和8年分の給与所得控除を引いた額です。" + (pay > 0 && pay < 6600000 ? "660万円未満は正しくは表で出すため、少しずれることがあります。" : ""), false);
+    if (tk) box("退職所得の目安", yen(tinc), "退職所得控除 " + yen(tko) + "（勤続" + yrs + "年）。" + tnote + "申告がいらない退職金でも、境目の計算には入ります。", false);
+    box("総所得金額等の目安", yen(total), "給与所得" + (tk ? "＋退職所得" : "") + "＋ほかの所得 " + yen(oth) + "。失業保険と傷病手当金は入りません。", false);
+    box("あなたの境目", yen(line), total < 2000000 ? "総所得金額等が200万円未満なので、10万円ではなく、その5%（" + yen(total) + "×5%）が境目です。" : "総所得金額等が200万円以上なので、境目は10万円です。" + (tk && g + oth < 2000000 ? "退職金がなければ5%の境目になるところ、退職所得が入って200万円を超えています。" : ""), false);
+    var memo;
+    if (ded > 0) {
+      box("医療費控除の目安", yen(ded), "医療費 " + yen(med) + " − 戻る額 " + yen(hot) + " − 境目 " + yen(line) + (net - line > 2000000 ? "。上限の200万円です。" : "。この額が所得から引かれます（戻る税金の額ではありません）。"), false);
+      memo = "退職した年に、\n医療費が" + yen(net) + "\nかかりました。\n総所得金額等は\n" + yen(total) + "くらいです。\n医療費控除の境目と、\n出すものを\n確かめたいです。";
+    } else {
+      box("医療費控除の目安", "0円（境目に届いていません）", "医療費 " + yen(med) + " − 戻る額 " + yen(hot) + " ＝ " + yen(net) + "。境目の " + yen(line) + " まで、あと " + yen(line - net) + " です。12月31日までに払う医療費や、生計を一にする家族の分を足すと届くことがあります。", true);
+      memo = "退職した年の\n医療費控除について\n聞きたいです。\n総所得金額等は\n" + yen(total) + "くらいで、\n医療費は" + yen(net) + "です。\n家族の分を足せるか\n確かめたいです。";
+    }
+    if (total === 0) box("所得が0円のとき", "引く先の所得がないので、控除しても所得税は変わりません", "医療費控除は所得から引くしくみです。総所得金額等が0円なら、申告しても所得税は戻りません。家族の申告に入れられるかは、税務署で確かめます。", true);
+    var gen = $("gen").value;
+    if (gen === "zero") box("所得税が戻るか", "源泉徴収税額が0円なら、戻る所得税はありません", "国税庁の案内では、源泉徴収された所得税がない人は、申告しても還付される所得税はない、とされています。", true);
+    else if (gen === "unk") box("所得税が戻るか", "源泉徴収票の「源泉徴収税額」を見てください", "0円なら、申告しても戻る所得税はありません。0円でなければ、控除の分に応じて戻ることがあります。", true);
+    todo("医療費の領収書か、健康保険の医療費通知を、1月から12月の分まで集める");
+    todo("保険などで戻る額（高額療養費・入院給付金）を、どの医療費の分かとあわせて書き出す");
+    if (ded > 0) {
+      todo("「医療費控除の明細書」を作り、翌年の確定申告で出す。還付の申告は、翌年1月1日から5年間出せる");
+      todo("辞めた会社と、そのあと働いた会社の源泉徴収票" + (tk ? "、退職所得の源泉徴収票" : "") + "を手元に置く");
+    } else {
+      todo("12月31日までに払う予定の医療費と、生計を一にする家族の分を足して、もう一度入れてみる");
+      todo("届かないときは、その年の医療費控除は使えない。領収書はそのまま取っておく");
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = "・境目は「10万円」か「所得の5%」の少ない方\n・200万円は、収入ではなく総所得金額等で見る\n・退職金は、申告がいらなくても総所得金額等に入る\n・失業保険と傷病手当金は、所得に入らない\n・保険で戻る額は、その医療費の分までしか引かない\n・年末調整では医療費控除は受けられない\n・ここでの額は目安。決まった額は申告書の作成で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  syncTk();
+  if (DEMO) { $("pay").value = "1500000"; $("tk").value = "no"; syncTk(); $("oth").value = "0"; $("med").value = "60000"; $("hot").value = "0"; $("gen").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
