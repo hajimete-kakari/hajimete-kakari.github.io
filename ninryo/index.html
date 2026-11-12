@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>任意継続の保険料、月にいくらかの目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .radio { display: block; margin: 4px 0; font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>任意継続の保険料、月にいくらかの目安</h1>
+  <p class="lead">退職後に、前の会社の健康保険を任意継続（2年まで続けられるしくみ）にしたとき、月の保険料がいくらになるかの目安を出すページです。協会けんぽ（全国健康保険協会）に入っていた人向けで、令和8年4月分からの料率で出します。決めるのは協会けんぽの通知です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 住んでいるところと年齢</h2>
+    <label class="f" for="pref">住んでいる都道府県<span class="hint">協会けんぽの任意継続の保険料額表は、「〇〇県居住の方の金額」として都道府県ごとに出ています</span></label>
+    <select id="pref"></select>
+    <label class="f" for="age">年齢<span class="hint">40歳から64歳までの人は、介護保険料の分が加わります</span></label>
+    <select id="age">
+      <option value="u">39歳以下</option>
+      <option value="k">40歳〜64歳</option>
+      <option value="o">65歳〜74歳</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めたときの給料</h2>
+    <label class="f">どちらで入れますか<span class="hint">標準報酬月額は、保険料を決めるために給料を区切りのいい額にあてはめたものです</span></label>
+    <label class="radio"><input type="radio" name="mode" value="pay" checked> 月の給料から目安を出す</label>
+    <label class="radio"><input type="radio" name="mode" value="std"> 標準報酬月額がわかっている</label>
+    <div id="payBox">
+      <label class="f" for="pay">辞める前の月の給料（円）<span class="hint">税金や保険料を引く前の額。交通費や残業代も入れた、ならした1か月分です</span></label>
+      <input type="number" id="pay" inputmode="numeric" min="0" step="1000" placeholder="例：250000">
+    </div>
+    <div id="stdBox" hidden>
+      <label class="f" for="std">退職したときの標準報酬月額（円）<span class="hint">前の会社の担当者に聞けます。ねんきん定期便の標準報酬月額とほぼ同じことが多いです</span></label>
+      <input type="number" id="std" inputmode="numeric" min="0" step="1000" placeholder="例：260000">
+    </div>
+  </div>
+  <button id="make" type="button">保険料の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>協会けんぽに聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※協会けんぽの「令和8年度の任意継続被保険者の標準報酬月額の上限」（32万円。退職したときの標準報酬月額と、この額のどちらか少ない方）、令和8年度の都道府県単位保険料率、子ども・子育て支援金率（0.23%、令和8年4月分から）、介護保険料率（1.62%、40歳〜64歳）、任意継続被保険者の保険料額表（令和8年4月分〜、1円未満は切り捨て）で出した目安です。健康保険組合（会社や業界の健康保険）に入っていた人は、上限や料率がちがうので、その組合に確かめてください。料率は毎年4月分から、上限は毎年度、見直されます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  // 令和8年度 協会けんぽ 都道府県単位保険料率（%×100）
+  var R = {"北海道":1028,"青森県":985,"岩手県":951,"宮城県":1010,"秋田県":1001,"山形県":975,"福島県":950,"茨城県":952,"栃木県":982,"群馬県":968,"埼玉県":967,"千葉県":973,"東京都":985,"神奈川県":992,"新潟県":921,"富山県":959,"石川県":970,"福井県":971,"山梨県":955,"長野県":963,"岐阜県":980,"静岡県":961,"愛知県":993,"三重県":977,"滋賀県":988,"京都府":989,"大阪府":1013,"兵庫県":1012,"奈良県":991,"和歌山県":1006,"鳥取県":986,"島根県":994,"岡山県":1005,"広島県":978,"山口県":1015,"徳島県":1024,"香川県":1002,"愛媛県":998,"高知県":1005,"福岡県":1011,"佐賀県":1055,"長崎県":1006,"熊本県":1008,"大分県":1008,"宮崎県":977,"鹿児島県":1013,"沖縄県":944};
+  var SHIEN = 23, KAIGO = 162, CAP = 320000;
+  // 標準報酬月額 1〜23級（報酬月額の下限〜）
+  var G = [[58000,0],[68000,63000],[78000,73000],[88000,83000],[98000,93000],[104000,101000],[110000,107000],[118000,114000],[126000,122000],[134000,130000],[142000,138000],[150000,146000],[160000,155000],[170000,165000],[180000,175000],[190000,185000],[200000,195000],[220000,210000],[240000,230000],[260000,250000],[280000,270000],[300000,290000],[320000,310000]];
+  var sel = $("pref");
+  Object.keys(R).forEach(function (k) { var o = document.createElement("option"); o.value = k; o.textContent = k; sel.appendChild(o); });
+  sel.value = "東京都";
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function pct(n) { return (n / 100).toFixed(2) + "%"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function mode() { return document.querySelector('input[name=mode]:checked').value; }
+  function sw() { var m = mode(); $("payBox").hidden = m !== "pay"; $("stdBox").hidden = m !== "std"; }
+  [].forEach.call(document.querySelectorAll('input[name=mode]'), function (r) { r.addEventListener("change", sw); });
+  function make() {
+    $("result").hidden = true;
+    var m = mode(), own = null, over = false;
+    if (m === "pay") {
+      var p = Math.floor(+$("pay").value);
+      if (!$("pay").value || !(p > 0)) { alert("辞める前の月の給料を、円で入れてください"); return false; }
+      if (p >= 310000) { over = true; } else {
+        for (var i = G.length - 1; i >= 0; i--) { if (p >= G[i][1]) { own = G[i][0]; break; } }
+      }
+    } else {
+      var s = Math.floor(+$("std").value);
+      if (!$("std").value || !(s > 0)) { alert("標準報酬月額を、円で入れてください"); return false; }
+      var ok = s >= CAP || G.some(function (g) { return g[0] === s; });
+      if (!ok) { alert("標準報酬月額は、58,000円・68,000円・…・300,000円・320,000円のような区切りの額です。給料の額を入れたときは「月の給料から目安を出す」を選んでください"); return false; }
+      own = s; if (s >= CAP) over = s > CAP;
+    }
+    var pref = sel.value, age = $("age").value;
+    var rate = R[pref] + SHIEN + (age === "k" ? KAIGO : 0);
+    var use = over ? CAP : Math.min(own, CAP);
+    var fee = Math.floor(use * rate / 10000);
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    box("任意継続で使う標準報酬月額", yen(use), over ? "辞めたときの額が上限の32万円をこえるので、32万円で計算します（令和8年度の上限）。" : "辞めたときの額が上限の32万円以下なので、その額のまま使います。", false);
+    box("月の保険料の目安（令和8年4月分から）", "約 " + yen(fee), pref + "の健康保険料率 " + pct(R[pref]) + "＋子ども・子育て支援金 0.23%" + (age === "k" ? "＋介護保険料 1.62%" : "") + "＝" + pct(rate) + " を、全額自分で払います。", false);
+    if (!over && own !== null) {
+      var half = Math.floor(own * rate / 10000 / 2);
+      box("会社にいたときとの比べ", "給料から引かれていた額の目安は 約" + yen(half), "会社にいたときは会社と半分ずつでした。任意継続では会社の分も自分で払うので、同じ給料・同じ都道府県なら約2倍になります。", true);
+    } else {
+      box("会社にいたときとの比べ", "上限で止まるので、2倍よりは小さくなります", "会社にいたときは、32万円より高い標準報酬月額の半分を払っていました。任意継続では32万円で止まるので、給料が高かった人ほど、増え方は小さくなります。", false);
+    }
+    box("1年分の目安", "約 " + yen(fee * 12), "12か月分を足した額です。料率は毎年4月分から変わるので、年度をまたぐと変わります。前納（まとめ払い）にすると少し割引になります。", false);
+    if (age === "o") box("65歳以上のとき", "介護保険料は含めていません", "65歳からの介護保険料は、市区町村から別に届きます。", false);
+    todo("任意継続にするなら、退職日の翌日から20日以内に、住所のある都道府県の協会けんぽの支部へ申出書を出す");
+    todo("市区町村の国保の窓口で、国民健康保険にした場合の保険料を聞き、この額と比べる");
+    todo("家族の健康保険の扶養に入れるかも、家族の勤め先に聞いておく（入れれば保険料はかからない）");
+    todo("加入すると協会けんぽから届く通知で、標準報酬月額と保険料の額を確かめる");
+    $("memo").textContent = "任意継続を考えています。\n退職日は〇月〇日です。\n標準報酬月額が" + (use / 10000) + "万円で、\n" + pref + "に住んでいる場合、\n月の保険料はいくらですか。\n最初の納付の期限も\n教えてください。";
+    $("ng").textContent = "・ここでの額は目安。決まるのは協会けんぽの通知\n・料率は住んでいる都道府県で変わる\n・健康保険組合だった人は、組合の上限と料率\n・年度の途中で40歳・65歳になると、介護の分が変わる\n・保険料は毎月10日まで。遅れると資格を失う\n・扶養の家族がいても、保険料は同じ額";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    sel.value = "大阪府"; $("age").value = "k"; $("pay").value = "280000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
