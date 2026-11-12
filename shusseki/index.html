@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金の「8割」の数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金の「8割」の数え方</h1>
+  <p class="lead">求職者支援制度で月10万円の給付金（職業訓練受講手当）を受けながら訓練に通っている人向けです。1か月の区切り（支給単位期間）の訓練日数と、休んだ日・遅刻や早退の日を入れると、出席日数の数え方と、その1か月が「8割以上」に届いているかの目安を出します。給付金が出るかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. この1か月の訓練日数</h2>
+    <label class="f" for="n">支給単位期間の中で、訓練がある日の数<span class="hint">訓練の開始日から1か月ごとの区切りです。カレンダーの月とずれていることがあります。時間割（訓練の予定表）で数えます</span></label>
+    <input type="number" id="n" min="1" max="31" inputmode="numeric" placeholder="例：20">
+  </div>
+
+  <div class="card">
+    <h2>2. 理由を証明できる休み</h2>
+    <label class="f" for="a">1日まるごと休んだ日<span class="hint">病気・子の看護・面接など、ハローワークが認める理由で、証明書類を出せるもの</span></label>
+    <input type="number" id="a" min="0" max="31" inputmode="numeric" value="0">
+    <label class="f" for="b">遅刻・早退したが、その日のコマ（時限）の半分以上は受けた日<span class="hint">遅刻・早退したコマは、そのコマごと欠席として数えます</span></label>
+    <input type="number" id="b" min="0" max="31" inputmode="numeric" value="0">
+    <label class="f" for="c">遅刻・早退して、受けたコマが半分に届かなかった日</label>
+    <input type="number" id="c" min="0" max="31" inputmode="numeric" value="0">
+  </div>
+
+  <div class="card">
+    <h2>3. 理由を証明できない休み</h2>
+    <label class="f" for="d">寝坊・私用などで休んだ・遅刻・早退した日<span class="hint">理由があっても証明書類を出せない日は、ここに入れます</span></label>
+    <input type="number" id="d" min="0" max="31" inputmode="numeric" value="0">
+    <label class="f" for="t">次のどれかに当てはまるか<span class="hint">求職者支援訓練の基礎コースを受けている／小学校に入る前の子を育てている／決まった範囲の家族を介護している</span></label>
+    <select id="t">
+      <option value="no">当てはまらない</option>
+      <option value="yes">当てはまる</option>
+    </select>
+  </div>
+  <button id="make" type="button">8割に届いているかを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度・訓練受講のしおり」の支給要件（全ての訓練実施日に出席。やむを得ない理由による欠席がある場合でも8割以上出席。やむを得ない理由の遅刻・欠課・早退で、その日の訓練の2分の1以上を受けた日は1/2日出席。支給単位期間ごとの出席日数の端数は切り捨て）で出した目安です。訓練日の振替が行われた場合の扱い、収入・資産などほかの支給要件、減額されるときの金額は見ていません。理由が「やむを得ない理由」に当たるかは、ハローワークが決めます。公共職業訓練を失業保険（基本手当）を受けながら受けている人は、決まりが別です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = $(id).value.trim(); if (v === "") return NaN; return Number(v); }
+  function ok(x) { return isFinite(x) && x >= 0 && Math.floor(x) === x; }
+  function h(x) { return (Math.floor(x) === x) ? String(x) : x.toFixed(1); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function make() {
+    var n = num("n"), a = num("a"), b = num("b"), c = num("c"), d = num("d"), t = $("t").value === "yes";
+    if (!ok(n) || n < 1 || n > 31) { alert("訓練がある日の数を、1〜31の数で入れてください"); return false; }
+    if (!ok(a) || !ok(b) || !ok(c) || !ok(d)) { alert("休んだ日などは、0以上の数で入れてください（なければ0）"); return false; }
+    if (a + b + c + d > n) { alert("休んだ日・遅刻や早退の日の合計が、訓練がある日の数をこえています"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var zen = n - a - b - c - d;
+    var raw = zen + b * 0.5;
+    var att = Math.floor(raw);
+    var need = Math.ceil(n * 0.8 - 1e-9);
+    var reach = att >= need;
+    var full = (a + b + c + d) === 0;
+    var rate = Math.floor(att / n * 1000) / 10;
+    var nokori = att - need;
+
+    box("この1か月の出席日数", att + "日（" + n + "日のうち）",
+      "全部出た日が" + zen + "日" + (b ? "、半分以上受けた日が" + b + "日×1/2で" + h(b * 0.5) + "日" : "") +
+      (b ? "。合わせて" + h(raw) + "日" + (raw !== att ? "で、端数を切り捨てて" + att + "日" : "") + "です" : "です") + "。出席率はおよそ" + rate + "%です。", false);
+    box("8割に必要な日数", need + "日",
+      n + "日の8割は" + h(n * 0.8) + "日です。" + (n * 0.8 !== need ? "日数は小数にならないので、" + need + "日出ていれば届きます。" : "") +
+      (reach ? (nokori === 0 ? "いまの出席日数は、ちょうどこの日数です。" : "いまの出席日数は、これより" + nokori + "日多いです。") : "いまの出席日数は、これより" + (need - att) + "日足りません。"), !reach);
+
+    var memo;
+    if (d > 0 && !t) {
+      box("この1か月の目安", "給付金は出ない見込みです",
+        "理由を証明できない休み・遅刻・早退が" + d + "日あります。この場合、8割に届いていても、その1か月分は支給されないのが原則です。次の1か月は、ほかの要件を満たしていれば、また支給の対象になります。", true);
+      todo("次の指定来所日に、休んだ日と理由を、就職支援計画書の「あなたの求職活動記録」欄に書いて出す");
+      todo("証明書類を出せる理由だった日があれば、その書類をそろえて、ハローワークで扱いを確かめる");
+      todo("同じことを繰り返すと、訓練を続けられなくなることがある。次の1か月は、休む前にハローワークへ連絡する");
+      memo = "この1か月、訓練が" + n + "日あり、\n証明書類のない休み・遅刻が\n" + d + "日あります。\n今月の給付金の扱いと、\n来月から気をつけることを\n教えてください。";
+    } else if (d > 0 && t) {
+      if (reach) {
+        box("この1か月の目安", "減らされて出る見込みです",
+          "基礎コース・子育て・介護のどれかに当てはまり、出席が8割以上なので、理由を証明できない日数に応じて減らしたうえで支給される扱いがあります。いくら減るかは、ハローワークで確かめてください。", true);
+      } else {
+        box("この1か月の目安", "給付金は出ない見込みです",
+          "基礎コース・子育て・介護のどれかに当てはまっても、出席が8割に届かないと、その1か月分は支給されません。", true);
+      }
+      todo("次の指定来所日に、基礎コース・子育て・介護のどれに当てはまるかと、休んだ日の理由を伝える");
+      todo("証明書類を出せる理由だった日があれば、その書類もそろえる");
+      todo(reach ? "減る額をハローワークで確かめ、次の1か月は休む前に連絡する" : "次の1か月は、8割以上出られるように時間割を確かめ、休む前に連絡する");
+      memo = "この1か月、訓練が" + n + "日あり、\n出席は" + att + "日です。\n証明書類のない休みが\n" + d + "日あります。\n子育て・介護など\n（または基礎コース）に\n当てはまります。\n今月の給付金の扱いを\n教えてください。";
+    } else if (full) {
+      box("この1か月の目安", "出席の要件は満たしている見込みです",
+        "休み・遅刻・早退がないので、出席の要件で外れることはない見込みです。収入・資産などほかの要件は、このページでは見ていません。", false);
+      todo("次の指定来所日に、訓練施設の受講証明が入った支給申請書を持ってハローワークへ行く");
+      todo("この先、休むことになったら、その日のうちに訓練施設とハローワークに連絡し、証明書類をもらっておく");
+      memo = "この1か月、訓練が" + n + "日あり、\n全部出席しました。\n支給申請に必要なものを\n確かめたいです。";
+    } else if (reach) {
+      box("この1か月の目安", "8割には届いている見込みです",
+        "休みや遅刻・早退が、すべて理由を証明できるものなら、この1か月は出席の要件を満たす見込みです。" +
+        (nokori === 0 ? "ただ、ぎりぎりです。この1か月のうちに、あと1日でも休むと届かなくなります。" : "この1か月のうちに、あと" + nokori + "日まるごと休んでも届く計算です。"), nokori === 0);
+      todo("休んだ日・遅刻や早退の日の証明書類（診断書・面接の証明など）をそろえる");
+      todo("次の指定来所日に、支給申請書と証明書類をハローワークに出す");
+      todo("その理由が「やむを得ない理由」に当たるか不安なら、出す前に窓口で確かめる");
+      memo = "この1か月、訓練が" + n + "日あり、\n出席は" + att + "日の見込みです。\n休んだ日の理由は\n証明書類を出せます。\nこの理由で認められるか\n確かめたいです。";
+    } else {
+      box("この1か月の目安", "8割に届かない見込みです",
+        "理由を証明できる休みだけでも、出席が" + need + "日に届かないと、その1か月分は支給されません。いまは" + (need - att) + "日足りません。次の1か月は、ほかの要件を満たしていれば、また支給の対象になります。", true);
+      todo("まだ1か月の途中なら、残りの訓練日に全部出て届くかを、時間割で数え直す");
+      todo("訓練施設が振替（別の日に同じ内容を受ける）をしてくれるか聞く。振替はいつもあるとは限らない");
+      todo("次の指定来所日に、休んだ日の証明書類を出し、今月の扱いを確かめる");
+      memo = "この1か月、訓練が" + n + "日あり、\n出席は" + att + "日の見込みで、\n8割に届きません。\n休んだのは証明できる理由です。\n今月の扱いと、来月のことを\n教えてください。";
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = "・原則は全部の訓練日に出ること。8割は、理由を証明できる休みがあるときの下限\n・遅刻・早退したコマは、そのコマごと欠席になる\n・その日のコマの半分以上を受けた日だけ1/2日出席。半分に届かなければ1日欠席\n・1/2日の合計に出た端数は切り捨て\n・訓練の期間全体で出席が8割に届かないと、退校になることがある\n・やむを得ない理由かどうかは自分で決めず、ハローワークで確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("n").value = "20"; $("a").value = "2"; $("b").value = "3"; $("c").value = "0"; $("d").value = "0"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
