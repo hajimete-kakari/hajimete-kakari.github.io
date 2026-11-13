@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職した年、家族の扶養控除に入れる？所得の見積り｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職した年、家族の扶養控除に入れる？</h1>
+  <p class="lead">その年に辞めた人が、生活費を一緒にしている親や子など家族の年末調整で「扶養控除」（19〜22歳なら「特定親族特別控除」も）の対象になるかを、辞めた人の所得の見積りから確かめるページです。2026年（令和8年分）の決まりで出します。控除の額や、税金がいくら変わるかは出しません。夫や妻の配偶者控除は別の決まりです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた人の年齢</h2>
+    <label class="f" for="age">その年の12月31日の時点の年齢（歳）<span class="hint">今年の誕生日がまだでも、12月31日の年齢で入れます</span></label>
+    <input type="number" id="age" inputmode="numeric" min="0" max="120" step="1" placeholder="例 22">
+  </div>
+
+  <div class="card">
+    <h2>2. その年の給料</h2>
+    <label class="f" for="pay">給料の支払金額の合計（円）<span class="hint">1月から12月に受け取る分。辞めた会社の源泉徴収票の「支払金額」に、そのあと働いた分や12月までに受け取る見込みの分を足します。なければ0</span></label>
+    <input type="number" id="pay" inputmode="numeric" min="0" step="1" placeholder="例 1500000">
+  </div>
+
+  <div class="card">
+    <h2>3. 退職金</h2>
+    <label class="f" for="tk">その年に退職金を受け取りましたか<span class="hint">退職所得の源泉徴収票が届いていれば「受け取った」です</span></label>
+    <select id="tk">
+      <option value="no">受け取っていない</option>
+      <option value="yes">受け取った</option>
+    </select>
+    <div id="tkbox" hidden>
+      <label class="f" for="tpay">退職金の支払金額（円）<span class="hint">税金が引かれる前の額。退職所得の源泉徴収票の「支払金額」です</span></label>
+      <input type="number" id="tpay" inputmode="numeric" min="0" step="1" placeholder="例 1000000">
+      <label class="f" for="yrs">勤続年数（年）<span class="hint">1年に満たない端数は1年に切り上げます（3年2か月なら4年）</span></label>
+      <input type="number" id="yrs" inputmode="numeric" min="1" max="60" step="1" placeholder="例 4">
+      <label class="f" for="kind">働き方<span class="hint">勤続5年以下のときは、計算のしかたが変わります</span></label>
+      <select id="kind">
+        <option value="n">会社員で、勤続6年以上</option>
+        <option value="s">会社員で、勤続5年以下</option>
+        <option value="y">役員として5年以下</option>
+      </select>
+      <label class="f" for="sho">障害者になったことが、直接の理由の退職ですか</label>
+      <select id="sho">
+        <option value="no">いいえ</option>
+        <option value="yes">はい</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card mh">
+    <h2>4. ほかの所得と、失業保険</h2>
+    <label class="f" for="oth">給料・退職金のほかの所得の金額（円）<span class="hint">副業・年金などの「所得」（収入から経費などを引いた額）です。遺族年金・障害年金のような税金がかからない年金は入れません。なければ0</span></label>
+    <input type="number" id="oth" inputmode="numeric" min="0" step="1" placeholder="例 0">
+    <label class="f" for="ui">その年に受け取る失業保険（基本手当）の合計（円）<span class="hint">わかる範囲で。なければ0。所得には数えませんが、健康保険の扶養の話と分けるために聞きます</span></label>
+    <input type="number" id="ui" inputmode="numeric" min="0" step="1" placeholder="例 300000">
+  </div>
+
+  <div class="card mh">
+    <h2>5. 生活費を一緒にしているか</h2>
+    <label class="f" for="live">年末調整をする家族と、生活費を一緒にしていますか<span class="hint">一緒に住んでいる。または離れて住んでいても、仕送りなどでいつも生活費を出してもらっている</span></label>
+    <select id="live">
+      <option value="yes">はい</option>
+      <option value="no">いいえ</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">見積りを出す</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>家族の会社に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁タックスアンサー No.1180（扶養控除）と同Q&amp;A（Q6 非課税所得・Q8 合計所得金額・Q9 給与収入136万円）・No.1177（特定親族特別控除）・No.1410（給与所得控除、令和8年分）・No.1420（退職所得）・用語集「合計所得金額」で出した目安です。給料の支払金額が220万円以上のときは、正しくは所得税法別表第五の表で給与所得を出すため、少しずれることがあります（その場合は123万円を超えるので、結果は変わりません）。前の年以前に退職金を受け取ったことがある人、同じ年に2か所以上から退職金を受け取った人は、退職所得控除の計算が変わります。日本の外に住む家族は、条件が別にあります。健康保険の扶養（年収130万円の見込みなど）は、別の決まりです。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var LINE1 = 620000, LINE2 = 1230000;
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = $(id).value; if (v === "" || v === null) return null; v = Number(v); return isFinite(v) ? v : NaN; }
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  // 令和8年分の給与所得（国税庁 No.1410）
+  function kyuyo(s) {
+    if (s < 741000) return 0;
+    if (s < 2191000) return s - 740000;
+    if (s < 2193000) return 1451000;
+    if (s < 2196000) return 1453000;
+    if (s < 2200000) return 1456000;
+    var k;
+    if (s <= 3600000) k = s * 0.3 + 80000;
+    else if (s <= 6600000) k = s * 0.2 + 440000;
+    else if (s <= 8500000) k = s * 0.1 + 1100000;
+    else k = 1950000;
+    return Math.floor(s - k);
+  }
+  // 給料以外の所得が base のとき、合計所得が line 以下に収まる給料の支払金額の上限
+  function payMax(base, line) {
+    if (base > line) return -1;
+    return Math.min(line - base + 740000, 2190999);
+  }
+  function kojo(a, sho) {
+    var k = a <= 20 ? Math.max(400000 * a, 800000) : 8000000 + 700000 * (a - 20);
+    return k + (sho ? 1000000 : 0);
+  }
+  function syncTk() { $("tkbox").hidden = $("tk").value !== "yes"; }
+  $("tk").addEventListener("change", syncTk);
+  function bad(v) { return v === null || isNaN(v) || v < 0; }
+  function make() {
+    $("result").hidden = true;
+    var age = num("age");
+    if (age === null || isNaN(age) || age < 0 || age > 120 || Math.floor(age) !== age) { alert("12月31日の時点の年齢を、0以上の整数で入れてください"); return false; }
+    var pay = num("pay"), oth = num("oth"), ui = num("ui");
+    if (pay === null) pay = 0; if (oth === null) oth = 0; if (ui === null) ui = 0;
+    if (bad(pay)) { alert("給料の支払金額は、0以上の数で入れてください"); return false; }
+    if (bad(oth)) { alert("ほかの所得は、0以上の数で入れてください"); return false; }
+    if (bad(ui)) { alert("失業保険の合計は、0以上の数で入れてください"); return false; }
+    var tk = $("tk").value === "yes", tinc = 0, tpay = 0, yrs = 0, kind = "n", tko = 0, tnote = "";
+    if (tk) {
+      tpay = num("tpay"); yrs = num("yrs"); kind = $("kind").value;
+      if (bad(tpay) || tpay === 0) { alert("退職金の支払金額を入れてください"); return false; }
+      if (yrs === null || isNaN(yrs) || yrs < 1 || Math.floor(yrs) !== yrs) { alert("勤続年数を1以上の整数で入れてください（端数は切り上げ）"); return false; }
+      if (kind !== "n" && yrs > 5) { alert("勤続5年以下を選んだときは、勤続年数を5年以下で入れてください"); return false; }
+      if (kind === "n" && yrs <= 5) { alert("勤続5年以下のときは、働き方で「勤続5年以下」を選んでください"); return false; }
+      tko = kojo(yrs, $("sho").value === "yes");
+      var rest = Math.max(0, tpay - tko);
+      if (kind === "y") { tinc = rest; tnote = "役員として5年以下なので、1/2にしません。"; }
+      else if (kind === "s") { tinc = rest <= 3000000 ? Math.floor(rest / 2) : 1500000 + (rest - 3000000); tnote = rest <= 3000000 ? "勤続5年以下で、控除のあとが300万円以下なので1/2にしました。" : "勤続5年以下で、控除のあとの300万円を超える部分は1/2にしません。"; }
+      else { tinc = Math.floor(rest / 2); tnote = "（支払金額−退職所得控除）×1/2 です。"; }
+    }
+    var g = kyuyo(pay);
+    var total = g + tinc + oth;
+    var live = $("live").value;
+    var toku = age >= 19 && age <= 22;
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    box("給与所得の目安", yen(g), "支払金額 " + yen(pay) + " から、令和8年分の給与所得控除を引いた額です。" + (pay >= 2200000 ? "220万円以上は正しくは表で出すため、少しずれることがあります。" : ""), false);
+    if (tk) box("退職所得の目安", yen(tinc), "退職所得控除 " + yen(tko) + "（勤続" + yrs + "年）。" + tnote + (tinc === 0 ? "0円なら、合計所得は増えません。" : "申告がいらない退職金でも、合計所得には入ります。"), false);
+    box("辞めた人の合計所得金額の見積り", yen(total), "給与所得" + (tk ? "＋退職所得" : "") + "＋ほかの所得 " + yen(oth) + "。" + (ui > 0 ? "失業保険の " + yen(ui) + " は入れていません。" : "失業保険は入りません。"), false);
+    var res, lab = "";
+    if (age < 16) {
+      res = "u16";
+      box("どれの対象になりそうか", "扶養控除の対象になりません（16歳未満）", "扶養控除の対象は、12月31日の時点で16歳以上の家族です。", true);
+    } else if (total <= LINE1) {
+      res = "a";
+      lab = toku ? "特定扶養親族" : age >= 70 ? "老人扶養親族" : "一般の控除対象扶養親族";
+      box("どれの対象になりそうか", "扶養控除の範囲（62万円以下）", "合計所得金額が62万円以下です。12月31日の時点で、年末調整をする家族と生計を一にしていれば、扶養控除の対象になる見込みです。年齢での区分は「" + lab + "」です。" + (age >= 70 ? "家族やその配偶者の親・祖父母で、いつも同居していれば「同居老親等」になります。" : ""), false);
+    } else if (toku && total <= LINE2) {
+      res = "b";
+      box("どれの対象になりそうか", "特定親族特別控除の範囲（62万円超123万円以下）", "扶養控除には入りませんが、19歳以上23歳未満なので、特定親族特別控除の対象になる見込みです。控除の額は、辞めた人の合計所得金額で段階的に決まります。", false);
+    } else {
+      res = "c";
+      box("どれの対象になりそうか", toku ? "どちらの対象にもなりません（123万円超）" : "扶養控除の対象になりません（62万円超）", toku ? "合計所得金額が123万円を超えるので、扶養控除・特定親族特別控除のどちらも受けられない見込みです。" : "合計所得金額が62万円を超えるので、扶養控除は受けられない見込みです。特定親族特別控除は19歳以上23歳未満の人だけなので、これも対象になりません。", true);
+    }
+    if (res === "a" || res === "b") {
+      var m1 = payMax(tinc + oth, LINE1), m2 = payMax(tinc + oth, LINE2);
+      if (res === "a" && m1 >= 0) box("給料の境目", m1 - pay > 0 ? "あと " + yen(m1 - pay) + " まで" : "ちょうど境目です", "給料の支払金額の合計が " + yen(m1) + " までなら、62万円以下のままです。12月までに受け取る給料も足して見てください。" + (toku ? "超えても " + yen(m2) + " までなら、特定親族特別控除の範囲です。" : ""), false);
+      if (res === "b") box("給料の境目", m2 - pay > 0 ? "あと " + yen(m2 - pay) + " まで" : "ちょうど境目です", "給料の支払金額の合計が " + yen(m2) + " までなら、123万円以下のままです。12月までに受け取る給料も足して見てください。", false);
+    }
+    if (tk && tinc > 0 && res !== "u16" && total > LINE1 && g + oth <= LINE1) box("退職金で変わったところ", "退職所得がなければ62万円以下でした", "退職所得 " + yen(tinc) + " が合計所得に入ったため、62万円を超えています。源泉徴収票の金額で入れ直して確かめてください。", true);
+    if (live === "no" && res !== "u16") box("生計を一にしているか", "生計が別なら、対象になりません", "扶養控除も特定親族特別控除も、年末調整をする家族と生計を一にしていることが条件です。離れて住んでいても、仕送りなどでいつも生活費を出してもらっていれば、生計を一にしていると扱われます。", true);
+    else if (live === "unk" && res !== "u16") box("生計を一にしているか", "生活費を一緒にしているかを確かめてください", "一緒に住んでいれば、ふつうは生計を一にしています。離れて住んでいるときは、仕送りなどでいつも生活費を出してもらっているかで見ます。", true);
+    if (res !== "u16" && (ui > 0 || pay > 0)) box("健康保険の扶養とは別です", "税の扶養と、健康保険の扶養は数え方がちがいます", "税の扶養控除は、1月から12月の所得で見て、失業保険は数えません。健康保険の扶養は、これからの年収の見込みで見て、失業保険も日額で見ます。", false);
+    var memo, tag = res === "b" ? "特定親族特別控除" : "扶養控除";
+    if (res === "u16") {
+      todo("16歳未満の家族は、扶養控除の対象にならない");
+      todo("家族の会社の年末調整の書類に書く欄があるかは、会社の案内に合わせる");
+      memo = "家族が今年退職しました。\n16歳未満ですが、\n年末調整の書類に\n書く欄はありますか。";
+    } else if (res === "c") {
+      todo("年末調整をする家族に、今年は" + (toku ? "扶養控除・特定親族特別控除" : "扶養控除") + "の対象外の見込みだと伝える");
+      todo("家族の会社の年末調整の書類で、辞めた人の欄の書き方は会社の案内に合わせる");
+      todo((tk ? "退職金や給料" : "給料") + "の額は、源泉徴収票の金額で入れ直して確かめる");
+      memo = "家族が今年退職しました。\n合計所得の見積りが\n" + yen(total) + "で、\n扶養控除の対象外の\n見込みです。\n書類の書き方を\n確かめたいです。";
+    } else {
+      if (live === "no") todo("先に、年末調整をする家族と生計を一にしているかを確かめる（別なら、この控除は受けられない）");
+      todo("辞めた会社の源泉徴収票" + (tk ? "と、退職所得の源泉徴収票" : "") + "を手元に置く（届いていなければ会社に頼む）");
+      todo("年末調整をする家族の会社の書類に、辞めた人の名前と、合計所得金額の見積り " + yen(total) + " を書いてもらう");
+      todo("ほかの家族が、すでに辞めた人を控除に入れていないか確かめる（入れられるのは1人だけ）");
+      todo("12月までに働いて給料が増えたら、もう一度入れて境目を超えないか確かめる");
+      todo("見積りとちがってしまったときの直し方は、家族の会社に確かめる");
+      memo = "家族が今年退職しました。\n合計所得の見積りは\n" + yen(total) + "で、\n" + tag + "の\n対象になりそうです。\nどの書類に書けばよいか\n確かめたいです。";
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = "・境目は「収入」ではなく「合計所得金額」で見る\n・給料だけなら、支払金額136万円以下が62万円以下\n・19〜22歳は、123万円以下（給料だけなら197万円以下）まで特定親族特別控除の範囲\n・失業保険は、合計所得金額に入らない\n・退職金は、申告がいらなくても合計所得金額に入る\n・年齢も所得も、12月31日の時点で見る\n・同じ人を2人の家族が扶養控除に入れることはできない\n・税の扶養と、健康保険の扶養は別の決まり\n・ここでの額は目安。控除の額は会社の年末調整で決まる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  syncTk();
+  if (DEMO) { $("age").value = "22"; $("pay").value = "1500000"; $("tk").value = "no"; syncTk(); $("oth").value = "0"; $("ui").value = "300000"; $("live").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
