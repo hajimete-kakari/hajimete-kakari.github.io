@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職した年の生命保険料控除、入れる額と出す先｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職した年の生命保険料控除、入れる額と出す先</h1>
+  <p class="lead">年の途中で会社を辞めた年に、自分で払った生命保険・医療保険・個人年金の保険料を、年末調整か確定申告で入れたい人のためのページです。証明書の額を入れると、国税庁の式で控除額を出し、出す先と次にやることを出します。令和8年分からの「23歳未満の扶養親族がいるときの特例」にも合わせています。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今年の年末</h2>
+    <label class="f" for="nencho">年末に会社に勤めていて、年末調整を受ける？</label>
+    <select id="nencho">
+      <option value="yes">受ける（新しい会社などで書類が配られる）</option>
+      <option value="no">受けない（年末に会社に勤めていない）</option>
+      <option value="unk">まだわからない</option>
+    </select>
+    <label class="f" for="kid">12月31日の時点で、23歳未満の扶養親族がいる？<span class="hint">16歳未満の子も入ります。扶養親族には所得の条件があります。</span></label>
+    <select id="kid">
+      <option value="no">いない</option>
+      <option value="yes">いる</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 今年払った保険料（年間）</h2>
+    <p class="hint" style="margin:0 0 10px">保険会社から届く控除証明書の「新・旧」の区分ごとに、今年1月〜12月に払った額（配当金・割戻金を引いた額）を足して入れます。12月まで払う予定の額が証明書に書いてあれば、その額で目安を出せます。ない区分は空けておきます。</p>
+    <label class="f" for="ippanNew">一般の生命保険（新）<span class="hint">2012年1月1日以後の契約。死亡保障など</span></label>
+    <input type="number" id="ippanNew" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="ippanOld">一般の生命保険（旧）<span class="hint">2011年12月31日以前の契約。旧契約の医療保険もここ</span></label>
+    <input type="number" id="ippanOld" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="kaigo">介護医療保険<span class="hint">2012年1月1日以後の契約の医療保険・介護保険</span></label>
+    <input type="number" id="kaigo" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="nenNew">個人年金保険（新）</label>
+    <input type="number" id="nenNew" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="nenOld">個人年金保険（旧）</label>
+    <input type="number" id="nenOld" inputmode="numeric" min="0" step="1" placeholder="円">
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. あてはまるもの</h2>
+    <label class="f" for="kaiyaku">今年の途中で解約した保険がある？</label>
+    <select id="kaiyaku">
+      <option value="no">ない</option>
+      <option value="yes">ある（解約までに払った分も上に入れた）</option>
+    </select>
+    <label class="f" for="dantai">前の会社の給料から引かれていた保険（団体扱い）がある？</label>
+    <select id="dantai">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">控除額と出す先を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社（年末調整の担当）への一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁 No.1140「生命保険料控除」と、同Q&amp;A（Q2 年の途中で解約した場合）、「令和8年分 年末調整のしかた」（昨年と比べて変わった点・生命保険料控除の計算）で出した所得税の控除額の目安です。新契約は2万円・4万円・8万円、旧契約は2.5万円・5万円・10万円で式が変わり、1円未満は切り上げます。新と旧の両方があるときは、国税庁の式で大きくなるほうを選んでいます。3つの控除の合計は12万円までです。23歳未満の扶養親族がいるときの特例（新契約の一般の生命保険は上限6万円）は、令和8年分・9年分のものです。住民税の控除額、控除で税金がいくら下がるかは、このページでは出していません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+
+  // 国税庁 No.1140 の式（1円未満は切り上げ）
+  function fNew(x) { if (x <= 20000) return x; if (x <= 40000) return Math.ceil(x / 2 + 10000); if (x <= 80000) return Math.ceil(x / 4 + 20000); return 40000; }
+  function fNew23(x) { if (x <= 30000) return x; if (x <= 60000) return Math.ceil(x / 2 + 15000); if (x <= 120000) return Math.ceil(x / 4 + 30000); return 60000; }
+  function fOld(x) { if (x <= 25000) return x; if (x <= 50000) return Math.ceil(x / 2 + 12500); if (x <= 100000) return Math.ceil(x / 4 + 25000); return 50000; }
+  // 新旧の両方があるとき：新だけ・旧だけ・合わせて（上限あり）のうち大きいもの
+  function both(nw, od, fn, cap) {
+    var a = nw > 0 ? fn(nw) : 0, b = od > 0 ? fOld(od) : 0;
+    if (nw > 0 && od > 0) {
+      var c = Math.min(a + b, cap);
+      var m = Math.max(a, b, c);
+      return { v: m, how: m === c && c > Math.max(a, b) ? "新と旧を合わせて計算" : (m === b && b >= a ? "旧だけで計算" : "新だけで計算") };
+    }
+    return { v: a + b, how: nw > 0 ? "新の式" : (od > 0 ? "旧の式" : "") };
+  }
+  function num(id) {
+    var v = $(id).value.trim(); if (v === "") return 0;
+    var a = Number(v); if (!(a >= 0) || Math.floor(a) !== a) return NaN; return a;
+  }
+
+  function make() {
+    var ids = ["ippanNew", "ippanOld", "kaigo", "nenNew", "nenOld"], vals = {};
+    for (var i = 0; i < ids.length; i++) { vals[ids[i]] = num(ids[i]); if (isNaN(vals[ids[i]])) { alert("払った額は、0以上の整数（円）で入れてください"); return; } }
+    var total0 = ids.reduce(function (s, k) { return s + vals[k]; }, 0);
+    if (total0 === 0) { alert("払った保険料を、少なくとも1つ入れてください"); return; }
+    var nencho = $("nencho").value, kid = $("kid").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+
+    var ip = both(vals.ippanNew, vals.ippanOld, fNew, 40000);
+    var ip23 = both(vals.ippanNew, vals.ippanOld, fNew23, 60000);
+    var useKid = kid === "yes" && vals.ippanNew > 0;
+    var ipUse = useKid ? ip23 : ip;
+    var kg = vals.kaigo > 0 ? fNew(vals.kaigo) : 0;
+    var nn = both(vals.nenNew, vals.nenOld, fNew, 40000);
+    var sum = ipUse.v + kg + nn.v, cut = sum > 120000;
+    var total = Math.min(sum, 120000);
+    var sumAlt = Math.min(ip23.v + kg + nn.v, 120000);
+
+    box("生命保険料控除の額（所得税）", yen(total),
+      "一般の生命保険 " + yen(ipUse.v) + (ipUse.how ? "（" + ipUse.how + (useKid ? "・23歳未満の扶養親族の特例" : "") + "）" : "") +
+      "、介護医療 " + yen(kg) + "、個人年金 " + yen(nn.v) + (nn.how ? "（" + nn.how + "）" : "") + "。" +
+      (cut ? "3つを足すと" + yen(sum) + "ですが、合計は12万円までです。" : "3つの合計です（上限は12万円）。"), false);
+
+    if (kid === "unk" && vals.ippanNew > 0 && sumAlt > total) {
+      box("23歳未満の扶養親族がいれば", yen(sumAlt), "12月31日の時点で23歳未満の扶養親族（16歳未満の子も入る）がいれば、新契約の一般の生命保険の式が変わり、この額になります。扶養親族にあたるか（所得の条件）は、会社の担当か税務署に確かめます。", true);
+    } else if (kid === "yes" && vals.ippanNew === 0) {
+      box("23歳未満の扶養親族の特例", "今回は使わない", "特例で式が変わるのは、新契約（2012年以後）の一般の生命保険だけです。入れた保険には新契約の一般の生命保険がないので、ふつうの式で出しています。", true);
+    } else if (kid === "yes" && ip23.v > ip.v) {
+      box("特例で増えた分", "+" + yen(Math.min(ip23.v + kg + nn.v, 120000) - Math.min(ip.v + kg + nn.v, 120000)), "令和8年分・9年分の特例です。年末調整なら、保険料控除申告書の生命保険料控除の欄に、特例の記入欄があります。", false);
+    }
+
+    var where, whereS, whereNo = false;
+    if (nencho === "yes") {
+      where = "年末に勤めている会社の年末調整（保険料控除申告書）";
+      whereS = "辞めた会社ではなく、年末に勤めている会社に出します。退職前に払った分も、今年1〜12月に払った分なら一緒に入れます。書類を出し忘れたら、翌年の確定申告で入れる方法があります。";
+    } else if (nencho === "no") {
+      where = "翌年の確定申告";
+      whereS = "年末に会社に勤めていない人は、年末調整がありません。確定申告の生命保険料控除の欄に入れます。税金を戻してもらうための申告は、翌年1月1日から5年間出せます。";
+    } else {
+      where = "年末調整か、翌年の確定申告";
+      whereS = "年内に就職して年末調整の書類が配られたらそこに書きます。年末に勤めていなければ、翌年の確定申告で入れます。どちらでも、そろえる証明書は同じです。";
+      whereNo = true;
+    }
+    box("出す先", where, whereS, whereNo);
+
+
+    box("添えるもの", "保険会社の控除証明書",
+      "確定申告では、控除証明書（または電子の証明書を印刷したもの）を添えるか見せます。旧契約で年9,000円以下のものは要らないとされています。年末調整では、会社の案内どおりに出します。", false);
+
+    todo("保険会社から届いた控除証明書（はがき・封書・電子）を、契約ごとに集める");
+    todo("証明書の「新・旧」と「一般・介護医療・個人年金」の区分ごとに、今年1〜12月に払う額を足す（配当金・割戻金があれば引く）");
+    if ($("kaiyaku").value === "yes") todo("解約した保険は、解約までに払った分を入れる。解約返戻金（一時金）は、払った額から引かない");
+    if ($("dantai").value === "yes") todo("前の会社の給料から引かれていた保険は、今年払った分の証明書がどこから届くかを、保険会社か前の会社に確かめる");
+    if (kid !== "no") todo("23歳未満の扶養親族にあたるか（12月31日の年齢と、所得の条件）を確かめる。共働きなら、夫婦のどちらも特例を使える");
+    if (nencho === "yes") todo("年末に勤めている会社の保険料控除申告書の、生命保険料控除の欄に書き、証明書を添えて出す");
+    else if (nencho === "no") todo("翌年の確定申告で、生命保険料控除の欄に入れる。前の会社の源泉徴収票も用意する");
+    else todo("年末調整の書類が配られたらそこに、配られなければ翌年の確定申告で入れる。証明書はなくさないように1か所にまとめる");
+
+    if (nencho === "yes") {
+      $("memo").textContent = "年末調整の書類の件です。\n今年の途中で前の会社を辞め、\nこちらに入りました。\n前の会社にいたあいだに\n払った生命保険料も、\n今年の分として\n保険料控除申告書に書きます。\n証明書を添えて出します。" + (useKid ? "\n23歳未満の扶養親族の\n特例の欄も書きます。" : "");
+    } else {
+      $("memo").textContent = "（年末調整がない人は、\n会社への一言は要りません。\n確定申告のときに、\n控除証明書と\nこのページの区分ごとの額を\nまとめて持っておきます）";
+    }
+
+    $("ng").textContent = "・辞めた会社では年末調整をしないことが多い。今年の分は、年末に勤めている会社か確定申告で入れる\n・控除に入るのは、その年に払った額。証明書の額が12月まで払う予定の額か、途中までの額かを見る\n・新と旧、一般と介護医療を取りちがえると額が変わる。証明書の区分の欄で確かめる\n・保険金の受取人に、自分と家族（配偶者・親族）以外の人がいる保険は、控除の対象にならない\n・ここで出すのは所得税の控除額。住民税の控除額や、税金がいくら下がるかは出していない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("nencho").value = "yes"; $("kid").value = "yes";
+    $("ippanNew").value = "96000"; $("kaigo").value = "36000"; $("nenOld").value = "84000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
