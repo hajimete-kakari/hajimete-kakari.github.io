@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>特定受給資格者・特定理由離職者の判定の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .z { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .z label { font-size: .8rem; color: var(--sub); }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>特定受給資格者・特定理由離職者になれる？</h1>
+  <p class="lead">辞めた理由をいちばん近いものから選び、いくつかの質問に答えると、ハローワークの判断基準に当てはまりそうか、持っていく資料、離職票の理由欄の書き方、失業保険で変わること（待つ期間・加入期間・日数・国保）を出します。区分を決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日・年齢・加入期間</h2>
+    <label class="f" for="day">辞めた日（離職日）<span class="hint">これから辞める人は、辞める予定の日</span></label>
+    <input type="date" id="day">
+    <label class="f" for="age">辞めた日の年齢（歳）</label>
+    <input type="number" id="age" inputmode="numeric" min="15" max="80" step="1" placeholder="例 42">
+    <label class="f" for="ki">辞めた会社で雇用保険に入っていた期間</label>
+    <select id="ki">
+      <option value="0">6か月未満</option>
+      <option value="1">6か月以上1年未満</option>
+      <option value="2" selected>1年以上5年未満</option>
+      <option value="3">5年以上10年未満</option>
+      <option value="4">10年以上20年未満</option>
+      <option value="5">20年以上</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めた理由</h2>
+    <label class="f" for="why">いちばん近いもの<span class="hint">離職票に書かれた理由ではなく、実際の理由で選びます</span></label>
+    <select id="why">
+      <optgroup label="会社の事情">
+        <option value="tosan">会社が倒産した（破産・民事再生の申立て、手形の不渡りなど）</option>
+        <option value="haishi">事業所がなくなった・事業が止まって再開の見込みがない</option>
+        <option value="taiyo">大きな人員整理があった（1か月に30人以上など）</option>
+        <option value="iten">事業所が移転して、通勤が難しくなった</option>
+      </optgroup>
+      <optgroup label="解雇・退職のすすめ">
+        <option value="kaiko">解雇された</option>
+        <option value="juseki">自分の重大な理由で解雇された</option>
+        <option value="kansho">会社から辞めるようすすめられた（退職勧奨）</option>
+        <option value="kibou">希望退職・早期退職の募集に応じた</option>
+      </optgroup>
+      <optgroup label="給料・働き方">
+        <option value="jouken">入社のときの条件と、実際が大きくちがった</option>
+        <option value="mibarai">給料が払われない・遅れた</option>
+        <option value="teika">給料が大きく下がった</option>
+        <option value="zangyo">残業・休日出勤が多かった</option>
+        <option value="kyugyo">会社の都合の休業が続いた</option>
+        <option value="hara">いじめ・嫌がらせ・ハラスメントがあった</option>
+        <option value="shokushu">急な職種の変更・遠くへの転勤を命じられた</option>
+        <option value="ikuji">育休・介護休業を拒まれた、妊娠・出産で不利な扱いを受けた</option>
+      </optgroup>
+      <optgroup label="契約社員・派遣など">
+        <option value="keiyaku">契約期間が終わって、更新されなかった</option>
+      </optgroup>
+      <optgroup label="自分や家族の事情">
+        <option value="byoki">体調・けが・障害で、仕事を続けられなくなった</option>
+        <option value="ninshin">妊娠・出産・育児で辞めた</option>
+        <option value="kaigo">家族の看護・介護、親の扶養が必要になった</option>
+        <option value="bekkyo">配偶者や扶養する家族と、別に暮らすのが難しくなった</option>
+        <option value="tsukin">結婚・保育・転居などで、通勤が難しくなった</option>
+        <option value="jiko">転職・やりたいことなど、自分の都合</option>
+      </optgroup>
+    </select>
+
+    <div id="s_iten" class="sub">
+      <label class="f" for="iten_h">移転したあとの通勤の往復時間（時間）<span class="hint">ふつうの方法で通った場合</span></label>
+      <input type="number" id="iten_h" inputmode="decimal" min="0" max="12" step="0.5" placeholder="例 4">
+      <label class="f" for="iten_t">辞めた時期</label>
+      <select id="iten_t">
+        <option value="in">移転の前か、移転のあとおおむね3か月以内</option>
+        <option value="out">移転のあと3か月より後</option>
+      </select>
+    </div>
+
+    <div id="s_kibou" class="sub">
+      <label class="f" for="kb">応じた募集の種類</label>
+      <select id="kb">
+        <option value="jinin">人員整理のための臨時の募集（辞める前1年以内に始まり、募集期間が3か月以内）</option>
+        <option value="other">人員整理の募集だが、上の条件に当てはまらない</option>
+        <option value="joji">前からずっとある早期退職優遇制度・選択定年制度</option>
+      </select>
+    </div>
+
+    <div id="s_kikan" class="sub">
+      <label class="f" for="kikan">辞めた時期</label>
+      <select id="kikan">
+        <option value="in">そのことが起きてから1年以内</option>
+        <option value="out">1年を過ぎてから</option>
+      </select>
+    </div>
+
+    <div id="s_mibarai" class="sub">
+      <label class="f" for="mb">どんなことがあった？</label>
+      <select id="mb">
+        <option value="a">その月に払われた額が、本来の額の3分の2に満たない月があった</option>
+        <option value="b">給料の全額が、支払日より遅れて払われたことがある</option>
+        <option value="c">数日遅れたことはあるが、そのあと3か月以上ふつうに払われた</option>
+      </select>
+    </div>
+
+    <div id="s_teika" class="sub">
+      <label class="f" for="t_mae">下がる前の、毎月決まって出る給料（円）<span class="hint">残業代など月によって変わるものは入れない</span></label>
+      <input type="number" id="t_mae" inputmode="numeric" min="0" step="1000" placeholder="例 250000">
+      <label class="f" for="t_ato">下がった（下がる）あとの、毎月決まって出る給料（円）</label>
+      <input type="number" id="t_ato" inputmode="numeric" min="0" step="1000" placeholder="例 200000">
+      <label class="f" for="t_yo">下がることは、前から知らされていた？</label>
+      <select id="t_yo">
+        <option value="no">知らされていなかった（予想できなかった）</option>
+        <option value="yes">1年より前から知らされていた</option>
+      </select>
+      <label class="f" for="t_ri">下がった理由</label>
+      <select id="t_ri">
+        <option value="futsu">会社の業績・制度の変更など</option>
+        <option value="dekidaka">出来高払いで、毎月の額がもともと変わる</option>
+        <option value="kekkin">懲戒や、病気の欠勤で下がった</option>
+        <option value="sai60">60歳以上の定年のあと、同じ会社に再雇用されて下がった</option>
+      </select>
+    </div>
+
+    <div id="s_zangyo" class="sub">
+      <label class="f">辞めた月の前の6か月の、残業と休日出勤の時間<span class="hint">1が辞めた月の前の月。給料の締め日で区切った月で数えます</span></label>
+      <div class="z">
+        <div><label for="z1">1（直前）</label><input type="number" id="z1" inputmode="numeric" min="0" max="400" step="1"></div>
+        <div><label for="z2">2</label><input type="number" id="z2" inputmode="numeric" min="0" max="400" step="1"></div>
+        <div><label for="z3">3</label><input type="number" id="z3" inputmode="numeric" min="0" max="400" step="1"></div>
+        <div><label for="z4">4</label><input type="number" id="z4" inputmode="numeric" min="0" max="400" step="1"></div>
+        <div><label for="z5">5</label><input type="number" id="z5" inputmode="numeric" min="0" max="400" step="1"></div>
+        <div><label for="z6">6</label><input type="number" id="z6" inputmode="numeric" min="0" max="400" step="1"></div>
+      </div>
+    </div>
+
+    <div id="s_kyugyo" class="sub">
+      <label class="f" for="kg">休業の状態</label>
+      <select id="kg">
+        <option value="in">休業手当が3か月以上続いているあいだに辞めた</option>
+        <option value="short">休業は3か月に届かなかった</option>
+        <option value="out">休業が終わって、ふつうの給料に戻ってから辞めた</option>
+      </select>
+    </div>
+
+    <div id="s_hara" class="sub">
+      <label class="f" for="hr">いちばん近いもの</label>
+      <select id="hr">
+        <option value="haiseki">上司・同僚から、わざと外される・ひどい扱い・嫌がらせを繰り返し受けた</option>
+        <option value="soudan">セクハラや、妊娠・出産・育休に関する嫌がらせを相談したのに、会社が対応しなかった</option>
+        <option value="shikari">仕事のミスなどで、注意や叱られることがあった</option>
+      </select>
+    </div>
+
+    <div id="s_keiyaku" class="sub">
+      <label class="f" for="k_kibo">契約の更新を、自分は希望した？</label>
+      <select id="k_kibo">
+        <option value="yes">希望した（会社に伝えた）</option>
+        <option value="no">希望しなかった</option>
+      </select>
+      <label class="f" for="k_nen">雇われた日から、続けて3年以上働いた？<span class="hint">契約を1回以上更新して、3年以上</span></label>
+      <select id="k_nen">
+        <option value="no">3年未満</option>
+        <option value="yes">3年以上</option>
+      </select>
+      <label class="f" for="k_mei">契約書（雇入通知書）の、更新についての書き方</label>
+      <select id="k_mei">
+        <option value="baai">「更新する場合がある」など、条件つき</option>
+        <option value="kaku">「更新する」とはっきり書かれていた</option>
+        <option value="nashi">はじめから「更新なし」と書かれていた</option>
+        <option value="wakaranai">わからない・契約書がない</option>
+      </select>
+    </div>
+
+    <div id="s_ninshin" class="sub">
+      <label class="f" for="nn">受給期間の延長の手続き<span class="hint">辞めた日の翌日から30日以上働けないときにできる手続き</span></label>
+      <select id="nn">
+        <option value="yes">した・する予定</option>
+        <option value="no">していない（すぐ働ける）</option>
+      </select>
+    </div>
+
+    <div id="s_kaigo" class="sub">
+      <label class="f" for="kk">会社に辞めると伝えたとき、看護・介護が要る期間はどのくらいの見込みだった？</label>
+      <select id="kk">
+        <option value="yes">おおむね30日を超える見込みだった</option>
+        <option value="no">30日以内の見込みだった</option>
+      </select>
+    </div>
+
+    <div id="s_tsukin" class="sub">
+      <label class="f" for="ts">通勤が難しくなった理由</label>
+      <select id="ts">
+        <option value="kekkon">結婚で住所が変わった</option>
+        <option value="hoiku">子どもを保育所に預ける・親族に預けるため</option>
+        <option value="tachinoki">立ち退き・災害などで、望まない引っ越しをした</option>
+        <option value="kotsu">電車・バスがなくなった・時間が変わった</option>
+        <option value="tenkin">自分の転勤・出向で、家族と別に暮らすことになる</option>
+        <option value="haigu">配偶者の転勤・出向・再就職で、一緒に暮らすために引っ越した</option>
+      </select>
+      <label class="f" for="ts_h">新しい通勤の往復時間（時間）<span class="hint">ふつうの方法で通った場合</span></label>
+      <input type="number" id="ts_h" inputmode="decimal" min="0" max="12" step="0.5" placeholder="例 4">
+      <div id="s_kekkon">
+        <label class="f" for="kn">辞めた日から引っ越しまで</label>
+        <select id="kn">
+          <option value="in">おおむね1か月以内</option>
+          <option value="out">1か月より空いた</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <button id="make" type="button">判定の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※ハローワークインターネットサービス「特定受給資格者及び特定理由離職者の範囲の概要」「基本手当の所定給付日数」、厚生労働省・労働局のリーフレット「特定受給資格者及び特定理由離職者の範囲と判断基準」（2025年7月版）と「離職票－２の離職理由欄等の記載方法について」、「給付制限期間の見直し（令和7年4月）」で出した目安です。ここに出る資料は例で、ほかの資料で確かめることもあります。障害のある方など「就職困難者」の日数、65歳以上の高年齢求職者給付金は扱いません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function mk(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    return el;
+  }
+  function box(k, v, s, no) { $("sum").appendChild(mk(k, v, s, no)); }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  var KN = ["6か月未満", "6か月以上1年未満", "1年以上5年未満", "5年以上10年未満", "10年以上20年未満", "20年以上"];
+  function ippan(ki) { if (ki <= 3) return 90; if (ki === 4) return 120; return 150; }
+  function tokutei(age, ki) {
+    if (ki <= 1) return 90;
+    var t;
+    if (age < 30) t = [90, 120, 180, 180];
+    else if (age < 35) t = [120, 180, 210, 240];
+    else if (age < 45) t = [150, 180, 240, 270];
+    else if (age < 60) t = [180, 240, 270, 330];
+    else t = [150, 180, 210, 240];
+    return t[ki - 2];
+  }
+  var SUBS = { iten: ["s_iten"], kibou: ["s_kibou"], jouken: ["s_kikan"], mibarai: ["s_mibarai", "s_kikan"], teika: ["s_teika"],
+    zangyo: ["s_zangyo"], kyugyo: ["s_kyugyo"], hara: ["s_hara"], keiyaku: ["s_keiyaku"], ninshin: ["s_ninshin"], kaigo: ["s_kaigo"], tsukin: ["s_tsukin"] };
+  function sync() {
+    var w = $("why").value, list = SUBS[w] || [];
+    var all = document.querySelectorAll(".sub");
+    for (var i = 0; i < all.length; i++) all[i].hidden = list.indexOf(all[i].id) < 0;
+    $("s_kekkon").hidden = $("ts").value !== "kekkon";
+  }
+  $("why").addEventListener("change", sync); $("ts").addEventListener("change", sync);
+  function num(id) { var v = $(id).value; if (v === "") return null; var n = Number(v); return isFinite(n) ? n : NaN; }
+
+  // 判定。cat: tk=特定受給資格者 / tr1=特定理由離職者（雇止め）/ tr2=特定理由離職者（正当な理由）/ ip=一般 / ju=重責解雇 / man=期間満了で希望なし / ask=窓口
+  function judge(w) {
+    var r = { cat: "tk", why: "", shiryo: "", hyo: "", err: null };
+    if (w === "tosan") { r.why = "倒産（破産・民事再生・会社更生などの申立て、手形の不渡りなど）で辞めた人は、特定受給資格者の基準に当たります。再建型の手続きでは、計画が決まるまでに辞めると申し出た場合です。"; r.shiryo = "裁判所が倒産手続の申立てを受け付けたことがわかる書類など"; r.hyo = "「事業所の倒産等によるもの」の倒産"; }
+    else if (w === "haishi") { r.why = "事業所がなくなった（事業が止まって再開の見込みがない、解散の議決があったも含む）ため辞めた人は、特定受給資格者の基準に当たります。"; r.shiryo = "解散の議決があった議事録（写し）など"; r.hyo = "「事業所の倒産等によるもの」の事業所の廃止"; }
+    else if (w === "taiyo") { r.why = "1か月に30人以上の離職を予定する届け出があった、または人員整理で事業所の3分の1を超える人が辞めたために辞めた人は、特定受給資格者の基準に当たります。人数の条件は、会社の届け出などでハローワークが確かめます。"; r.shiryo = "人員整理の知らせ・説明の資料など（窓口で何が要るか聞く）"; r.hyo = "「労働者の判断によるもの」の、事業所での大規模な人員整理"; }
+    else if (w === "iten") {
+      var h = num("iten_h");
+      if (h === null || isNaN(h) || h < 0 || h > 12) { r.err = "移転したあとの通勤の往復時間を、0〜12の数で入れてください"; return r; }
+      r.shiryo = "事業所の移転の知らせ、移転先がわかる資料、通勤経路の時刻表など"; r.hyo = "「労働者の判断によるもの」の、事業所移転で通勤が難しくなった";
+      if (h >= 4 && $("iten_t").value === "in") r.why = "往復おおむね4時間以上かかる場所への移転を知らされ、移転のあとおおむね3か月以内までに辞めた場合は、特定受給資格者の基準に当たります（知らせは移転の1年前以降のもの）。";
+      else { r.cat = "ip"; r.why = h < 4 ? "基準の「通勤が難しい」は、往復おおむね4時間以上が目安です。それより短いと、この基準には当たりにくいです。乗り換えや時間帯の事情があれば、窓口で伝えます。" : "移転のあとおおむね3か月より後に辞めた場合は、この基準には当たりにくいです。"; }
+    }
+    else if (w === "kaiko") { r.why = "解雇（自分の重大な理由による解雇を除く）で辞めた人は、特定受給資格者の基準に当たります。"; r.shiryo = "解雇予告通知書、退職証明書、就業規則など"; r.hyo = "「事業主からの働きかけによるもの」の解雇（重責解雇を除く）"; }
+    else if (w === "juseki") { r.cat = "ju"; r.why = "法律に反する行い、わざと・大きな不注意で設備をこわした、大きな就業規則違反などで解雇された場合は「重責解雇」で、特定受給資格者には当たりません。解雇の理由に心当たりがないときは、窓口で事情を伝えます。"; r.shiryo = "解雇予告通知書、退職証明書（解雇の理由が書かれたもの）、就業規則など"; r.hyo = "「事業主からの働きかけによるもの」の重責解雇"; }
+    else if (w === "kansho") { r.why = "会社（人事の担当者を含む）から、直接・間接に辞めるようすすめられて辞めた人は、特定受給資格者の基準に当たります。前からずっとある早期退職優遇制度に応じた場合は当たりません。"; r.shiryo = "すすめられた日・言われたこと・相手のメモ、メールやチャットなど（あれば）"; r.hyo = "「事業主からの働きかけによるもの」の希望退職の募集又は退職勧奨"; }
+    else if (w === "kibou") {
+      var kb = $("kb").value; r.shiryo = "希望退職の募集要綱、自分が応募したことがわかる資料など";
+      if (kb === "jinin") { r.why = "人員整理のための臨時の希望退職の募集（辞める前1年以内に始まり、募集期間が3か月以内）に応じた場合は、特定受給資格者の基準に当たります。"; r.hyo = "「事業主からの働きかけによるもの」の希望退職の募集又は退職勧奨"; }
+      else if (kb === "other") { r.cat = "ask"; r.why = "人員整理で希望退職の募集に応じたが、上の条件に当てはまらない場合は、特定理由離職者に当たることがあります（判断基準では「窓口に問い合わせ」とされています）。"; r.hyo = "「事業主からの働きかけによるもの」の希望退職の募集又は退職勧奨"; }
+      else { r.cat = "ip"; r.why = "前からずっとある早期退職優遇制度・選択定年制度に応じた場合は、特定受給資格者には当たりません。"; r.shiryo = "制度の内容がわかる資料"; r.hyo = "「労働契約期間満了等によるもの」の早期退職優遇制度、選択定年制度等"; }
+    }
+    else if (w === "jouken") {
+      r.shiryo = "採用のときの条件と、実際の条件がわかる労働契約書や就業規則など"; r.hyo = "「労働者の判断によるもの」の、労働条件に係る重大な問題";
+      if ($("kikan").value === "in") r.why = "入社のときに示された条件（給料・労働時間・働く場所・仕事の内容など）と実際が大きくちがった、または会社が条件を変えて大きくちがうことになり、それから1年以内に辞めた場合は、特定受給資格者の基準に当たります。正しい手続きで変えた場合は当たりません。";
+      else { r.cat = "ip"; r.why = "条件のちがいが起きてから1年を過ぎて辞めた場合は、この基準には当たりにくいです。給料の低下や残業の多さなど、ほかの基準に当たるかを見ます。"; }
+    }
+    else if (w === "mibarai") {
+      var mb = $("mb").value; r.shiryo = "労働契約書、就業規則、給与明細書、振込の日がわかる預金通帳など"; r.hyo = "「労働者の判断によるもの」の、労働条件に係る重大な問題（賃金遅配など）";
+      if (mb === "c") { r.cat = "ip"; r.why = "遅れたあと、ふつうの支払いが3か月以上続いてから辞めた場合は、この基準には当たりません。"; }
+      else if ($("kikan").value === "out") { r.cat = "ip"; r.why = "払われなかった・遅れた月から1年を過ぎて辞めた場合は、この基準には当たりにくいです。"; }
+      else r.why = "給料（退職金を除く）の3分の1を超える額が支払日までに払われなかった場合（払われた額が本来の3分の2に満たない月があった、または全額が支払日より遅れたことがある）で、その月から1年以内に辞めた人は、特定受給資格者の基準に当たります。";
+    }
+    else if (w === "teika") {
+      var a = num("t_mae"), b = num("t_ato");
+      if (a === null || b === null || isNaN(a) || isNaN(b) || a <= 0 || b < 0 || a > 5000000 || b > 5000000) { r.err = "下がる前と、下がったあとの給料を、円で入れてください"; return r; }
+      var pct = Math.floor(b / a * 1000) / 10;
+      r.shiryo = "労働契約書、就業規則、賃金規定、給料を下げる知らせの書類、給与明細書など"; r.hyo = "「労働者の判断によるもの」の、労働条件に係る重大な問題（賃金低下）";
+      r.pct = pct;
+      var ri = $("t_ri").value;
+      if (b >= a * 0.85) { r.cat = "ip"; r.why = "下がる前の " + pct + "% です。基準は「85%未満に下がった」なので、この数字では当たりにくいです。"; }
+      else if ($("t_yo").value === "yes") { r.cat = "ip"; r.why = "下がる前の " + pct + "% ですが、下がった時点から1年より前に知らされていて予想できた場合は、この基準に当たりません。"; }
+      else if (ri !== "futsu") { r.cat = "ip"; r.why = "下がる前の " + pct + "% ですが、" + (ri === "dekidaka" ? "出来高払いのように毎月の額がもともと変わる契約" : (ri === "kekkin" ? "懲戒や病気の欠勤で下がった場合" : "60歳以上の定年のあと、同じ会社に再雇用されて下がった場合")) + "は、この基準に当たりません。"; }
+      else r.why = "下がる前の " + pct + "% です。毎月決まって出る給料が85%未満に下がった（下がることになった）ため辞めた場合で、予想できなかったときは、特定受給資格者の基準に当たります。比べるのは、辞めた月の前後6か月の月と、その前6か月の月です。";
+    }
+    else if (w === "zangyo") {
+      var z = [], i, v;
+      for (i = 1; i <= 6; i++) { v = num("z" + i); if (v === null) v = 0; if (isNaN(v) || v < 0 || v > 400) { r.err = "残業と休日出勤の時間を、0〜400の数で入れてください（なかった月は0か空欄）"; return r; } z.push(v); }
+      r.shiryo = "タイムカード（写し）など時間がわかるもの、賃金台帳、給与明細書"; r.hyo = "「労働者の判断によるもの」の、労働条件に係る重大な問題（過度な時間外労働）";
+      var hit = [];
+      for (i = 0; i <= 3; i++) if (z[i] > 45 && z[i + 1] > 45 && z[i + 2] > 45) { hit.push("45時間を超えた月が3か月続いた"); break; }
+      for (i = 0; i < 6; i++) if (z[i] > 100) { hit.push("100時間を超えた月がある（" + (i + 1) + "の月 " + z[i] + "時間）"); break; }
+      var best = 0, bk = 0;
+      for (var n = 2; n <= 6; n++) for (i = 0; i + n <= 6; i++) { var s = 0; for (var j = i; j < i + n; j++) s += z[j]; if (s / n > best) { best = s / n; bk = n; } }
+      if (best > 80) hit.push("続いた" + bk + "か月の平均が80時間を超えた（平均 " + (Math.round(best * 10) / 10) + "時間）");
+      r.zhit = hit;
+      if (hit.length) r.why = "当てはまったもの：" + hit.join("、") + "。辞めた月の前6か月に、こうした残業と休日出勤があったため辞めた場合は、特定受給資格者の基準に当たります。有休や体調不良で残業がなかった月は、除いて数えます。";
+      else { r.cat = "ip"; r.why = "入れた時間では、基準（45時間超が3か月続く・1か月100時間超・2〜6か月の平均80時間超）に届きません。有休や体調不良で残業がなかった月があれば、その月を除いて数えるので、窓口で伝えます。"; }
+    }
+    else if (w === "kyugyo") {
+      var kg = $("kg").value; r.shiryo = "賃金台帳、給与明細書など"; r.hyo = "「労働者の判断によるもの」の、労働条件に係る重大な問題（休業手当の継続）";
+      if (kg === "in") r.why = "会社の都合で全日休業になり、休業手当が3か月以上続いたため辞めた場合は、特定受給資格者の基準に当たります。";
+      else { r.cat = "ip"; r.why = kg === "out" ? "休業が終わって、ふつうの給料に戻ってから辞めた場合は、この基準に当たりません。" : "休業が3か月以上続いたことが条件です。3か月に届かないと、この基準には当たりにくいです。給料の低下など、ほかの基準も見ます。"; }
+    }
+    else if (w === "hara") {
+      var hr = $("hr").value; r.hyo = "「労働者の判断によるもの」の、就業環境に係る重大な問題（故意の排斥、嫌がらせ等）";
+      r.shiryo = "自分だけを狙った配置転換や給料の変更があったなら、配置転換の辞令（写し）・就業規則・労働契約書・賃金台帳など。日付と内容のメモ、相談した記録";
+      if (hr === "haiseki") r.why = "上司・同僚などから、わざと外される・ひどい扱い・嫌がらせを繰り返し受けて辞めた場合は、特定受給資格者の基準に当たります。";
+      else if (hr === "soudan") r.why = "セクハラや、妊娠・出産・育休などに関する嫌がらせを会社（人事の担当者）や公的な窓口に相談したのに、おおむね1か月たっても会社が必要な対応をしなかったため辞めた場合は、特定受給資格者の基準に当たります。";
+      else { r.cat = "ip"; r.why = "仕事のミスなどで注意や叱られることは、ふつうに起こりうることとされ、それだけではこの基準に当たりません。繰り返しのひどい扱いがあったなら、上の選び方で見直します。"; }
+    }
+    else if (w === "shokushu") { r.why = "採用のときに決まっていた職種から、給料が下がる別の職種へ変えられた、10年以上同じ職種だったのに十分な訓練なく変えられた、働く場所が決まっていたのに遠く（往復おおむね4時間以上）へ転勤を命じられた、などで辞めた場合は、特定受給資格者の基準に当たることがあります。細かい条件は窓口で確かめます。"; r.shiryo = "採用のときの労働契約書、職種の変更・配置転換・転勤の辞令（写し）、賃金台帳など"; r.hyo = "「労働者の判断によるもの」の、職種転換等に適応することが困難"; }
+    else if (w === "ikuji") { r.why = "育児休業・介護休業などを申し出たのに正当な理由なく拒まれた、妊娠・出産や休業の申し出・取得を理由に不利な扱いを受けた、などで辞めた場合は、特定受給資格者の基準に当たります。"; r.shiryo = "申し出た日と会社の返事がわかるメール・書面、不利な扱いがわかる辞令や給与明細など（何が要るかは窓口で聞く）"; r.hyo = "「労働者の判断によるもの」の、就業環境に係る重大な問題など（近いものを選ぶ）"; }
+    else if (w === "keiyaku") {
+      var kibo = $("k_kibo").value, nen = $("k_nen").value, mei = $("k_mei").value;
+      r.shiryo = "労働契約書、雇入通知書、就業規則、契約更新の通知書など"; r.hyo = "「労働契約期間満了等によるもの」の労働契約期間満了（更新の希望の有無にも○）";
+      if (kibo === "no") { r.cat = "man"; r.why = "自分が更新を希望しなかった場合は、特定受給資格者・特定理由離職者には当たりません。"; }
+      else if (nen === "yes") r.why = "契約を更新して3年以上続けて雇われ、更新を希望したのに更新されなかった場合は、特定受給資格者の基準に当たります。";
+      else if (mei === "kaku") r.why = "契約のときに「更新する」とはっきり示されていて（確約があって）、更新を希望したのに更新されなかった場合は、特定受給資格者の基準に当たります。";
+      else if (mei === "baai") { r.cat = "tr1"; r.why = "「更新する場合がある」のように更新の確約まではない契約で、更新を希望したのに合意できず更新されなかった場合は、特定理由離職者の基準に当たります。"; }
+      else if (mei === "nashi") { r.cat = "ip"; r.why = "はじめから「更新なし」と示されていた場合は、基本的に特定理由離職者の基準には当たりません。ただし、更新の上限があとから設けられた・引き下げられた場合（2027年3月31日までの離職）は当たることがあります。"; }
+      else { r.cat = "tr1"; r.why = "更新を希望したのに更新されなかった場合は、特定理由離職者の基準に当たる見込みです。契約書の書き方（「更新する」なら特定受給資格者、「更新なし」なら当たらないことも）で変わるので、契約書をさがします。"; }
+    }
+    else if (w === "byoki") { r.cat = "tr2"; r.why = "体力の不足、心身の障害、病気、けが、視力・聴力などの低下で、いまの仕事（通勤を含む）を続けられない・難しくなった、または新しく命じられた仕事ができないために辞めた場合は、特定理由離職者の基準に当たります。"; r.shiryo = "医師の診断書など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職（体調不良など）"; }
+    else if (w === "ninshin") {
+      r.shiryo = "受給期間延長通知書など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職";
+      if ($("nn").value === "yes") { r.cat = "tr2"; r.why = "妊娠・出産・育児で辞めて、辞めた日の翌日から30日以上働けないため受給期間の延長を受けた場合は、特定理由離職者の基準に当たります。"; }
+      else { r.cat = "ip"; r.why = "妊娠・出産・育児での離職が特定理由離職者になるのは、受給期間の延長を受けた場合です。延長をしていないと、この基準には当たりません。保育の事情で通勤が難しくなった場合は、「通勤が難しくなった」で見直します。"; }
+    }
+    else if (w === "kaigo") {
+      r.shiryo = "扶養控除等申告書、健康保険証（資格確認書など）、家族の医師の診断書など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職（家庭の事情の急変）";
+      if ($("kk").value === "yes") { r.cat = "tr2"; r.why = "親の死亡・病気などで親を扶養するため、または常に看護が要る家族の病気・けがのために辞めた場合は、特定理由離職者の基準に当たります。看護の場合は、会社に辞めると申し出た時点で、看護が要る期間がおおむね30日を超える見込みだったことが要ります。"; }
+      else { r.cat = "ip"; r.why = "家族の看護で辞める場合は、申し出た時点で看護が要る期間がおおむね30日を超える見込みだったことが要ります。それより短い見込みだと、この基準には当たりにくいです。"; }
+    }
+    else if (w === "bekkyo") { r.cat = "tr2"; r.why = "配偶者や扶養すべき家族と別に暮らし続けることが、暮らしやお金の面で難しくなり、一緒に暮らすために通勤できない場所へ引っ越して辞めた場合は、特定理由離職者の基準に当たります。"; r.shiryo = "転勤の辞令、住民票の写し、扶養控除等申告書、健康保険証（資格確認書など）など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職"; }
+    else if (w === "tsukin") {
+      var ts = $("ts").value, th = num("ts_h");
+      if (th === null || isNaN(th) || th < 0 || th > 12) { r.err = "新しい通勤の往復時間を、0〜12の数で入れてください"; return r; }
+      var SH = { kekkon: "住民票の写しなど", hoiku: "保育園の入園許可書など", tachinoki: "立ち退き・災害などの事実がわかる書類", kotsu: "電車・バスの廃止や時間の変更がわかる書類", tenkin: "転勤の辞令、住民票の写し、扶養控除等申告書、健康保険証（資格確認書など）など", haigu: "配偶者の転勤の辞令、住民票の写しなど" };
+      r.shiryo = SH[ts] + "。どの場合も、通勤経路の時刻表など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職（転居で通勤困難など）";
+      if (th < 4) { r.cat = "ip"; r.why = "基準の「通勤が難しい」は、往復おおむね4時間以上が目安です。それより短いと、この基準には当たりにくいです。子どもの送り迎えの時間が合わないなどの事情があれば、窓口で伝えます。"; }
+      else if (ts === "kekkon" && $("kn").value === "out") { r.cat = "ip"; r.why = "結婚で住所が変わって辞める場合は、辞めた日から引っ越しまでがおおむね1か月以内であることが要ります（会社の都合で辞める日を年末などにした場合を除く）。"; }
+      else { r.cat = "tr2"; r.why = "往復おおむね4時間以上など、通勤できない・難しくなったために辞めた場合は、特定理由離職者の基準に当たります。" + (ts === "hoiku" ? "近くに預けられる保育所や親族がない、時間が合わないなど、ほかに方法がないことが要ります。" : ""); }
+    }
+    else { r.cat = "ip"; r.why = "転職・やりたいことなど、自分の都合で辞めた場合は、特定受給資格者・特定理由離職者には当たりません。"; r.shiryo = "退職願（写し）など"; r.hyo = "「労働者の判断によるもの」の、労働者の個人的な事情による離職（一身上の都合、転職希望等）"; }
+    return r;
+  }
+
+  var CN = { tk: "特定受給資格者に当たりそう", tr1: "特定理由離職者（契約が更新されなかった）に当たりそう", tr2: "特定理由離職者（正当な理由のある自己都合）に当たりそう",
+    ip: "当たりにくい（一般の離職者）", ju: "重責解雇（特定受給資格者には当たらない）", man: "当たらない（期間満了・更新を希望せず）", ask: "特定理由離職者に当たることがある（窓口で確かめる）" };
+
+  function make() {
+    $("result").hidden = true;
+    var dv = $("day").value, age = Number($("age").value), ki = Number($("ki").value), w = $("why").value;
+    if (!dv) { alert("辞めた日（予定の日）を入れてください"); return false; }
+    if ($("age").value === "" || !isFinite(age) || age < 15 || age > 80 || Math.floor(age) !== age) { alert("辞めた日の年齢を、15〜80の整数で入れてください"); return false; }
+    var r = judge(w);
+    if (r.err) { alert(r.err); return false; }
+    var p = dv.split("-"), day = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var c = r.cat, good = c === "tk" || c === "tr1" || c === "tr2" || c === "ask";
+    box("判定の目安", CN[c], r.why, !good);
+    box("持っていく資料（例）", r.shiryo || "窓口で聞く", "離職票・本人確認書類など、手続きにいつも要るものに加えて持っていきます。ここにない資料で確かめることもあります。", false);
+    box("離職票-2の理由欄で近いもの", r.hyo, "会社が付けた理由とちがうときは、離職者の欄で近い理由に○をつけ、具体的な事情の欄に、いつ・何があったかを書きます。同じなら「同上」。", false);
+
+    if (age >= 65) {
+      box("65歳以上で辞めたとき", "高年齢求職者給付金になります", "基本手当ではなく一時金になり、日数のしくみが変わります。国保の軽減も対象外です。くわしくはハローワークで確かめます。", true);
+    } else {
+      var afterR7 = day >= new Date(2025, 3, 1), limitR9 = day <= new Date(2027, 2, 31);
+      var spec = c === "tk" || (c === "tr1" && limitR9);
+      var tkL = c === "tk" || c === "tr1" || c === "tr2";
+      var sv, ss, sno;
+      if (tkL) { sv = "なし（待期7日のあと、すぐ対象）"; ss = "手続きした日から7日間の待期は、どの区分でもあります。"; sno = false; }
+      else if (c === "ju") { sv = "3か月"; ss = "重責解雇の給付制限は3か月です。"; sno = true; }
+      else if (c === "man") { sv = "ハローワークで確かめる"; ss = "期間満了で辞めた場合の扱いは、窓口で確かめます。"; sno = false; }
+      else if (c === "ask") { sv = "認められればなし"; ss = "認められないと、一般の自己都合と同じ扱い（原則1か月）になります。"; sno = false; }
+      else { sv = afterR7 ? "原則1か月" : "原則2か月"; ss = (afterR7 ? "2025年4月1日以降に辞めた人は原則1か月。" : "2025年3月31日までに辞めた人は原則2か月でした。") + "5年の間に正当な理由のない自己都合で2回以上手続きしていると3か月です。対象の教育訓練を受けると外れることがあります。"; sno = true; }
+      box("待つ期間（給付制限）", sv, ss, sno);
+      var need6 = tkL || c === "ask";
+      var okQ = ki >= 2 || (ki === 1 && tkL);
+      box("受け取るのに要る加入", tkL ? "辞める前1年に6か月以上" : "辞める前2年に12か月以上", ki === 0 ? "辞めた会社だけでは足りない見込みです。前の会社の期間を足せることがあります。" : (okQ ? "入れた期間なら足りる見込みです。給料の支払いの基礎になった日が11日以上の月などで数えます。" : "1年未満なので、前の会社の期間を足して12か月に届くかで決まります。" + (need6 && !tkL ? "認められれば6か月で足ります。" : "")), !okQ);
+      var d = spec ? tokutei(age, ki) : ippan(ki), dn = "";
+      if (c === "tr1" && !limitR9) dn = "2027年3月31日より後の離職は、いまの決まりでは一般と同じ日数です。";
+      else if (c === "tr1") dn = "契約が更新されなかった人の日数を会社都合と同じにする扱いは、2027年3月31日までの離職が対象です。";
+      else if (c === "tr2") dn = "正当な理由のある自己都合は、待つ期間はなくなりますが、日数は一般と同じです。";
+      box("もらえる日数（所定給付日数）", d + "日", (dn ? dn + "\n" : "") + "年齢 " + age + "歳・加入 " + KN[ki] + " で見ています。" + (spec && ippan(ki) !== d ? "\n一般の離職者なら " + ippan(ki) + "日です。" : ((c === "ip" || c === "ask") && tokutei(age, ki) !== d ? "\n特定受給資格者と認められた場合なら " + tokutei(age, ki) + "日です。" : (spec || c === "ip" || c === "ask" ? "\nこの年齢・加入期間では、区分で日数は変わりません。" : ""))) + (ki === 0 ? "\n加入が足りないと、この日数も受け取れません。" : ""), !okQ);
+      box("国保の保険料の軽減", tkL ? "対象になる見込み（届け出が要ります）" : (c === "ask" ? "認められれば対象" : "対象外"), tkL || c === "ask" ? "国保の保険料を、前年の給与所得を100分の30として計算します。受給資格者証（通知）の離職理由の番号で決まります。任意継続には、この軽減はありません。" : "国保の非自発的失業者の軽減は、特定受給資格者と特定理由離職者が対象です。", !(tkL || c === "ask"));
+    }
+
+    // 次にやること
+    todo("離職票-2が届いたら、会社が付けた理由と具体的な事情の欄を見る");
+    if (good) todo("持っていく資料をそろえる：" + (r.shiryo || "窓口で聞く"));
+    if (c === "tk" || c === "tr1") todo("会社の付けた理由が「自己都合」などちがうときは、離職者の欄で近い理由に○をつけ、具体的な事情を書く");
+    if (c === "tr2" || c === "ask") todo("「一身上の都合」と書かれていても、手続きのときに事情と資料を見せて、正当な理由に当たるか見てもらう");
+    if (c === "ip" && w !== "jiko") todo("基準に届かなくても、事情は窓口で伝える。判断するのはハローワーク");
+    if (w === "byoki") todo("いま働ける状態か確かめる。すぐ働けないなら、先に受給期間の延長を考える");
+    if (w === "keiyaku") todo("離職票の、更新の希望の有無の欄を確かめる。会社の書き方とちがうときは、具体的な事情の欄に書く");
+    todo("離職票・本人確認書類などを持って、住んでいるところのハローワークで手続きする");
+    if (age < 65 && (c === "tk" || c === "tr1" || c === "tr2")) todo("受給資格者証（通知）の離職理由の番号を見て、国保に入るなら市区町村で軽減の届け出をする");
+
+    var M = {
+      tk: "会社の事情で辞めました。\n離職票の理由が\n実際とちがうので、\n確かめてほしいです。\n資料を持ってきました。",
+      tr1: "契約の更新を\n希望しましたが、\n更新されませんでした。\n希望したことがわかる\nメールを持ってきました。",
+      tr2: "やむを得ない事情で\n辞めました。\n資料を持ってきたので、\n正当な理由に当たるか\n見ていただけますか。",
+      ask: "人員整理の募集に\n応じて辞めました。\n募集要綱を持って\nきたので、扱いを\n確かめたいです。",
+      ju: "解雇の理由について\n確かめたいことが\nあります。\n離職票の理由を\n見てもらえますか。",
+      man: "契約期間が終わって\n辞めました。\n給付制限があるか\n教えてください。",
+      ip: "辞めた事情を\n聞いていただけますか。\n基準に当たるか\nわからないので、\n資料も持ってきました。"
+    };
+    var memo = M[c];
+    if (w === "jiko") memo = "自己都合で辞めました。\n給付制限の長さと、\n最初の認定日を\n教えてください。";
+    if (w === "kaiko" || w === "kansho") memo = (w === "kaiko" ? "解雇されて" : "会社から\n退職をすすめられて\n") + "辞めました。\n離職票の理由を\n確かめてほしいです。\n" + (w === "kaiko" ? "解雇予告の通知を\n持ってきました。" : "言われた日と内容の\nメモを持ってきました。");
+    if (w === "zangyo" && c === "tk") memo = "残業が多くて\n辞めました。\nタイムカードの写しと\n給与明細を\n持ってきました。";
+    $("memo").textContent = memo;
+    $("ng").textContent = "・区分を決めるのはハローワーク。ここは目安\n・会社と本人の言い分を、資料で確かめて決まる\n・離職票の理由がちがうのに黙っていると、そのまま進みやすい\n・事実とちがう申告は不正受給になる\n・正当な理由のある自己都合は、待つ期間なし・日数は一般と同じ\n・国保の軽減は届け出が要る";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("day").value = "2026-12-31"; $("age").value = "42"; $("ki").value = "3"; $("why").value = "zangyo"; sync();
+    var zz = [62, 58, 51, 40, 35, 30]; for (var i = 0; i < 6; i++) $("z" + (i + 1)).value = zz[i]; make(); }
+})();
+</script>
+</body>
+</html>
