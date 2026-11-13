@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>住居確保給付金の判定と金額の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .hint, .mihon .opt, .mihon .lead { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>住居確保給付金の判定と金額の目安</h1>
+  <p class="lead">理由・時期・世帯の収入と預貯金・家賃・住んでいる市区町村の基準額を入れると、条件に当たりそうか、毎月の支給額と自己負担の目安、もらえる期間、求職活動の回数、転居費用補助の上限、次にやることを出します。決めるのは市区町村です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 使いたいもの</h2>
+    <label class="f" for="kind">どちらを考えていますか</label>
+    <select id="kind">
+      <option value="yachin">家賃補助（家賃を払うのが難しい・家を失った）</option>
+      <option value="tenkyo">転居費用補助（家賃の安い家へ引っ越したい）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 理由と時期</h2>
+    <label class="f" for="why">いちばん近いもの</label>
+    <select id="why">
+      <option value="rishoku">仕事を辞めた・辞めさせられた・店をたたんだ</option>
+      <option value="kyugyo">辞めてはいないが、休業やシフト減で収入が大きく減った（自分の都合ではない）</option>
+      <option value="kazoku">家族が亡くなった・家族が仕事を失って、世帯の収入が大きく減った</option>
+    </select>
+    <label class="f" for="day"><span id="daylabel">辞めた日（店をたたんだ日）</span><span class="hint" id="dayhint">2年以内かを見ます</span></label>
+    <input type="date" id="day">
+    <div id="kasanbox">
+      <label class="f" for="kasan">その後、病気・けが・妊娠・出産・3歳未満の育児などで、続けて30日以上、仕事を探せなかった日数<span class="hint">なければ0。証明（医師の証明書など）が要ります</span></label>
+      <input type="number" id="kasan" inputmode="numeric" min="0" step="1" placeholder="例 0">
+    </div>
+    <label class="f" for="seikei">あなたは世帯の生計を主に支えていましたか<span class="hint">辞めた時点（休業・転居費用は今の月）で、自分の収入で家計を主に支えていたか。離婚などで、あとから主になった人も含みます</span></label>
+    <select id="seikei">
+      <option value="yes">はい</option>
+      <option value="no">いいえ（ほかの家族の収入が主）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 住まいと家賃</h2>
+    <label class="f" for="sumai">いまの住まい</label>
+    <select id="sumai">
+      <option value="chintai">賃貸に住んでいて、家賃を払うのが難しい</option>
+      <option value="soushitsu">家を失った・失う（これから借りる）</option>
+      <option value="mochiie">持ち家に住んでいる</option>
+    </select>
+    <label class="f" for="yachin"><span id="yachinlabel">1か月の家賃（円）</span><span class="hint">契約書に書かれた家賃。共益費・管理費は入れません</span></label>
+    <input type="number" id="yachin" inputmode="numeric" min="0" step="1" placeholder="例 55000">
+    <label class="f" for="nin">世帯の人数（人）<span class="hint">同じ家に住み、家計が同じ人</span></label>
+    <input type="number" id="nin" inputmode="numeric" min="1" max="10" step="1" placeholder="例 1">
+  </div>
+
+  <div class="card opt">
+    <h2>4. 世帯の収入と預貯金</h2>
+    <label class="f" for="shunyu">申請する月の、世帯の収入の合計（円）<span class="hint">給料は天引き前の総支給額（交通費は除く）。失業保険・年金・仕送りも入れます。22歳以下で学校に通う子の収入、児童扶養手当などの手当、退職金や借りたお金は入れません</span></label>
+    <input type="number" id="shunyu" inputmode="numeric" min="0" step="1" placeholder="例 120000">
+    <label class="f" for="shisan">世帯の預貯金・現金・株などの合計（円）<span class="hint">生命保険は入れません。借金があっても差し引きません</span></label>
+    <input type="number" id="shisan" inputmode="numeric" min="0" step="1" placeholder="例 300000">
+  </div>
+
+  <div class="card opt">
+    <h2>5. 住んでいる市区町村の基準（わかれば）</h2>
+    <label class="f" for="kijun">基準額（月・円）<span class="hint">市区町村の住居確保給付金の案内に、世帯の人数ごとに載っています。「収入基準額」から家賃を引いた額のことです。空欄なら、収入と預貯金の判定は出しません</span></label>
+    <input type="number" id="kijun" inputmode="numeric" min="0" step="1" placeholder="例 80000">
+    <label class="f" for="jogen">家賃の上限（支給上限額・円）<span class="hint">同じ案内に世帯の人数ごとに載っています（生活保護の住宅扶助の額）。空欄なら、上限を当てずに出します</span></label>
+    <input type="number" id="jogen" inputmode="numeric" min="0" step="1" placeholder="例 50000">
+  </div>
+
+  <div class="card" id="tenbox">
+    <h2>6. 引っ越しの費用（転居費用補助）</h2>
+    <label class="f" for="hiyou">見積もりの合計（円）<span class="hint">運搬費・礼金・仲介手数料・家賃保証料・住宅保険料だけを足します。敷金・前家賃・クリーニング・家具や家電・鍵の交換は入れません</span></label>
+    <input type="number" id="hiyou" inputmode="numeric" min="0" step="1" placeholder="例 180000">
+    <label class="f" for="shinyachin">引っ越し先の家賃（円）<span class="hint">決まっていなければ空欄</span></label>
+    <input type="number" id="shinyachin" inputmode="numeric" min="0" step="1" placeholder="例 42000">
+  </div>
+
+  <div class="card opt">
+    <h2>7. 前に受けたことがあるか</h2>
+    <label class="f" for="mae">同じ給付金（家賃補助なら家賃補助、転居なら転居費用補助）を前に受けたことは</label>
+    <select id="mae">
+      <option value="nai">ない</option>
+      <option value="ok">ある。終わってから1年以上たち、その後に働いてから、また会社都合などで失った</option>
+      <option value="ng">ある（上に当たらない）</option>
+    </select>
+  </div>
+  <button id="make" type="button">判定の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「生活困窮者自立支援制度に係る自治体事務マニュアル（令和7年5月14日 第15版）」第7 住居確保給付金の支給、厚生労働省生活支援特設ウェブサイト「住居確保給付金」で出した目安です。基準額と上限額は市区町村ごとにちがいます。最後に決めるのは市区町村で、ここでの判定は目安です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function num(id, lo, hi, name, opt) {
+    var v = $(id).value;
+    if (v === "") { if (opt) return null; alert(name + "を入れてください"); throw 0; }
+    var n = Number(v);
+    if (!isFinite(n) || n < lo || n > hi || Math.floor(n) !== n) { alert(name + "は、" + lo.toLocaleString() + "〜" + hi.toLocaleString() + "の整数で入れてください"); throw 0; }
+    return n;
+  }
+
+  function sync() {
+    var kind = $("kind").value, why = $("why").value;
+    // 家族の死亡・家族の離職は転居費用補助だけ
+    var opt = $("why").querySelector('option[value="kazoku"]');
+    opt.disabled = kind === "yachin";
+    if (kind === "yachin" && why === "kazoku") { $("why").value = "rishoku"; why = "rishoku"; }
+    $("tenbox").hidden = kind !== "tenkyo";
+    if (kind === "tenkyo") { $("daylabel").textContent = "世帯の収入が大きく減った月の、その月の1日ごろ（目安でよい）"; $("dayhint").textContent = "減った月から2年以内に申請するかを見ます"; }
+    else if (why === "kyugyo") { $("daylabel").textContent = "収入が減り始めた日（目安）"; $("dayhint").textContent = "休業・シフト減は、2年以内の決まりではなく、今の月の状況で見ます"; }
+    else { $("daylabel").textContent = "辞めた日（店をたたんだ日）"; $("dayhint").textContent = "申請する日に、2年以内かを見ます"; }
+    $("kasanbox").hidden = !(kind === "yachin" && why === "rishoku");
+    $("yachinlabel").textContent = $("sumai").value === "chintai" ? "1か月の家賃（円）" : ($("sumai").value === "mochiie" ? "住まいにかかっている月の費用（ローンなど・円）" : "これから借りる家の家賃（決まっていれば・円）");
+  }
+  ["kind", "why", "sumai"].forEach(function (id) { $(id).addEventListener("change", sync); });
+
+  function make() {
+    $("result").hidden = true;
+    var kind = $("kind").value, why = $("why").value, sumai = $("sumai").value, mae = $("mae").value, seikei = $("seikei").value;
+    var dv = $("day").value;
+    var yachin, nin, shunyu, shisan, kijun, jogen, kasan = 0, hiyou = null, shin = null;
+    try {
+      if (!dv) { alert("日付を入れてください"); throw 0; }
+      if (!$("kasanbox").hidden) kasan = num("kasan", 0, 2000, "仕事を探せなかった日数", true) || 0;
+      yachin = num("yachin", 0, 1000000, sumai === "chintai" ? "家賃" : "住まいの費用", sumai !== "chintai");
+      nin = num("nin", 1, 10, "世帯の人数");
+      shunyu = num("shunyu", 0, 10000000, "世帯の収入");
+      shisan = num("shisan", 0, 1000000000, "預貯金などの合計");
+      kijun = num("kijun", 0, 1000000, "基準額", true);
+      jogen = num("jogen", 0, 1000000, "家賃の上限", true);
+      if (kind === "tenkyo") { hiyou = num("hiyou", 0, 10000000, "引っ越しの費用", true); shin = num("shinyachin", 0, 1000000, "引っ越し先の家賃", true); }
+    } catch (e) { return false; }
+    var p = dv.split("-"), day = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var ngs = [];
+
+    // 期間
+    var kv, ks, kno = false;
+    if (kind === "yachin" && why === "rishoku") {
+      var add = kasan >= 30 ? kasan : 0;
+      var end = new Date(day.getFullYear() + 2, day.getMonth(), day.getDate() + add);
+      var max4 = new Date(day.getFullYear() + 4, day.getMonth(), day.getDate());
+      if (end > max4) end = max4;
+      if (day > now) { kv = "辞めたあとに申請できます"; ks = "申請できる期限は " + fmt(end) + " ごろまで（辞めた日から2年" + (add ? "＋" + add + "日" : "") + "）。辞める前は対象になりません。"; }
+      else if (end >= now) { kv = fmt(end) + " ごろまで申請できる見込み"; ks = "辞めた日から2年以内が条件です。" + (add ? "病気・出産・育児などで仕事を探せなかった" + add + "日を足しています（足しても最長4年）。証明が要ります。" : "病気・出産・育児などで続けて30日以上仕事を探せなかった期間があれば、その日数を足せます（最長4年）。"); }
+      else { kv = "2年を過ぎている見込み"; ks = "辞めた日から2年（足せる日数を含めて）を過ぎると、離職を理由にした申請はできません。病気などで仕事を探せなかった期間があれば、足せないか窓口で聞きます。"; kno = true; }
+      if (kasan > 0 && kasan < 30) ks += "\n続けて30日に届かない期間は足せません。";
+    } else if (kind === "yachin") {
+      kv = "今の月の状況で見ます"; ks = "休業やシフト減は、本人の責任や都合ではなく収入の機会が減り、辞めたのと同じくらいの状況かどうかで見ます。収入が減ったことがわかる給与明細やシフト表を用意します。";
+    } else {
+      var tm = new Date(day.getFullYear() + 2, day.getMonth(), 1);
+      var last = new Date(tm.getFullYear(), tm.getMonth(), 0);
+      if (last >= now) { kv = fmt(last) + " ごろまでの申請が目安"; ks = "世帯の収入が大きく減った月から2年以内が条件です。「大きく減った」に当たるかは、減った額や世帯の人数などで市区町村が判断します。"; }
+      else { kv = "2年を過ぎている見込み"; ks = "収入が大きく減った月から2年以内が条件です。"; kno = true; }
+    }
+    box("申請できる時期", kv, ks, kno);
+
+    // 住まい
+    var sv, ss, sno = false;
+    if (sumai === "mochiie" && kind === "yachin") { sv = "持ち家は家賃補助の対象外"; ss = "家賃補助は、借りている家の家賃に出ます。世帯の誰かが住める家を持っていると対象になりません。住宅ローンが払えないときは、借りている金融機関や、市区町村の生活の相談窓口へ。"; sno = true; }
+    else if (sumai === "mochiie") { sv = "持ち家から家賃の安い賃貸へ移る場合は相談の余地あり"; ss = "転居費用補助は、住まいの費用（持ち家の費用を含む）が転居で下がるなどして、家計全体の支出が減る見込みのときに使えます。ただし、世帯の誰かが住める家を持っていると、家を失うおそれのある人に当たるかが問われます。窓口で確かめます。"; sno = true; }
+    else if (sumai === "soushitsu") { sv = "家を失った人として申請"; ss = kind === "yachin" ? "新しく借りる家の市区町村の窓口に申請します。家賃は、上限の額以下の家を探すのが基本です。家賃補助は、入居の初期費用として払う家賃の翌月分から出ます。" : "家を失う前に住んでいた市区町村の窓口が基本です。遠いなど事情があれば、今いる場所の窓口で相談できます。"; }
+    else { sv = "今の家の市区町村で申請"; ss = kind === "yachin" ? "今住んでいる市区町村の窓口に申請します。家賃補助は、申請した月に払う家賃の分から出ます。たまっている家賃（滞納分）には使えません。" : "今住んでいる市区町村の窓口に申請します。"; }
+    box("住まい", sv, ss, sno);
+
+    // 生計維持
+    if (seikei === "no") { box("生計を主に支えていたか", "当たらない見込み", "世帯の生計を主に支えていた（いる）人が申請する決まりです。家計を主に支えている家族が申請できるか、窓口で聞きます。", true); ngs.push("seikei"); }
+
+    // 収入・資産
+    var rent = yachin || 0;
+    var rentForKijun = rent;
+    if (kind === "tenkyo" && jogen !== null && rentForKijun > jogen) rentForKijun = jogen;
+    var shuOK = null, shiOK = null, noRent = rent === 0 && sumai !== "chintai";
+    if (noRent && jogen !== null) rentForKijun = jogen;
+    if (noRent && jogen === null && kijun !== null) {
+      box("収入と預貯金の条件", "家賃か上限の額を入れると判定します", "収入の条件は「基準額＋家賃」以下です。これから借りる家の家賃が決まっていなければ、上限の額を入れると、その額で見ます。預貯金は「基準額×6（最大100万円）」＝" + yen(Math.min(kijun * 6, 1000000)) + " 以下が条件です。", true);
+      kijun = null; shuOK = null;
+    } else if (kijun !== null) {
+      var kb = kijun + rentForKijun;
+      shuOK = shunyu <= kb;
+      box("収入の条件", shuOK ? "当たる見込み" : "超えている見込み", (noRent ? "家賃が決まっていないので、上限の額で見ています。\n" : "") + "収入基準額＝基準額 " + yen(kijun) + "＋家賃 " + yen(rentForKijun) + "＝" + yen(kb) + "。世帯の収入 " + yen(shunyu) + " が" + (shuOK ? "これ以下です。" : "これを超えています。") + (kind === "tenkyo" ? "\n転居費用補助では、家賃は上限の額までで見ます。" : "\n市区町村の案内に「収入基準額」が表で載っていれば、その額でも確かめます。") + (shuOK ? "" : "\n今月は超えていても、失業保険が終わるなどで来月から下回ることを書類で示せるときは、来月の申請として扱われることがあります。"), !shuOK);
+      var lim = Math.min(kijun * 6, 1000000);
+      shiOK = shisan <= lim;
+      box("預貯金の条件", shiOK ? "当たる見込み" : "超えている見込み", "上限＝基準額×6＝" + yen(kijun * 6) + (kijun * 6 > 1000000 ? "（100万円をこえるので100万円）" : "") + "。世帯の預貯金など " + yen(shisan) + " が" + (shiOK ? "これ以下です。" : "これを超えています。") + "\n市区町村が決めた額で見ます。", !shiOK);
+    } else {
+      box("収入と預貯金の条件", "基準額が空欄なので出していません", "市区町村の案内で、世帯 " + nin + " 人の基準額（または収入基準額）を見て入れると判定します。収入は「基準額＋家賃」以下、預貯金は「基準額×6（最大100万円）」以下が条件です。", true);
+    }
+
+    // 再支給
+    if (mae === "ng") { box("前に受けたことがある", "もう一度は難しい見込み", "前の支給が終わった月の翌月から1年以上たち、その後に働いてから、会社都合の解雇や本人の責任ではない休業などでまた失った場合に、もう一度申請できます。", true); ngs.push("mae"); }
+    else if (mae === "ok") box("前に受けたことがある", "もう一度申請できる場合に当たりそう", "申請のときに、その内容を確認書で誓います。前の支給の時期がわかるものを用意します。", false);
+
+    var allOK = !kno && !sno && seikei === "yes" && mae !== "ng" && shuOK !== false && shiOK !== false;
+
+    if (kind === "yachin") {
+      // 支給額
+      if (rent > 0 && kijun !== null) {
+        var g = shunyu <= kijun ? rent : kijun + rent - shunyu;
+        if (g < 0) g = 0;
+        var capped = jogen !== null && g > jogen;
+        if (capped) g = jogen;
+        if (g > 0 && g < 100) g = 100; else g = Math.ceil(g / 100) * 100;
+        var how = shunyu <= kijun ? "世帯の収入が基準額以下なので、家賃の額" : "基準額＋家賃－世帯の収入＝" + yen(kijun) + "＋" + yen(rent) + "－" + yen(shunyu);
+        box("毎月の支給額の目安", shuOK === false ? "収入の条件を超えるので出ない見込み" : yen(g), shuOK === false ? "" : how + (capped ? "（上限 " + yen(jogen) + " で止まります）" : "") + "。100円未満は切り上げ。\n支給は、市区町村から大家さんや不動産会社の口座へ直接振り込まれます。", shuOK === false);
+        if (shuOK !== false) box("毎月の自己負担の目安", yen(Math.max(rent - g, 0)) + "＋共益費・管理費", "家賃と支給額の差は自分で払います。共益費・管理費は対象外です。" + (jogen !== null && rent > jogen ? "\n家賃が上限の額を超えています。" + (sumai === "soushitsu" ? "家を失った人は、上限の額以下の家を探すのが基本です。" : "今の家に住み続けて申請はできますが、差額は自分で払います。") : ""), false);
+      } else if (rent > 0) {
+        box("毎月の支給額の目安", "基準額を入れると出します", "世帯の収入が基準額以下なら家賃の額、超えるなら「基準額＋家賃－世帯の収入」。どちらも上限の額まで。", false);
+      }
+      box("もらえる期間", "原則3か月・延長2回で最長9か月", "延長は、3か月ごとに、支給の最後の月の末日までに申請します。受けている間に求職活動を続けていたことと、延長の申請のときに条件に当たっていることが要ります。延長のときの額は、その時の収入で計算し直します。", false);
+      if (why === "kyugyo") box("受けている間にやること", "求職活動（自営業は経営の立て直しの活動で代えられる場合あり）", "雇われていてシフトが減った人は、ハローワークでの求職活動です。自営業の人は、市区町村が認めれば3か月（延長で6か月）まで、経営相談先の助言を受けた活動で代えられます。7〜9か月目は全員が求職活動です。", false);
+      box(why === "kyugyo" ? "ハローワークで求職活動をする人の回数" : "受けている間の求職活動", "月4回・月2回・週1回", "・相談窓口（自立相談支援機関）の面接など 月4回以上\n・ハローワークなどの職業相談 月2回以上\n・求人への応募か面接 原則週1回以上\nしないと支給が止まります。", false);
+    } else {
+      // 転居費用
+      if (jogen !== null) {
+        var top = jogen * 3;
+        var gv, gs;
+        if (hiyou !== null) { var gg = Math.min(hiyou, top); gv = yen(gg); gs = "見積もり " + yen(hiyou) + " と、上限（家賃の上限×3＝" + yen(top) + "）の小さいほう。" + (hiyou > top ? "上限を超えた " + yen(hiyou - top) + " は自己負担です。" : "") + "\n実際にかかった額が少なければ、差額は返します。"; }
+        else { gv = "上限 " + yen(top); gs = "引っ越し先の市区町村の家賃の上限×3まで。見積もりの合計を入れると、目安を出します。"; }
+        box("転居費用の支給の目安", allOK ? gv : "条件に当たらない見込みのため参考", gs + "\n※上限は引っ越し先の市区町村の額で決まります。入れた上限が今の市区町村の額なら、引っ越し先の額で見直します。", !allOK);
+      } else {
+        box("転居費用の支給の目安", "家賃の上限を入れると出します", "上限は、引っ越し先の市区町村の家賃の上限（住宅扶助の額）×3です。", false);
+      }
+      box("対象になる費用・ならない費用", "運搬費・礼金・仲介手数料・保証料・保険料", "対象外：敷金（戻ることがあるため）、前家賃、クリーニングなどの原状回復、家具や家電・設備の購入、鍵の交換。対象外の分は自分で払います。", false);
+      var hv, hs, hno = false;
+      if (shin !== null && rent > 0) {
+        if (shin < rent) { hv = "家賃が月 " + yen(rent - shin) + " 下がる"; hs = "家計の相談で、家賃が下がって家計全体の支出が減る見込みと認められると、「要転居証明書」が出ます。"; }
+        else { hv = "家賃は下がらない"; hs = "家賃が上がっても、通勤費などほかの支出が減って家計全体の支出が減る見込みなら、認められることがあります。家計の相談で確かめます。"; hno = true; }
+      } else { hv = "家計の相談で決まります"; hs = "家計改善支援（家計の相談）で、家計を立て直すために引っ越しが要ること、その費用を出すのが難しいことが認められる必要があります。"; }
+      box("引っ越しが要ると認められるか", hv, hs, hno);
+      if (jogen !== null && shin !== null && shin > jogen) box("引っ越し先の家賃", "上限の額を超えています", "家計の相談で、引っ越し先の家賃として適切な額が示されます。その額を目安に探します。", true);
+    }
+
+    box("全体の見込み", allOK ? "条件に当たりそう" : "当たらない条件があります", allOK ? (kijun === null ? "収入と預貯金は、基準額を入れて確かめてください。" : "入れた内容では、主な条件に当たりそうです。") + "最後に決めるのは市区町村です。書類で確かめられます。" : "赤い欄の条件を見てください。当たらなくても、生活福祉資金の貸付や、市区町村の生活の相談窓口で、ほかの支えを紹介してもらえます。", !allOK);
+
+    // todo
+    todo("住んでいる市区町村の「住居確保給付金」の案内で、世帯 " + nin + " 人の基準額・上限の額・相談窓口（自立相談支援機関）を確かめる");
+    todo("相談窓口に電話かメールで相談の予約をする（申請書の提出はメールなどでもよいとされています）");
+    if (kind === "yachin" && why === "rishoku") todo("ハローワークで求職の申込みをして、求職番号を控える（申請のときに確認書に書きます）");
+    todo("本人確認書類、" + (kind === "yachin" ? (why === "rishoku" ? "辞めたことがわかる書類（離職票など）" : "収入が減ったことがわかる書類（給与明細・シフト表など）") : "世帯の収入が減ったことがわかる書類") + "、世帯の収入がわかる書類、通帳の写しをそろえる");
+    if (kind === "yachin") {
+      if (sumai === "chintai") todo("大家さんか不動産会社に「入居住宅に関する状況通知書」を書いてもらい、賃貸借契約書の写しと一緒に出す");
+      else if (sumai === "soushitsu") todo("申請書の写しを不動産会社に見せて家を探し、「入居予定住宅に関する状況通知書」を書いてもらう。決定後に契約し、入居から7日以内に契約書と住民票の写しを出す");
+      todo("支給が始まったら、月4回の面接・月2回の職業相談・週1回の応募を続ける。延長するなら、最後の月の末日までに申請する");
+      todo("仕事が決まったら「常用就職届」を出し、毎月の収入を報告する");
+    } else {
+      todo("家計の相談（家計改善支援）を受けて、引っ越しが要ると認められたら「要転居証明書」を受け取る");
+      todo("示された家賃の目安で引っ越し先を探し、費用の見積もりをもらってから申請する");
+      todo("引っ越しのあと、家賃が払えないときは家賃補助も申請できるか聞く");
+    }
+
+    var memo;
+    if (kind === "yachin" && why === "rishoku") memo = "仕事を辞めて、\n家賃を払うのが\n難しくなりました。\n住居確保給付金を\n申請したいので、\n相談の予約をしたいです。";
+    else if (kind === "yachin") memo = "休業（シフト減）で\n収入が大きく減り、\n家賃を払うのが\n難しくなりました。\n住居確保給付金の\n相談をしたいです。";
+    else memo = "世帯の収入が減り、\n家賃の安い家へ\n引っ越したいです。\n住居確保給付金の\n転居費用補助の\n相談をしたいです。";
+    $("memo").textContent = memo;
+    $("ng").textContent = kind === "yachin"
+      ? "・支給は大家さんや不動産会社へ直接。自分の口座には原則入らない\n・共益費・管理費・初期費用・たまった家賃には使えない\n・失業保険は収入に入る\n・求職活動をしないと止まる\n・仕事が決まり、収入が収入基準額を超えると止まる\n・うその申請は、返すことになる\n・金額は目安。市区町村の決定で確かめる"
+      : "・敷金・前家賃・家具や家電は対象外\n・上限は引っ越し先の家賃の上限×3\n・家計の相談で引っ越しが要ると認められるのが先\n・見積もりより安く済んだら差額は返す\n・うその申請は、返すことになる\n・金額は目安。市区町村の決定で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("kind").value = "yachin"; $("why").value = "rishoku"; sync(); $("day").value = "2026-09-30"; $("kasan").value = "0"; $("seikei").value = "yes"; $("sumai").value = "chintai"; sync(); $("yachin").value = "55000"; $("nin").value = "1"; $("shunyu").value = "120000"; $("shisan").value = "300000"; $("kijun").value = "80000"; $("jogen").value = "50000"; $("mae").value = "nai"; make(); }
+})();
+</script>
+</body>
+</html>
