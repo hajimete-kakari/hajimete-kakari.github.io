@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職した年のiDeCoの掛金控除、入れる額と出す先｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職した年のiDeCoの掛金控除、入れる額と出す先</h1>
+  <p class="lead">年の途中で会社を辞めた年に、iDeCo（個人型の確定拠出年金）の掛金を、年末調整か確定申告でどう入れるかをそろえるページです。給料から引かれていた分と、自分の口座から引き落とされた分を分けて、どの書類で確かめ、どこに書くかを出します。毎月掛金を出している人向けです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今年の年末</h2>
+    <label class="f" for="nencho">年末に会社に勤めていて、年末調整を受ける？</label>
+    <select id="nencho">
+      <option value="yes">受ける（新しい会社などで書類が配られる）</option>
+      <option value="no">受けない（年末に会社に勤めていない）</option>
+      <option value="unk">まだわからない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 今年の掛金</h2>
+    <label class="f" for="getsu">毎月の掛金<span class="hint">加入先の金融機関の画面や、届いた通知に書いてある月額</span></label>
+    <input type="number" id="getsu" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="kyuyo">今年、給料から掛金が引かれた回数<span class="hint">前の会社の給与明細で、iDeCoの掛金が引かれていた月を数えます。給料から引かれていなかった人は0。</span></label>
+    <select id="kyuyo"></select>
+    <label class="f" for="first">今年、自分の口座から最初に引き落とされた月<span class="hint">掛金は、ふつう毎月26日（休みなら次の営業日）に前の月の分が引き落とされます。通帳で見ます。</span></label>
+    <select id="first"></select>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. わかれば（なくても出せます）</h2>
+    <label class="f" for="kojinSum">自分の口座から今年引き落とされる合計<span class="hint">2か月分まとめて引かれた月があるなど、月額×回数と合わないときに入れます。12月26日の分まで。</span></label>
+    <input type="number" id="kojinSum" inputmode="numeric" min="0" step="1" placeholder="円（空欄なら月額×回数）">
+    <label class="f" for="cert">払込証明書（はがき）は届いた？</label>
+    <select id="cert">
+      <option value="no">まだ・わからない</option>
+      <option value="yes">届いた</option>
+    </select>
+  </div>
+  <button id="make" type="button">入れる額と出す先を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社（年末調整の担当）への一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁 No.1135「小規模企業共済等掛金控除」（その年に支払った掛金の全額が控除の対象・年末調整か確定申告で証明書を添付か提示）、国税庁「確定申告の手引き」の小規模企業共済等掛金控除・社会保険料控除の書き方（年末調整で受けた分は源泉徴収票の「社会保険料等の金額」欄に内書き）、iDeCo公式サイトのよくあるご質問（毎月の掛金は翌月26日に引き落とし・個人払込の人に毎年10月に払込証明書・初回が10月以降なら納付月の翌月・事業主払込は証明書なし）をもとにした目安です。給与明細と通帳の実際の額で確かめてください。控除で税金がいくら下がるかは、このページでは出していません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  (function () {
+    var k = $("kyuyo"), f = $("first"), i, o;
+    for (i = 0; i <= 12; i++) { o = document.createElement("option"); o.value = i; o.textContent = i === 0 ? "0回（引かれていない）" : i + "回"; k.appendChild(o); }
+    o = document.createElement("option"); o.value = "0"; o.textContent = "今年は引き落とされていない・その予定もない"; f.appendChild(o);
+    for (i = 1; i <= 12; i++) { o = document.createElement("option"); o.value = i; o.textContent = i + "月26日ごろ" + (i === 1 ? "（前の年の12月分）" : "（" + (i - 1) + "月分）"); f.appendChild(o); }
+  })();
+  function num(id) {
+    var v = $(id).value.trim(); if (v === "") return 0;
+    var a = Number(v); if (!(a >= 0) || Math.floor(a) !== a) return NaN; return a;
+  }
+
+  function make() {
+    var getsu = num("getsu"), over = num("kojinSum");
+    if (isNaN(getsu) || isNaN(over)) { alert("金額は、0以上の整数（円）で入れてください"); return; }
+    var kyuyo = Number($("kyuyo").value), first = Number($("first").value);
+    var nencho = $("nencho").value, cert = $("cert").value;
+    if (kyuyo === 0 && first === 0) { alert("給料から引かれた回数か、自分の口座から最初に引き落とされた月を選んでください"); return; }
+    if (getsu === 0 && (kyuyo > 0 || (first > 0 && over === 0))) { alert("毎月の掛金を入れてください"); return; }
+    if (kyuyo + (first > 0 ? 13 - first : 0) > 13) { alert("給料から引かれた回数と、口座から引き落とされた月が重なりすぎています。給与明細と通帳で数え直してください"); return; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+
+    var jigyo = getsu * kyuyo;
+    var kaisu = first > 0 ? 13 - first : 0;
+    var kojin = first > 0 ? (over > 0 ? over : getsu * kaisu) : 0;
+    var total = jigyo + kojin;
+
+    box("今年の控除に入る掛金（合計の目安）", yen(total),
+      (jigyo > 0 ? "給料から引かれた分 " + yen(jigyo) + "（" + kyuyo + "回）" : "") +
+      (jigyo > 0 && kojin > 0 ? "＋" : "") +
+      (kojin > 0 ? "自分の口座から引き落とされる分 " + yen(kojin) + (over > 0 ? "（入れた合計）" : (first === 12 ? "（12月26日の1回）" : "（" + first + "月〜12月の26日、" + kaisu + "回）")) : "") +
+      "。控除に入るのは、今年1月〜12月に払った掛金の全額です。", false);
+
+    if (jigyo > 0) {
+      box("給料から引かれた分の確かめ方", "前の会社の源泉徴収票",
+        "給料から引かれていた掛金は、毎月の給料の税金の計算で、もう引かれています。源泉徴収票の「社会保険料等の金額」の欄に、内書き（欄の中に「内」として小さく書かれた額）で載っているかを見ます。証明書のはがきは届きません。" +
+        (nencho === "no" ? "確定申告では、この内書きの額を小規模企業共済等掛金控除に入れ、種類に「源泉徴収分」と書きます。" : "年末調整では、新しい会社に源泉徴収票を出せば、前の会社の分として合わせて計算されます。"), false);
+    }
+
+    if (kojin > 0) {
+      var when, late = false;
+      if (cert === "yes") when = "届いている";
+      else if (first <= 9) when = "10月ごろ届く";
+      else { when = (first === 12 ? "翌年1月" : (first + 1) + "月") + "ごろ届く見込み"; late = first === 12; }
+      box("自分の口座から引き落とされた分の確かめ方", "払込証明書（" + when + "）",
+        "国民年金基金連合会から届く「小規模企業共済等掛金払込証明書」です。毎年10月に送られ、初めての引き落としが10月以降の人は、引き落としの翌月（11月〜翌年1月）に送られるとされています。" +
+        (first >= 10 ? "給料からの払い込みを自分の口座に切り替えた人は、届く時期が違うことがあります。届かなければ、加入先の金融機関に確かめます。" : "届いていなければ、加入先の金融機関に確かめます。"), late);
+    }
+
+    var where, whereS, whereNo = false;
+    if (nencho === "yes") {
+      if (kojin > 0 && first === 12 && cert !== "yes") {
+        where = "年末調整（証明書が間に合わなければ確定申告）";
+        whereS = "12月に初めて引き落とされた人は、証明書が翌年1月ごろになることがあります。年末調整に間に合わないときは、翌年の確定申告で入れます。";
+        whereNo = true;
+      } else {
+        where = "年末に勤めている会社の年末調整";
+        whereS = kojin > 0 ? "保険料控除申告書の「小規模企業共済等掛金控除」の欄（iDeCoの掛金を書くところ）に、自分の口座から払った分を書いて、証明書を添えます。給料から引かれた分は、前の会社の源泉徴収票を出せば合わさります。" : "給料から引かれた分だけなら、前の会社の源泉徴収票を新しい会社に出せば足ります。保険料控除申告書に重ねて書かないようにします。";
+      }
+    } else if (nencho === "no") {
+      where = "翌年の確定申告";
+      whereS = "年末に会社に勤めていない人は、年末調整がありません。確定申告の小規模企業共済等掛金控除の欄に、" + (jigyo > 0 && kojin > 0 ? "源泉徴収票の内書きの分と、証明書の分を種類ごとに書きます。" : (jigyo > 0 ? "源泉徴収票の内書きの分を書きます。" : "証明書の分を書き、証明書を添えるか見せます。")) + "税金を戻してもらうための申告は、翌年1月1日から5年間出せます。";
+    } else {
+      where = "年末調整か、翌年の確定申告";
+      whereS = "年内に就職して年末調整の書類が配られたらそこに書きます。年末に勤めていなければ、翌年の確定申告で入れます。どちらでも、そろえる書類は同じです。";
+      whereNo = true;
+    }
+    box("出す先", where, whereS, whereNo);
+
+    if (kojin > 0) {
+      box("12月分の掛金", "来年の分", "12月分の掛金は、来年1月26日ごろの引き落としです。控除はその年に払った分なので、今年には入りません。" + (first === 1 ? "代わりに、今年1月26日ごろに引き落とされた前の年の12月分は、今年に入ります。" : ""), false);
+    }
+
+    if (jigyo > 0) todo("前の会社の源泉徴収票を手元に用意し、「社会保険料等の金額」の欄の内書きの額を見る。載っていなければ前の会社に確かめる");
+    if (kojin > 0) todo("通帳で、今年1月〜12月の26日ごろの引き落としを数え、額を足す（2か月分まとめての月もそのまま足す）");
+    if (kojin > 0 && cert !== "yes") todo("払込証明書（はがき）が届くのを待つ。電子で受け取る設定の人は、そちらを見る。届かなければ加入先の金融機関に聞く");
+    if (kojin > 0) todo("証明書の額と、通帳で数えた額が合っているかを見る。合わなければ証明書の額を使い、違うわけを加入先に聞く");
+    if (nencho === "yes") todo(kojin > 0 ? "保険料控除申告書の小規模企業共済等掛金控除の欄に、自分の口座から払った分を書き、証明書を添えて出す。前の会社の源泉徴収票も出す" : "新しい会社に前の会社の源泉徴収票を出す。保険料控除申告書には重ねて書かない");
+    else if (nencho === "no") todo("翌年の確定申告で、小規模企業共済等掛金控除の欄に" + (jigyo > 0 && kojin > 0 ? "、源泉徴収分と証明書の分を分けて書く" : (jigyo > 0 ? "、源泉徴収票の内書きの額を「源泉徴収分」として書く" : "、証明書の額を書く")));
+    else todo("年末調整の書類が配られたらそこに、配られなければ翌年の確定申告で入れる。源泉徴収票と証明書は1か所にまとめておく");
+
+    if (nencho === "yes") {
+      $("memo").textContent = kojin > 0 ?
+        "年末調整の書類の件です。\n今年の途中で前の会社を辞め、\nこちらに入りました。\niDeCoの掛金のうち、\n自分の口座から払った分を\n保険料控除申告書に書き、\n払込証明書を添えます。\n前の会社で給料から\n引かれていた分は、\n源泉徴収票に入っています。" :
+        "年末調整の書類の件です。\n前の会社の給料から\niDeCoの掛金が引かれていました。\nその分は前の会社の\n源泉徴収票に入っているので、\n源泉徴収票を出します。";
+    } else {
+      $("memo").textContent = (nencho === "unk" ? "（年末調整の書類が配られたら、\n1で「受ける」を選んで\nもう一度出すと、\n担当への一言が出ます。\n" : "（年末調整がない人は、\n会社への一言は要りません。\n") + "確定申告のときは、\n" + (jigyo > 0 && kojin > 0 ? "源泉徴収票と払込証明書、\n" : (jigyo > 0 ? "前の会社の源泉徴収票と\n" : "払込証明書と\n")) + "このページの額を\nまとめて持っておきます）";
+    }
+
+    $("ng").textContent = "・辞めた会社では年末調整をしないことが多い。今年の分は、年末に勤めている会社か確定申告で入れる\n・給料から引かれていた分を、保険料控除申告書にも書くと二重になる。申告書に書くのは自分の口座から払った分だけ\n・控除に入るのは、その年に払った額。12月分は来年1月の引き落としなので来年の分\n・退職の前後は、引き落としがない月や、まとめて引かれる月があることがある。通帳と給与明細の実際の額で直す\n・控除に入るのは、加入している本人の掛金だけ。家族が代わりに払う形にはできない\n・ここで出すのは控除に入れる掛金の額。税金がいくら下がるかは出していない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("nencho").value = "yes"; $("getsu").value = "23000"; $("kyuyo").value = "6"; $("first").value = "9";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
