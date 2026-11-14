@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>国民年金の前納、途中から始めるときの期間と額｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>国民年金の前納、途中から始めるときの期間と額</h1>
+  <p class="lead">退職して国民年金に入り、年度の途中から保険料をまとめて前払い（前納）するときに、何月分から何月分までを・いつ払うか、割引の目安を出します。額は令和8年度（月17,920円）・令和9年度（月18,290円）の日本年金機構の表をもとにした目安です。実際の額と月は、届く通知書や納付書で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 払い方</h2>
+    <label class="f" for="way">どの払い方で前納する？</label>
+    <select id="way">
+      <option value="koza">口座振替</option>
+      <option value="card">クレジットカード</option>
+      <option value="nofu">納付書（前納用の納付書を年金事務所に出してもらう）</option>
+    </select>
+    <div id="kindBox">
+      <label class="f" for="kind">前納の種類</label>
+      <select id="kind">
+        <option value="6">6カ月前納</option>
+        <option value="12">1年前納</option>
+        <option value="24">2年前納</option>
+        <option value="24a">2年前納（4月開始）</option>
+        <option value="haya">当月末振替（早割・口座振替だけ）</option>
+      </select>
+    </div>
+    <div id="endBox" hidden>
+      <label class="f" for="end">どこまでまとめて払う？</label>
+      <select id="end">
+        <option value="2027">令和9年（2027年）3月分まで</option>
+        <option value="2028">令和10年（2028年）3月分まで</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 始める月</h2>
+    <label class="f" for="mon" id="monLabel">申し込む月<span class="hint" id="monHint">口座振替・クレジットカードは、手続きをした月の翌月以降に始まります。このページでは、いちばん早い「翌月」で出します</span></label>
+    <select id="mon"></select>
+  </div>
+  <button id="make" type="button">期間と額を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>年金事務所に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「国民年金保険料の前納」「前納金額一覧（令和8年度）」「口座振替でのお支払い」「クレジットカードでのお支払い」「国民年金保険料」、年金Q&A「重複して納めた国民年金保険料を返してもらうには」をもとにした目安です。口座振替・クレジットカードで年度の途中から前納するときの額は、表がないため、同じ期間を納付書で前納したときの額を参考として出しています。期限・振替日が土日祝日・年末年始（12月31日、1月2日・3日）のときは、次の金融機関の営業日になります（このページでは土日と年末年始だけをずらしています）。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  // 納付書で前納するときの表（日本年金機構「前納金額一覧」令和8年度）[毎月納付した場合, 前納額, 割引額]
+  var T1 = { "2026-5": [197120, 193940, 3180], "2026-6": [179200, 176590, 2610], "2026-7": [161280, 159190, 2090], "2026-8": [143360, 141730, 1630], "2026-9": [125440, 124220, 1220], "2026-10": [107520, 106650, 870], "2026-11": [89600, 89020, 580], "2026-12": [71680, 71330, 350], "2027-1": [53760, 53580, 180], "2027-2": [35840, 35780, 60] };
+  var T2 = { "2026-5": [416600, 401910, 14690], "2026-6": [398680, 385240, 13440], "2026-7": [380760, 368530, 12230], "2026-8": [362840, 351750, 11090], "2026-9": [344920, 334930, 9990], "2026-10": [327000, 318040, 8960], "2026-11": [309080, 301110, 7970], "2026-12": [291160, 284110, 7050], "2027-1": [273240, 267060, 6180], "2027-2": [255320, 249960, 5360], "2027-3": [237400, 232800, 4600], "2027-4": [219480, 215580, 3900], "2027-5": [201190, 197940, 3250], "2027-6": [182900, 180240, 2660], "2027-7": [164610, 162480, 2130], "2027-8": [146320, 144660, 1660], "2027-9": [128030, 126780, 1250], "2027-10": [109740, 108850, 890], "2027-11": [91450, 90860, 590], "2027-12": [73160, 72800, 360], "2028-1": [54870, 54690, 180], "2028-2": [36580, 36520, 60] };
+  function fyOf(y, m) { return m >= 4 ? y : y - 1; } // 年度（4月始まり）
+  function monthly(y, m) { return fyOf(y, m) === 2026 ? 17920 : fyOf(y, m) === 2027 ? 18290 : 0; }
+  function ym(y, m) { return y + "年" + m + "月分"; }
+  function rng(a, b) { return (a[0] === b[0] && a[1] === b[1]) ? ym(a[0], a[1]) : ym(a[0], a[1]) + "〜" + ym(b[0], b[1]); }
+  function add(y, m, k) { var t = y * 12 + (m - 1) + k; return [Math.floor(t / 12), t % 12 + 1]; }
+  function count(a, b) { return (b[0] * 12 + b[1]) - (a[0] * 12 + a[1]) + 1; }
+  function payday(y, m) { // その月の末日。土日・年末年始なら次の営業日
+    var d = new Date(y, m, 0);
+    function off(x) { var w = x.getDay(), mo = x.getMonth() + 1, da = x.getDate(); return w === 0 || w === 6 || (mo === 12 && da === 31) || (mo === 1 && da <= 3); }
+    while (off(d)) d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    return d;
+  }
+  function fd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function ref(start, endY) { var t = endY === 2027 ? T1 : T2; return t[start[0] + "-" + start[1]] || null; }
+  window.__ref = ref; window.__payday = function (y, m) { return fd(payday(y, m)); };
+
+  function fillMonths() {
+    var way = $("way").value, sel = $("mon"), cur = sel.value; sel.innerHTML = "";
+    var list = [];
+    for (var i = 0; i < 16; i++) { var a = add(2026, 11, i); list.push(a); } // 2026年11月〜2028年2月
+    list.forEach(function (a) {
+      var o = document.createElement("option"); o.value = a[0] + "-" + a[1];
+      o.textContent = a[0] + "年" + a[1] + "月"; sel.appendChild(o);
+    });
+    if (cur) sel.value = cur;
+    var nofu = way === "nofu";
+    $("kindBox").hidden = nofu; $("endBox").hidden = !nofu;
+    $("monLabel").firstChild.textContent = nofu ? "前納を始める月（この月の分からまとめて払う）" : "申し込む月";
+    $("monHint").textContent = nofu ? "前納用の納付書の期限は、始める月の末日です。それより前の月の分は、ふつうの納付書で払います" : "口座振替・クレジットカードは、手続きをした月の翌月以降に始まります。このページでは、いちばん早い「翌月」で出します";
+    var hy = $("kind").querySelector('option[value="haya"]'); hy.disabled = way === "card";
+    if (way === "card" && $("kind").value === "haya") $("kind").value = "6";
+  }
+
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function refText(start, endY, label) {
+    var r = ref(start, endY);
+    if (!r) return "この期間の額は、日本年金機構の表がないので出せません。通知書で確かめてください。";
+    return label + "：毎月払うと" + yen(r[0]) + "のところ、" + yen(r[1]) + "（" + yen(r[2]) + "安い）。";
+  }
+
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var way = $("way").value, kind = $("kind").value, p = $("mon").value.split("-");
+    var y = Number(p[0]), m = Number(p[1]), memo = "", ng = [];
+    if (way === "card" && kind === "haya") { alert("当月末振替（早割）は口座振替だけです。ほかの種類を選んでください"); return false; }
+    if (way === "nofu") {
+      var endY = Number($("end").value), endA = [endY, 3], st = [y, m];
+      if (count(st, endA) < 2) { alert("令和9年3月分までにするときは、2027年2月までの月を選んでください"); return false; }
+      var r = ref(st, endY), dl = payday(y, m);
+      box("まとめて払う分", ym(y, m) + "〜" + ym(endY, 3) + "（" + count(st, endA) + "カ月分）", "前納用の納付書で、" + fd(dl) + " までに払います。", false);
+      if (r) box("割引の目安", yen(r[2]) + " 安くなる", "毎月払うと" + yen(r[0]) + "のところ、まとめて" + yen(r[1]) + "です（令和8年度の前納金額一覧）。", false);
+      box("その前の月の分", ym(y, m) + "より前の月", "国民年金に入った月が" + ym(y, m) + "より前なら、" + ym(add(y, m, -1)[0], add(y, m, -1)[1]) + "までの分は、ふつうの納付書で1カ月ずつ払います（期限は、その月の翌月末日）。", false);
+      li("国民年金に切り替えたあと、年金事務所に「" + y + "年" + m + "月分から" + endY + "年3月分までの前納用の納付書」を出してもらう（手元にない人は、専用の納付書を発行してもらう必要があります）");
+      li(fd(dl) + " までに、金融機関・コンビニなどで払う");
+      li("払った額は、払った年の社会保険料控除に入れられる（年末調整か確定申告で）");
+      memo = "国民年金に切り替えました。\n" + y + "年" + m + "月分から\n" + endY + "年3月分までを、\n納付書で前納したいので、\n前納用の納付書を\n出してもらえますか。";
+    } else {
+      var fx = add(y, m, 1), X = fx[1], XY = fx[0]; // いちばん早い初回の月
+      var fyEnd = [fyOf(XY, X) + 1, 3], fyEnd2 = [fyOf(XY, X) + 2, 3];
+      var dl0 = payday(XY, X), nm = way === "koza" ? "振替" : "立替納付", head = way === "koza" ? "口座から引き落とし" : "クレジットカードで立替納付";
+      var prev = add(XY, X, -1);
+      var prevNote = way === "koza" ? "初回は、前の月（" + ym(prev[0], prev[1]) + "・割引なし）の保険料もいっしょに振り替えます。" : "";
+      if (kind === "haya") {
+        box("初回の振替", fd(dl0) + "（いちばん早い場合）", ym(prev[0], prev[1]) + "（割引なし）と" + ym(XY, X) + "（割引あり）の2カ月分をいっしょに振り替え、その後は毎月、その月の末日にその月の分を振り替えます。", false);
+        box("割引の目安", "1カ月60円（令和8年度）", "令和8年度は1カ月17,860円です。令和9年度の早割の額は、まだ表がありません。", false);
+      } else if (kind === "6") {
+        if (X >= 5 && X <= 9) {
+          box("まとめて払う分", ym(XY, 10) + "〜" + ym(XY + 1, 3) + "（6カ月分）", "9月分までは割引のない1カ月ずつの" + nm + "になり、" + fd(payday(XY, 10)) + " から6カ月前納が始まります。", false);
+          box("割引の目安", "表がないので出せません", "令和9年度の6カ月前納の額は、まだ日本年金機構の表にありません。", false);
+        } else if (X === 4) {
+          box("まとめて払う分", ym(XY, 4) + "〜" + ym(XY, 9) + "（6カ月分）", fd(dl0) + " に" + head + "（いちばん早い場合）。" + prevNote + "次は10月末日に10月分〜3月分です。", false);
+          box("割引の目安", "表がないので出せません", "令和9年度の6カ月前納の額は、まだ日本年金機構の表にありません。", false);
+        } else {
+          var a = [XY, X], c = count(a, fyEnd);
+          box("まとめて払う分", rng([XY, X], fyEnd) + "（" + c + "カ月分）", fd(dl0) + " に" + head + "（いちばん早い場合）。" + prevNote + "次は4月末日に4月分〜9月分です。", false);
+          box("割引の目安（参考）", c === 6 && X === 10 ? "6カ月分の前納" : c + "カ月分の前納", refText(a, fyEnd[0], "同じ期間を納付書で前納した場合"), false);
+        }
+      } else if (kind === "12") {
+        var a2 = [XY, X], c2 = count(a2, fyEnd);
+        box("まとめて払う分", rng([XY, X], fyEnd) + "（" + c2 + "カ月分）", fd(dl0) + " に" + head + "（いちばん早い場合）。" + prevNote + "次からは毎年4月末日に、4月分〜3月分の1年分です。", false);
+        box("割引の目安（参考）", c2 + "カ月分の前納", refText(a2, fyEnd[0], "同じ期間を納付書で前納した場合"), false);
+      } else if (kind === "24") {
+        var a3 = [XY, X], c3 = count(a3, fyEnd2);
+        box("まとめて払う分", ym(XY, X) + "〜" + ym(fyEnd2[0], 3) + "（" + c3 + "カ月分）", fd(dl0) + " に" + head + "（いちばん早い場合）。" + prevNote + "次は" + (fyEnd2[0]) + "年4月末日に2年分（24カ月分）です。", false);
+        box("割引の目安（参考）", c3 + "カ月分の前納", refText(a3, fyEnd2[0], "同じ期間を納付書で前納した場合"), false);
+        ng.push("2年前納は、払う額が大きくなります。引き落としの日に残高や利用限度額が足りないと、前納分はもう一度は振り替えられず、次の4月まで割引なしの1カ月ずつになります");
+      } else { // 2年前納（4月開始）
+        var apr = X === 4 ? XY : fyOf(XY, X) + 1;
+        if (X === 4) box("まとめて払う分", ym(XY, 4) + "〜" + ym(XY + 2, 3) + "（24カ月分）", fd(dl0) + " に" + head + "（いちばん早い場合）。" + prevNote, false);
+        else box("まとめて払う分", ym(apr, 4) + "〜" + ym(apr + 2, 3) + "（24カ月分）", (X === 3 ? ym(XY, X) + "は" : ym(XY, X) + "から" + ym(apr, 3) + "までは") + "、割引のない1カ月ずつの" + nm + "です。" + fd(payday(apr, 4)) + " に2年分をまとめて払います。", false);
+        box("割引の目安", "表がないので出せません", "令和9年4月からの2年前納の額は、まだ日本年金機構の表にありません。参考：令和8年4月からの2年前納は、口座振替で17,370円、クレジットカードで16,010円安くなりました。", false);
+        ng.push("直近の4月から始めるには、2月末日までに申出書が日本年金機構に届いている必要があります" + (y * 12 + m > apr * 12 + 2 ? "。申し込む月が" + apr + "年2月より後なので、" + apr + "年4月には間に合わない見込みです" : ""));
+      }
+      if (way === "koza") {
+        li("年金事務所か、引き落としにする金融機関の窓口で「口座振替納付（変更）申出書」を出す（マイナポータルから、ねんきんネットでも申し込めます）");
+        li("届く「口座振替開始（変更）通知書」「口座振替額通知書」で、始まる月と額を確かめる");
+        li("振替日の前日までに、口座の残高をそろえておく");
+        ng.push("一部免除の人は、口座振替でも翌月末の振替（割引なし）しか選べません");
+        ng.push("一部のネット銀行は、口座振替が使えません");
+      } else {
+        li("年金事務所に「クレジットカード納付（変更）申出書」を出す（カードの名義が本人か配偶者でないときは、同意書も）");
+        li("届く「クレジットカード納付開始（変更）通知書」で、始まる月を確かめる");
+        li("カードの利用限度額と有効期限を確かめる（引き落とし日は、カード会社の明細で見る）");
+        ng.push("一部免除の人は、クレジットカードでは払えません");
+      }
+      li("払った額は、払った年の社会保険料控除に入れられる（年末調整か確定申告で）");
+      memo = "国民年金に切り替えました。\n" + y + "年" + m + "月に" + (way === "koza" ? "口座振替" : "クレジットカード") + "で\n" + $("kind").options[$("kind").selectedIndex].text.replace("（早割・口座振替だけ）", "（早割）") + "を申し込むと、\n最初はいつ、何月分から\nいくら払うことになりますか。";
+    }
+    ng.unshift("前納のあとに再就職して厚生年金に入ると、重なった月の分は返してもらう手続きになります（日本年金機構から還付請求書が届き、受付から約1カ月）");
+    ng.push("免除や納付猶予を申請している（する）月は、前納する前に年金事務所に確かめる");
+    $("memo").textContent = memo;
+    $("ng").textContent = "・" + ng.join("\n・");
+    $("result").hidden = false;
+    return true;
+  }
+  $("way").addEventListener("change", fillMonths);
+  fillMonths();
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("way").value = "nofu"; fillMonths(); $("mon").value = "2026-12"; $("end").value = "2028"; make(); }
+})();
+</script>
+</body>
+</html>
