@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職した年の地震保険料控除、入れる額と出す先｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職した年の地震保険料控除、入れる額と出す先</h1>
+  <p class="lead">年の途中で会社を辞めた年に、自分で払った地震保険料（火災保険に付けた地震保険など）を、年末調整か確定申告で入れたい人のためのページです。証明書の額を入れると、国税庁の式で所得税の控除額を、市区町村の案内の式で住民税の控除額を出し、出す先と次にやることを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今年の年末</h2>
+    <label class="f" for="nencho">年末に会社に勤めていて、年末調整を受ける？</label>
+    <select id="nencho">
+      <option value="yes">受ける（新しい会社などで書類が配られる）</option>
+      <option value="no">受けない（年末に会社に勤めていない）</option>
+      <option value="unk">まだわからない</option>
+    </select>
+    <label class="f" for="ie">保険をかけている家や家財は？<span class="hint">自分か、生計が同じ家族が持っているもの</span></label>
+    <select id="ie">
+      <option value="home">いつも住んでいる家・その家の家財</option>
+      <option value="other">別荘・人に貸している家など、住んでいない家</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 今年払った保険料（年間）</h2>
+    <p class="hint" style="margin:0 0 10px">保険会社・共済から届く「地震保険料控除証明書」の、今年1月〜12月に払った額（12月まで払う予定の額が書いてあればその額）を、区分ごとに足して入れます。ない区分は空けておきます。</p>
+    <label class="f" for="eq">地震保険料<span class="hint">火災保険に付けた地震保険・共済の地震の部分など</span></label>
+    <input type="number" id="eq" inputmode="numeric" min="0" step="1" placeholder="円">
+    <label class="f" for="old">旧長期損害保険料<span class="hint">2006年12月31日までの契約で、満期返戻金があり期間10年以上、2007年以後に変更していないもの</span></label>
+    <input type="number" id="old" inputmode="numeric" min="0" step="1" placeholder="円">
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. あてはまるもの</h2>
+    <label class="f" for="same">上の2つは、同じ1つの契約の額？</label>
+    <select id="same">
+      <option value="no">ちがう契約（または片方だけ）</option>
+      <option value="yes">同じ1つの契約に、両方の額が書いてある</option>
+    </select>
+    <label class="f" for="matome">数年分をまとめて払った保険がある？</label>
+    <select id="matome">
+      <option value="no">ない（毎月・毎年払い）</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">控除額と出す先を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社（年末調整の担当）への一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁 No.1145「地震保険料控除」、No.1146「地震保険料控除の対象となる保険契約」（令和8年4月1日現在法令等）で出した所得税の控除額と、市区町村の案内（福岡市「個人市民税・県民税の計算方法」）の式で出した住民税の控除額の目安です。所得税は地震保険料が5万円まで全額・上限5万円、旧長期損害保険料は1万円・2万円で式が変わり上限1万5千円、合計の上限は5万円です。住民税は地震保険料の半額・上限2万5千円、旧長期損害保険料は5千円・1万5千円で式が変わり上限1万円、合計の上限は2万5千円です。1円未満は、所得税は切り上げ、住民税は切り捨てて表示しています。控除で税金がいくら下がるかは、このページでは出していません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+
+  // 所得税（国税庁 No.1145）
+  function itEq(x) { return Math.min(x, 50000); }
+  function itOld(x) { if (x <= 10000) return x; if (x <= 20000) return Math.ceil(x / 2 + 5000); return 15000; }
+  // 住民税（市区町村の案内の式。1円未満切り捨てで表示）
+  function rtEq(x) { return Math.min(Math.floor(x / 2), 25000); }
+  function rtOld(x) { if (x <= 5000) return x; if (x <= 15000) return Math.floor(x / 2 + 2500); return 10000; }
+  function num(id) {
+    var v = $(id).value.trim(); if (v === "") return 0;
+    var a = Number(v); if (!(a >= 0) || Math.floor(a) !== a) return NaN; return a;
+  }
+
+  function make() {
+    var e = num("eq"), o = num("old");
+    if (isNaN(e) || isNaN(o)) { alert("払った額は、0以上の整数（円）で入れてください"); return; }
+    if (e + o === 0) { alert("払った保険料を、少なくとも1つ入れてください"); return; }
+    var nencho = $("nencho").value, ie = $("ie").value, same = $("same").value === "yes" && e > 0 && o > 0;
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+
+    var ie1 = itEq(e), io1 = o > 0 ? itOld(o) : 0, re1 = rtEq(e), ro1 = o > 0 ? rtOld(o) : 0;
+    var it, rt, how;
+    if (same) {
+      if (ie1 >= io1) { it = ie1; rt = re1; how = "同じ契約なので、大きくなる地震保険料のほうだけで計算"; }
+      else { it = io1; rt = ro1; how = "同じ契約なので、大きくなる旧長期損害保険料のほうだけで計算"; }
+    } else {
+      it = Math.min(ie1 + io1, 50000); rt = Math.min(re1 + ro1, 25000);
+      how = (e > 0 && o > 0) ? "地震保険料 " + yen(ie1) + "と旧長期損害保険料 " + yen(io1) + "を足した額" + (ie1 + io1 > 50000 ? "。足すと" + yen(ie1 + io1) + "ですが、合計は5万円まで" : "（上限5万円）") :
+        (e > 0 ? (e > 50000 ? "地震保険料は5万円まで。超えた分は入らない" : "地震保険料は5万円までは全額") : "旧長期損害保険料の式（上限1万5千円）");
+    }
+
+    if (ie === "other") {
+      box("地震保険料控除", "対象にならない見込み", "控除の対象は、自分か生計が同じ家族が持つ「いつも住んでいる家」と、生活に必要な家具・衣服などの家財です。住んでいない家だけの保険は、入れない見込みです。住む家と兼ねているときは、保険会社か税務署に確かめます。", true);
+    } else {
+      box("地震保険料控除の額（所得税）", yen(it), how + "。", false);
+      box("地震保険料控除の額（住民税）", yen(rt), same ? "住民税も、同じ契約なら片方だけです。上限は2万5千円です。" : "住民税は式がちがい、上限は2万5千円です。年末調整や確定申告で入れれば、市区町村に伝わります。", false);
+      if (ie === "unk") box("家の条件", "確かめが要る", "控除に入るのは、自分か生計が同じ家族が持つ、いつも住んでいる家とその家財の分です。別荘や人に貸している家の分は入りません。", true);
+    }
+
+    var where, whereS, whereNo = false;
+    if (nencho === "yes") {
+      where = "年末に勤めている会社の年末調整（保険料控除申告書）";
+      whereS = "辞めた会社ではなく、年末に勤めている会社に出します。退職前に払った分も、今年1〜12月に払った分なら一緒に入れます。出し忘れたら、翌年の確定申告で入れる方法があります。";
+    } else if (nencho === "no") {
+      where = "翌年の確定申告";
+      whereS = "年末に会社に勤めていない人は、年末調整がありません。確定申告の地震保険料控除の欄に入れます。税金を戻してもらうための申告は、翌年1月1日から5年間出せます。";
+    } else {
+      where = "年末調整か、翌年の確定申告";
+      whereS = "年内に就職して年末調整の書類が配られたらそこに書きます。年末に勤めていなければ、翌年の確定申告で入れます。どちらでも、そろえる証明書は同じです。";
+      whereNo = true;
+    }
+    if (ie !== "other") {
+      box("出す先", where, whereS, whereNo);
+      box("添えるもの", "地震保険料控除証明書",
+        "確定申告では、証明書（または電子の証明書を印刷したもの）を添えるか見せます。年末調整で入れた分は、確定申告で添える必要はありません。", false);
+    }
+
+    todo("保険会社・共済から届いた地震保険料控除証明書（はがき・封書・電子）を、契約ごとに集める");
+    todo("証明書の「地震保険料」と「旧長期損害保険料」の区分ごとに、今年1〜12月に払う額を足す");
+    if (same) todo("同じ契約に両方の額があるときは、どちらか一方だけを書く（このページは大きくなるほうで出した）");
+    if ($("matome").value === "yes") todo("数年分をまとめて払った保険は、今年の分として入れる額を、証明書か保険会社で確かめてから入れる");
+    if (ie !== "home") todo("保険をかけている家が、いつも住んでいる家（とその家財）かを、保険証券で確かめる");
+    if (ie !== "other") {
+      if (nencho === "yes") todo("年末に勤めている会社の保険料控除申告書の、地震保険料控除の欄に書き、証明書を添えて出す");
+      else if (nencho === "no") todo("翌年の確定申告で、地震保険料控除の欄に入れる。前の会社の源泉徴収票も用意する");
+      else todo("年末調整の書類が配られたらそこに、配られなければ翌年の確定申告で入れる。証明書はなくさないように1か所にまとめる");
+    }
+
+    if (nencho === "yes" && ie !== "other") {
+      $("memo").textContent = "年末調整の書類の件です。\n今年の途中で前の会社を辞め、\nこちらに入りました。\n前の会社にいたあいだに\n払った地震保険料も、\n今年の分として\n保険料控除申告書に書きます。\n証明書を添えて出します。";
+    } else if (ie === "other") {
+      $("memo").textContent = "（住んでいない家だけの保険なら、\n会社への一言は要りません。\n住む家と兼ねているときは、\n保険会社か税務署に\n確かめてから書きます）";
+    } else {
+      $("memo").textContent = "（年末調整がない人は、\n会社への一言は要りません。\n確定申告のときに、\n地震保険料控除証明書と\nこのページの区分ごとの額を\nまとめて持っておきます）";
+    }
+
+    $("ng").textContent = "・辞めた会社では年末調整をしないことが多い。今年の分は、年末に勤めている会社か確定申告で入れる\n・控除に入るのは、その年に払った額。証明書の額が12月まで払う予定の額か、途中までの額かを見る\n・火災保険だけの部分は入らない。証明書の「地震保険料」の欄の額を使う\n・旧長期損害保険料は、2006年までの契約で条件が3つある。証明書の区分に合わせる\n・ここで出すのは控除額の目安。税金がいくら下がるかは出していない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("nencho").value = "yes"; $("ie").value = "home";
+    $("eq").value = "38000"; $("old").value = "16000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
