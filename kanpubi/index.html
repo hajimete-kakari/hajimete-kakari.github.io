@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>確定申告の還付金、いつ振り込まれるかの目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: .95rem; }
+  label.c input { margin-top: 6px; flex: none; width: 18px; height: 18px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #check li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>確定申告の還付金、いつ振り込まれるかの目安</h1>
+  <p class="lead">年の途中で会社を辞めて、年末調整を受けなかった人などが、還付申告（払いすぎた所得税を返してもらう申告）を出したあと、還付金がいつごろ振り込まれるかの目安と、受け取りで止まりやすいところを出します。税額の計算はしません。振り込みの日を決めるのは税務署です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いつの分を、いつ出す？</h2>
+    <label class="f" for="nen">還付してもらう年（辞めた年）<span class="hint">1月〜12月の、どの年の分の申告かです</span></label>
+    <select id="nen">
+      <option value="2021">2021年</option><option value="2022">2022年</option><option value="2023">2023年</option>
+      <option value="2024">2024年</option><option value="2025">2025年</option><option value="2026" selected>2026年</option>
+    </select>
+    <label class="f" for="hi">申告を出す日（出した日）<span class="hint">まだ先でも、予定の日で見られます。郵送なら、税務署に届く日の目安を入れてください</span></label>
+    <input type="date" id="hi">
+  </div>
+
+  <div class="card">
+    <h2>2. 出し方と受け取り方</h2>
+    <label class="f" for="kata">出し方</label>
+    <select id="kata">
+      <option value="etax">自宅のパソコン・スマホから、e-Tax（電子申告）で出す</option>
+      <option value="etaxb">e-Taxで出すが、書類を別に郵送する／同じ年の分を出し直す</option>
+      <option value="kaijo">税務署や申告会場で作って出す</option>
+      <option value="paper">紙の申告書を、郵送か窓口で出す</option>
+    </select>
+    <label class="f" for="uke">受け取り方</label>
+    <select id="uke">
+      <option value="bank">自分の銀行などの口座</option>
+      <option value="net">インターネット専用銀行の口座</option>
+      <option value="yucho">ゆうちょ銀行の口座</option>
+      <option value="kokin">公金受取口座（マイナポータルで登録した口座）</option>
+      <option value="mado">郵便局の窓口で受け取る</option>
+    </select>
+    <label class="f" for="id">e-Taxの利用者識別番号（16けたの番号）を持っている？<span class="hint">マイナンバーカードでe-Taxを使ったことがある人は、持っていることが多いです</span></label>
+    <select id="id">
+      <option value="yes">持っている</option>
+      <option value="no">持っていない</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">振り込みの目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>止まりやすいところ</h3>
+    <ul class="tl" id="check"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>税務署に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁「確定申告期に多いお問合せ事項Q&amp;A【税金の還付】」（Q40〜Q46）、タックスアンサー No.2030「還付申告」をもとにした目安です。e-Taxは「3週間程度」を提出日の21日後として、2月・3月の確定申告期間中（2月16日〜3月15日として数えています）は「おおむね1か月から1か月半程度」を提出日の1か月後〜1か月半後として出しています。期間の外の、紙などで出す申告の日数は、国税庁の案内に書かれていないため、参考として同じ日数で出しています。申告書の中身や書類に足りないところがあると、もっとかかります。還付申告は、その年の翌年1月1日から5年間出せます（最後の日が土日祝日のときの扱いは、税務署に確かめてください）。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function fd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function md(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function add(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function addM(d, m) {
+    var y = d.getFullYear(), mo = d.getMonth() + m, last = new Date(y, mo + 1, 0).getDate();
+    return new Date(y, mo, Math.min(d.getDate(), last));
+  }
+  function inSeason(d) { var m = d.getMonth() + 1, x = d.getDate(); return (m === 2 && x >= 16) || (m === 3 && x <= 15); }
+  window.__t = { addM: addM, inSeason: inSeason };
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function make() {
+    $("sum").innerHTML = ""; $("check").innerHTML = ""; $("todo").innerHTML = "";
+    var nen = Number($("nen").value), hs = $("hi").value, kata = $("kata").value, uke = $("uke").value, id = $("id").value;
+    if (!hs) { alert("申告を出す日（予定の日）を入れてください"); return false; }
+    var hi = pd(hs), first = new Date(nen + 1, 0, 1), lastDay = new Date(nen + 5, 11, 31);
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var past = hi <= now;
+    if (hi < first) {
+      box("出せる日", fd(first) + " から", nen + "年の分の還付申告は、" + (nen + 1) + "年1月1日から出せます。その前の日には出せないので、出す日を1月1日以降にしてください。", true);
+      li("check", "年内に次の会社に入って年末調整を受けると、前の会社の分もまとめて精算されることがあります。その場合は、還付申告がいらないこともあります");
+      li("todo", fd(first) + "以降で出す日を決めて、もう一度このページで目安を見る");
+      li("todo", "辞めた会社の源泉徴収票が手元にあるか確かめる");
+      $("memo").textContent = nen + "年に会社を辞めて、\n年末調整を受けて\nいません。\n還付申告は、いつから\n出せますか。";
+      $("ng").textContent = "・還付申告は、翌年1月1日から出せる\n・3月15日までの期間を待たなくてよい\n・出せるのは5年間";
+      $("result").hidden = false; return true;
+    }
+    if (hi > lastDay) {
+      box("出せる期限", fd(lastDay) + " まで", nen + "年の分の還付申告は、" + (nen + 1) + "年1月1日から5年間です。入れた日は、その期限を過ぎています。出せるかどうか、税務署に確かめてください。", true);
+      li("check", "期限を過ぎた分の扱いは、税務署に確かめます");
+      li("todo", "税務署に電話して、" + nen + "年の分がいまから出せるかを聞く");
+      $("memo").textContent = nen + "年の分の\n還付申告を、まだ\n出していません。\nいまから出せるか\n教えてください。";
+      $("ng").textContent = "・還付申告は、翌年1月1日から5年間\n・期限の扱いは、税務署に確かめる";
+      $("result").hidden = false; return true;
+    }
+    var season = inSeason(hi), fast = kata === "etax";
+    var a, b, v, s;
+    if (fast) {
+      a = add(hi, 21); b = a;
+      v = md(a) + "ごろ";
+      s = "自宅などからe-Taxで出した還付申告は、国税庁の案内で「3週間程度」で処理するとされています。" + fd(hi) + "の21日後が目安です。" + (season ? "確定申告の期間中でも、この目安です。" : "");
+    } else {
+      a = addM(hi, 1); b = add(addM(hi, 1), 15);
+      v = md(a) + "〜" + md(b) + "ごろ";
+      var why = kata === "etaxb" ? "e-Taxでも、書類を別に郵送したり、同じ年の分を出し直したりすると、3週間の目安の外になります。" : kata === "kaijo" ? "3週間の目安は、自宅などからe-Taxで出した申告のものです。" : "";
+      if (season) s = "2月・3月の確定申告の期間中は、国税庁の案内で「おおむね1か月から1か月半程度」かかるとされています。" + why;
+      else s = "期間の外に出すときの日数は、国税庁の案内に書かれていません。期間中の目安（1か月〜1か月半）を参考に出しています。" + why;
+    }
+    box("振り込みの目安", v, s, false);
+    var tip = "";
+    if (!fast && season) tip = "還付申告は1月1日から出せるので、2月16日より前に出すと、混み合う時期を避けられます。";
+    else if (!fast) tip = "書類を郵送しない形で、自宅などからe-Taxで出すと、3週間程度の目安になります。";
+    box("出せる期間", (nen + 1) + "年1月1日〜" + md(lastDay), "還付申告は、3月15日までの確定申告の期間に関係なく、翌年1月1日から5年間出せます。" + tip, false);
+    if (past) {
+      var over = Math.round((now - b) / 86400000);
+      if (over > 0) box("いまの状況", "目安を" + over + "日過ぎています", "申告書の中身や書類の確認で、時間がかかっていることがあります。下の「次にやること」の確かめ方で処理の状況を見て、わからなければ申告書を出した税務署に聞いてください。", true);
+      else box("いまの状況", "目安の日まで、待つ時期です", "目安の日を過ぎても入らないときは、下の「次にやること」の確かめ方で処理の状況を見てください。", false);
+    }
+
+    li("check", "口座の名義は、申告した本人の名前だけのもの。屋号や事務所の名前が入った口座には振り込めません");
+    if (uke === "net") li("check", "インターネット専用銀行は、一部、還付金を振り込めません。申告の前に、その銀行に振り込めるか確かめてください");
+    if (uke === "yucho") li("check", "ゆうちょ銀行は、通帳の5けたの「記号」と、2〜8けたの「番号」をつなげて書きます。ほかの銀行から振り込むときの「店名・口座番号」や、「-2」などの枝番は書きません");
+    if (uke === "kokin") li("check", "申告書の「公金受取口座の利用」の欄に丸を付けます。登録済みかは、出す前にマイナポータルで確かめます。「受取場所」の欄に口座を書くと、そちらに振り込まれます");
+    if (uke === "kokin") li("check", "マイナンバーが正しく書かれていない、本人確認の書類が足りないときは、公金受取口座は使えません");
+    if (uke === "mado") li("check", "郵便局の窓口で受け取る形を選ぶと、口座への振り込みではなくなります。届いた書類を持って、ゆうちょ銀行か郵便局へ行きます");
+    if (uke === "bank") li("check", "銀行名・預金の種類・口座番号を、通帳やキャッシュカードを見ながら書き写します");
+    li("check", "源泉徴収票の「源泉徴収税額」が0円の人は、申告しても戻る所得税はありません");
+
+    if (id === "yes") li("todo", "e-Taxソフト（WEB版）にログイン →「マイページ」→「本人情報設定」の「還付・納税関係」→「還付金処理状況を確認する」で、処理の状況を見る" + (fast || kata === "etaxb" ? "" : "（紙などで出した人も見られることがあります。出してすぐは見られないこともあります）"));
+    else if (id === "unk") li("todo", "利用者識別番号があれば、e-Taxソフト（WEB版）の「マイページ」から処理の状況を見られます。わからなければ、目安の日を過ぎるまで待つ");
+    else li("todo", "目安の日を過ぎても入らないときは、申告書を出した税務署に電話して聞く（申告書の控えを手元に置く）");
+    li("todo", uke === "mado" ? "届いた書類を持って、ゆうちょ銀行か郵便局で受け取る" : "振り込まれたら、届いた「国税還付金振込通知書」（e-Taxで受け取る形を選んだ人は、e-Taxの通知）と金額を照らす");
+    li("todo", "申告書の控えと源泉徴収票は、捨てずに取っておく");
+
+    $("memo").textContent = (hi.getMonth() + 1) + "月" + hi.getDate() + "日に、\n" + nen + "年の分の還付申告を\n" + (fast || kata === "etaxb" ? "e-Taxで" : "") + "出しました。\n還付金の処理の状況を\n教えてください。\n" + (uke === "mado" ? "受け取りは\n郵便局の窓口です。" : "振込先は\n" + (uke === "kokin" ? "公金受取口座です。" : "本人名義の口座です。"));
+    $("ng").textContent = "・e-Taxでも、書類の別送や\n　出し直しがあると遅くなる\n・口座の名義は、本人の名前だけ\n・一部のネット銀行は不可\n・振り込みの日は税務署が決める\n・申告書の控えを取っておく";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("nen").value = "2026"; $("hi").value = "2027-01-20"; $("kata").value = "etax"; $("uke").value = "bank"; $("id").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
