@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職金の税金の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .hint, .mihon .opt, .mihon .lead { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>退職金の税金の目安</h1>
+  <p class="lead">勤め始めた日・辞める日・退職金の額・申告書を出したかを入れると、勤続年数、退職所得控除、税金がかかる額、所得税と住民税の目安、手取りの目安、申告書を出さなかったときとの差、次にやることを出します。国税庁と地方税法の式に当てはめた目安で、実際の額は会社が出す源泉徴収票で確かめます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 勤めた期間</h2>
+    <label class="f" for="start">勤め始めた日<span class="hint">その会社に入った日。試用期間も含めるのが一般的です。途中の休職などの扱いは会社に確かめます</span></label>
+    <input type="date" id="start">
+    <label class="f" for="end">辞める日（辞めた日）</label>
+    <input type="date" id="end">
+  </div>
+
+  <div class="card">
+    <h2>2. 退職金</h2>
+    <label class="f" for="pay">退職金の額（円）<span class="hint">税金が引かれる前の額。会社の規程や、会社から聞いた見込みの額</span></label>
+    <input type="number" id="pay" inputmode="numeric" min="0" step="1" placeholder="例 8000000">
+    <label class="f" for="yakuin">役員（取締役など）だった期間は<span class="hint">ふつうの社員だけなら「なし」</span></label>
+    <select id="yakuin">
+      <option value="nashi">なし（社員として勤めた）</option>
+      <option value="long">役員だった。役員の期間は5年を超える</option>
+      <option value="short">役員だった。役員の期間は5年以下</option>
+    </select>
+    <label class="f" for="shogai">障害者になったことが、辞める直接の原因ですか</label>
+    <select id="shogai">
+      <option value="no">いいえ</option>
+      <option value="yes">はい</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 申告書と、ほかの退職金</h2>
+    <label class="f" for="shinkoku">「退職所得の受給に関する申告書」を会社に<span class="hint">退職金を受け取る時までに、退職金を払う先（会社）に出す紙です</span></label>
+    <select id="shinkoku">
+      <option value="dasu">出した・受け取る前に出す</option>
+      <option value="dasanai">出さないまま受け取った</option>
+      <option value="mada">まだわからない（両方の場合を見たい）</option>
+    </select>
+    <label class="f" for="hoka">同じ年にほかの会社からも退職金をもらう、または前の年までに退職金やiDeCoなどの一時金をもらったことは</label>
+    <select id="hoka">
+      <option value="nai">ない</option>
+      <option value="aru">ある・わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">税金の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社の担当者への一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁 タックスアンサー No.1420「退職金を受け取ったとき（退職所得）」、No.2732「退職手当等に対する源泉徴収」と別表（速算表）、地方税法 第50条の4・第328条の3（分離課税の住民税の税率 4%・6%）で出した目安です。住民税の端数の扱いは入れていないので「約」としています。実際の額は、会社が出す退職所得の源泉徴収票・特別徴収票で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(x) { return Math.floor(x).toLocaleString("ja-JP") + "円"; }
+  function man(x) { return (x / 10000).toLocaleString("ja-JP") + "万円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function pd(v) { var a = v.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+
+  // 勤続年数：入った日から辞めた日まで。1年未満の端数は1年に切り上げ
+  function nensu(s, e) {
+    var e1 = new Date(e.getFullYear(), e.getMonth(), e.getDate() + 1);
+    var y = e1.getFullYear() - s.getFullYear();
+    var ann = new Date(s.getFullYear() + y, s.getMonth(), s.getDate());
+    if (ann > e1) { y -= 1; ann = new Date(s.getFullYear() + y, s.getMonth(), s.getDate()); }
+    var hasu = ann < e1;
+    var months = (e1.getFullYear() - ann.getFullYear()) * 12 + (e1.getMonth() - ann.getMonth());
+    if (e1.getDate() < ann.getDate()) months -= 1;
+    return { full: y, months: Math.max(0, months), years: Math.max(1, y + (hasu ? 1 : 0)) };
+  }
+  // 速算表（国税庁 No.2732 別表）
+  var HYO = [[1950000, 5, 0], [3300000, 10, 97500], [6950000, 20, 427500], [9000000, 23, 636000],
+             [18000000, 33, 1536000], [40000000, 40, 2796000], [Infinity, 45, 4796000]];
+  function shotokuzei(A) {
+    if (A <= 0) return { tax: 0, rate: 0 };
+    for (var i = 0; i < HYO.length; i++) {
+      if (A <= HYO[i][0]) {
+        var t = Math.floor(((A * HYO[i][1] - HYO[i][2] * 100) * 1021) / 100000);
+        return { tax: Math.max(0, t), rate: HYO[i][1], c: HYO[i][2] };
+      }
+    }
+  }
+
+  function make() {
+    $("result").hidden = true;
+    var sv = $("start").value, ev = $("end").value, pv = $("pay").value;
+    if (!sv || !ev) { alert("勤め始めた日と辞める日を入れてください"); return false; }
+    var s = pd(sv), e = pd(ev);
+    if (e < s) { alert("辞める日が、勤め始めた日より前になっています"); return false; }
+    var pay = Number(pv);
+    if (pv === "" || !isFinite(pay) || pay < 1 || pay > 1000000000 || Math.floor(pay) !== pay) { alert("退職金の額は、1〜1,000,000,000の整数（円）で入れてください"); return false; }
+    var yak = $("yakuin").value, sho = $("shogai").value, shin = $("shinkoku").value, hoka = $("hoka").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("memo").textContent = ""; $("ng").textContent = "";
+
+    // 1 勤続年数
+    var n = nensu(s, e), N = n.years;
+    var nenTxt = n.full + "年" + (n.months ? n.months + "か月" : "") + "（入った日から辞めた日まで）";
+    box("勤続年数", N + "年", nenTxt + (N > n.full ? "\n1年に満たない端数は1年に切り上げるので、" + N + "年で数えます。" : "\n端数がないので、そのまま" + N + "年です。"));
+
+    // 2 退職所得控除
+    var kojo = N <= 20 ? 400000 * N : 8000000 + 700000 * (N - 20);
+    var kojoTxt = N <= 20 ? "40万円×" + N + "年＝" + man(400000 * N) : "800万円＋70万円×（" + N + "年−20年）＝" + man(kojo);
+    if (kojo < 800000) { kojo = 800000; kojoTxt += "\n80万円より少ないので、80万円です。"; }
+    if (sho === "yes") { kojo += 1000000; kojoTxt += "\n障害者になったことが直接の原因なので、100万円を足します。"; }
+    box("退職所得控除（退職金から差し引ける額）", man(kojo), kojoTxt);
+
+    // 3 税金がかかる額（課税退職所得金額）
+    var diff = pay - kojo, A = 0, kind, aTxt;
+    if (diff <= 0) { A = 0; kind = "none"; aTxt = "退職金が控除の範囲に収まるので、税金がかかる額は0円です。"; }
+    else if (yak === "short") { A = diff; kind = "yakuin"; aTxt = "役員の期間が5年以下の役員の退職金は、2分の1にしません。\n" + yen(pay) + "−" + yen(kojo) + "＝" + yen(diff); }
+    else if (N <= 5 && yak === "nashi") {
+      kind = "tanki";
+      if (diff <= 3000000) { A = diff / 2; aTxt = "勤続5年以下（短期退職手当等）。差し引いた額が300万円以下なので2分の1にします。\n（" + yen(pay) + "−" + yen(kojo) + "）÷2"; }
+      else { A = 1500000 + (pay - (3000000 + kojo)); aTxt = "勤続5年以下（短期退職手当等）。差し引いた額のうち300万円を超える分は2分の1にしません。\n1,500,000円＋｛" + yen(pay) + "−（3,000,000円＋" + yen(kojo) + "）｝"; }
+    } else { A = diff / 2; kind = "ippan"; aTxt = "（" + yen(pay) + "−" + yen(kojo) + "）÷2"; }
+    A = Math.floor(A / 1000) * 1000;
+    if (diff > 0) aTxt += "\n1,000円未満は切り捨てます。";
+    box("税金がかかる額（課税退職所得金額）", yen(A), aTxt);
+
+    // 4 所得税（復興特別所得税を含む）
+    var st = shotokuzei(A), tax = st.tax;
+    var juRaw = A * 0.1, ju = Math.floor(juRaw / 100) * 100;
+    var stTxt = A > 0 ? "（" + yen(A) + "×" + st.rate + "%" + (st.c ? "−" + yen(st.c) : "") + "）×102.1%\n102.1%は、復興特別所得税（所得税の2.1%）を含めるためです。" : "税金がかかる額が0円なので、所得税はかからない見込みです。";
+    var ganpon = Math.floor(pay * 2042 / 10000);
+
+    if (shin === "dasanai") {
+      box("受け取るときに引かれた所得税の目安（申告書なし）", yen(ganpon), "申告書を出さないと、控除を使わずに、退職金の額×20.42%が引かれます。\n" + yen(pay) + "×20.42%", true);
+      box("控除を使った場合の所得税の目安", yen(tax), stTxt);
+      box("確定申告で戻る見込みの目安", yen(Math.max(0, ganpon - tax)), "引かれた額−控除を使った額。翌年1月以降の確定申告で、退職所得を書いて精算します。実際の額は、退職所得の源泉徴収票で確かめます。");
+    } else if (shin === "mada") {
+      box("所得税の目安（申告書を出した場合）", yen(tax), stTxt);
+      box("所得税の目安（申告書を出さなかった場合）", yen(ganpon), "退職金の額×20.42%が引かれます。差の" + yen(Math.max(0, ganpon - tax)) + "は、確定申告をすれば精算できますが、それまで手元に戻りません。", true);
+    } else {
+      box("所得税の目安（受け取るときに引かれる額）", yen(tax), stTxt + (tax > 0 || A === 0 ? "\n申告書を出していれば、多くの場合これで精算され、確定申告は要りません。" : ""));
+    }
+
+    box("住民税の目安", (ju > 0 ? "約" : "") + yen(ju), A > 0 ? "税金がかかる額×10%（市区町村6%・都道府県4%）。\n退職金を払うときに会社が天引きします。申告書を出していなくても、その退職金について控除を使って計算されます。端数の扱いは入れていないので、約としています。" : "税金がかかる額が0円なので、住民税もかからない見込みです。");
+
+    var tedori = pay - (shin === "dasanai" ? ganpon : tax) - ju;
+    box("手取りの目安", "約" + yen(tedori), (shin === "dasanai" ? "申告書なしで引かれた所得税と、住民税を引いた額です。確定申告で戻る分は入っていません。" : "退職金−所得税−住民税の目安です。") + "\nほかに引かれているもの（会社の規程によるもの）がないかは、明細で確かめます。");
+
+    // 次にやること
+    if (shin === "dasanai") {
+      todo("会社から届く「退職所得の源泉徴収票・特別徴収票」で、支払金額と源泉徴収税額を確かめる。20.42%前後が引かれていれば、申告書なしの扱いです。");
+      todo("翌年1月以降に確定申告をして、退職所得（支払金額・勤続年数・引かれた税額）を書く。控除を使った額との差が戻る見込みです。");
+      todo("確定申告書のどこに書くかがわからないときは、税務署の電話相談や申告の会場で聞く。");
+    } else {
+      if (shin === "mada") todo("いちばん大事なのは、退職金を受け取る前に申告書を会社に出すこと。会社の担当者に、用紙と出す期限を聞く。");
+      else todo("申告書に、名前・住所・マイナンバー・勤め始めた日と辞める日、ほかの退職金の有無を書いて、受け取る前に会社に出す。");
+      todo("受け取ったら、退職所得の源泉徴収票・特別徴収票で、引かれた所得税と住民税を確かめる。このページの目安と大きくちがうときは、会社に勤続年数の数え方を聞く。");
+      todo("医療費控除などで確定申告をするときは、退職所得の金額も書く（国税庁の案内）。退職所得だけなら、申告書を出していれば多くの場合要りません。");
+    }
+    todo("源泉徴収票は、次の会社の手続きや確定申告で使うので、なくさないようにしまっておく。");
+
+    // 一言
+    var memo = shin === "dasanai"
+      ? "退職金の件でご連絡しました。\n退職所得の源泉徴収票を\nまだいただいていないので、\nお送りいただけますか。\n確定申告で使います。"
+      : "退職金の件で確認させてください。\n「退職所得の受給に関する申告書」は、\nいつまでに、どなたに出せば\nよいでしょうか。\nあわせて、勤続年数を何年で\n数えるかも教えてください。";
+    $("memo").textContent = memo;
+
+    // 気をつけること
+    var ng = [];
+    if (hoka === "aru") ng.push("同じ年に2か所以上から退職金をもらう、または前の年までに退職金やiDeCoなどの一時金をもらったことがあると、控除の計算が変わることがあります（国税庁 No.1420）。このページの目安より税金が多くなることがあるので、会社か税務署で確かめてください。申告書を出すときは、ほかの退職金のことも書きます。");
+    if (yak === "short") ng.push("役員の期間が5年以下の役員の退職金は、2分の1にしない計算で出しました。役員と社員の両方の期間がある場合は分け方が変わるので、会社に確かめてください。");
+    if (yak === "long" && N <= 5) ng.push("勤続5年以下で役員の期間がある場合の分け方は、このページでは見ていません。会社に確かめてください。");
+    if (kind === "tanki") ng.push("勤続5年以下の社員の退職金（短期退職手当等）は、差し引いた額のうち300万円を超える分を2分の1にしない計算で出しました。");
+    if (N > 5 && yak === "nashi" && diff > 0) ng.push("勤続年数は、会社の規程の数え方（退職金の計算に使う年数）とはちがうことがあります。税金の計算の勤続年数は、入った日から辞めた日までで数え、端数は1年に切り上げます。");
+    ng.push("亡くなった人の退職金を家族が受け取る場合は、相続税の扱いになり、このページの計算には当たりません。");
+    ng.push("iDeCoや企業年金を一時金で受け取る場合は、勤続年数の数え方などが変わることがあるので、受け取る先に確かめてください。");
+    ng.push("ここに出した額は目安です。税額を決めるのは会社の源泉徴収と、確定申告をする場合はその申告です。");
+    $("ng").textContent = ng.join("\n\n");
+
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("start").value = "2016-04-01"; $("end").value = "2026-05-31"; $("pay").value = "8000000"; $("yakuin").value = "nashi"; $("shogai").value = "no"; $("shinkoku").value = "mada"; $("hoka").value = "nai"; make(); }
+})();
+</script>
+</body>
+</html>
