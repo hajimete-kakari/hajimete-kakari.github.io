@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>国民年金の付加保険料、払う額と年金に足される額｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>国民年金の付加保険料、払う額と年金に足される額</h1>
+  <p class="lead">会社を辞めて国民年金（第1号）に切り替えた人が、月400円の付加保険料を足すか考えるためのページです。今の状況と、申し出る月・払う見込みの月数を入れると、払えるか・いつの分から払うか・払う合計と年金に足される額（年額）・期限と次にやることを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今の状況</h2>
+    <label class="f" for="st">国民年金の入り方は？</label>
+    <select id="st">
+      <option value="ichi">退職して国民年金（第1号）、保険料を全額払う</option>
+      <option value="nini">60〜64歳で任意加入している</option>
+      <option value="menjo">免除・納付猶予・学生納付特例を受けている</option>
+      <option value="sanzen">産前産後の免除を受けている</option>
+      <option value="kikin">国民年金基金に入っている</option>
+      <option value="kosei">会社で厚生年金に入っている</option>
+      <option value="nini65">65歳以上で任意加入している</option>
+    </select>
+    <label class="f" for="ideco">iDeCo（個人型確定拠出年金）に入っている？</label>
+    <select id="ideco">
+      <option value="no">入っていない</option>
+      <option value="yes">入っている</option>
+    </select>
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 申し出る月と払う月数</h2>
+    <label class="f" for="y">付加保険料を申し出る月<span class="hint">役所か年金事務所に届ける月（電子申請も可）。この月の分から払います</span></label>
+    <div style="display:flex;gap:8px">
+      <select id="y"></select>
+      <select id="m"></select>
+    </div>
+    <label class="f" for="n">払う見込みの月数<span class="hint">例：次の仕事が決まるまで、または60歳になるまでの月数</span></label>
+    <input type="number" id="n" inputmode="numeric" min="1" max="480" step="1" placeholder="月">
+    <label class="f" for="yrs">年金を受け取る年数の見込み（なくても可）<span class="hint">空けると、5年・10年・20年で出します</span></label>
+    <input type="number" id="yrs" inputmode="numeric" min="1" max="50" step="1" placeholder="年">
+  </div>
+  <button id="make" type="button">払う額と足される額を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口での一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「付加保険料の納付」（2026年7月23日更新）で出した目安です。付加保険料は月400円、付加年金は「200円×付加保険料を納めた月数」の年額で、老齢基礎年金に足されます。2年以上受け取ると、納めた付加保険料以上の年金を受け取れるとされています。納められるのは第1号被保険者と65歳未満の任意加入被保険者で、免除・納付猶予・学生納付特例を受けている人（産前産後の免除は除く）と国民年金基金の加入員は納められません。払い始めは申し出た月の分からで、さかのぼれません。期限は翌月末日で、過ぎても期限から2年間は納められます。税金の控除や、実際に受け取る年金の総額は、このページでは出していません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+
+  var now = new Date(), ys = $("y"), ms = $("m");
+  for (var yy = now.getFullYear(); yy <= now.getFullYear() + 2; yy++) { var o = document.createElement("option"); o.value = yy; o.textContent = yy + "年"; ys.appendChild(o); }
+  for (var mm = 1; mm <= 12; mm++) { var p = document.createElement("option"); p.value = mm; p.textContent = mm + "月"; ms.appendChild(p); }
+  ys.value = now.getFullYear(); ms.value = now.getMonth() + 1;
+
+  function addM(y, m, k) { var t = y * 12 + (m - 1) + k; return { y: Math.floor(t / 12), m: t % 12 + 1 }; }
+  function ym(o) { return o.y + "年" + o.m + "月"; }
+
+  function make() {
+    var st = $("st").value, ideco = $("ideco").value;
+    var nv = $("n").value.trim(), n = Number(nv);
+    if (nv === "" || !(n >= 1) || n > 480 || Math.floor(n) !== n) { alert("払う見込みの月数は、1〜480の整数で入れてください"); return; }
+    var yv = $("yrs").value.trim(), yrs = yv === "" ? 0 : Number(yv);
+    if (yv !== "" && (!(yrs >= 1) || yrs > 50 || Math.floor(yrs) !== yrs)) { alert("受け取る年数は、1〜50の整数で入れるか、空けてください"); return; }
+    var y = Number(ys.value), m = Number(ms.value);
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+
+    var ok = st === "ichi" || st === "nini" || st === "sanzen";
+    var why = {
+      ichi: "国民年金の第1号被保険者は、付加保険料を納められます。",
+      nini: "65歳未満の任意加入被保険者は、付加保険料を納められます。",
+      sanzen: "産前産後の免除を受けている人は、免除中でも付加保険料を納められます。",
+      menjo: "免除・納付猶予・学生納付特例を受けている人は、付加保険料を納められません。",
+      kikin: "国民年金基金の加入員は、付加保険料を納められません。",
+      kosei: "付加保険料を納められるのは、国民年金の第1号被保険者と65歳未満の任意加入被保険者です。会社の厚生年金に入っている人は、このどちらでもありません。",
+      nini65: "付加保険料を納められる任意加入は、65歳未満の人です。"
+    }[st];
+    box("付加保険料を払える？", ok ? "払える見込み" : "払えない見込み", why, !ok);
+
+    if (!ok) {
+      if (st === "menjo") todo("全額を払えるようになって免除などをやめるときに、あわせて付加保険料を申し出られるか、役所か年金事務所で聞く");
+      else if (st === "kikin") todo("国民年金基金と付加保険料は一緒には入れない。基金の内容は、入っている基金に確かめる");
+      else if (st === "kosei") todo("会社を辞めて国民年金（第1号）に切り替えるときに、このページでもう一度見る");
+      else todo("年金の増やし方は、年金事務所で相談する");
+      $("memo").textContent = "（今は付加保険料を払えない\n見込みなので、窓口での\n一言は要りません）";
+      $("ng").textContent = "・ここでの判定は、日本年金機構の案内の条件に当てはめた目安。自分の加入の状態は、年金事務所か役所で確かめる";
+      $("result").hidden = false; return;
+    }
+
+    var start = { y: y, m: m }, last = addM(y, m, n - 1), firstDue = addM(y, m, 1);
+    var pay = 400 * n, plus = 200 * n;
+    box("いつの分から払う？", ym(start) + "分から",
+      "申し出た月の分から払い始めます。申し出より前の月にはさかのぼれません。" + n + "か月払うと、" + ym(last) + "分までです。", false);
+    box("払う付加保険料の合計", yen(pay), "400円×" + n + "か月。国民年金の保険料に、毎月400円が足されます。", false);
+    box("年金に足される額（年額）", yen(plus) + "／年", "200円×" + n + "か月。老齢基礎年金を受け取り始めると、毎年この額が足されます。", false);
+    var line = yrs ? [yrs] : [5, 10, 20], s = [];
+    for (var i = 0; i < line.length; i++) s.push(line[i] + "年受け取ると " + yen(plus * line[i]));
+    box("受け取る年数ごとの合計（目安）", "2年で払った額と同じ", s.join("、") + "。2年以上受け取ると、納めた付加保険料以上の年金を受け取れるとされています。", false);
+    box("1か月目の期限", ym(firstDue) + "末日",
+      "付加保険料も、国民年金の保険料と同じく翌月末日が期限です。期限を過ぎても、期限から2年間は納められます。", false);
+    if (ideco === "yes") box("iDeCoとの関係", "掛金によっては一緒に入れない", "iDeCoと付加保険料は一緒に入れますが、iDeCoには掛金の上限があり、今の掛金によっては付加保険料と一緒に納められないことがあります。iDeCoの加入先に確かめます。", true);
+
+    if (st === "ichi") todo("国民年金への切り替えが済んでいるか確かめる（まだなら、切り替えの届出と一緒に聞く）");
+    todo("役所（国民年金の窓口）か年金事務所に「国民年金被保険者関係届書（申出書）」を出す。電子申請もできる");
+    if (ideco === "yes") todo("iDeCoの加入先に、今の掛金のまま付加保険料と一緒に納められるか確かめる");
+    todo(ym(start) + "分から、国民年金の保険料と一緒に月400円を払う。前納すると、期間によって割引がある");
+    todo("次の仕事が決まって厚生年金に入るときは、付加保険料がどうなるかを窓口で確かめる。やめるときは同じ申出書を出す");
+
+    $("memo").textContent = "国民年金の付加保険料を\n申し出たいです。\n" + ym(start) + "分から\n払いたいと思っています。\n申出書の書き方と、\n最初の納付書が\nいつ届くかを教えてください。";
+    $("ng").textContent = "・付加保険料は申し出た月の分から。前の月にさかのぼって払うことはできない\n・保険料を免除・猶予してもらう月は、付加保険料も払えない\n・国民年金基金に入ると、付加保険料は払えない\n・足される額は、払った月数で決まる（200円×月数）。払う月が少ないと足される額も少ない\n・ここで出すのは目安。税金の控除や、実際に受け取る年金の総額は出していない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("st").value = "ichi"; $("ideco").value = "no"; ys.value = 2026; ms.value = 12; $("n").value = "18";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
