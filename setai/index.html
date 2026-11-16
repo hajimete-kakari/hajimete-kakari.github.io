@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金の世帯収入、誰の分まで数える？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .fam { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 12px; }
+  .fam:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+  .fam .t { font-weight: 700; font-size: .92rem; margin-bottom: 4px; }
+  .fam label { display: block; font-size: .85rem; color: var(--sub); margin: 6px 0 2px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  button.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; padding: 9px; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } button.sub { color: var(--accent); } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.who { margin: 0; padding-left: 1.2em; } ul.who li { margin-bottom: 4px; font-size: .92rem; }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .fam:nth-child(n+3), .mihon .lead, .mihon .note { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #who li, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金の世帯収入、誰の分まで数える？</h1>
+  <p class="lead">求職者支援制度の月10万円の給付金（職業訓練受講給付金）を考えている人向けです。いっしょに住む家族・離れて住む家族の続柄と、月の収入（税金を引く前）を入れると、世帯の収入に数える人・数えない人と、合計が月30万円以下（交通費だけなら月34万円以下）に収まるかの目安を出します。給付金が出るかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 自分の月の収入</h2>
+    <label class="f" for="me">自分の、1か月の収入（税金を引く前）<span class="hint">アルバイト・内職の給料、年金、仕送りなど。なければ0。単位は円</span></label>
+    <input type="number" id="me" min="0" inputmode="numeric" value="0">
+  </div>
+
+  <div class="card">
+    <h2>2. 家族（住民票が同じ人と、仕送りなどでつながっている人）</h2>
+    <div id="fams"></div>
+    <button class="sub" id="add" type="button">家族を1人ふやす</button>
+  </div>
+  <button id="make" type="button">世帯の収入を数える</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <h3>数える人・数えない人</h3>
+    <ul class="who" id="who"></ul>
+    <div id="sum" style="margin-top:12px"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度・訓練受講のしおり」の支給要件（本人の収入が月8万円以下・世帯全体の収入が月30万円以下・世帯全体の金融資産が300万円以下など。収入の要件を満たさなくても、本人月12万円以下・世帯月34万円以下なら通所手当のみ。「世帯」は本人のほか、同居または生計を一つにする別居の配偶者・子・父母。内縁の関係は配偶者とみなす。「収入」は税引前の給与・賞与、年金、仕送りなど）で出した目安です。金融資産・土地建物・出席など、収入以外の要件は見ていません。「生計を一つにする」に当たるか、収入に含まれるかは、ハローワークが決めます。公共職業訓練を失業保険（基本手当）を受けながら受ける人は、決まりが別です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var REL = [["haigu", "配偶者（籍を入れていない夫・妻も）"], ["ko", "子"], ["oya", "自分の父・母"], ["giri", "配偶者の父・母"],
+    ["kyodai", "兄弟姉妹"], ["sofu", "祖父・祖母"], ["sonota", "そのほか（おじ・おば・孫など）"]];
+  var LIVE = [["dokyo", "いっしょに住んでいる"], ["seikei", "別に住むが、仕送りなどで生計が同じ"], ["betsu", "別に住み、生計も別"]];
+  var count = 0;
+  function opt(list) { return list.map(function (x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join(""); }
+  function addFam(r, l, y) {
+    count++;
+    var d = document.createElement("div"); d.className = "fam";
+    d.innerHTML = '<div class="t">家族' + count + '</div>' +
+      '<label>続柄</label><select class="r">' + opt(REL) + '</select>' +
+      '<label>住まい</label><select class="l">' + opt(LIVE) + '</select>' +
+      '<label>1か月の収入（税金を引く前・円。なければ0）</label><input type="number" class="y" min="0" inputmode="numeric" value="0">';
+    $("fams").appendChild(d);
+    if (r) d.querySelector(".r").value = r;
+    if (l) d.querySelector(".l").value = l;
+    if (y != null) d.querySelector(".y").value = y;
+  }
+  function yen(x) { return x.toLocaleString("ja-JP") + "円"; }
+  function relName(v) { for (var i = 0; i < REL.length; i++) if (REL[i][0] === v) return REL[i][1].replace(/（.*）/, ""); return ""; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function make() {
+    var me = Number($("me").value);
+    if ($("me").value.trim() === "" || !isFinite(me) || me < 0) { alert("自分の収入を、0以上の数で入れてください（なければ0）"); return false; }
+    var rows = [].slice.call(document.querySelectorAll(".fam"));
+    var fams = [];
+    for (var i = 0; i < rows.length; i++) {
+      var y = Number(rows[i].querySelector(".y").value);
+      if (rows[i].querySelector(".y").value.trim() === "" || !isFinite(y) || y < 0) { alert("家族" + (i + 1) + "の収入を、0以上の数で入れてください（なければ0）"); return false; }
+      fams.push({ n: i + 1, r: rows[i].querySelector(".r").value, l: rows[i].querySelector(".l").value, y: y });
+    }
+    $("who").innerHTML = ""; $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    li("who", "自分：数える（" + yen(me) + "）");
+    var total = me, inN = 0, outN = 0, ask = false, seikeiN = 0, giriN = 0;
+    fams.forEach(function (f) {
+      var name = "家族" + f.n + "（" + relName(f.r) + "）";
+      var core = (f.r === "haigu" || f.r === "ko" || f.r === "oya");
+      if (core && (f.l === "dokyo" || f.l === "seikei")) {
+        total += f.y; inN++;
+        if (f.l === "seikei") { seikeiN++; ask = true; }
+        li("who", name + "：数える（" + yen(f.y) + "）" + (f.l === "seikei" ? "。別に住んでいても、生計が同じなら入る" : ""));
+      } else if (core) {
+        outN++;
+        li("who", name + "：数えない。別に住み、生計も別のため");
+      } else {
+        outN++;
+        if (f.r === "giri") { giriN++; ask = true; }
+        li("who", name + "：数えない。世帯に入るのは配偶者・子・父母だけのため" + (f.l === "dokyo" ? "（いっしょに住んでいても）" : "") + (f.r === "giri" ? "。配偶者の父母は迷いやすいので窓口で確かめる" : ""));
+      }
+    });
+    var meOk8 = me <= 80000, setOk30 = total <= 300000, meOk12 = me <= 120000, setOk34 = total <= 340000;
+    box("世帯の収入の合計（1か月）", yen(total),
+      "自分と、数える家族" + inN + "人の合計です。" + (outN ? "数えない家族が" + outN + "人います。" : "") +
+      (setOk30 ? "月30万円まで、あと" + yen(300000 - total) + "です。" : "月30万円を" + yen(total - 300000) + "こえています。"), !setOk30);
+    var memo;
+    if (meOk8 && setOk30) {
+      box("収入の目安", "月10万円の給付金の、収入の要件は満たす見込みです",
+        "自分の収入が月8万円以下、世帯の収入が月30万円以下です。金融資産（世帯で300万円以下）や出席など、ほかの要件は別に確かめます。", false);
+      li("todo", "数える家族の、前の月の収入がわかるもの（給与明細・年金の通知など）をそろえる");
+      li("todo", "自分と数える家族の、預貯金通帳（残高がわかるもの）をそろえる。世帯で300万円以下かを見られる");
+      li("todo", "世帯全員が載った住民票の写し（3か月以内）を取り、ハローワークの事前審査で出す");
+      memo = "職業訓練受講給付金の\n事前審査を考えています。\n世帯の収入は、私を含めて\n月" + yen(total) + "の見込みです。\n" + (seikeiN ? "別に住む家族を\n" + seikeiN + "人入れています。\n" : "") + "数える人の範囲が\nこれで合っているか\n確かめたいです。";
+    } else if (meOk12 && setOk34) {
+      box("収入の目安", "月10万円は外れ、交通費（通所手当）だけの見込みです",
+        (!meOk8 ? "自分の収入が月8万円をこえています。" : "") + (!setOk30 ? "世帯の収入が月30万円をこえています。" : "") +
+        "ただ、自分が月12万円以下・世帯が月34万円以下なので、ほかの要件を満たせば、通所手当だけは受けられる扱いがあります。", true);
+      li("todo", "数える家族を入れすぎていないか、続柄と住まいをもう一度確かめる（兄弟姉妹・祖父母は入らない）");
+      li("todo", "交通費だけでも訓練を受けるか、生活費が足りるかを考える");
+      li("todo", "ハローワークで、通所手当だけになる見込みかを確かめる");
+      memo = "職業訓練受講給付金を\n考えています。\n自分の収入は月" + yen(me) + "、\n世帯の収入は月" + yen(total) + "の\n見込みです。\n通所手当だけになるか、\n確かめたいです。";
+    } else {
+      box("収入の目安", "収入の要件からは外れる見込みです",
+        (!meOk12 ? "自分の収入が月12万円をこえています。" : "") + (!setOk34 ? "世帯の収入が月34万円をこえています。" : "") +
+        "この場合、月10万円も通所手当も出ないのが原則です。給付金なしで受けられる無料の訓練はあります。", true);
+      li("todo", "数える家族を入れすぎていないか確かめる（別に住み、生計も別の家族は入らない）");
+      li("todo", "家族の収入が、税金を引く前の額になっているか確かめる（引いた後の額と取り違えやすい）");
+      li("todo", "給付金なしで無料の訓練を受けるか、ハローワークで相談する");
+      memo = "職業訓練受講給付金を\n考えています。\n世帯の収入は月" + yen(total) + "の\n見込みで、条件をこえそうです。\n数える人の範囲と、\n給付金なしで受ける訓練を\n相談したいです。";
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = "・世帯は住民票で見るのが基本。別に住む配偶者・子・父母は、生計が同じなら入る\n・兄弟姉妹・祖父母は、いっしょに住んでいても入らない\n・収入は税金を引く前の額。年金・仕送り・ボーナスも入る\n・訓練中も1か月ごとに、本人と世帯の収入を書いて出す。家族の収入が増えた月は外れることがある\n" + (ask ? "・「生計が同じ」や配偶者の父母は、自分で決めず窓口で確かめる\n" : "") + "・入れ忘れて受け取ると、不正受給として返すことになることがある";
+    $("result").hidden = false;
+    return true;
+  }
+  $("add").addEventListener("click", function () { addFam(); });
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("me").value = "30000";
+    addFam("haigu", "dokyo", 220000); addFam("ko", "dokyo", 0); addFam("oya", "seikei", 90000); addFam("kyodai", "dokyo", 250000);
+    make();
+  } else { addFam(); }
+})();
+</script>
+</body>
+</html>
