@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の受講手当と交通費（通所手当）はいくら？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の受講手当と交通費（通所手当）はいくら？</h1>
+  <p class="lead">失業保険（基本手当）を受けながら、ハローワークの受講指示で職業訓練に通う人が、ひと月分の受講手当（1日500円・40日分まで）と通所手当（交通費・月42,500円まで）の目安を出します。決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 訓練と月</h2>
+    <label class="f" for="k">ハローワークの受講指示は？</label>
+    <select id="k">
+      <option value="yes">受けた（受ける予定）</option>
+      <option value="no">受けていない（自分で申し込んだ講座など）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="mo">計算する月</label>
+    <input type="month" id="mo">
+    <label class="f" for="att">その月に訓練を受けた日数<span class="hint">基本手当の対象になる日だけ数えます（待期の7日や、傷病手当に変わった日は入れません）</span></label>
+    <input type="number" id="att" min="0" max="31" inputmode="numeric" placeholder="例：20">
+    <label class="f" for="prev">これまでに受講手当が出た日数<span class="hint">同じ訓練で、前の月までに出た日数です。はじめての月は0</span></label>
+    <input type="number" id="prev" min="0" max="999" inputmode="numeric" placeholder="例：0">
+  </div>
+
+  <div class="card">
+    <h2>2. 通い方</h2>
+    <label class="f" for="w">訓練の施設まで、どう通う？<span class="hint">ふだんの通い方です。歩いて片道2km未満のときは、ふつうは出ません</span></label>
+    <select id="w">
+      <option value="train">電車・バス</option>
+      <option value="car">車・バイクなど</option>
+      <option value="both">電車・バスと車の両方</option>
+      <option value="walk">歩いて片道2km未満</option>
+    </select>
+    <div id="trainBox">
+      <label class="f" for="tei">1か月の定期代（円）<span class="hint">いちばん安くて無理のない道順の、1か月定期の額です。定期がないときは21回分の運賃</span></label>
+      <input type="number" id="tei" min="0" max="200000" inputmode="numeric" placeholder="例：12000">
+    </div>
+    <div id="carBox" hidden>
+      <label class="f" for="km">車などで走る距離（片道）</label>
+      <select id="km">
+        <option value="a">10km未満</option>
+        <option value="b">10km以上</option>
+        <option value="c">15km以上で、国の決めた地域に住んでいる</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. その月で、減る日</h2>
+    <label class="f" for="out">訓練の期間に入らない日・基本手当の対象にならない日<span class="hint">月の途中で訓練が始まる（終わる）ときの前後の日、待期の日などの合計です。訓練の期間の中の土日などの休みの日は入れません</span></label>
+    <input type="number" id="out" min="0" max="31" inputmode="numeric" placeholder="例：0">
+    <label class="f" for="abs">理由なく休んだ日<span class="hint">病気・けが（15日未満）、家族の看護、忌引などは「やむを得ない理由」として扱われることがあります。迷う日はここに入れずに、ハローワークに聞いてください</span></label>
+    <input type="number" id="abs" min="0" max="31" inputmode="numeric" placeholder="例：0">
+  </div>
+  <button id="make" type="button">ひと月の額を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法 第36条、雇用保険法施行規則 第56条・第57条（受講手当：受講指示の訓練を受けた日で基本手当の対象になる日、40日分まで、日額500円）・第59条（通所手当：月42,500円まで、電車・バスは1か月定期の額、車などは片道10km未満3,690円・それ以外5,850円・国の決めた地域で片道15km以上8,010円、訓練の期間に入らない日・基本手当の対象にならない日・理由なく受けなかった日のある月は日割りで減らす）、厚生労働省「雇用保険に関する業務取扱要領」52851〜52952（円未満は切り捨て、基本手当の支給日に前の月の末日までの分を出す）をもとにした目安です。電車・バスと車の両方を使う人は、合計になるときと、どちらか高い方だけになるときがあり、ここでは合計で出しています。道順・定期の額・距離・休んだ日の理由は、ハローワークが受講届・通所届・受講証明書をもとに決めます。寄宿手当と、遠くて宿に泊まる人の分は扱っていません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var CAP = 42500, CAR = { a: 3690, b: 5850, c: 8010 };
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function num(id) { var s = $(id).value; return s === "" ? NaN : Math.floor(Number(s)); }
+  function calc(o) {
+    var r = {};
+    r.left = Math.max(0, 40 - o.prev);
+    r.jd = Math.min(o.att, r.left);
+    r.jukou = r.jd * 500;
+    var base = 0;
+    if (o.w === "train") base = o.tei;
+    else if (o.w === "car") base = CAR[o.km];
+    else if (o.w === "both") base = o.tei + CAR[o.km];
+    r.base = base; r.capped = Math.min(base, CAP);
+    r.cut = Math.min(o.out + o.abs, o.n);
+    r.tsusho = Math.floor(r.capped - r.capped * r.cut / o.n);
+    r.minus = r.capped - r.tsusho;
+    return r;
+  }
+  window.__calc = calc;
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function sw() { var w = $("w").value; $("trainBox").hidden = !(w === "train" || w === "both"); $("carBox").hidden = !(w === "car" || w === "both"); }
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var k = $("k").value, w = $("w").value, km = $("km").value;
+    var m = /^(\d{4})-(\d{2})$/.exec($("mo").value);
+    if (!m) { alert("計算する月を入れてください"); return false; }
+    var y = +m[1], mon = +m[2], n = new Date(Date.UTC(y, mon, 0)).getUTCDate();
+    var att = num("att"), prev = $("prev").value === "" ? 0 : num("prev");
+    var out = $("out").value === "" ? 0 : num("out"), abs = $("abs").value === "" ? 0 : num("abs");
+    var tei = (w === "train" || w === "both") ? num("tei") : 0;
+    if (isNaN(att)) { alert("その月に訓練を受けた日数を入れてください"); return false; }
+    if (!(att >= 0) || att > n) { alert("訓練を受けた日数は、0から" + n + "までの数で入れてください"); return false; }
+    if (!(prev >= 0)) { alert("これまでに出た日数は、0以上の数で入れてください"); return false; }
+    if (!(out >= 0) || !(abs >= 0)) { alert("減る日は、0以上の数で入れてください"); return false; }
+    if ((w === "train" || w === "both") && !(tei >= 0)) { alert("1か月の定期代を入れてください"); return false; }
+    if (att + out + abs > n) { alert("訓練を受けた日数と減る日の合計が、その月の日数（" + n + "日）を超えています"); return false; }
+    var c = calc({ prev: prev, att: att, w: w, km: km, tei: tei, out: out, abs: abs, n: n });
+
+    if (k !== "yes") {
+      box("先に確かめること", k === "no" ? "受講指示のない訓練は、この手当の対象になりません" : "受講指示を受けたか、確かめてください",
+        "受講手当と通所手当は、ハローワークの所長の指示（受講指示）で受ける訓練だけが対象です。自分で申し込んだ講座や、教育訓練給付の講座は別のものです。下は、受講指示を受けた場合の参考です。", true);
+    }
+    var jt;
+    if (prev >= 40) jt = "40日分をすでに受け取っているので、この訓練ではもう出ません。";
+    else if (att === 0) jt = "この月に訓練を受けた日がないので、受講手当は出ません。";
+    else if (att > c.left) jt = "40日分までなので、" + att + "日のうち残りの " + c.left + "日分だけです（1日500円 × " + c.jd + "日）。";
+    else jt = "1日500円 × " + c.jd + "日。この訓練で出るのは、あと " + (c.left - c.jd) + "日分です。";
+    box(y + "年" + mon + "月の受講手当", yen(c.jukou), jt, prev >= 40);
+
+    if (w === "walk") {
+      box("通所手当", "出ない見込みです", "歩いて片道2km未満で通える人は、ふつうは対象になりません。体の事情などで乗り物を使わないと通えないときは、ハローワークに伝えてください。", true);
+    } else {
+      var how = w === "train" ? "1か月の定期代 " + yen(tei) : w === "car" ? "車などの額 " + yen(CAR[km]) : "定期代 " + yen(tei) + " ＋ 車などの " + yen(CAR[km]) + " ＝ " + yen(c.base);
+      var s = how + "。";
+      if (c.base > CAP) s += "月42,500円までなので、" + yen(CAP) + "にそろえます。";
+      if (c.cut > 0) s += "減る日が " + c.cut + "日あるので、" + yen(c.capped) + " × " + c.cut + "日 ÷ " + n + "日 ＝ 約" + yen(c.minus) + " を引きます（円未満は切り捨て）。";
+      else s += "減る日がないので、そのままの額です。";
+      if (w === "both") s += "両方を使う人は、どちらか高い方だけになることもあります。";
+      if (w === "car" && km === "c") s += "国の決めた地域に入るかは、ハローワークで確かめてください。";
+      box(y + "年" + mon + "月の通所手当", yen(c.tsusho), s, false);
+    }
+    var tot = c.jukou + (w === "walk" ? 0 : c.tsusho);
+    box("ふたつの合計", yen(tot), "基本手当とは別の額です。ふつうは、基本手当の支給日に、前の月の末日までの分がいっしょに振り込まれます。", false);
+
+    li("受講指示を受けたら、受講届と通所届をハローワークに出す（通い方と額のもとはここで決まる）");
+    li("認定日ごとに、受講証明書と受給資格者証を出す（出席した日が受講手当の日数になる）");
+    if (prev < 40 && c.left - c.jd <= 0) li("40日分を使い切るので、次の月からは受講手当が出ないつもりで予定を立てる");
+    if (abs > 0) li("休んだ日の理由（病気・家族の看護・忌引など）は、わかるものを用意して認定日に伝える");
+    if (w !== "walk") li("引っ越し・道順の変更・運賃の値上げがあったら、ハローワークに届け出る");
+
+    $("memo").textContent = "職業訓練の\n受講手当と通所手当を\n確かめたいです。\n" + y + "年" + mon + "月は\n" + (att > 0 ? att + "日受けました。" : "受けた日がありません。") + "\n" + (w === "walk" ? "" : "通い方は\n" + (w === "train" ? "電車・バスです。" : w === "car" ? "車などです。" : "電車・バスと車です。") + "\n") + (abs > 0 ? "休んだ日の扱いも\n教えてください。" : "いつ振り込まれるかも\n教えてください。");
+    $("ng").textContent = "・受講指示のない訓練は対象外\n・受講手当は40日分まで\n・待期や傷病手当の日は出ない\n・通所手当は月42,500円まで\n・理由なく休んだ日は日割りで減る\n・額を決めるのはハローワーク";
+    $("result").hidden = false;
+    return true;
+  }
+  $("w").addEventListener("change", sw);
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sw();
+  if (DEMO) { $("k").value = "yes"; $("mo").value = "2026-12"; $("att").value = "18"; $("prev").value = "0"; $("w").value = "train"; $("tei").value = "12000"; $("out").value = "0"; $("abs").value = "1"; sw(); make(); }
+})();
+</script>
+</body>
+</html>
