@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>辞めて引っ越すとき、住民税はどこに払うか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>辞めて引っ越すとき、住民税はどこに払うか</h1>
+  <p class="lead">会社を辞める日と、引っ越して住民票を移す日を入れると、いま払っている年度の住民税と、辞めた年の所得にかかる住民税を、どこの市区町村に払うことになるかを出します。住民税の額の計算はしません（額は市区町村が決めます）。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="td">会社を辞める日（退職日）</label>
+    <input type="date" id="td">
+    <label class="f" for="md">引っ越して住民票を移す日<span class="hint">転入届に書く「住み始めた日」です。辞める前に引っ越した人も入れられます</span></label>
+    <input type="date" id="md">
+    <label class="f" for="mv">住民票を移しますか</label>
+    <select id="mv">
+      <option value="yes">移す（引っ越し先で転入届を出す）</option>
+      <option value="no">移さない（住民票は前の住所のまま）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 呼び方（なくてもよい）</h2>
+    <label class="f" for="on">前に住んでいた市区町村<span class="hint">空のままなら「前の市区町村」と出します</span></label>
+    <input type="text" id="on" placeholder="例：〇〇市">
+    <label class="f" for="nn">引っ越し先の市区町村<span class="hint">空のままなら「引っ越し先」と出します</span></label>
+    <input type="text" id="nn" placeholder="例：△△町">
+  </div>
+  <button id="make" type="button">払う先を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口で言う一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※地方税法 第39条・第318条（個人の住民税は、その年度が始まる年の1月1日を基準に課税する）、第294条（住所のある個人に課税する。住所は、原則として住民基本台帳に記録されているところ）、住民基本台帳法 第22条（転入届は住み始めた日から14日以内）、港区・岡山市・横浜市の住民税の案内（1月2日以降に引っ越しても、その年度の住民税は1月1日に住んでいた市区町村に全額納める。住民票を移さないと二重に課税される場合がある）をもとにした目安です。住民税の年度は、6月ごろに通知が届き、その年の6月から翌年5月にかけて払う分として書いています。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function fd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function rw(y) { return "令和" + (y - 2018) + "年度"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  // 年度 y の払う先：y年1月1日に住民票があるところ
+  function where(y, md, mv) { return (mv === "yes" && md <= new Date(y, 0, 1)) ? "new" : "old"; }
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var tds = $("td").value, mds = $("md").value, mv = $("mv").value;
+    var on = $("on").value.trim() || "前の市区町村", nn = $("nn").value.trim() || "引っ越し先";
+    if (!tds || !mds) { alert("辞める日と、住民票を移す日を入れてください"); return false; }
+    var td = pd(tds), md = pd(mds), ty = td.getFullYear();
+    function nm(w) { return w === "new" ? nn : on; }
+    var w1 = where(ty, md, mv), w2 = where(ty + 1, md, mv);
+    var cut = new Date(ty, 11, 31);
+
+    box("いま払っている年度の分（" + rw(ty) + "・" + (ty - 1) + "年の所得の分）",
+      nm(w1) + "に払う",
+      (w1 === "old" ? ty + "年1月1日に住民票があったのは" + on + "なので、引っ越したあとも、この年度の分は最後まで" + on + "に払います。" : ty + "年1月1日より前に住民票を移しているので、この年度の分は" + nn + "に払います。") +
+      "退職後の残りを、最後の給料からまとめて引かれるか、納付書で払うかは、辞める月で変わります。", false);
+
+    box("辞めた年の所得の分（" + rw(ty + 1) + "・" + (ty + 1) + "年6月ごろから）",
+      nm(w2) + "に払う",
+      (w2 === "new" ? (mv === "yes" ? fd(md) + "に住民票を移すので、" + (ty + 1) + "年1月1日の住所は" + nn + "です。" : "") : (mv === "yes" ? "住民票を移すのが" + (ty + 1) + "年1月2日以降なので、" + (ty + 1) + "年1月1日の住所は" + on + "のままです。" : "住民票を移さないので、" + (ty + 1) + "年1月1日の住所は" + on + "のままです。")) +
+      ty + "年に受け取った給料などをもとにした住民税で、" + (ty + 1) + "年6月ごろに、そのときの住所へ通知が届きます。次の会社で天引きされていなければ、届いた納付書で払います。", false);
+
+    if (mv === "yes") {
+      var nextY = md.getFullYear() + (md > new Date(md.getFullYear(), 0, 1) ? 1 : 0);
+      box("引っ越し先に払い始める年度", rw(nextY) + "の分から",
+        nextY + "年1月1日に、" + nn + "に住民票があるためです。それより前の年度の分は、" + on + "に払い終えるまで続きます。", false);
+      if (md.getFullYear() === ty && md <= cut && md >= td) {
+        box("境目", ty + "年12月31日までに移すか、" + (ty + 1) + "年1月2日以降か",
+          "辞めた年の所得の分は、" + ty + "年12月31日までに住民票を移せば" + nn + "、" + (ty + 1) + "年1月2日以降なら" + on + "に払います。額は、払う先の市区町村が決めます。", false);
+      } else if (md.getFullYear() === ty + 1 && md > new Date(ty + 1, 0, 1)) {
+        box("境目", "1月1日を過ぎてから移すので、" + rw(ty + 1) + "の分も" + on,
+          ty + "年12月31日までに移していれば、" + rw(ty + 1) + "の分から" + nn + "でした。額は、払う先の市区町村が決めます。", false);
+      }
+    } else {
+      box("住民票を移さないとき", "前の住所のまま課税されます（原則）",
+        "住民税は、原則として住民票のある市区町村にかかります。ただ、実際に住んでいる市区町村が、住民票がなくても課税できる決まりもあり、移さないままだと二重に課税されることがある、と案内している市区町村もあります。", true);
+    }
+
+    if (mv === "yes") li(fd(md) + "から14日以内に、" + nn + "の窓口で転入届を出す（前の住所の市区町村で転出届も出す）");
+    li("前の会社に、退職後の住所を伝える（源泉徴収票などの送り先）");
+    if (w1 === "old" && mv === "yes") li("最後の給料でまとめて引かれなかった残りは、" + on + "から届く納付書で、" + on + "あてに払う");
+    li((ty + 1) + "年6月ごろ、" + nm(w2) + "から届く通知で、辞めた年の所得の分の額と払い方を確かめる");
+    li("どちらに払うか迷ったら、" + nm(w2) + "の住民税の窓口に、下の一言で確かめる");
+
+    $("memo").textContent = fd(td) + "に退職し、\n" + fd(md) + "に\n" + (mv === "yes" ? on + "から\n" + nn + "へ引っ越します。\n" : nn + "に住みますが、\n住民票は" + on + "のままです。\n") + rw(ty + 1) + "の住民税は、\nどちらに納めるか\n確かめたいです。";
+    $("ng").textContent = "・払う先は、1月1日に\n　住民票があるところ\n・年度の途中で引っ越しても\n　その年度の払う先は\n　変わらない\n・額は、払う先の\n　市区町村が決める\n" + (mv === "yes" ? "・転入届は14日以内\n" : "・住民票を移さないと\n　二重に課税されることも\n") + "・額と払い方は\n　届く通知で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("td").value = "2026-12-25"; $("md").value = "2026-12-28"; $("mv").value = "yes"; $("on").value = ""; $("nn").value = ""; make(); }
+})();
+</script>
+</body>
+</html>
