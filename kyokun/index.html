@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>教育訓練給付金の判定と目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .hint, .mihon .lead, .mihon .opt { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>教育訓練給付金の判定と目安</h1>
+  <p class="lead">講座の種類・受講開始日・雇用保険に入っていた期間・受講料を入れると、対象になりそうか、戻る額の目安（追加の分も）、受講前の手続きの期限、申請の期限、次にやることを出します。厚生労働省・ハローワークの案内に当てはめた目安で、決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 講座</h2>
+    <label class="f" for="kind">講座の種類<span class="hint">講座検索システムや学校の案内に「一般教育訓練」「特定一般教育訓練」「専門実践教育訓練」と書いてあります</span></label>
+    <select id="kind">
+      <option value="ippan">一般教育訓練</option>
+      <option value="tokutei">特定一般教育訓練</option>
+      <option value="senmon">専門実践教育訓練</option>
+      <option value="all">まだわからない（3つを比べたい）</option>
+    </select>
+    <label class="f" for="start">受講開始日（予定）<span class="hint">通学は講座の開講日、通信は教材の発送日。学校が証明する日です</span></label>
+    <input type="date" id="start">
+    <label class="f" for="cost">入学料と受講料の合計（円）<span class="hint">検定料・教材費（必須でないもの）・交通費・パソコン代は入れません。割引があれば割引後の額</span></label>
+    <input type="number" id="cost" inputmode="numeric" min="0" step="1" placeholder="例 300000">
+    <label class="f" for="years">訓練の期間（専門実践のとき）<span class="hint">専門実践は1年ごとに上限があるので使います。ほかの種類では使いません</span></label>
+    <select id="years">
+      <option value="1">1年以内</option>
+      <option value="2">1年を超えて2年以内</option>
+      <option value="3">2年を超えて3年以内</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 雇用保険</h2>
+    <label class="f" for="now">受講開始日の時点で</label>
+    <select id="now">
+      <option value="zai">働いていて、雇用保険に入っている</option>
+      <option value="ri">辞めている（雇用保険から外れている）</option>
+    </select>
+    <label class="f" for="rishoku">辞めた日（辞めている人だけ）</label>
+    <input type="date" id="rishoku">
+    <label class="f" for="kikan">雇用保険に入っていた期間（受講開始日まで）<span class="hint">今の会社（または最後の会社）の期間。その前の会社とのあいだが1年以内なら足せます</span></label>
+    <select id="kikan">
+      <option value="0">1年未満</option>
+      <option value="1">1年以上2年未満</option>
+      <option value="2">2年以上3年未満</option>
+      <option value="3">3年以上</option>
+    </select>
+    <label class="f" for="past">教育訓練給付金を受け取ったことは</label>
+    <select id="past">
+      <option value="nai">ない（今回が初めて）</option>
+      <option value="old">ある（受け取ったのは3年より前）</option>
+      <option value="recent">ある（受け取ってから3年たっていない）</option>
+    </select>
+    <label class="f" for="encho">辞めたあと、病気・けが・妊娠・出産・育児などで、30日以上続けて受講できなかった期間は（辞めている人だけ）</label>
+    <select id="encho">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+
+  <div class="card opt">
+    <h2>3. 修了したあと</h2>
+    <label class="f" for="shikaku">講座の目標の資格を取って、修了の翌日から1年以内に就職する見込みは<span class="hint">働きながら受けるなら、1年以内に資格を取る見込み。特定一般と専門実践の追加の分に使います</span></label>
+    <select id="shikaku">
+      <option value="wakaranai">まだわからない</option>
+      <option value="yes">ある</option>
+      <option value="no">ない</option>
+    </select>
+    <label class="f" for="chingin">就職後の賃金が、受講前より5%以上上がる見込みは<span class="hint">専門実践だけの追加の分に使います</span></label>
+    <select id="chingin">
+      <option value="wakaranai">まだわからない</option>
+      <option value="yes">ある</option>
+      <option value="no">ない</option>
+    </select>
+  </div>
+
+  <div class="card opt">
+    <h2>4. 教育訓練支援給付金（専門実践で、辞めている人）</h2>
+    <label class="f" for="age">受講開始日の年齢</label>
+    <select id="age">
+      <option value="u45">45歳未満</option>
+      <option value="o45">45歳以上</option>
+    </select>
+    <label class="f" for="hiru">講座の形</label>
+    <select id="hiru">
+      <option value="hiru">昼間の通学</option>
+      <option value="yoru">夜間・通信など、働きながら受けられる形</option>
+    </select>
+    <label class="f" for="nichigaku">失業保険の1日の額（基本手当日額・円）<span class="hint">わかれば。受給資格者証や、離職票からの目安。わからなければ空けておきます</span></label>
+    <input type="number" id="nichigaku" inputmode="numeric" min="0" step="1" placeholder="例 5500">
+  </div>
+  <button id="make" type="button">判定と目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークでの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※ハローワークインターネットサービス「教育訓練給付金」、厚生労働省「一般教育訓練の教育訓練給付金のご案内」「特定一般教育訓練の教育訓練給付金のご案内」「専門実践教育訓練の教育訓練給付金のご案内」（令和8年版のリーフレット）に当てはめた目安です。専門実践の額は受講開始日から6か月ごとに決まるので、払った時期で変わることがあります。対象になるか・額は、ハローワークが決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(x) { return Math.floor(x).toLocaleString("ja-JP") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function pd(v) { var a = v.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function md(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  var NAME = { ippan: "一般教育訓練", tokutei: "特定一般教育訓練", senmon: "専門実践教育訓練" };
+
+  function hantei(t, c) {
+    // 必要な期間：3年。初めてなら 一般・特定一般 1年、専門実践 2年
+    var need = c.past === "nai" ? (t === "senmon" ? 2 : 1) : 3;
+    var r = { ok: true, why: [], need: need };
+    if (c.past === "recent") { r.ok = false; r.why.push("今回の受講開始日の前日から3年以内に教育訓練給付金を受け取っていると、支給されません。"); }
+    if (c.kikan < need) { r.ok = false; r.why.push("雇用保険に入っていた期間が" + need + "年に足りません（" + (c.past === "nai" ? "初めての人は" + need + "年以上" : "前に受け取った人は3年以上") + "）。"); }
+    if (c.now === "ri") {
+      if (!c.within) {
+        if (c.encho === "yes") { r.cond = true; r.why.push("辞めた日の翌日から1年を過ぎて受講を始めることになります。受講できなかった期間の分、適用対象期間の延長をハローワークに申し出れば、最大20年以内まで対象になることがあります。"); }
+        else { r.ok = false; r.why.push("辞めた日の翌日から1年を過ぎて受講を始めることになります（延長の理由がない場合）。"); }
+      }
+    }
+    return r;
+  }
+
+  function gaku(t, c) {
+    var cost = c.cost, Y = c.years, out = { base: 0, add: 0, add2: 0, txt: "" };
+    if (t === "ippan") {
+      out.base = Math.min(cost * 0.2, 100000);
+      out.txt = yen(cost) + "×20%" + (cost * 0.2 > 100000 ? "＝" + yen(cost * 0.2) + " → 上限10万円" : "");
+      if (out.base <= 4000) { out.base = 0; out.txt += "\n4,000円を超えないので、支給されません。"; }
+    } else if (t === "tokutei") {
+      out.base = Math.min(cost * 0.4, 200000);
+      out.txt = yen(cost) + "×40%" + (cost * 0.4 > 200000 ? "＝" + yen(cost * 0.4) + " → 上限20万円" : "");
+      if (out.base <= 4000) { out.base = 0; out.txt += "\n4,000円を超えないので、支給されません。"; }
+      out.add = out.base > 0 ? Math.min(cost * 0.1, 50000) : 0;
+      out.addTxt = "資格を取って就職したら、追加で" + yen(cost) + "×10%" + (cost * 0.1 > 50000 ? " → 上限5万円" : "") + "＝" + yen(out.add) + "（合わせて50%・上限25万円）";
+    } else {
+      out.base = Math.min(cost * 0.5, 400000 * Y);
+      out.txt = yen(cost) + "×50%" + (cost * 0.5 > 400000 * Y ? "＝" + yen(cost * 0.5) + " → 1年40万円×" + Y + "年＝" + yen(400000 * Y) + "まで" : "") + "\n受講中に、受講開始日から6か月ごとに分けて支給されます。";
+      if (cost * 0.5 <= 4000) { out.base = 0; out.txt += "\n4,000円を超えないので、支給されません。"; }
+      out.add = out.base > 0 ? Math.min(cost * 0.2, 160000 * Y) : 0;
+      out.addTxt = "資格を取って就職したら、追加で" + yen(cost) + "×20%" + (cost * 0.2 > 160000 * Y ? " → 1年16万円×" + Y + "年まで" : "") + "＝" + yen(out.add);
+      out.add2 = out.base > 0 ? Math.min(cost * 0.1, 80000 * Y) : 0;
+      out.add2Txt = "さらに賃金が受講前より5%以上上がったら、追加で" + yen(cost) + "×10%" + (cost * 0.1 > 80000 * Y ? " → 1年8万円×" + Y + "年まで" : "") + "＝" + yen(out.add2);
+    }
+    return out;
+  }
+
+  function one(t, c, many) {
+    var h = hantei(t, c), g = gaku(t, c);
+    var head = many ? NAME[t] + "：" : "";
+    if (!h.ok) { box(head + "対象になりそうか", "このままでは対象外の見込み", h.why.join("\n"), true); return { t: t, ok: false }; }
+    box(head + "対象になりそうか", h.cond ? "延長の申し出をすれば、対象になることがあります" : "対象になりそうです",
+      (h.why.length ? h.why.join("\n") + "\n" : "") + "必要な期間：雇用保険に" + h.need + "年以上" + (c.now === "ri" ? (h.cond ? "、辞めた日の翌日から受講開始日まで1年以内（延長が認められたら、延長後の期間内）" : "、辞めた日の翌日から受講開始日まで1年以内") : "") + "。\n最後はハローワークが決めます。", h.cond);
+    var total = g.base, s = g.txt, kakko = false;
+    if (t !== "ippan" && g.base > 0) {
+      if (c.shikaku === "yes") { total += g.add; s += "\n" + g.addTxt; }
+      else if (c.shikaku === "wakaranai") { s += "\n（" + g.addTxt + "）"; kakko = true; }
+      else s += "\n資格を取って就職しない場合、追加の分はありません。";
+      if (t === "senmon") {
+        if (c.shikaku === "yes" && c.chingin === "yes") { total += g.add2; s += "\n" + g.add2Txt; }
+        else if (c.shikaku !== "no" && c.chingin !== "no") { s += "\n（" + g.add2Txt + "）"; kakko = true; }
+      }
+    }
+    box(head + "戻る額の目安", yen(total), s + (kakko ? "\n（ ）の分は、まだ足していません。見込みを「ある」にすると足した額が出ます。" : ""), g.base === 0);
+    return { t: t, ok: true, total: total };
+  }
+
+  function make() {
+    $("result").hidden = true;
+    var sv = $("start").value, cv = $("cost").value;
+    if (!sv) { alert("受講開始日（予定）を入れてください"); return false; }
+    var cost = Number(cv);
+    if (cv === "" || !isFinite(cost) || cost < 1 || cost > 20000000 || Math.floor(cost) !== cost) { alert("入学料と受講料の合計は、1〜20,000,000の整数（円）で入れてください"); return false; }
+    var c = { cost: cost, years: Number($("years").value), now: $("now").value, kikan: Number($("kikan").value), past: $("past").value,
+      encho: $("encho").value, shikaku: $("shikaku").value, chingin: $("chingin").value, within: true };
+    var start = pd(sv), kind = $("kind").value, rd = null;
+    if (c.now === "ri") {
+      if (!$("rishoku").value) { alert("辞めた日を入れてください"); return false; }
+      rd = pd($("rishoku").value);
+      if (rd >= start) { alert("辞めた日が、受講開始日と同じか後になっています"); return false; }
+      var lim = new Date(rd.getFullYear() + 1, rd.getMonth(), rd.getDate());
+      c.within = start <= lim; c.lim = lim;
+    }
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("memo").textContent = ""; $("ng").textContent = "";
+
+    var types = kind === "all" ? ["ippan", "tokutei", "senmon"] : [kind], res = [];
+    if (c.now === "ri") box("辞めた日の翌日から1年の区切り", md(c.lim) + "までに受講開始", "受講開始日は" + md(start) + "。" + (c.within ? "1年以内に入っています。" : "1年を過ぎています。"), !c.within);
+    for (var i = 0; i < types.length; i++) res.push(one(types[i], c, types.length > 1));
+
+    // 期限
+    var mae = new Date(start.getFullYear(), start.getMonth(), start.getDate() - 14);
+    var needPre = types.some(function (t) { return t !== "ippan"; });
+    if (needPre) box("受講前の手続きの期限（特定一般・専門実践）", md(mae) + "ごろまで",
+      "受講開始日の2週間前までに、訓練前キャリアコンサルティングで受け取ったジョブ・カードと受給資格確認票をハローワークに出します。キャリアコンサルティングはその前に受けます（予約が要ることが多いので、早めに）。\n日にちの数え方はハローワークで確かめてください。");
+    var kg = [];
+    if (types.indexOf("ippan") >= 0) kg.push("一般：修了日の翌日から1か月以内");
+    if (types.indexOf("tokutei") >= 0) kg.push("特定一般：修了日の翌日から1か月以内。追加の分は、資格を取った日と就職した日の遅いほうの翌日から1か月以内");
+    if (types.indexOf("senmon") >= 0) kg.push("専門実践：受講中は6か月ごとの区切りの翌日から1か月以内、修了した区切りは修了日の翌日から1か月以内。資格・就職の追加は就職した日（働きながらなら資格を取った日）の翌日から1か月以内。賃金の追加は、その翌日から6か月たった日から6か月以内");
+    box("申請の期限", "修了してから1か月以内が基本", kg.join("\n"));
+
+    // 教育訓練支援給付金
+    if (types.indexOf("senmon") >= 0) {
+      var sOk = c.now === "ri" && $("age").value === "u45" && $("hiru").value === "hiru" && c.past === "nai" && start <= new Date(2027, 2, 31);
+      var sw = [];
+      if (c.now !== "ri") sw.push("受講開始日に雇用保険に入っている（働いている）");
+      if ($("age").value !== "u45") sw.push("受講開始日に45歳以上");
+      if ($("hiru").value !== "hiru") sw.push("夜間・通信など働きながら受けられる講座");
+      if (c.past !== "nai") sw.push("前に教育訓練給付金を受け取ったことがある");
+      if (start > new Date(2027, 2, 31)) sw.push("受講開始日が2027年3月31日より後（今の決まりでは対象外。延びることもあるのでハローワークで確かめる）");
+      var res0 = res.filter(function (r) { return r.t === "senmon"; })[0];
+      if (res0 && !res0.ok) { sOk = false; sw.push("専門実践の教育訓練給付金の対象外"); }
+      var nv = Number($("nichigaku").value), sTxt;
+      if (sOk) {
+        sTxt = "専門実践を昼間に受けていて失業している日に、失業保険の1日の額の60%が出る制度です（受講開始日が2027年3月31日までの暫定）。失業保険の残りがある間・待期・給付制限の間は出ません。失業保険の受給資格がある人は、手続きをしていなくても、辞めた日の翌日から1年間は出ません。2か月に1回、認定日に失業の認定を受けます。\n2か月で出席が8割を切ると、それ以後は出ません。";
+        if (nv > 0 && isFinite(nv)) sTxt = "1日 " + yen(nv) + "×60%＝約" + yen(nv * 0.6) + "（30日で約" + yen(nv * 0.6 * 30) + "）\n" + sTxt;
+        box("教育訓練支援給付金", "対象になる可能性があります", sTxt);
+      } else {
+        box("教育訓練支援給付金", "対象外の見込み", "当てはまらない点：\n・" + sw.join("\n・"), true);
+      }
+    }
+
+    // 次にやること
+    var anyOk = res.some(function (r) { return r.ok; });
+    todo("講座検索システム（厚生労働省）で、受けたい講座が指定を受けているか、どの種類か、指定の期間内に受講開始日が入っているかを確かめる。");
+    if (c.kikan < 3 || c.now === "ri" || c.past !== "nai") todo("対象になるかがはっきりしないときは、受講を申し込む前に、ハローワークに「支給要件照会票」を出して確かめる（電話では受け付けていません）。");
+    if (needPre) {
+      todo("特定一般・専門実践なら、ハローワークで訓練前キャリアコンサルティングの予約をして受け、ジョブ・カードを受け取る。");
+      todo(md(mae) + "ごろまでに、ジョブ・カードと受給資格確認票・本人確認書類・マイナンバーの確認書類などをハローワークに出す。");
+    }
+    if (c.now === "ri" && !c.within && c.encho === "yes") todo("ハローワークに適用対象期間の延長申請書を出す。受講できなかった理由と期間を確かめる書類が要ることがあるので、何を出すかを先に聞く。");
+    todo("学校に払った入学料・受講料の領収書をしまっておく。クレジットカードで払ったときはクレジット契約証明書も。");
+    todo("修了したら、修了日の翌日から1か月以内に、支給申請書・修了証明書（専門実践の受講中は受講証明書）・領収書などをハローワークに出す。郵送なら消印が期限内。");
+    if (!anyOk) todo("今回が対象外の見込みでも、雇用保険に入る期間が足りれば、受講開始日をずらすと対象になることがあります。区切りの日をハローワークで確かめる。");
+
+    // 一言
+    $("memo").textContent = needPre
+      ? "教育訓練給付金を使って、\n" + (kind === "all" ? "講座を受けたいと考えています。" : NAME[kind] + "の講座を受けたいと考えています。") + "\n訓練前キャリアコンサルティングの\n予約をお願いできますか。\n受講開始は" + md(start) + "の予定です。"
+      : "一般教育訓練の講座を\n" + md(start) + "から受けたいと考えています。\n教育訓練給付金の対象になるか、\n支給要件照会をお願いできますか。";
+
+    // 気をつけること
+    var ng = [];
+    ng.push("対象になるのは、厚生労働大臣の指定を受けた講座を、指定の期間内に受講開始した場合だけです。同じ学校でも、講座ごとに指定がちがいます。");
+    ng.push("雇用保険に入っていた期間は、前の会社とのあいだが1年以内なら足せます。ただし、前に教育訓練給付金を受け取った人は、そのときの受講開始日より前の期間は数えません。");
+    if (needPre) ng.push("特定一般・専門実践は、受講前の手続き（キャリアコンサルティングと受給資格確認）をしていないと受け取れません。修了してから気づいても、さかのぼれません。");
+    if (types.indexOf("senmon") >= 0) ng.push("専門実践の賃金が上がった分の追加は、受講開始日に辞めていて、適用対象期間の延長が2年を超える人は出ません。");
+    ng.push("戻る額は、学校に自分で払った入学料・受講料が元になります。会社が受講料の一部を出したときは、その分を引いて申請します。学校からの返金・パソコンの無料提供などがあるときも引きます。");
+    ng.push("失業保険をもらっている人は、認定日が講座の日と重なっても、原則として認定日は変えてもらえません。");
+    ng.push("ここに出した結果は目安です。対象になるか・額は、ハローワークが決めます。");
+    $("ng").textContent = ng.join("\n\n");
+
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("kind").value = "all"; $("start").value = "2027-01-10"; $("cost").value = "300000"; $("years").value = "1"; $("now").value = "ri"; $("rishoku").value = "2026-09-30"; $("kikan").value = "3"; $("past").value = "nai"; $("encho").value = "no"; $("shikaku").value = "wakaranai"; $("chingin").value = "wakaranai"; $("age").value = "u45"; $("hiru").value = "hiru"; make(); }
+})();
+</script>
+</body>
+</html>
