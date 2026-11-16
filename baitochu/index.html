@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険をもらいながら働く：申告と減る額の判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .sec { font-size: .82rem; color: var(--sub); margin: 18px 0 0; border-top: 1px dashed var(--line); padding-top: 12px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険をもらいながら働く：申告と減る額の判定</h1>
+  <p class="lead">失業保険（基本手当）の手続きをしたあとに、アルバイト・手伝いなどで働いたとき（働く予定のとき）、その働き方が「就職」になるか、申告書のカレンダーに付ける印、今回の支給額の目安、後ろにずれる日数、減らない収入の境目、受給期間のうちに受け切れそうかを出します。決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの段階と、働き方の契約</h2>
+    <label class="f" for="st">働いた日（働く日）は、どの期間？</label>
+    <select id="st">
+      <option value="pay">基本手当が出る期間（待期・給付制限が終わった後）</option>
+      <option value="taiki">待期（手続きのあと、働いていない日が7日そろうまで）</option>
+      <option value="seigen">給付制限のあいだ</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="ct">働き方の契約<span class="hint">実際に働いた時間ではなく、契約で決まっている1週間の時間で選びます</span></label>
+    <select id="ct">
+      <option value="tan">単発・その日だけ（続けて働く約束はない）</option>
+      <option value="lt20">週20時間未満の契約</option>
+      <option value="ge20">週20時間以上の契約</option>
+      <option value="unk">まだ決まっていない・わからない</option>
+    </select>
+    <div id="mikomiBox" hidden>
+    <label class="f" for="mk">その契約は、31日以上続く見込み？</label>
+    <select id="mk">
+      <option value="yes">はい（期間の定めなし・31日以上・更新の見込みあり）</option>
+      <option value="no">いいえ（30日以内で終わることが決まっている）</option>
+      <option value="unk">わからない</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="card mh">
+    <h2>2. 受給資格者証の2つの額</h2>
+    <label class="f" for="w">賃金日額（円）<span class="hint">受給資格者証（第1面）の14欄「離職時賃金日額」です</span></label>
+    <input type="number" id="w" min="1" max="30000" inputmode="numeric" placeholder="例：7000">
+    <label class="f" for="b">基本手当日額（円）<span class="hint">受給資格者証（第1面）の19欄です</span></label>
+    <input type="number" id="b" min="1" max="20000" inputmode="numeric" placeholder="例：5201">
+  </div>
+
+  <div class="card">
+    <h2>3. 今回の認定期間に働いた日</h2>
+    <label class="f" for="p">今回の認定期間の日数<span class="hint">前回の認定日から今回の認定日の前日まで。ふつうは28日です</span></label>
+    <input type="number" id="p" min="1" max="60" inputmode="numeric" placeholder="例：28">
+    <label class="f" for="on">1日4時間以上働いた日数<span class="hint">申告書のカレンダーに○を付ける日です。報酬がなくても数えます</span></label>
+    <input type="number" id="on" min="0" max="60" inputmode="numeric" placeholder="例：3">
+    <label class="f" for="off">1日4時間未満で働いた日数<span class="hint">申告書のカレンダーに×を付ける日です（内職・手伝い）</span></label>
+    <input type="number" id="off" min="0" max="60" inputmode="numeric" placeholder="例：2">
+    <label class="f" for="y">4時間未満の日の収入の合計（円）<span class="hint">4時間以上の日の分は入れません。まだ受け取っていなくても、その日の分を入れます</span></label>
+    <input type="number" id="y" min="0" max="10000000" inputmode="numeric" placeholder="例：6000">
+
+    <div class="mh">
+    <p class="sec">ここから下は、受け切れるかを見たいときだけ（空でもかまいません）</p>
+    <label class="f" for="nd">今回の認定日</label>
+    <input type="date" id="nd">
+    <label class="f" for="ed">受給期間の最後の日<span class="hint">ふつうは辞めた日の翌日から1年後の前日です。延長していれば、その日です</span></label>
+    <input type="date" id="ed">
+    <label class="f" for="r">今回の認定のあとに残る日数<span class="hint">所定給付日数から、これまでと今回で支給された日数を引いた日数です</span></label>
+    <input type="number" id="r" min="0" max="400" inputmode="numeric" placeholder="例：60">
+    </div>
+  </div>
+  <button id="make" type="button">判定と目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで伝えるときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※失業認定申告書（様式第14号）第2面の注意（「就職又は就労」は原則1日の労働時間が4時間以上、「内職又は手伝い」は原則4時間未満。報酬がなくても就労になることがある）、ハローワークの案内（1日4時間以上働いた日はその日の支給がなく、その1日分は残日数として残る。受給期間の満了が近いと所定給付日数分を受け取れないことがある。契約上、週の所定労働時間が20時間以上かつ31日以上の雇用見込みがあれば就職）、雇用保険法 第19条（内職・手伝いの収入による減額）と、厚生労働省「雇用保険の基本手当日額の変更～令和8年8月1日から～」（控除額1,429円）をもとにした目安です。控除額は毎年8月1日に変わることがあります。減る額は1円未満を切り捨てて表示しています。内職・手伝いの収入は、収入のあった日（給料日）の直後の認定日に申告するのが一般的なので、働いた期間と申告する期間がずれることがあります。受け切れるかの目安は、今回の認定日の翌日から受給期間の最後の日までの日数と、残る日数を比べただけのものです（認定日の間隔や、これからの就労は入れていません）。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var KOJO = 1429;
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function dd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function syncMikomi() { $("mikomiBox").hidden = $("ct").value !== "ge20"; }
+  $("ct").addEventListener("change", syncMikomi);
+
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var st = $("st").value, ct = $("ct").value, mk = $("mk").value;
+    var ws = $("w").value, bs = $("b").value, ps = $("p").value, ons = $("on").value, offs = $("off").value, ys = $("y").value;
+    if (ps === "" || ons === "" || offs === "") { alert("認定期間の日数と、4時間以上・4時間未満で働いた日数を入れてください（ない日は0）"); return false; }
+    var p = Math.floor(Number(ps)), on = Math.floor(Number(ons)), off = Math.floor(Number(offs));
+    if (!(p >= 1)) { alert("認定期間の日数を、1以上の数で入れてください"); return false; }
+    if (!(on >= 0) || !(off >= 0) || on + off > p) { alert("働いた日数の合計が、認定期間の日数（" + p + "日）を超えないように入れてください"); return false; }
+    var w = 0, b = 0, y = 0;
+    if (off > 0) {
+      if (ws === "" || bs === "" || ys === "") { alert("4時間未満の日があるときは、賃金日額・基本手当日額・その日の収入の合計を入れてください"); return false; }
+    }
+    if (ws !== "" || bs !== "") {
+      if (ws === "" || bs === "") { alert("賃金日額と基本手当日額は、2つとも入れてください"); return false; }
+      w = Math.floor(Number(ws)); b = Math.floor(Number(bs));
+      if (!(w >= 1) || !(b >= 1)) { alert("賃金日額と基本手当日額は、1円以上の数で入れてください"); return false; }
+      if (b > w * 0.8 + 1) { alert("基本手当日額が、賃金日額の80%より多くなっています。14欄（賃金日額）と19欄（基本手当日額）が入れ替わっていないか確かめてください"); return false; }
+    }
+    if (ys !== "") { y = Math.floor(Number(ys)); if (!(y >= 0)) { alert("収入の合計を、0以上の数で入れてください"); return false; } }
+
+    // 1. 就職になるか
+    var shushoku = (ct === "ge20" && mk === "yes");
+    if (shushoku) {
+      box("この働き方は", "「就職」と扱われる見込みです",
+        "契約で週20時間以上、31日以上続く見込みがあると、雇用保険に入る働き方なので、アルバイトやパートという名前でも「就職」になります。働き始める日の前日までに、ハローワークで就職の届けをします（入社日がわかる書類を持っていきます）。その日からは失業保険は出ません。早く決まった人は、再就職手当の対象になることがあります。下の額は、就職する前の日までの参考です。", true);
+    } else if (ct === "ge20") {
+      box("この働き方は", mk === "no" ? "すぐには「就職」にならない見込みです" : "「就職」になるかどうか、先に確かめてください",
+        mk === "no" ? "週20時間以上でも、30日以内で終わることが決まっていれば、雇用保険に入る条件にはあたりません。契約が延びることになったら、その時点で扱いが変わることがあります。働き始める前に、契約書を持ってハローワークで確かめると安心です。働いた日は、時間に応じて○か×で申告します。" : "契約で週20時間以上、31日以上続く見込みがあると「就職」になります。31日以上続くかどうかがはっきりしないときは、働き始める前に、契約の内容を持ってハローワークで確かめてください。", true);
+    } else if (ct === "unk") {
+      box("この働き方は", "契約の時間を先に確かめてください",
+        "契約で週20時間以上、31日以上続く見込みがあると「就職」になります。週の時間は、実際に働いた時間ではなく、契約で決まった時間で見ます。働き始める前に、相手先に週の時間と期間を確かめ、ハローワークに相談してください。下の額は、就職にならない場合の参考です。", true);
+    } else {
+      box("この働き方は", "失業保険を受けながら働ける範囲の見込みです",
+        (ct === "tan" ? "単発の仕事は、雇用保険に入る働き方ではありません。" : "週20時間未満の契約は、雇用保険に入る働き方ではありません（20時間ちょうどは「20時間以上」に入ります）。") + "ただし、働いた日は全部、認定日に申告します。4時間以上の日はその日の分が出ず、4時間未満の日は収入によって減ることがあります。", false);
+    }
+
+    // 2. 申告書の印
+    box("申告書のカレンダーの印", (on + off === 0) ? "今回は印を付ける日はありません" : ("○ " + on + "日・× " + off + "日"),
+      (on + off === 0) ? "働いた日がなければ、1欄は「イ しない」に○です。" : "1欄は「ア した」に○を付け、4時間以上の日に○、4時間未満の日に×を付けます。報酬がなくても、働いた日は付けます。" + (off > 0 ? "×の日の収入は、「収入のあった日（給料日）・収入額・何日分か」を書きます。収入があった日の直後の認定日に申告するのが一般的です。" : ""), false);
+
+    // 3. 期間ごと
+    if (st === "taiki" || st === "unk" || st === "seigen") {
+      if (st === "taiki") {
+        box("待期のあいだに働いた日", on + off > 0 ? "待期が終わる日が後ろにずれることがあります" : "待期への影響はありません",
+          "待期は、手続きのあと、働いていない日が通算7日になるまでの期間です。4時間以上働いた日は、その7日に数えられません。4時間未満の日（内職・手伝い）を待期にどう数えるかは、ハローワークに確かめてください。待期のあいだは、もともと基本手当は出ません。", on > 0);
+      } else if (st === "seigen") {
+        box("給付制限のあいだに働いた日", "申告は要ります",
+          "給付制限のあいだは基本手当が出ないので、この期間の働いた日で額が減ることはありません。それでも、初回の認定日と、給付制限が終わって最初の認定日に出す申告書に、収入があってもなくても、働いた日を正確に書きます。", false);
+      } else {
+        box("先に確かめること", "待期・給付制限が終わっているか",
+          "待期・給付制限のあいだは、もともとその日の基本手当が出ないので、下の額の計算はあてはまりません。終わった日は、受給資格者証やハローワークで確かめられます。下の額は、基本手当が出る期間だった場合の参考です。", true);
+      }
+    }
+
+    // 4. 減る額・支給額
+    var perDay = b, red = 0, none = false, w80 = w * 0.8;
+    if (off > 0) {
+      var x = y / off, over = (x - KOJO) + b - w80;
+      red = over > 0 ? Math.floor(over) : 0; none = over >= b; perDay = none ? 0 : b - red;
+      var xs = yen(Math.floor(x)), w80s = yen(Math.floor(w80));
+      if (none) box("4時間未満の日の基本手当", "その" + off + "日分は出ない見込みです",
+        "1日あたりの収入 " + xs + " から控除額 " + yen(KOJO) + " を引くと、賃金日額の80%（" + w80s + "）以上になるためです。出ない日の分がそのあとどう扱われるかは、ハローワークに確かめてください。", true);
+      else if (red > 0) box("4時間未満の日の基本手当", "1日 " + yen(red) + " 減って " + yen(perDay) + " の見込みです",
+        "（1日あたりの収入 " + xs + " − " + yen(KOJO) + "）＋基本手当日額 " + yen(b) + " が、賃金日額の80%（" + w80s + "）を " + yen(red) + " 超えるので、その分だけ減ります。", false);
+      else box("4時間未満の日の基本手当", "減らない見込みです（1日 " + yen(b) + "）",
+        "（1日あたりの収入 " + xs + " − " + yen(KOJO) + "）＋基本手当日額 " + yen(b) + " が、賃金日額の80%（" + w80s + "）を超えないためです。減らなくても申告は要ります。", false);
+      var safeDay = Math.floor(w80 - b + KOJO);
+      box("4時間未満の日の、減らない収入の境目", "1日あたり " + yen(safeDay) + " まで",
+        off + "日なら合計 " + yen(safeDay * off) + " までです（賃金日額の80% − 基本手当日額 ＋ 控除額）。1日あたり " + yen(Math.ceil(w80 + KOJO)) + " 以上になると、その日の分は出ません。", false);
+    }
+    var fullDays = p - on - off;
+    if (b > 0 && (st === "pay" || st === "unk")) {
+      var total = b * fullDays + perDay * off;
+      box("今回の認定期間の支給額の目安", yen(total),
+        (off > 0 && !none && red === 0 ? yen(b) + "×" + (fullDays + off) + "日（4時間未満の" + off + "日分も減らない）" : yen(b) + "×" + fullDays + "日" + (off > 0 ? (none ? "（4時間未満の" + off + "日分は0円）" : "＋" + yen(perDay) + "×" + off + "日") : "")) + (on > 0 ? "。4時間以上の" + on + "日分は、今回は出ません。" : "。") + "働かなかったときの " + yen(b * p) + " との差は " + yen(b * p - total) + " です。", false);
+    }
+    if (st === "pay" || st === "unk") {
+      box("後ろにずれる日数", on > 0 ? on + "日分" : "ずれる日はありません",
+        on > 0 ? "4時間以上働いた" + on + "日分は、なくなるのではなく、残りの日数として残ります。そのぶん、受け取り終わるのが後ろにずれます。ただし、受給期間の最後の日を過ぎた分は受け取れません。" : "4時間以上働いた日がないので、受け取り終わる時期は変わりません。" + (off > 0 ? "4時間未満の日の分がそのあとどう扱われるかは、ハローワークに確かめてください。" : ""), false);
+    }
+
+    // 5. 受け切れるか
+    var nds = $("nd").value, eds = $("ed").value, rs = $("r").value, risk = false;
+    if (nds !== "" && eds !== "" && rs !== "") {
+      var nd = dd(nds), ed = dd(eds), r = Math.floor(Number(rs));
+      var left = Math.round((ed - nd) / 86400000);
+      if (!(r >= 0)) { alert("残る日数を、0以上の数で入れてください"); return false; }
+      if (left < 0) {
+        box("受給期間のうちに受け切れるか", "受給期間の最後の日が、認定日より前です", "日付を確かめてください。受給期間を過ぎると、残りの日数があっても受け取れません。", true);
+      } else if (r > left) {
+        risk = true;
+        box("受給期間のうちに受け切れるか", "残る " + r + " 日のうち、受け取れない日が出る見込みです",
+          "今回の認定日の翌日から受給期間の最後の日（" + md(ed) + "）までは " + left + " 日です。残る日数が " + (r - left) + " 日多いので、これから働かなくても、その分は受け取れない見込みです。4時間以上働く日が増えると、受け取れない日も増えます。", true);
+      } else {
+        risk = (left - r) < 28;
+        box("受給期間のうちに受け切れるか", "いまのところ受け切れる見込みです（余り " + (left - r) + " 日）",
+          "今回の認定日の翌日から受給期間の最後の日（" + md(ed) + "）までは " + left + " 日、残る日数は " + r + " 日です。" + (left - r) + " 日より多く4時間以上働くと、受け取れない日が出ます。" + (risk ? "余りが少ないので、働く日を増やす前にハローワークに相談すると安心です。" : ""), risk);
+      }
+    } else if (nds !== "" || eds !== "" || rs !== "") {
+      box("受給期間のうちに受け切れるか", "3つとも入れると出ます", "今回の認定日・受給期間の最後の日・残る日数の3つを入れてください。", false);
+    }
+
+    // 次にやること
+    if (shushoku) li("働き始める日の前日までに、ハローワークで就職の届けをする（入社日がわかる書類を持っていく）");
+    else if (ct === "ge20" || ct === "unk") li("働き始める前に、契約の週の時間と期間を確かめ、ハローワークに相談する");
+    li("働いた日ごとに、日付・働いた時間・仕事の中身・収入と給料日をスマホにメモする");
+    if (on + off > 0) li("次の認定日に、申告書のカレンダーへ4時間以上の日は○、4時間未満の日は×を付ける");
+    else li("次の認定日に、申告書の1欄は「イ しない」に○を付ける。これから働いたら、その日のうちに時間と収入をメモする");
+    if (off > 0) li("×の日の収入は、収入のあった日（給料日）・額・何日分かを書く。額が決まっていなければ、そのことを伝える");
+    if (st === "seigen") li("給付制限のあいだに働いた日も、初回と、給付制限が終わって最初の認定日の申告書に書く");
+    if (st === "taiki") li("待期が終わる日を、初回の認定日にハローワークで確かめる");
+    if (none) li("出ない日の分がそのあとどう扱われるかを、認定日にハローワークに確かめる");
+    if (risk) li("受給期間の最後の日が近いので、働く日を増やす前にハローワークに相談する");
+    if (shushoku) li("再就職手当の対象になるかを、就職の届けのときに聞く");
+    li("認定日のあとに、受給資格者証の支給額と、このページの目安を見比べる");
+
+    // メモ
+    var m = "";
+    if (shushoku) m = "○月○日から\n週○時間の契約で\n働くことになりました。\n就職の届けと、\n再就職手当の対象かを\n教えてください。";
+    else if (ct === "ge20" || ct === "unk") m = "週○時間・○か月の\n契約で働く予定です。\n就職の扱いになるか、\n働き始める前に\n確かめたいです。";
+    else if (on + off === 0) m = "今回の認定期間は\n働いていません。";
+    else m = "今回の認定期間に\n4時間以上の日が" + on + "日、\n4時間未満の日が" + off + "日\nありました。" + (off > 0 ? "\n4時間未満の日の収入は\n合計" + yen(y) + "です。" : "") + "\n書き方を確かめさせて\nください。";
+    $("memo").textContent = m;
+    $("ng").textContent = "・働いた日は、報酬がなくても申告する\n・減らない額でも、収入の申告は要る\n・申告しないと不正受給になり、受け取った額の返還とさらに最大2倍の納付を命じられることがある\n・週20時間は契約の時間で見る（20時間ちょうどは以上）\n・4時間以上の日の分は残るが、受給期間を過ぎた分は受け取れない\n・控除額は毎年8月に変わることがある\n・決めるのはハローワーク";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  syncMikomi();
+  if (DEMO) {
+    $("st").value = "pay"; $("ct").value = "tan"; syncMikomi();
+    $("w").value = "7000"; $("b").value = "5201"; $("p").value = "28"; $("on").value = "3"; $("off").value = "2"; $("y").value = "6000";
+    $("nd").value = "2026-12-01"; $("ed").value = "2027-03-31"; $("r").value = "60";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
