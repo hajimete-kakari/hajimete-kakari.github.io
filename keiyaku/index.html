@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>契約社員・パート・派遣で、再就職手当の「1年を超える見込み」にあたるか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e; --mid: #fbf1d9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578; --mid: #3a3322;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .big.mid { background: var(--mid); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #check li, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>契約社員・パート・派遣で、再就職手当の「1年を超える見込み」にあたるか</h1>
+  <p class="lead">再就職手当には「1年を超えて勤務することが確実と認められること」という条件があります。次の仕事の契約の書き方（期間・更新）と働き方から、この条件にあたりそうかと、入社前に会社へ確かめることを出します。ほかの条件（残りの日数・待期・前の会社でないことなど）は見ません。対象かどうかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 契約の期間</h2>
+    <label class="f" for="kikan">労働条件通知書（または雇用契約書）の「契約期間」は？<span class="hint">内定のときにもらう書面の、いちばん上のほうにある欄です。まだもらっていなければ、求人票の「雇用期間」で見ます</span></label>
+    <select id="kikan">
+      <option value="none">期間の定めなし</option>
+      <option value="long">期間の定めあり：1年を超える期間（例：2年）</option>
+      <option value="short">期間の定めあり：1年以下（例：3か月・6か月・1年）</option>
+      <option value="unk">まだ書面がなく、わからない</option>
+    </select>
+    <label class="f" for="kosin">「契約の更新」の欄は？<span class="hint">期間が1年以下の人だけ。ほかの人はそのままで大丈夫です</span></label>
+    <select id="kosin">
+      <option value="-">（あてはまらない）</option>
+      <option value="auto">自動的に更新する／原則として更新する</option>
+      <option value="maybe">更新する場合がある（業務量・会社の判断などによる）</option>
+      <option value="goal">一定の目標（成績・売上など）を達成したら更新する</option>
+      <option value="no">更新しない（契約はこの期間だけ）</option>
+      <option value="unk">書いていない・わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 働き方</h2>
+    <label class="f" for="kata">雇ってくれる会社と、働く場所の関係は？</label>
+    <select id="kata">
+      <option value="direct">働く会社に直接雇われる</option>
+      <option value="haken_ok">登録型の派遣：派遣先と働き始める日が決まっている</option>
+      <option value="haken_no">登録型の派遣：登録しただけで、派遣先はまだ決まっていない</option>
+    </select>
+    <label class="f" for="hoken">週の所定の労働時間は20時間以上で、31日以上働く見込み？<span class="hint">雇用保険に入る目安です</span></label>
+    <select id="hoken">
+      <option value="yes">はい</option>
+      <option value="no">いいえ（週20時間未満、または31日未満）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="tenseki">入社して1年以内に、会社の都合で別の会社へ移る予定（転籍・出向）は？</label>
+    <select id="tenseki">
+      <option value="none">ない・聞いていない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">あたるかを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>書面で確かめるところ</h3>
+    <ul class="tl" id="check"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法施行規則 第82条の2（1年を超えて引き続き雇用されることが確実であると認められる職業に就いた受給資格者）、ハローワークの案内（雇用形態は問わない・1年以下の期間でも契約の更新で1年を超えて雇用されることが確実と見込まれる場合は対象／更新に一定の目標達成が条件になっている場合は対象外／登録型派遣で具体的な派遣予定がない場合は対象外／1年以内に事業主の都合で転籍・出向の予定があると当てはまらない場合がある／原則として雇用保険に入る働き方であること）、厚生労働省の再審査請求の裁決例（「業務上特に必要な場合は更新することがある」の契約で、会社が1年を超えて雇う見込みはないと証明していた例は、確実とはいえないとされた）をもとにした目安です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, cls) {
+    var el = document.createElement("div"); el.className = "big" + (cls ? " " + cls : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  var LV = { ok: "あたる見込み", mid: "会社とハローワークに確かめる", no: "あたらない見込み" };
+
+  function judge(kikan, kosin, kata, hoken, tenseki) {
+    var items = [];
+    // 期間と更新
+    if (kikan === "none") items.push(["契約の期間", "ok", "期間の定めのない雇用は、この条件で迷うことの少ない形です。"]);
+    else if (kikan === "long") items.push(["契約の期間", "ok", "契約の期間そのものが1年を超えているので、この点は満たす形です。"]);
+    else if (kikan === "unk") items.push(["契約の期間", "mid", "期間の定めがあるか、何か月の契約かで判断が変わります。入社前に、労働条件通知書で契約期間と更新の欄を見せてもらってください。"]);
+    else {
+      if (kosin === "auto") items.push(["1年以下の契約＋更新", "ok", "ハローワークの案内では、1年以下の期間でも、契約の更新で1年を超えて雇用されることが確実と見込まれる場合は対象です。申請のときに会社が「1年を超えて雇う見込み」と答えられるか、入社前に確かめておくと安心です。"]);
+      else if (kosin === "maybe") items.push(["1年以下の契約＋更新", "mid", "「更新する場合がある」だけでは、1年を超えることが確実かどうか決まりません。厚生労働省の裁決例では、「業務上特に必要な場合は更新することがある」の契約で、会社が1年を超えて雇う見込みはないと証明していたため、確実とはいえないとされました。会社が1年を超えて雇うつもりかを確かめてください。"]);
+      else if (kosin === "goal") items.push(["1年以下の契約＋更新", "no", "ハローワークの案内では、1年以下の期間で、更新に一定の目標達成が条件になっている場合は、この条件にあたらないとされています。"]);
+      else if (kosin === "no") items.push(["1年以下の契約＋更新", "no", "1年以下の期間で更新しない契約は、1年を超えて働く見込みになりません。"]);
+      else items.push(["1年以下の契約＋更新", "mid", "期間が1年以下のときは、更新の見込みで判断が変わります。更新の欄が空いている・聞いていないときは、入社前に会社に確かめてください。"]);
+    }
+    // 働き方
+    if (kata === "haken_no") items.push(["働き方", "no", "ハローワークの案内では、登録型の派遣で、具体的な派遣の予定がない場合は対象外とされています。派遣先と働き始める日が決まってから、もう一度見てください。"]);
+    else if (kata === "haken_ok") items.push(["働き方", "ok", "登録型の派遣でも、派遣先が決まっていれば、この点は問題になりにくい形です。ただし雇い主は派遣会社なので、契約の期間と更新は派遣会社との契約で見ます。"]);
+    else items.push(["働き方", "ok", "直接雇われる働き方です。正社員でなくても、雇用の形そのものでは外れません。"]);
+    // 雇用保険
+    if (hoken === "no") items.push(["雇用保険に入る働き方か", "no", "再就職手当は、原則として雇用保険に入る働き方（週20時間以上・31日以上の見込み）での就職が対象です。"]);
+    else if (hoken === "unk") items.push(["雇用保険に入る働き方か", "mid", "週の所定の労働時間が20時間以上か、労働条件通知書の「所定労働時間」で確かめてください。"]);
+    else items.push(["雇用保険に入る働き方か", "ok", "雇用保険に入る目安を満たしています。"]);
+    // 転籍・出向
+    if (tenseki === "yes") items.push(["1年以内の転籍・出向", "mid", "ハローワークの案内では、1年以内に会社の都合で転籍・出向の予定があると、この条件にあたらない場合があるとされています。予定の中身をハローワークで確かめてください。"]);
+    return items;
+  }
+  window.__judge = judge;
+
+  function make() {
+    $("sum").innerHTML = ""; $("check").innerHTML = ""; $("todo").innerHTML = "";
+    var kikan = $("kikan").value, kosin = $("kosin").value, kata = $("kata").value, hoken = $("hoken").value, tenseki = $("tenseki").value;
+    if (kikan === "short" && kosin === "-") kosin = "unk";
+    var items = judge(kikan, kosin, kata, hoken, tenseki);
+    var worst = "ok";
+    items.forEach(function (it) { if (it[1] === "no") worst = "no"; else if (it[1] === "mid" && worst !== "no") worst = "mid"; });
+    var head = worst === "no" ? "このままでは「1年を超える見込み」にあたらない見込みです" : worst === "mid" ? "入社前に、会社とハローワークに確かめることがあります" : "「1年を超える見込み」にはあたる見込みです";
+    var sub = worst === "no" ? "下の理由の点が、この条件にあたりません。条件が変わる（更新の約束・派遣先が決まるなど）なら、もう一度見てください。" : worst === "mid" ? "あたるかどうかを決めるのはハローワークです。入社日の前に確かめておくと、申請のときに慌てずに済みます。" : "この条件では外れない形です。ほかの条件（残りの日数・待期・前の会社でないことなど）も、すべて満たす必要があります。";
+    box("再就職手当の「1年を超える見込み」は？", head, sub, worst === "ok" ? "" : worst);
+    items.forEach(function (it) { box(it[0], LV[it[1]], it[2], it[1] === "ok" ? "" : it[1]); });
+
+    li("check", "労働条件通知書の「契約期間」：期間の定めがあるか、あれば何か月か");
+    if (kikan === "short" || kikan === "unk") li("check", "「契約の更新の有無」と「更新の判断の基準」：自動更新か、場合によるか、目標の達成が条件か");
+    li("check", "「所定労働時間」：週20時間以上か");
+    if (kata !== "direct") li("check", "派遣会社との契約の期間と、派遣先・働き始める日");
+
+    if (worst === "no") {
+      li("todo", "理由の点が変えられないか（更新の約束・派遣先・労働時間）、入社前に会社に聞く");
+      li("todo", "変えられないときは、再就職手当は出ない見込み。迷うところはハローワークで聞く");
+      li("todo", "出ないときも、入社日の前日までの失業の認定を受けて、就職の届け出をする");
+    } else {
+      li("todo", "入社日の前に、労働条件通知書を受け取って、上の欄を見る");
+      if (worst === "mid") li("todo", "下の一言で、会社に1年を超えて雇うつもりかを聞く。答えをメモしてハローワークで確かめる");
+      li("todo", "入社日の前日までの失業の認定を受けて、就職の届け出をする");
+      li("todo", "再就職手当の申請書をもらい、会社に書いてもらう欄を頼む。申請は就職した日の翌日から1か月以内");
+    }
+
+    var m;
+    if (kata === "haken_no") m = "派遣先と、働き始める\n日が決まったら\n教えてください。\n契約の期間と、更新の\n見込みも知りたいです。";
+    else m = "内定をいただき\nありがとうございます。\n雇用保険の手続きの\nために、契約の期間と\n更新の見込みを\n教えてください。\n1年を超えて働ける\n見込みでしょうか。";
+    $("memo").textContent = m;
+    $("ng").textContent = "・正社員でなくても対象になりうる。形ではなく、1年を超える見込みで見る\n・1年以下の契約は、更新の見込みで決まる\n・「更新する場合がある」だけでは確実とはいえないことがある\n・目標の達成が更新の条件なら、あたらない\n・派遣は派遣先が決まってから\n・決めるのはハローワーク。入社日の前に聞く";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("kikan").value = "short"; $("kosin").value = "maybe"; $("kata").value = "direct"; $("hoken").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
