@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>休職中の社会保険料の払い方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=month], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  button.copy { width: auto; font-size: .85rem; padding: 6px 14px; margin-top: 8px; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big.w { background: var(--warn-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  ol.tl { list-style: none; padding: 0; margin: 0; }
+  ol.tl li { border-left: 3px solid var(--accent); padding: 4px 0 8px 12px; margin-left: 4px; font-size: .92rem; }
+  ol.tl .d { font-weight: 700; display: block; }
+  ul.lst { margin: 0; padding-left: 1.2em; font-size: .92rem; }
+  .bun { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl .d, .mihon #tl .t, .mihon #way, .mihon #bun, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>休職中の社会保険料、給料が出ない月はどう払う？</h1>
+  <p class="lead">給与明細の保険料の額と、給料が出ない月の数を入れると、自分で用意する額の目安と、会社に確かめる払い方、人事に送る文面がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 明細の額を入れる</h2>
+    <label class="f" for="ken">健康保険料（円）<span class="hint">休む前の給与明細の「健康保険」の欄。40〜64歳の「介護保険」の欄など、ほかに健康保険と一緒の欄があれば足して入れる</span></label>
+    <input type="number" id="ken" inputmode="numeric" min="0" placeholder="例：15000">
+    <label class="f" for="nen">厚生年金保険料（円）<span class="hint">同じ明細の「厚生年金」の欄</span></label>
+    <input type="number" id="nen" inputmode="numeric" min="0" placeholder="例：27450">
+  </div>
+  <div class="card">
+    <h2>2. 休む月を入れる</h2>
+    <label class="f" for="start">給料が出なくなる最初の月<span class="hint">その月の分の保険料から、天引きできなくなると考える月。締め日によってずれるので、迷ったら休み始めた月</span></label>
+    <input type="month" id="start">
+    <label class="f" for="cnt">給料がまったく出ない月の数<span class="hint">わからなければ、医師の見立てや休職の予定の月数</span></label>
+    <select id="cnt"></select>
+  </div>
+  <button id="make" type="button">払い方を見る</button>
+  <p class="err" id="err" hidden></p>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>自分で払う形になる月の分</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>会社に確かめる払い方</h3>
+    <ul class="lst" id="way"></ul>
+    <h3>人事に送る文面</h3>
+    <div class="bun" id="bun"></div>
+    <button class="copy" id="cp" type="button">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※会社の健康保険・厚生年金の保険料は、本人と会社が半分ずつ負担し、会社がまとめて納めます（健康保険法第161条）。会社が給料から引けるのは、給料を払うときに、前月の分です（同第167条）。給料が出ない月は引く元がないため、本人の分を別に払う形になります。保険料がかからなくなるのは、産前産後休業・育児休業などの決まった場合で、病気やけがでの休職は入っていません（同第158条・第159条、日本年金機構）。雇用保険料は支払われた給料にかかるため、給料が出ない月はかかりません。健康保険組合の人も、払い方は会社に確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return Math.round(n).toLocaleString("ja-JP") + "円"; }
+  function lbl(y, m) { return y + "年" + m + "月"; }
+  var sel = $("cnt");
+  for (var i = 1; i <= 18; i++) { var o = document.createElement("option"); o.value = i; o.textContent = i + "か月"; sel.appendChild(o); }
+  sel.value = "3";
+  function big(par, cls, k, v, s) {
+    var el = document.createElement("div"); el.className = "big" + (cls ? " " + cls : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s; par.appendChild(el);
+  }
+  function li(ol, d, t) { var e = document.createElement("li"); e.innerHTML = '<span class="d"></span><span class="t"></span>'; e.querySelector(".d").textContent = d; e.querySelector(".t").textContent = t; ol.appendChild(e); }
+  function make() {
+    var ken = parseFloat($("ken").value), nen = parseFloat($("nen").value), st = $("start").value, n = parseInt(sel.value, 10);
+    $("err").hidden = true;
+    if (!(ken >= 0) || !(nen >= 0) || (ken + nen) <= 0 || !st) {
+      $("err").textContent = "健康保険料・厚生年金保険料の額と、給料が出なくなる最初の月を入れてください。";
+      $("err").hidden = false; $("result").hidden = true; return;
+    }
+    var a = st.split("-"), y = +a[0], m = +a[1];
+    var mon = ken + nen, total = mon * n;
+    var endY = y, endM = m + n - 1; while (endM > 12) { endM -= 12; endY++; }
+    var nxY = endY, nxM = endM + 1; if (nxM > 12) { nxM = 1; nxY++; }
+    var sm = $("sum"); sm.innerHTML = "";
+    big(sm, "", "1か月の自分の分", yen(mon), "健康保険 " + yen(ken) + "＋厚生年金 " + yen(nen) + "。給料が出なくても、明細と同じ額がかかり続けます（保険料は給料の額ではなく、決まった等級＝標準報酬月額で決まるため）。");
+    big(sm, "", n + "か月分で用意する額の目安", yen(total), lbl(y, m) + "分から" + lbl(endY, endM) + "分まで。傷病手当金を受け取る人も、この分の払い方を会社と決めておきます。");
+    big(sm, "w", "かからないもの", "雇用保険料は、この間かかりません", "雇用保険料は支払われた給料にかかるためです。住民税は保険料とは別で、休職中も払います（払い方は会社に確かめる）。");
+    var ol = $("tl"); ol.innerHTML = "";
+    var cy = y, cm = m;
+    for (var k = 0; k < n; k++) {
+      var py = cy, pm = cm + 1; if (pm > 12) { pm = 1; py++; }
+      li(ol, lbl(cy, cm) + "分　" + yen(mon), "ふだんなら" + lbl(py, pm) + "の給料から引く分。給料が出ないので、自分で払う形になります");
+      cm++; if (cm > 12) { cm = 1; cy++; }
+    }
+    li(ol, lbl(nxY, nxM) + "分から", "復職して給料が出れば、また給料から引かれる形に戻ります");
+    var w = $("way"); w.innerHTML = "";
+    [
+      "毎月、会社の口座に振り込む形：月に" + yen(mon) + "。振込先・期日・振込手数料をどちらが持つかを聞く",
+      "会社が立て替えて、復職後の給料から引く形：合計" + yen(total) + "。1回でまとめて引くと手取りが大きく減るので、何回に分けて引けるかを聞く",
+      "傷病手当金が振り込まれたら、まとめて払う形：手当金の申請から振込まで時間がかかることがあるので、払う時期を会社と決めておく",
+      "退職することになったとき、立て替えの残りをどう精算するか"
+    ].forEach(function (t) { var e = document.createElement("li"); e.textContent = t; w.appendChild(e); });
+    $("bun").textContent =
+      "お疲れさまです。休職中の社会保険料についてご相談です。\n" +
+      lbl(y, m) + "分から" + n + "か月ほど給料が出ない見込みのため、その間の健康保険・厚生年金の本人負担分（明細では月" + yen(mon) + "）の払い方を教えていただけますか。\n" +
+      "毎月の振込か、復職後の精算かを確かめたいです。振込の場合は、振込先と期日もお願いします。\n" +
+      "お手数をおかけしますが、よろしくお願いいたします。";
+    var ng = [
+      "・病気やけがの休職は、保険料が0円にはならない。0円になるのは産休・育休など決まった場合だけ",
+      "・給料が一部出る月は、その給料から引かれる。足りない分を払うかは会社に聞く",
+      "・9月分から保険料の額が見直されることがある（年1回の見直し）。届いた通知や会社の連絡で額を直す",
+      "・40歳になる月（誕生日の前日がある月）から介護保険料が加わる。休職中に40歳になる人は額が上がる"
+    ];
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+  }
+  $("cp").addEventListener("click", function () {
+    var t = $("bun").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("make").addEventListener("click", function () { make(); if (!DEMO && !$("result").hidden) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("ken").value = "15000"; $("nen").value = "27450"; $("start").value = "2026-12"; sel.value = "3"; make(); }
+})();
+</script>
+</body>
+</html>
