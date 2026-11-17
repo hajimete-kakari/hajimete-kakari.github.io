@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の納付要件、数える月と満たすかの目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], input[type=month], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .92rem; margin-top: 12px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の納付要件、数える月と満たすかの目安</h1>
+  <p class="lead">生年月日と初診日を入れると、保険料の納付要件で数える月（初診日の月の前々月まで）、3分の2の線、直近1年の12か月がどこからどこまでかを出します。未納の月数を入れると、満たしていそうかの目安も出ます。日本年金機構の案内と国民年金法で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="birth">生年月日</label>
+    <input type="date" id="birth">
+    <label class="f" for="sho">初診日<span class="hint">その病気やけがで、はじめて医師（歯科医師）にかかった日。診断名がついた日ではありません</span></label>
+    <input type="date" id="sho">
+    <label class="f" for="kosei">20歳になる前から会社員などで厚生年金に入っていたなら、入った月<span class="hint">なければ空けておきます</span></label>
+    <input type="month" id="kosei">
+  </div>
+
+  <div class="card">
+    <h2>2. 記録の月数（ねんきんネットや年金事務所で見る）</h2>
+    <label class="f" for="minou">数える期間のうち、未納の月数<span class="hint">わからなければ空けておきます。免除・猶予・学生納付特例の月は未納に入れません</span></label>
+    <input type="number" id="minou" min="0" inputmode="numeric">
+    <label class="f" for="nashi">数える期間のうち、どの年金にも入っていなかった月数<span class="hint">海外に住んでいた月や、60歳を過ぎて入っていない月など。なければ0</span></label>
+    <input type="number" id="nashi" min="0" inputmode="numeric" value="0">
+    <label class="f" for="one">直近1年（下に出る12か月）に、未納の月は</label>
+    <select id="one">
+      <option value="unknown">わからない</option>
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">数える月と目安を見る</button>
+  <div class="err" id="err" hidden></div>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>年金事務所で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害基礎年金の受給要件」「障害年金ガイド」「国民年金保険料の免除制度・納付猶予制度」と国民年金法5条・30条で出した目安です（初診日の前日において、初診日のある月の前々月までの加入期間の3分の2以上が納付・免除のどちらか、または、初診日が令和18年3月末日までで初診日に65歳未満なら、前々月までの直近1年間に未納がないこと。20歳前で年金に入っていない期間に初診日があるときは納付要件なし。病気やけがのあとにさかのぼって免除を申請しても納付要件には入らない）。初診日が平成3年4月末日までのときは要件が異なります。厚生年金の加入期間は会社が届けた記録で決まるので、月数は記録で確かめてください。受け取れるかどうか（障害の状態に当たるか）や年金額は判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +(p[2] || 1)); }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日"; }
+  function ym(i) { return Math.floor(i / 12) + "年" + (i % 12 + 1) + "月"; }
+  function rg(a, z) { return a === z ? ym(a) : ym(a) + "〜" + ym(z); }
+  function idx(dt) { return dt.getFullYear() * 12 + dt.getMonth(); }
+  function err(t) { $("err").textContent = t; $("err").hidden = false; $("result").hidden = true; }
+  function make() {
+    $("err").hidden = true;
+    var b = d($("birth").value), s = d($("sho").value), k = $("kosei").value ? d($("kosei").value) : null;
+    var mv = $("minou").value.trim(), nv = $("nashi").value.trim(), one = $("one").value;
+    if (!b) { err("生年月日を入れてください。"); return false; }
+    if (!s) { err("初診日を入れてください。"); return false; }
+    if (s <= b) { err("初診日は、生年月日より後の日を入れてください。"); return false; }
+    var minou = mv === "" ? null : parseInt(mv, 10), nashi = nv === "" ? 0 : parseInt(nv, 10);
+    if ((minou !== null && (isNaN(minou) || minou < 0)) || isNaN(nashi) || nashi < 0) { err("月数は0以上の数で入れてください。"); return false; }
+    // 20歳に達した日＝20歳の誕生日の前日
+    var reach20 = new Date(b.getFullYear() + 20, b.getMonth(), b.getDate() - 1);
+    var reach65 = new Date(b.getFullYear() + 65, b.getMonth(), b.getDate() - 1);
+    var start = idx(reach20);
+    if (k) { if (idx(k) < start) start = idx(k); }
+    if (k && idx(k) >= idx(reach20)) k = null;
+    var endI = idx(s) - 2; // 前々月
+    $("sum").innerHTML = "";
+    function box(kk, v, t, no) {
+      var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+      el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+      el.querySelector(".k").textContent = kk; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+      $("sum").appendChild(el);
+    }
+    var memoTail = "";
+    if (s < new Date(1991, 4, 1)) {
+      box("初診日が平成3年4月末日まで", "要件が異なります", "このページの数え方とは別の決まりになります。年金事務所で、初診日を伝えて確かめてください。", true);
+      finish("初診日が" + f(s) + "です。\n平成3年4月より前なので、\n納付要件の数え方を\n教えてください。");
+      return true;
+    }
+    var before20 = s < reach20 && !k;
+    if (before20) {
+      box("初診日が20歳になる前", "納付要件はありません", "20歳前の、年金に入っていない期間に初診日があるときは、保険料の納付要件はありません（20歳前の障害基礎年金。本人の所得による支給の制限などは別にあります）。", false);
+      finish("初診日が20歳になる前の\n" + f(s) + "です。\n20歳前の障害基礎年金として\n請求する準備を教えてください。");
+      return true;
+    }
+    var total = endI - start + 1 - nashi;
+    if (endI < start) {
+      box("数える月", "前々月までに加入の月がありません", "初診日の月の前々月までに、年金に入っていた月がありません。この場合の扱いは、年金事務所で確かめてください。", true);
+      finish("初診日が" + f(s) + "で、\n前々月までに加入の月が\nありません。\n納付要件の扱いを教えてください。");
+      return true;
+    }
+    if (total <= 0) { err("入っていなかった月数が、数える期間より多くなっています。月数を見直してください。"); return false; }
+    var allowMax = Math.floor(total / 3); // 未納がこの月数までなら3分の2以上
+    var need = total - allowMax;
+    box("数える期間", rg(start, endI), "初診日（" + f(s) + "）の月の前々月までです。始まりは" + (k ? "厚生年金に入った月" : "20歳に達した日（20歳の誕生日の前日）の月") + "。この間の加入の月は" + total + "か月" + (nashi ? "（入っていなかった" + nashi + "か月を引いた数）" : "") + "です。記録の数え方は、年金事務所で確かめてください。", false);
+    var ok23 = null;
+    if (minou === null) {
+      box("3分の2の線", "未納が" + allowMax + "か月までなら満たします", "納付と免除（猶予・学生納付特例を含む）をあわせて" + need + "か月以上あれば、3分の2以上です。未納の月数を入れると、目安を出します。", false);
+    } else if (minou > total) {
+      err("未納の月数が、数える期間の月数（" + total + "か月）より多くなっています。"); return false;
+    } else {
+      ok23 = minou <= allowMax;
+      box("3分の2の要件", ok23 ? "満たしていそうです" : "満たしていないかもしれません", "未納" + minou + "か月で、納付と免除が" + (total - minou) + "か月（" + total + "か月のうち）。3分の2の線は未納" + allowMax + "か月までです。" + (ok23 ? "" : "下の直近1年の要件を満たせば、そちらで足ります。"), !ok23);
+    }
+    var y1s = endI - 11;
+    var tokurei = s <= new Date(2036, 2, 31) && s < reach65;
+    if (!tokurei) {
+      box("直近1年の要件", "使えません", s > new Date(2036, 2, 31) ? "直近1年の要件は、初診日が令和18年3月末日までの人の決まりです。" : "直近1年の要件は、初診日に65歳未満の人の決まりです。初診日は65歳以後なので、3分の2の要件で見ます。", true);
+    } else {
+      var t = (y1s < start ? "見る月は" : "見る12か月は") + rg(Math.max(y1s, start), endI) + "です。" + (y1s < start ? "加入の月が12か月に足りないので、加入した月からを見ます。扱いは年金事務所で確かめてください。" : "");
+      if (one === "no") box("直近1年の要件", "満たしていそうです", t + "この間に未納がなければ、3分の2に足りなくても、こちらで足ります。", false);
+      else if (one === "yes") box("直近1年の要件", "満たしていないかもしれません", t + "この12か月に1か月でも未納があると、この要件は満たしません。", true);
+      else box("直近1年の要件", rg(Math.max(y1s, start), endI) + "に未納がないか", t + "記録でこの間を見て、未納が1か月もなければ満たします。", false);
+    }
+    var oneOk = tokurei && one === "no";
+    if (ok23 === true || oneOk) {
+      box("まとめ", "納付要件は満たしていそうです", (ok23 ? "3分の2の要件" : "") + (ok23 && oneOk ? "と" : "") + (oneOk ? "直近1年の要件" : "") + "で足りていそうです。最後は年金事務所の記録の確認で決まります。次は、初診日の証明と診断書の準備です。", false);
+    } else if (ok23 === false && (!tokurei || one === "yes")) {
+      box("まとめ", "どちらも満たしていないかもしれません", "記録の見まちがい（免除や学生納付特例の月を未納と数えている、厚生年金の月が抜けている）がないか、年金事務所で記録を一緒に見てもらいます。初診日のあとに払った分や、あとから申請した免除は数えられません。", true);
+    } else {
+      box("まとめ", "記録を見て確かめる", "未納の月数や、直近1年の未納がわかれば、目安が出ます。ねんきんネットか年金事務所で、上の期間の記録を見ます。", false);
+    }
+    var m = "障害年金の請求を考えています。\n初診日は" + f(s) + "です。\n" + (start === endI ? ym(start) + "の" : ym(start) + "から" + ym(endI) + "までの") + "\n納付の記録で、\n納付要件を満たしているか\n確かめていただけますか。";
+    finish(m);
+    return true;
+  }
+  function finish(m) {
+    $("memo").textContent = m + "\n初診日がずれると数える月も\n変わるので、その場合も\n教えてください。";
+    $("ng").textContent = "・数えるのは、初診日の前日の時点で納めていた（免除されていた）月だけ。初診日のあとに払っても間に合わない\n・病気やけがのあとに、さかのぼって免除を申請しても、納付要件には入らない\n・一部免除（4分の1など）は、残りを払っていない月は未納\n・会社員の月（厚生年金）と、会社員の家族として扶養に入っていた月（3号）は納めた月\n・初診日がずれると、数える月も変わる。初診日は受診状況等証明書などで確かめる\n・受け取れるかどうか（障害の状態に当たるか）は、このページでは決まらない";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("birth").value = "1995-06-15"; $("sho").value = "2026-10-20"; $("minou").value = "30"; $("nashi").value = "0"; $("one").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
