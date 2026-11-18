@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金の金融資産300万円、何を数える？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .fam { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 12px; }
+  .fam:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+  .fam .t { font-weight: 700; font-size: .92rem; margin-bottom: 4px; }
+  .fam label { display: block; font-size: .85rem; color: var(--sub); margin: 6px 0 2px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  button.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); margin-top: 12px; padding: 9px; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } button.sub { color: var(--accent); } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.who { margin: 0; padding-left: 1.2em; } ul.who li { margin-bottom: 4px; font-size: .92rem; }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .row2 { display: flex; gap: 8px; } .row2 > div { flex: 1; min-width: 0; }
+  [hidden] { display: none !important; }
+  .mihon .fam:nth-child(n+3), .mihon .lead, .mihon .note { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #who li, .mihon #todo li, .mihon #memo, .mihon #ng, .mihon #ask li { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金の金融資産300万円、何を数える？</h1>
+  <p class="lead">求職者支援制度の月10万円の給付金（職業訓練受講給付金）を考えている人向けです。自分と家族の現金・預貯金・株などの額と、住まい以外の土地・建物を持っているかを入れると、金融資産に数える人とお金、合計が300万円以下に収まるかの目安を出します。給付金が出るかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 自分のお金（今の残高）</h2>
+    <div class="row2">
+      <div><label class="f" for="cash">現金<span class="hint">手もとのお金（円）</span></label>
+      <input type="number" id="cash" min="0" inputmode="numeric" value="0"></div>
+      <div><label class="f" for="bank">預貯金<span class="hint">全部の口座の合計（円）</span></label>
+      <input type="number" id="bank" min="0" inputmode="numeric" value="0"></div>
+    </div>
+    <label class="f" for="stock">株・投資信託・債券<span class="hint">今の評価額のおおよそ（円）</span></label>
+    <input type="number" id="stock" min="0" inputmode="numeric" value="0">
+    <label class="f" for="gray">数えるか迷うもの<span class="hint">生命保険を解約したときに戻るお金、iDeCo、暗号資産など。合計には入れず、別に出します（円）</span></label>
+    <input type="number" id="gray" min="0" inputmode="numeric" value="0">
+  </div>
+
+  <div class="card">
+    <h2>2. 住まい以外の土地・建物</h2>
+    <label class="f" for="land">自分の名義で、今住んでいるところ以外の土地・建物を持っていますか</label>
+    <select id="land">
+      <option value="no">持っていない</option>
+      <option value="yes">持っている（貸している部屋・空き家・相続した実家など）</option>
+      <option value="share">親族と共有で持っている</option>
+      <option value="fam">家族の名義のものはあるが、自分の名義はない</option>
+      <option value="unk">わからない（相続の手続きが途中など）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 家族のお金</h2>
+    <p class="note" style="margin:0 0 8px">住民票が同じ人と、仕送りなどでつながっている人を入れます。額は、現金・預貯金・株などの合計です。</p>
+    <div id="fams"></div>
+    <button class="sub" id="add" type="button">家族を1人ふやす</button>
+  </div>
+  <button id="make" type="button">金融資産を数える</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <h3>数える人・数えない人</h3>
+    <ul class="who" id="who"></ul>
+    <div id="sum" style="margin-top:12px"></div>
+    <h3>窓口で確かめること</h3>
+    <ul class="who" id="ask"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度・訓練受講のしおり」の支給要件（世帯全体の金融資産が300万円以下・現在住んでいるところ以外に土地・建物を所有していない。「金融資産」は現金、預貯金、債券、株式及び投資信託等。「世帯」は本人のほか、同居または生計を一つにする別居の配偶者・子・父母）と、職業訓練の実施等による特定求職者の就職の支援に関する法律施行規則11条1項3号・4号で出した目安です。保険・iDeCo・暗号資産などが金融資産に入るか、「生計を一つにする」に当たるかは、ハローワークが決めます。収入・出席など、ほかの要件は見ていません。公共職業訓練を失業保険（基本手当）を受けながら受ける人は、決まりが別です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var REL = [["haigu", "配偶者（籍を入れていない夫・妻も）"], ["ko", "子（未成年の子も）"], ["oya", "自分の父・母"], ["giri", "配偶者の父・母"],
+    ["kyodai", "兄弟姉妹"], ["sofu", "祖父・祖母"], ["sonota", "そのほか（おじ・おば・孫など）"]];
+  var LIVE = [["dokyo", "いっしょに住んでいる"], ["seikei", "別に住むが、仕送りなどで生計が同じ"], ["betsu", "別に住み、生計も別"]];
+  var LIMIT = 3000000;
+  var count = 0;
+  function opt(list) { return list.map(function (x) { return '<option value="' + x[0] + '">' + x[1] + '</option>'; }).join(""); }
+  function addFam(r, l, y) {
+    count++;
+    var d = document.createElement("div"); d.className = "fam";
+    d.innerHTML = '<div class="t">家族' + count + '</div>' +
+      '<label>続柄</label><select class="r">' + opt(REL) + '</select>' +
+      '<label>住まい</label><select class="l">' + opt(LIVE) + '</select>' +
+      '<label>現金・預貯金・株などの合計（円。なければ0）</label><input type="number" class="y" min="0" inputmode="numeric" value="0">';
+    $("fams").appendChild(d);
+    if (r) d.querySelector(".r").value = r;
+    if (l) d.querySelector(".l").value = l;
+    if (y != null) d.querySelector(".y").value = y;
+  }
+  function yen(x) { return x.toLocaleString("ja-JP") + "円"; }
+  function man(x) { return (Math.round(x / 1000) / 10).toLocaleString("ja-JP") + "万円"; }
+  function relName(v) { for (var i = 0; i < REL.length; i++) if (REL[i][0] === v) return REL[i][1].replace(/（.*）/, ""); return ""; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function num(id, label) {
+    var v = $(id).value.trim(), n = Number(v);
+    if (v === "" || !isFinite(n) || n < 0) { alert(label + "を、0以上の数で入れてください（なければ0）"); return null; }
+    return n;
+  }
+  function make() {
+    var cash = num("cash", "現金"); if (cash === null) return false;
+    var bank = num("bank", "預貯金"); if (bank === null) return false;
+    var stock = num("stock", "株・投資信託・債券"); if (stock === null) return false;
+    var gray = num("gray", "数えるか迷うもの"); if (gray === null) return false;
+    var rows = [].slice.call(document.querySelectorAll(".fam"));
+    var fams = [];
+    for (var i = 0; i < rows.length; i++) {
+      var y = Number(rows[i].querySelector(".y").value);
+      if (rows[i].querySelector(".y").value.trim() === "" || !isFinite(y) || y < 0) { alert("家族" + (i + 1) + "の額を、0以上の数で入れてください（なければ0）"); return false; }
+      fams.push({ n: i + 1, r: rows[i].querySelector(".r").value, l: rows[i].querySelector(".l").value, y: y });
+    }
+    var land = $("land").value;
+    $("who").innerHTML = ""; $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("ask").innerHTML = "";
+    var mine = cash + bank + stock;
+    li("who", "自分：数える（現金・預貯金・株など " + yen(mine) + "）");
+    var total = mine, inN = 0, outN = 0, seikeiN = 0, giriN = 0, koN = 0;
+    fams.forEach(function (f) {
+      var name = "家族" + f.n + "（" + relName(f.r) + "）";
+      var core = (f.r === "haigu" || f.r === "ko" || f.r === "oya");
+      if (core && (f.l === "dokyo" || f.l === "seikei")) {
+        total += f.y; inN++;
+        if (f.l === "seikei") seikeiN++;
+        if (f.r === "ko") koN++;
+        li("who", name + "：数える（" + yen(f.y) + "）" + (f.l === "seikei" ? "。別に住んでいても、生計が同じなら入る" : "") + (f.r === "ko" ? "。子の名義の口座も入る" : ""));
+      } else if (core) {
+        outN++;
+        li("who", name + "：数えない。別に住み、生計も別のため");
+      } else {
+        outN++;
+        if (f.r === "giri") giriN++;
+        li("who", name + "：数えない。世帯に入るのは配偶者・子・父母だけのため" + (f.l === "dokyo" ? "（いっしょに住んでいても）" : ""));
+      }
+    });
+    var ok = total <= LIMIT;
+    box("世帯の金融資産の合計", yen(total),
+      (inN ? "自分と、数える家族" + inN + "人の合計です。" : "自分だけの合計です。") + (outN ? "数えない家族が" + outN + "人います。" : "") +
+      (total === LIMIT ? "ちょうど300万円で、「以下」なので収まります。" : ok ? "300万円まで、あと" + yen(LIMIT - total) + "です。" : "300万円を" + yen(total - LIMIT) + "こえています。この場合、月10万円も交通費（通所手当）も出ないのが原則です。"), !ok);
+    var withGray = total + gray;
+    if (gray > 0) {
+      box("迷うものを足したとき", yen(withGray),
+        "保険・iDeCoなど" + yen(gray) + "を足した額です。" + (withGray <= LIMIT ? "足しても300万円以下です。" : (ok ? "足すと300万円をこえるので、入るかどうかで結果が変わります。" : "")), withGray > LIMIT);
+    }
+    var landOk = (land === "no" || land === "fam");
+    box("土地・建物", landOk ? "要件を満たす見込みです" : (land === "yes" ? "要件から外れる見込みです" : "窓口で確かめが必要です"),
+      land === "no" ? "住まい以外の土地・建物を持っていません。" :
+      land === "fam" ? "決まり（施行規則）の文は「本人が」持っていないこと、と書かれています。家族の名義の分の扱いは窓口で確かめると安心です。" :
+      land === "yes" ? "住まい以外の土地・建物を持っていると、ほかの要件を満たしても、月10万円も交通費（通所手当）も出ないのが原則です。" :
+      land === "share" ? "共有の持ち分をどう見るかは、しおりに書かれていません。登記の内容がわかるものを持って確かめます。" :
+      "相続の手続きが途中のときなど、自分が持っていることになるかは窓口で確かめます。", !landOk);
+    if (seikeiN) li("ask", "別に住む家族を「生計が同じ」として" + seikeiN + "人入れています。入るかどうかは窓口が決めます");
+    if (giriN) li("ask", "配偶者の父・母は、決まりの文では世帯に入っていません。いっしょに住んでいて迷うときは確かめます");
+    if (gray > 0) li("ask", "保険を解約したときに戻るお金・iDeCo・暗号資産などが金融資産に入るかは、しおりに書かれていません。「迷う場合はハローワークに」とあります");
+    if (land === "share" || land === "unk" || land === "fam") li("ask", "土地・建物の名義（共有・相続の途中・家族の名義）の扱い");
+    if (!$("ask").children.length) li("ask", "特にありません。数え方に迷ったら、事前審査のときに聞きます");
+    if (ok && landOk) {
+      li("todo", (inN ? "自分と数える家族" + inN + "人の、残高がある預貯金通帳を全部そろえる（家族の分は写しでよい）" : "自分の、残高がある預貯金通帳を全部そろえる"));
+      li("todo", "通帳がない口座は、残高証明を取る。どちらも事前審査の申請日から1か月以内のもの");
+      li("todo", "ハローワークの事前審査で、住民票の写しなどと一緒に出す");
+      li("todo", "訓練中は1か月ごとの申請で、金融資産が変わったかを書く。300万円に近い人は、入金の多い月に気をつける");
+    } else if (!ok) {
+      li("todo", "数える家族を入れすぎていないか確かめる（別に住み、生計も別の家族・兄弟姉妹・祖父母は入らない）");
+      li("todo", "株・投資信託の額が、今の評価額になっているか確かめる");
+      li("todo", "給付金なしで無料の訓練を受けるか、ハローワークで相談する");
+    } else {
+      li("todo", "土地・建物の名義がわかるもの（固定資産税の通知など）を用意する");
+      li("todo", "事前審査の前に、ハローワークで土地・建物の扱いを確かめる");
+      li("todo", "金融資産は300万円以下なので、預貯金通帳は事前審査に向けてそろえておく");
+    }
+    var memo = "職業訓練受講給付金の\n事前審査を考えています。\n世帯の金融資産は、私を含めて\n" + yen(total) + "の見込みです。\n";
+    if (gray > 0) memo += "ほかに保険・iDeCoなどが\n約" + man(gray) + "あります。\nこれも入りますか。\n";
+    if (seikeiN) memo += "別に住む家族を\n" + seikeiN + "人入れています。\n";
+    if (!landOk) memo += "住まい以外の土地・建物の\n扱いも確かめたいです。\n";
+    else memo += "数える人とお金の範囲が\nこれで合っているか\n確かめたいです。";
+    $("memo").textContent = memo.replace(/\n$/, "");
+    $("ng").textContent = "・金融資産は、現金・預貯金・債券・株式・投資信託など\n・子の名義の預貯金も、世帯の分として数える" + (koN ? "（今回は子を" + koN + "人入れています）" : "") + "\n・300万円ちょうどは「以下」なので入る\n・通帳は、事前審査の申請日に残高があるもの全部。家族の分も出す\n・訓練中に金融資産が変わったら、毎月の申請書で「変更有」にする。迷うときも「有」にして窓口に聞く\n・書かずに受け取ると、不正受給として返すことになることがある";
+    $("result").hidden = false;
+    return true;
+  }
+  $("add").addEventListener("click", function () { addFam(); });
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("cash").value = "50000"; $("bank").value = "1200000"; $("stock").value = "300000"; $("gray").value = "400000";
+    addFam("haigu", "dokyo", 800000); addFam("ko", "dokyo", 200000); addFam("oya", "betsu", 5000000);
+    make();
+  } else { addFam(); }
+})();
+</script>
+</body>
+</html>
