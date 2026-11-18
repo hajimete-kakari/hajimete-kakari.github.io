@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>傷病手当金と家族の扶養｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>傷病手当金と家族の扶養</h1>
+  <p class="lead">傷病手当金の1日あたりの額と、扶養に入る人の年齢、ほかの収入を入れると、受け取っている間に家族の健康保険の扶養に入れそうか、入れないときの保険、扶養に入れそうな時期の目安を出します。扶養に入れるかを決めるのは、家族が入っている健康保険です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状態</h2>
+    <label class="f" for="st">あなたの勤め先</label>
+    <select id="st">
+      <option value="q">もう退職した・退職する（傷病手当金は退職後も続く）</option>
+      <option value="w">まだ在籍して休んでいる</option>
+    </select>
+    <label class="f" for="fam">扶養してもらう家族の健康保険</label>
+    <select id="fam">
+      <option value="k">会社の健康保険（協会けんぽ）</option>
+      <option value="u">会社の健康保険（健康保険組合・共済）</option>
+      <option value="n">国民健康保険（自営業など）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 傷病手当金の額</h2>
+    <label class="f" for="day">1日あたりの額（円）<span class="hint">支給の通知に書いてある額。まだわからなければ空のままで、下の標準報酬月額を入れる</span></label>
+    <input type="number" id="day" inputmode="numeric" min="0" step="1" placeholder="例 5333">
+    <label class="f" for="hyo">標準報酬月額（円）<span class="hint">1日あたりの額がわからないときだけ。休む前の12か月の平均。会社に聞くとわかります</span></label>
+    <input type="number" id="hyo" inputmode="numeric" min="0" step="1" placeholder="例 240000">
+    <label class="f" for="end">傷病手当金が終わる見込みの日<span class="hint">復職・治った・1年6か月の終わりなど。わからなければ空のままで</span></label>
+    <input type="date" id="end">
+  </div>
+
+  <div class="card">
+    <h2>3. 扶養に入る人（あなた）</h2>
+    <label class="f" for="rel">家族から見たあなた</label>
+    <select id="rel">
+      <option value="s">配偶者（妻・夫）</option>
+      <option value="c">子・親・兄弟姉妹など</option>
+    </select>
+    <label class="f" for="age">年齢（扶養に入る年の12月31日の時点）</label>
+    <select id="age">
+      <option value="a">19歳未満</option>
+      <option value="b">19歳〜22歳</option>
+      <option value="m" selected>23歳〜59歳</option>
+      <option value="o">60歳以上</option>
+    </select>
+    <label class="f" for="dis">障害厚生年金を受けられる程度の障害</label>
+    <select id="dis">
+      <option value="0">あてはまらない・わからない</option>
+      <option value="1">あてはまる</option>
+    </select>
+    <label class="f" for="oth">ほかの収入の1年の見込み（円）<span class="hint">年金・家賃収入など、傷病手当金のほかに入るお金。なければ0</span></label>
+    <input type="number" id="oth" inputmode="numeric" min="0" step="1" placeholder="例 0">
+    <label class="f" for="liv">家族と</label>
+    <select id="liv">
+      <option value="d">いっしょに住んでいる</option>
+      <option value="b">別に住んでいる</option>
+    </select>
+    <label class="f" for="fi">家族の年収（円）<span class="hint">いっしょに住んでいるときに使います。わからなければ空のままで</span></label>
+    <input type="number" id="fi" inputmode="numeric" min="0" step="1" placeholder="例 4500000">
+  </div>
+  <button id="make" type="button">扶養に入れそうかを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3 id="mh">家族の会社に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「従業員が家族を被扶養者にするとき」の案内（年間収入130万円未満・60歳以上または障害者は180万円未満、19歳以上23歳未満は配偶者を除き令和7年10月1日以降の認定で150万円未満。年間収入はこれからの1年の見込みで、雇用保険などを受け取っている人は日額3,611円以下なら要件を満たす。傷病手当金も収入に含む。同居は家族の収入の半分未満、別居は仕送り額未満）と、健康保険法104条（退職後の継続給付）をもとにした目安です。150万円・180万円のときの日額（4,166円・4,999円）は、130万円と同じく360日で割った目安で、案内に書かれた数字ではありません。健康保険組合・共済は、組合ごとに見方が違うことがあります。標準報酬月額からの1日あたりの額は、÷30日（10円未満四捨五入）の2/3（1円未満四捨五入）です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = $(id).value; if (v === "" || v === null) return null; v = Number(v); return isFinite(v) ? v : NaN; }
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function man(x) { return (x / 10000) + "万円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function fmtd(v) { var p = v.split("-"); return (+p[0]) + "年" + (+p[1]) + "月" + (+p[2]) + "日"; }
+  function nextd(v) { var p = v.split("-"); var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + 1)); return d.getUTCFullYear() + "年" + (d.getUTCMonth() + 1) + "月" + d.getUTCDate() + "日"; }
+  function make() {
+    var st = $("st").value, fam = $("fam").value, day = num("day"), hyo = num("hyo"), end = $("end").value;
+    var rel = $("rel").value, age = $("age").value, dis = $("dis").value === "1", oth = num("oth"), liv = $("liv").value, fi = num("fi");
+    if (day !== null && (isNaN(day) || day < 1 || day > 60000)) { alert("1日あたりの額を、円で入れてください（例 5333）"); return false; }
+    if (day === null && (hyo === null || isNaN(hyo) || hyo < 50000 || hyo > 1500000)) { alert("1日あたりの額か、標準報酬月額のどちらかを、円で入れてください"); return false; }
+    if (oth === null) oth = 0;
+    if (isNaN(oth) || oth < 0) { alert("ほかの収入を、円で入れてください（なければ0）"); return false; }
+    if (fi !== null && (isNaN(fi) || fi < 0)) { alert("家族の年収を、円で入れてください"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("mh").textContent = "家族の会社に聞くときの一言";
+
+    var d = day, how = "";
+    if (d === null) { var b = Math.round(hyo / 30 / 10) * 10; d = Math.round(b * 2 / 3); how = yen(hyo) + "÷30日＝" + yen(b) + "、その2/3で" + yen(d) + "（目安）。"; }
+    var lim = 1300000, lk = "130万円";
+    if (age === "o" || dis) { lim = 1800000; lk = "180万円"; }
+    else if (age === "b" && rel === "c") { lim = 1500000; lk = "150万円"; }
+    var dl = lim === 1300000 ? 3611 : (lim === 1500000 ? 4166 : 4999);
+    var y = d * 360 + oth;
+
+    if (fam === "n") {
+      box("扶養に入れるか", "国民健康保険には扶養のしくみがありません", "家族が自営業などで国民健康保険のときは、扶養に入るのではなく、あなたも国民健康保険に入ります。保険料は世帯ごとにかかります。", true);
+      todo("退職した日の次の日から14日以内に、住所の市区町村で国民健康保険に入る（任意継続を選ぶなら、退職日の次の日から20日以内に申し込む）");
+      todo("傷病手当金は、退職後の継続給付の条件を満たしていれば、前の健康保険から続けて出る");
+      $("mh").textContent = "市区町村の窓口で聞くときの一言";
+      $("memo").textContent = "傷病手当金を受けながら\n国民健康保険に入ります。\n保険料の額と、\n減らせる制度があるかを\n教えてください。";
+      $("ng").textContent = "・国民健康保険の保険料は、前の年の所得などで決まる\n・会社の都合などで辞めた人は、国民健康保険の保険料が軽くなることがある。窓口で確かめる\n・ここでの判定は目安。決めるのは市区町村";
+      $("result").hidden = false; return true;
+    }
+    if (st === "w") {
+      box("扶養に入れるか", "在籍中は、いまの会社の健康保険のままです", "会社に在籍している間は、あなた自身が会社の健康保険に入っているので、家族の扶養には入りません。扶養を考えるのは、退職して会社の健康保険を抜けるときです。", true);
+      todo("退職するなら、退職日まで1年以上続けて入っているか・退職日に出勤しないかを確かめる（傷病手当金が退職後も続く条件）");
+      todo("退職が決まったら、このページで「もう退職した・退職する」を選んで、もう一度見る");
+      $("mh").textContent = "会社に聞くときの一言";
+      $("memo").textContent = "休職中ですが、\n退職を考えています。\n退職後も傷病手当金を\n続けて受け取れるか、\n確かめたいです。";
+      $("ng").textContent = "・退職日に出勤すると、退職後の傷病手当金が出なくなることがある\n・休職中の社会保険料は、給料が出なくてもかかる\n・ここでの判定は目安";
+      $("result").hidden = false; return true;
+    }
+
+    var over = d > dl || y >= lim;
+    box("傷病手当金の1日あたりの額", yen(d), how + "1年に直すと " + yen(d * 360) + "（360日分）。" + (oth > 0 ? "ほかの収入を足すと " + yen(y) + "。" : ""), false);
+    box("あなたの基準", lk + "未満（日額" + yen(dl) + "以下）", (lim === 1300000 ? "日本年金機構の案内では、雇用保険などを受け取っている人は日額3,611円以下なら収入の条件を満たすとされ、傷病手当金も収入に入ります。" : lk + "を360日で割った目安です。案内に日額の数字は書かれていないので、家族の健康保険に確かめてください。") + (lim === 1500000 ? "19歳〜22歳で配偶者でない人の基準です。" : "") + (lim === 1800000 ? "60歳以上か、障害厚生年金を受けられる程度の障害がある人の基準です。" : ""), false);
+    var half = false;
+    if (liv === "d" && fi !== null && fi > 0 && y >= fi / 2) half = true;
+    if (over) {
+      box("受け取っている間", "扶養には入れない見込み", (d > dl ? "1日あたりの額が" + yen(dl) + "を超えているので、" : "ほかの収入を足すと" + lk + "以上になるので、") + "傷病手当金を受け取っている間は、収入の条件を満たさない見込みです。その間は、国民健康保険か任意継続に入ります。", true);
+    } else if (half) {
+      box("受け取っている間", "収入は基準より下、ただし家族の収入の半分以上", "いっしょに住んでいるときは、あなたの収入が家族の年収の半分（" + yen(fi / 2) + "）未満であることも条件です。半分以上でも、家族の年収を上回らず、家族が生計の中心と認められれば入れることがあります。家族の健康保険に確かめてください。", true);
+    } else {
+      box("受け取っている間", "扶養に入れる見込み", "1日あたりの額が" + yen(dl) + "以下で、1年に直しても" + lk + "未満です。" + (liv === "b" ? "別に住んでいるときは、家族からの仕送りの額より収入が少ないことも条件です。" : "いっしょに住んでいるときは、家族の年収の半分未満であることも条件です。") + "傷病手当金は、扶養に入っても前の健康保険から続けて出ます。", false);
+    }
+    if (over && oth >= lim) {
+      box("扶養に入れそうな時期", "ほかの収入だけで基準以上", "傷病手当金が終わっても、ほかの収入の見込みだけで" + lk + "以上なので、扶養には入れない見込みです。", true);
+    } else if (over) {
+      box("扶養に入れそうな時期", end ? nextd(end) + "ごろから" : "傷病手当金が終わったあと", (end ? fmtd(end) + "で傷病手当金が終わり、そのあと収入の見込みが" + lk + "未満になれば、そこから扶養に入れる見込みです。" : "終わる日が決まったら、そこから先の1年の収入の見込みで見ます。") + "終わったら、家族の会社に早めに伝えます（家族の会社が出す届けは、5日以内が決まりです）。", false);
+    }
+
+    var never = over && oth >= lim;
+    if (never) {
+      todo("退職日の次の日から14日以内に国民健康保険に入るか、20日以内に任意継続を申し込む（保険料を比べてから）");
+      todo("ほかの収入の見込みが変わったら、このページでもう一度見る");
+    } else if (over) {
+      todo("退職日の次の日から14日以内に国民健康保険に入るか、20日以内に任意継続を申し込む（保険料を比べてから）");
+      todo("傷病手当金の支給の通知を残しておく（扶養の届けで、受け取った額のわかる書類のコピーを求められる）");
+      todo("傷病手当金が終わったら、家族に伝えて扶養の届けを出してもらい、入っていた国民健康保険か任意継続をやめる手続きをする");
+    } else {
+      todo("家族に、勤め先へ扶養の届けを出してもらう（家族の会社から年金事務所などへ、5日以内が決まり）");
+      todo("傷病手当金の支給の通知のコピーと、退職証明書か離職票のコピーを用意する（求められることが多い書類）");
+      todo("扶養に入るまでの間が空くときは、その間の保険を家族の会社に確かめる");
+    }
+    $("memo").textContent = never ? "傷病手当金を\n1日" + yen(d) + "受けていて、\nほかの収入が年" + man(Math.round(oth / 10000) * 10000) + "ほどあります。\n扶養に入れるか、\n確かめたいです。" : over ? "傷病手当金を\n1日" + yen(d) + "受けています。\n終わったら扶養に\n入りたいのですが、\nいつの分から届けを\n出せばよいですか。" : "傷病手当金を\n1日" + yen(d) + "受けています。\n扶養に入れるか、\n届けに付ける書類と\nあわせて教えてください。";
+    $("ng").textContent = "・扶養の年収は、去年の実績ではなく、これからの1年の見込みで見る\n・傷病手当金は税金がかからないお金だが、扶養の収入には入る\n・額が少しでも基準を超えると入れない見込み。標準報酬月額で出した額は目安なので、支給の通知の額で確かめる\n・健康保険組合・共済は、見方が組合ごとに違うことがある\n・扶養に入っても入らなくても、退職後の傷病手当金は前の健康保険から出る\n・ここでの判定は目安。決めるのは家族の健康保険";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("st").value = "q"; $("fam").value = "k"; $("hyo").value = "240000"; $("end").value = "2027-03-31"; $("rel").value = "s"; $("age").value = "m"; $("oth").value = "0"; $("liv").value = "d"; $("fi").value = "4500000"; make(); }
+})();
+</script>
+</body>
+</html>
