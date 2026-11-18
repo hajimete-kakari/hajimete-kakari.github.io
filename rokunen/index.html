@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金、2回目はいつから？前回から6年の数え方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .lead, .mihon .note { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金、2回目はいつから？前回から6年の数え方</h1>
+  <p class="lead">前に求職者支援制度の給付金（職業訓練受講給付金：月10万円の受講手当・通所手当・寄宿手当）を受け取った人が、もう一度訓練を受けるとき向けです。前回の訓練の開始日と、何か月目から受け取ったかを入れると、6年がたつ日の目安と、今回の訓練の開始日がそれより後かを出します。給付金が出るかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 前回の訓練</h2>
+    <label class="f" for="got">前回、給付金（受講手当・通所手当・寄宿手当のどれか）を受け取った？</label>
+    <select id="got">
+      <option value="yes">受け取った（1か月分だけでも）</option>
+      <option value="no">訓練は受けたが、給付金は1回も受け取っていない</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="start1">前回の訓練の開始日<span class="hint">受講証明書や就職支援計画書に書いてある日</span></label>
+    <input type="date" id="start1">
+    <label class="f" for="nth">はじめて給付金が出たのは、何か月目の分？<span class="hint">1か月目から出たなら1。最初の月は収入が多くて出なかった、などなら2以上</span></label>
+    <input type="number" id="nth" min="1" max="24" inputmode="numeric" value="1">
+    <label class="f" for="end1">前回の訓練の終わり方</label>
+    <select id="end1">
+      <option value="fin">最後まで受けた（修了した）</option>
+      <option value="yamu">やむを得ない理由で途中でやめた（病気・けが・介護など）</option>
+      <option value="job">就職が決まって途中でやめた</option>
+      <option value="other">そのほかの理由で途中でやめた</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 今回の訓練</h2>
+    <label class="f" for="start2">今回の訓練の開始日（予定でよい）</label>
+    <input type="date" id="start2">
+    <label class="f" for="renzoku">今回は、前回の基礎コースから続けて受ける実践コース・公共職業訓練？<span class="hint">ハローワークで「連続受講」と言われたもの</span></label>
+    <select id="renzoku">
+      <option value="no">いいえ（別の訓練）</option>
+      <option value="yes">はい（基礎コースのあとに続けて受ける）</option>
+    </select>
+  </div>
+  <button id="make" type="button">6年がたつ日を出す</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※職業訓練の実施等による特定求職者の就職の支援に関する法律施行規則13条（直前に給付金を受けた訓練について、給付金を受けた最初の支給単位期間の初日から6年を経過しない人には支給しない。その訓練が、やむを得ない理由で終了前に受講をやめたものなら除く。連続受講の実践訓練・公共職業訓練で、基礎訓練の分を受けた場合は当たらない）、15条（不正受給で支給されなくなった訓練は6年ではなく9年）と、厚生労働省「求職者支援制度・訓練受講のしおり」（支給単位期間は原則、訓練開始日から1か月ごとに区切った期間）で出した目安です。6年は日付の上で計算しています。月末に近い日の区切り方や、訓練の途中で6年を過ぎるときの扱い、やむを得ない理由に当たるかは、ハローワークが決めます。失業保険（基本手当）を受けながら公共職業訓練を受ける人は、決まりが別です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function parse(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ""); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addMonths(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, day = d.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(day, last));
+  }
+  function addYears(d, n) {
+    var r = new Date(d.getFullYear() + n, d.getMonth(), d.getDate());
+    if (r.getMonth() !== d.getMonth()) r = new Date(d.getFullYear() + n, 2, 1); // 2/29 → 3/1
+    return r;
+  }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function make() {
+    var got = $("got").value, s1 = parse($("start1").value), s2 = parse($("start2").value);
+    var nth = Number($("nth").value), end1 = $("end1").value, ren = $("renzoku").value;
+    if (got !== "no" && !s1) { alert("前回の訓練の開始日を入れてください"); return false; }
+    if (!s2) { alert("今回の訓練の開始日を入れてください（予定でよい）"); return false; }
+    if (got !== "no" && (!isFinite(nth) || nth < 1 || nth > 24 || Math.floor(nth) !== nth)) { alert("何か月目の分かを、1から24の数で入れてください"); return false; }
+    if (got !== "no" && s2 <= s1) { alert("今回の開始日が、前回の開始日より前になっています"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var ng = [], memo;
+    if (got === "no") {
+      box("6年の決まり", "当たらない見込みです",
+        "6年の決まりは、前回に給付金を受け取った人が対象です。訓練を受けただけで給付金を1回も受け取っていなければ、数えません。収入・世帯・出席など、ほかの要件は別に見られます。", false);
+      li("前回、給付金を受け取っていないことを、事前審査のときに伝える");
+      li("収入（本人月8万円以下・世帯月30万円以下）と金融資産（世帯で300万円以下）を確かめる");
+      li("ハローワークで事前審査を受ける");
+      memo = "前に訓練を受けましたが、\n職業訓練受講給付金は\n受け取っていません。\n今回の訓練で、\n給付金の事前審査を\n受けたいです。";
+      ng.push("・「受け取っていない」と思っていても、通所手当だけ受け取っていた、ということがある。前回の通帳や書類で確かめる");
+    } else if (ren === "yes") {
+      box("6年の決まり", "連続受講なら、当たらない扱いがあります",
+        "前回の基礎コースから続けて受ける実践コース・公共職業訓練で、基礎コースの分の給付金を受け取った場合は、6年の決まりは当たらないことになっています。連続受講に当たるかはハローワークが決めます。", false);
+      li("今回の訓練が、基礎コースからの連続受講として扱われるか、ハローワークで確かめる");
+      li("収入・世帯・金融資産・出席の要件は、今回の訓練でもあらためて見られる");
+      memo = "前回の基礎コースで\n職業訓練受講給付金を\n受け取りました。\n今回は続けて受ける\n訓練の予定です。\n連続受講として、\n給付金の対象になるか\n確かめたいです。";
+    } else {
+      var first = addMonths(s1, nth - 1);
+      var six = addYears(first, 6);
+      var left = days(s2, six);
+      box("前回、はじめて給付金が出た月の初日（目安）", fmt(first),
+        "前回の開始日" + fmt(s1) + "から数えて" + nth + "か月目の支給単位期間の初日です。6年はこの日から数えます（訓練が終わった日や、最後に受け取った日からではありません）。", false);
+      box("6年がたつ日（目安）", fmt(six) + "以降",
+        "この日より前は、6年がたっていない扱いです。", false);
+      if (end1 === "yamu") {
+        box("前回をやむを得ない理由でやめた場合", "6年の決まりは当たらない扱いがあります",
+          "前回の訓練を、病気・けが・介護など、やむを得ない理由で終わる前にやめた場合は、6年以内に受け取ったとはみなさない決まりがあります。やむを得ない理由に当たるかは、前回のやめたときの記録をもとにハローワークが決めます。", false);
+        li("前回やめたときの理由がわかる書類（診断書・退校届の写しなど）があれば用意する");
+        li("ハローワークで、前回の退校がやむを得ない理由として扱われているか確かめる");
+        li("当たらないと言われたときに備えて、上の6年がたつ日も控えておく");
+        memo = "前回の訓練で職業訓練受講\n給付金を受け取りましたが、\n" + "途中で、やむを得ない理由で\nやめました。\n今回の訓練で、6年の決まりが\n当たるかを確かめたいです。";
+      } else if (left <= 0) {
+        box("今回の訓練の開始日", fmt(s2) + "は、6年がたったあとです",
+          "日付の上では、6年の決まりには当たらない見込みです（6年がたつ日から" + (-left) + "日後）。収入・世帯・金融資産・出席など、ほかの要件は別に見られます。", false);
+        li("前回の訓練の開始日と、はじめて給付金が出た月を、書類で確かめる（受講証明書・通帳の振込）");
+        li("収入（本人月8万円以下・世帯月30万円以下）と金融資産（世帯で300万円以下）を確かめる");
+        li("ハローワークで事前審査を受ける。前回受け取ったことは、そのまま伝える");
+        memo = "前に職業訓練受講給付金を\n受け取りました。\n最初に出た月の初日は\n" + fmt(first) + "ごろです。\n今回は" + fmt(s2) + "開始の\n訓練を考えています。\n6年がたっているか、\n確かめたいです。";
+        if (left > -31) ng.push("・6年がたつ日と今回の開始日が近い。前回の区切りが1日ずれるだけで変わるので、必ず窓口で確かめる");
+      } else {
+        box("今回の訓練の開始日", fmt(s2) + "は、まだ6年がたっていません",
+          "6年がたつ日まで、あと" + left + "日あります。今回の訓練が始まる時点では、給付金は出ない見込みです。給付金なしで無料の訓練を受けるか、6年がたってから始まる訓練を選ぶか、を考えます。", true);
+        li("6年がたつ日（" + fmt(six) + "）より後に始まる訓練がないか、訓練コースの一覧で探す");
+        li("給付金なしでも生活できるか、今回の訓練をそのまま受けるかを考える");
+        li("訓練の途中で6年がたつ場合に、その後の月から出るかは、ハローワークで確かめる");
+        memo = "前に職業訓練受講給付金を\n受け取りました。\n最初に出た月の初日は\n" + fmt(first) + "ごろです。\n今回は" + fmt(s2) + "開始の\n訓練を考えていますが、\n6年がたっていません。\n給付金の扱いを\n確かめたいです。";
+        if (left <= 31) ng.push("・6年がたつ日まで1か月を切っている。前回の区切りが1日ずれるだけで変わるので、窓口で確かめる");
+      }
+      if (end1 === "job") ng.push("・就職で途中でやめた場合が、やむを得ない理由に当たるかは書かれていない。6年の決まりが当たる前提で考え、窓口で確かめる");
+      if (end1 === "other") ng.push("・やむを得ない理由以外で途中でやめた訓練も、給付金を受け取っていれば6年の決まりが当たる");
+      if (s1.getDate() >= 29 && nth > 1) ng.push("・月末に近い開始日は、支給単位期間の区切りが1日ずれることがある");
+      if (got === "unk") ng.push("・受け取ったかわからないときは、前回の通帳の振込や、ハローワークの記録で確かめる");
+    }
+    if (got !== "no" && ren !== "yes") {
+      ng.push("・数えるのは、給付金を受け取った最初の月の初日から。訓練が終わった日からではない");
+      ng.push("・前回、不正受給で給付金を止められた場合は、6年ではなく9年になる");
+      ng.push("・6年がたっていても、収入・世帯・金融資産・出席の要件は、今回あらためて見られる");
+    } else {
+      ng.push("・収入・世帯・金融資産・出席の要件は、今回あらためて見られる");
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("start1").value = "2020-10-06"; $("nth").value = "2"; $("end1").value = "fin"; $("start2").value = "2026-12-07";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
