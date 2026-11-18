@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>出産手当金と出産育児一時金：いくら・いつまで・どこに出すかの判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .sec { font-size: .82rem; color: var(--sub); margin: 18px 0 0; border-top: 1px dashed var(--line); padding-top: 12px; }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>出産手当金と出産育児一時金：いくら・いつまで・どこに出すかの判定</h1>
+  <p class="lead">出産のときに入っている保険と、出産予定日・給料の目安を入れると、出産手当金がもらえるか・日額と合計の目安・休む期間、出産育児一時金の額とどの保険に出すか、病院で払う額（または戻る差額）の目安、保険料が免除・減額される月、申請の期限の目安、次にやることを出します。決めるのは加入している健康保険と市区町村です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 入っている保険と、出産の予定</h2>
+    <label class="f" for="ins">出産のときの健康保険は？</label>
+    <select id="ins">
+      <option value="work">会社の健康保険（産休をとって、辞めずに続ける）</option>
+      <option value="quit">会社の健康保険だが、出産の前後に辞める（辞めた）</option>
+      <option value="kokuho">国民健康保険（自営業・フリーランス・仕事をしていない）</option>
+      <option value="fuyo">家族の健康保険の扶養に入っている</option>
+    </select>
+    <label class="f" for="nin">おなかの子の人数</label>
+    <select id="nin">
+      <option value="1">1人</option>
+      <option value="2">2人（双子）</option>
+      <option value="3">3人以上</option>
+    </select>
+    <label class="f" for="yd">出産予定日</label>
+    <input type="date" id="yd">
+    <label class="f" for="od">実際の出産日<span class="hint">生まれていれば入れます。まだなら空でかまいません（予定日どおりとして出します）</span></label>
+    <input type="date" id="od">
+  </div>
+
+  <div class="card" id="kaishaBox">
+    <h2>2. 会社の健康保険のこと</h2>
+    <label class="f" for="ky">今の会社の健康保険に、続けて入っている期間<span class="hint">任意継続の期間は数えません。転職していても、間をあけずに協会けんぽなど同じ保険が続いていれば通算されることがあります</span></label>
+    <select id="ky">
+      <option value="ge1">1年以上</option>
+      <option value="lt1">1年未満</option>
+    </select>
+    <label class="f" for="hy">標準報酬月額の平均（円）<span class="hint">給与明細の健康保険料から会社に聞くのが確実です。わからなければ、残業代・通勤手当を含めた額面の月給の平均で目安を出します</span></label>
+    <input type="number" id="hy" min="50000" max="2000000" inputmode="numeric" placeholder="例：260000">
+    <div id="quitBox" hidden>
+      <p class="sec">辞める人だけ</p>
+      <label class="f" for="rd">退職日（会社に在籍する最後の日）</label>
+      <input type="date" id="rd">
+      <label class="f" for="rs">退職日に出勤する？</label>
+      <select id="rs">
+        <option value="no">出勤しない（産休・欠勤など）</option>
+        <option value="yes">出勤する（あいさつだけでも）</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card mh">
+    <h2>3. 出産の費用（わかれば）</h2>
+    <label class="f" for="w22">出産の時期</label>
+    <select id="w22">
+      <option value="yes">妊娠22週以降の出産（ほとんどの場合）</option>
+      <option value="no">妊娠22週より前（12週＝85日以降）</option>
+    </select>
+    <label class="f" for="hi">出産費用の見込み（円）<span class="hint">病院の案内や見積もりの額。空なら差額は出しません</span></label>
+    <input type="number" id="hi" min="0" max="5000000" inputmode="numeric" placeholder="例：520000">
+  </div>
+  <button id="make" type="button">判定と目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社・窓口に伝えるときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※全国健康保険協会（協会けんぽ）「出産手当金について」「出産育児一時金について」「申請・届出の時効」、日本年金機構「従業員が産前産後休業を取得したときの手続き」、市区町村の国民健康保険料・国民年金保険料の産前産後期間の案内（川崎市・名古屋市）をもとにした目安です。出産手当金の日額は、標準報酬月額の平均÷30（10円未満四捨五入）×3分の2（1円未満四捨五入）で出しています。1年未満のときは、平均と32万円（支給開始日が2025年4月1日以降）の低いほうを使っています。健康保険組合や共済組合は、額の上乗せなど、決まりがちがうことがあります。休みの期間中に給料が出た日は、出産手当金が減るか出ないことがあります。出産育児一時金は、産科医療補償制度に入っている病院（ほとんどの病院）として出しています。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function dd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function add(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function addY(d, n) { return new Date(d.getFullYear() + n, d.getMonth(), d.getDate()); }
+  function addM(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, d.getDate()); }
+  function ymd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function ym(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  function sync() {
+    var ins = $("ins").value;
+    $("kaishaBox").hidden = !(ins === "work" || ins === "quit");
+    $("quitBox").hidden = ins !== "quit";
+  }
+  $("ins").addEventListener("change", sync);
+
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var ins = $("ins").value, nin = Number($("nin").value), taji = nin >= 2;
+    var yds = $("yd").value, ods = $("od").value;
+    if (yds === "") { alert("出産予定日を入れてください"); return false; }
+    var yd = dd(yds), born = ods !== "", od = born ? dd(ods) : yd;
+    if (born && Math.abs(days(yd, od)) > 120) { alert("出産予定日と実際の出産日が4か月以上離れています。日付を確かめてください"); return false; }
+    var kaisha = (ins === "work" || ins === "quit");
+    var ky = $("ky").value, hys = $("hy").value, hy = 0;
+    if (kaisha) {
+      if (hys === "") { alert("標準報酬月額の平均（わからなければ額面の月給の平均）を入れてください"); return false; }
+      hy = Math.floor(Number(hys));
+      if (!(hy >= 50000) || hy > 2000000) { alert("標準報酬月額は、5万円〜200万円の数で入れてください"); return false; }
+    }
+    var rd = null, rs = $("rs").value;
+    if (ins === "quit") {
+      if ($("rd").value === "") { alert("退職日を入れてください"); return false; }
+      rd = dd($("rd").value);
+    }
+    var pre = taji ? 98 : 42;
+    var base = od < yd ? od : yd;
+    var st = add(base, -(pre - 1));
+    var en = add(od, 56);
+    var nd = days(st, en) + 1;
+
+    // 1. 出産手当金
+    var teate = 0, daily = 0, teateOk = false, useHy = hy, teateNote = "";
+    if (kaisha) {
+      if (ky === "lt1" && hy > 320000) useHy = 320000;
+      daily = Math.round(Math.round(useHy / 30 / 10) * 10 * 2 / 3);
+      var periodTxt = ymd(st) + "〜" + ymd(en) + "（" + nd + "日）";
+      if (ins === "work") {
+        teateOk = true; teate = daily * nd;
+        box("出産手当金", "1日 " + yen(daily) + "・合計 " + yen(teate) + " の目安",
+          "休む期間は " + periodTxt + "。産前" + pre + "日（" + (taji ? "多胎" : "1人") + "）と産後56日です。" + (born ? "" : "予定日より遅れて生まれると、遅れた日数の分も出ます。早く生まれると、産前の日数が減ります。") + (ky === "lt1" && hy > 320000 ? "入っている期間が1年未満なので、32万円で計算しています。" : "") + "休んだ日に給料が出ると、その日は減るか出ません。", false);
+      } else {
+        if (ky === "lt1") {
+          teateNote = "lt1";
+          var paidDays = rd < st ? 0 : Math.min(days(st, rd) + (rs === "yes" ? 0 : 1), nd);
+          box("出産手当金", "退職後の分は出ない見込みです",
+            "退職後も受け取るには、任意継続を除いて健康保険に続けて1年以上入っていることが条件です。在籍中の休んだ日（" + ymd(st) + "〜退職日、" + paidDays + "日）の分だけが対象になります" + (paidDays > 0 ? "（目安 1日 " + yen(daily) + "×" + paidDays + "日＝" + yen(daily * paidDays) + "）。" : "が、退職日が産前の期間より前なので、0日です。") + "前の会社の期間を足せるかは、加入していた保険に確かめてください。", true);
+          teate = daily * paidDays; teateOk = paidDays > 0;
+        } else if (rd < st) {
+          box("出産手当金", "出ない見込みです",
+            "退職日（" + ymd(rd) + "）が、産前の期間の始まり（" + ymd(st) + "）より前です。退職後も受け取るには、退職日に出産手当金を受けているか、受けられる状態（産前の期間に入っていて、働いていない）であることが条件です。" + (rd < new Date() ? "" : "退職日を" + ymd(st) + "以降にできるか、会社と話す余地があるかもしれません。"), true);
+        } else if (rs === "yes") {
+          box("出産手当金", "退職後の分は出ない見込みです",
+            "退職日に出勤すると、退職後の出産手当金は受けられません（あいさつだけの出勤でも、出勤の扱いになることがあります）。退職日を休みにすれば、条件を満たす見込みです。", true);
+          var pd = Math.min(days(st, rd), nd);
+          teate = daily * Math.max(pd, 0); teateOk = pd > 0;
+          if (pd > 0) box("在籍中の分の出産手当金", "1日 " + yen(daily) + "×" + pd + "日＝" + yen(teate) + " の目安", "産前の期間に入ってから退職日の前日までに休んだ日の分です。", false);
+        } else {
+          teateOk = true; teate = daily * nd;
+          var after = rd >= en ? 0 : days(rd, en);
+          box("出産手当金", "1日 " + yen(daily) + "・合計 " + yen(teate) + " の目安（退職後も続く見込み）",
+            "休む期間は " + periodTxt + "。在籍中の分と、退職の翌日からの分（" + after + "日）を合わせた額です。続けて1年以上入っていて、退職日が産前の期間の中、退職日に出勤しないので、退職後も受け取れる見込みです。退職後の分も、前の会社の健康保険に申請します。", false);
+        }
+      }
+    } else if (ins === "kokuho") {
+      box("出産手当金", "ふつうはありません",
+        "国民健康保険の出産手当金は、市区町村が決めれば出せる給付で、出していないところがほとんどです。念のため、お住まいの国保の窓口で確かめてください。出産育児一時金と、保険料の減額はあります。", true);
+    } else {
+      box("出産手当金", "ありません",
+        "出産手当金は、会社の健康保険に本人として入っている人が、出産のために仕事を休んだときのお金です。扶養に入っている家族には出ません。出産育児一時金（家族出産育児一時金）は、家族の健康保険から出ます。", true);
+    }
+
+    // 2. 出産育児一時金
+    var per = $("w22").value === "yes" ? 500000 : 488000, ichiji = per * nin;
+    var where = "", whereNo = false;
+    if (ins === "work") where = "今の会社の健康保険から出ます。";
+    else if (ins === "kokuho") where = "国民健康保険から出ます（お住まいの市区町村）。";
+    else if (ins === "fuyo") where = "家族の健康保険から「家族出産育児一時金」として出ます。";
+    else {
+      var loss = add(rd, 1), six = addM(loss, 6);
+      if (ky === "ge1" && od < six) where = "前の会社の健康保険（続けて1年以上入っていて、退職の翌日から6か月以内の出産なので対象）か、退職後に入った保険（国保・任意継続・家族の扶養）のどちらか一方から出ます。両方からは受け取れません。どちらに出すかは、出産する病院で直接支払制度の書類を書く前に決めます。";
+      else { where = "退職後に入った保険（国保・任意継続・家族の扶養）から出ます。" + (ky === "lt1" ? "前の会社の保険から受けるには、続けて1年以上の加入が要ります。" : "出産日が退職の翌日から6か月（" + ymd(six) + "）を過ぎるので、前の会社の保険からは出ません。"); whereNo = ky === "lt1"; }
+    }
+    box("出産育児一時金", yen(ichiji) + (nin >= 2 ? "（" + yen(per) + "×" + nin + "人）" : ""),
+      where + (per === 488000 ? "妊娠22週より前の出産は、1人48.8万円です。" : "産科医療補償制度に入っている病院での、妊娠22週以降の出産の額です。"), whereNo);
+
+    var his = $("hi").value;
+    if (his !== "") {
+      var hi = Math.floor(Number(his));
+      if (!(hi >= 0)) { alert("出産費用を、0以上の数で入れてください"); return false; }
+      if (hi > ichiji) box("病院の窓口で払う額の目安", yen(hi - ichiji),
+        "直接支払制度を使うと、出産育児一時金は保険から病院に直接払われ、超えた分（" + yen(hi) + "−" + yen(ichiji) + "）だけを退院のときに払います。", false);
+      else box("あとで戻る差額の目安", yen(ichiji - hi),
+        "出産費用が出産育児一時金より少ないので、差額を保険に請求できます。協会けんぽでは、出産からおおむね3か月後に差額の申請書が届きます。", false);
+    }
+
+    // 3. 保険料
+    if (ins === "work" || (ins === "quit" && rd >= st)) {
+      var endNext = add(en, 1);
+      var lastM = endNext.getDate() === 1 ? new Date(en.getFullYear(), en.getMonth(), 1) : new Date(endNext.getFullYear(), endNext.getMonth() - 1, 1);
+      if (ins === "work") box("免除される社会保険料", ym(st) + "分〜" + ym(lastM) + "分",
+        "産休のあいだの健康保険・厚生年金の保険料は、本人の分も会社の分も免除されます（給料が出ても出なくても）。会社が年金事務所に申出書を出します。免除の月も、将来の年金は払ったものとして数えられます。実際の産休の日で月が決まるので、早めに会社へ伝えます。", false);
+      else box("社会保険料", "在籍中の産休の月は免除されることがあります",
+        "産休に入ってから辞める場合、在籍中の産休の月は、会社が申出書を出せば免除されることがあります（" + ym(st) + "分から）。退職後は、入る保険（国保・任意継続・扶養）の保険料になります。国保なら下の減額も見てください。", false);
+    }
+    if (ins === "kokuho" || ins === "quit") {
+      var kst = new Date(od.getFullYear(), od.getMonth() - (taji ? 3 : 1), 1);
+      var ken = new Date(kst.getFullYear(), kst.getMonth() + (taji ? 5 : 3), 1);
+      box((ins === "quit" ? "退職後に国保に入る場合の" : "") + "国保の保険料の減額・国民年金の免除", ym(kst) + "分〜" + ym(ken) + "分（" + (taji ? 6 : 4) + "か月）",
+        "出産（予定）月の" + (taji ? "3か月前から6か月" : "前月から4か月") + "の、国保の保険料（所得割と均等割）が減額され、国民年金の保険料（第1号）が免除されます。" + (ins === "quit" ? "このうち、国保に入っている月だけが対象です。" : "") + "届け出は市区町村で、予定日の6か月前からできる市区町村が多く、出産後でもできます。母子健康手帳を持っていきます。保険料が0円になるとは限りません。", false);
+    }
+
+    // 4. 期限
+    var lim = [];
+    if (teateOk) lim.push("出産手当金：休んだ日ごとに、その翌日から2年。最初の日（" + ymd(st) + "）の分は " + ymd(addY(st, 2)) + " ごろまで");
+    lim.push("出産育児一時金（直接支払制度を使わないとき・差額）：出産の翌日から2年。" + ymd(addY(od, 2)) + " ごろまで");
+    box("申請の期限の目安", "2年（日ごとに数えます）", lim.join("。") + "。", false);
+
+    // 次にやること
+    if (ins === "work") {
+      li("産休の予定（産前の始まり " + ymd(st) + "）と、育休をとるかを会社に伝える");
+      li("会社に、社会保険料の免除の申出書を出してもらうよう頼む");
+    }
+    var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var past = ins === "quit" && rd < today;
+    var qok = ins === "quit" && ky === "ge1" && rd >= st && rs === "no";
+    var qfix = ins === "quit" && !past && ky === "ge1" && !qok;
+    if (ins === "quit") {
+      if (qok && !past) li("退職日（" + ymd(rd) + "）は出勤しないで休む予定のまま、会社と確かめておく");
+      if (qfix) li("退職日を産前の期間（" + ymd(st) + "以降）にし、その日は出勤しないで休めるか、会社と相談する");
+      if (!past) li("退職後に入る保険（国保・任意継続・家族の扶養）を決め、退職の翌日からの手続きの期限を確かめる");
+      else li("退職後に入った保険の窓口で、出産育児一時金の手続きを確かめる");
+      if (teateOk) li("会社に、出産手当金の申請書の会社の欄を書いてもらう段取りを決める" + (qok ? "（退職後の分も、前の会社の健康保険に出す）" : "（在籍中に休んだ日の分）"));
+    }
+    li("出産する病院で、直接支払制度の合意の書類に記入する（退院までに）" + (ins === "quit" && where.indexOf("どちらか一方") >= 0 ? "。どちらの保険から受けるかを先に決める" : ""));
+    if (kaisha && teateOk) li("出産のあと、出産手当金の申請書に医師・助産師の証明を書いてもらい、産後56日が終わってから（または区切って）会社経由か自分で健康保険に出す");
+    if (ins === "kokuho" || ins === "quit") li("市区町村の窓口で、国保の保険料の減額と国民年金の免除の届けを出す（母子健康手帳を持っていく）");
+    if (ins === "fuyo") li("家族の会社（健康保険）に、家族出産育児一時金の手続きと、病院で使う直接支払制度のことを確かめる");
+    li("出産のあと14日以内に出生届を出し、子どもを健康保険に入れる手続きをする");
+    li("出産費用が一時金より少なかったら、差額の申請を出す");
+
+    // メモ
+    var m = "";
+    if (ins === "work") m = "出産予定日が\n" + ymd(yd) + "です。\n" + ymd(st) + "から\n産休をとりたいです。\n社会保険料の免除と、\n出産手当金の申請書の\n会社の欄をお願いします。";
+    else if (qok) m = "出産予定日が\n" + ymd(yd) + "です。\n退職日は" + ymd(rd) + "で、\nその日は休みにして\n出産手当金を退職後も\n受けたいと考えています。\n申請書の会社の欄を\nお願いできますか。";
+    else if (qfix) m = "出産予定日が\n" + ymd(yd) + "です。\n退職日を" + ymd(st) + "\n以降にして、その日は\n休みにできないか\nご相談したいです。";
+    else if (ins === "quit" && teateOk) m = "出産予定日が\n" + ymd(yd) + "です。\n在籍中に産休で\n休んだ日の\n出産手当金の申請書の\n会社の欄を\nお願いできますか。";
+    else if (ins === "quit") m = "前の会社を\n" + ymd(rd) + "に辞めました。\n出産予定日が\n" + ymd(yd) + "です。\n出産育児一時金の\n手続きと、\n直接支払制度について\n教えてください。";
+    else if (ins === "kokuho") m = "出産予定日が\n" + ymd(yd) + "です。\n国保の保険料の減額と、\n国民年金の免除の\n届けをしたいです。\n出産手当金があるかも\n教えてください。";
+    else m = "家族の扶養に入っていて、\n出産予定日が\n" + ymd(yd) + "です。\n家族出産育児一時金と、\n直接支払制度の手続きを\n教えてください。";
+    $("memo").textContent = m;
+    $("ng").textContent = "・退職日に出勤すると、退職後の出産手当金は出ない\n・退職日を有給休暇にするときの扱いは、加入している保険に確かめる\n・出産手当金の1年は、任意継続の期間を数えない\n・出産育児一時金は、2つの保険から重ねて受け取れない\n・休んだ日に給料が出ると、出産手当金は減るか出ない\n・額は目安。健康保険組合は上乗せなどがちがうことがある\n・国保の減額は、保険料が0円になるとは限らない\n・決めるのは加入している健康保険と市区町村";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) {
+    $("ins").value = "quit"; sync();
+    $("nin").value = "1"; $("yd").value = "2027-04-20";
+    $("ky").value = "ge1"; $("hy").value = "260000"; $("rd").value = "2027-03-31"; $("rs").value = "no";
+    $("w22").value = "yes"; $("hi").value = "520000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
