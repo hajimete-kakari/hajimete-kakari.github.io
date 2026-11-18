@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>老齢年金の繰上げ・繰下げ：何歳から受け取るかの比べ方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; } .row > * { flex: 1; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>老齢年金の繰上げ・繰下げ：何歳から受け取るかの比べ方</h1>
+  <p class="lead">生年月日と、ねんきん定期便の「65歳からの年金の見込み額」、受け取りはじめる年齢を入れると、減る率・増える率、1年あたりの額、65歳から受け取った場合との合計の比べ、受け取った合計が追いつく年齢、気をつけること、次にやることを出します。税金・保険料は引く前の額です。決めるのは日本年金機構です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 生年月日と、65歳からの年金の見込み</h2>
+    <label class="f" for="bd">生年月日</label>
+    <input type="date" id="bd">
+    <label class="f" for="kiso">老齢基礎年金（国民年金）の年額（円）<span class="hint">ねんきん定期便の、65歳からの見込み額の「老齢基礎年金」の欄</span></label>
+    <input type="number" id="kiso" min="0" max="3000000" inputmode="numeric" placeholder="例：780000">
+    <label class="f" for="kosei">老齢厚生年金の年額（円）<span class="hint">同じく「老齢厚生年金」の欄（報酬比例部分と経過的加算部分の合計）。会社員の期間がなければ0</span></label>
+    <input type="number" id="kosei" min="0" max="10000000" inputmode="numeric" placeholder="例：900000">
+  </div>
+
+  <div class="card">
+    <h2>2. 受け取りはじめる年齢</h2>
+    <div class="row">
+      <div><label class="f" for="ay">歳</label>
+        <select id="ay"></select></div>
+      <div><label class="f" for="am">か月</label>
+        <select id="am"></select></div>
+    </div>
+    <label class="f" for="which">どちらを早める・遅らせる？<span class="hint">65歳より前（繰上げ）は、原則として両方いっしょです</span></label>
+    <select id="which">
+      <option value="both">両方（基礎年金と厚生年金）</option>
+      <option value="kiso">基礎年金だけ遅らせる（厚生年金は65歳から）</option>
+      <option value="kosei">厚生年金だけ遅らせる（基礎年金は65歳から）</option>
+    </select>
+    <div class="mh">
+      <label class="f" for="kakyu">加給年金の年額（円）<span class="hint">年下の配偶者や子がいて、ねんきん定期便や年金事務所で「加給年金」があると言われた人だけ。なければ空</span></label>
+      <input type="number" id="kakyu" min="0" max="1000000" inputmode="numeric" placeholder="例：400000">
+      <label class="f" for="sp">特別支給の老齢厚生年金（65歳前の厚生年金）がある？</label>
+      <select id="sp">
+        <option value="no">ない・わからない</option>
+        <option value="yes">ある（受け取っている・受け取る予定）</option>
+      </select>
+    </div>
+  </div>
+  <button id="make" type="button">比べた結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>年金事務所で聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「年金の繰上げ受給」「年金の繰下げ受給」をもとにした目安です。繰上げは1か月あたり0.4%（昭和37年4月1日以前生まれは0.5%）減り、繰下げは1か月あたり0.7%増えます（75歳まで。昭和27年4月1日以前生まれは70歳まで）。合計は、税金・社会保険料を引く前の額を、物価や制度の改定がないものとして足したものです。受け取る月は、65歳になる月（誕生日の前日がある月）から数えています。加給年金・振替加算は増えません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function man(n) { return (Math.round(n / 1000) / 10).toFixed(1).replace(/\.0$/, "") + "万円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function ym(y, m) { var d = new Date(y, m, 1); return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  function agetxt(mo) { var y = Math.floor(mo / 12), m = mo % 12; return y + "歳" + (m ? m + "か月" : ""); }
+  for (var y = 60; y <= 75; y++) { var o = document.createElement("option"); o.value = y; o.textContent = y + "歳"; if (y === 65) o.selected = true; $("ay").appendChild(o); }
+  for (var m = 0; m < 12; m++) { var o2 = document.createElement("option"); o2.value = m; o2.textContent = m + "か月"; $("am").appendChild(o2); }
+
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    if ($("bd").value === "") { alert("生年月日を入れてください"); return false; }
+    var a = $("bd").value.split("-"), by = Number(a[0]), bm = Number(a[1]) - 1, bdd = Number(a[2]);
+    var kiso = Math.floor(Number($("kiso").value || 0)), kosei = Math.floor(Number($("kosei").value || 0));
+    if ($("kiso").value === "" && $("kosei").value === "") { alert("ねんきん定期便の見込み額を入れてください"); return false; }
+    if (!(kiso >= 0) || !(kosei >= 0)) { alert("見込み額は0以上の数で入れてください"); return false; }
+    var kakyu = Math.floor(Number($("kakyu").value || 0));
+    var startMo = Number($("ay").value) * 12 + Number($("am").value);
+    var off = startMo - 780; // 65歳0か月からの月数
+    var which = $("which").value, sp = $("sp").value === "yes";
+    // 65歳になる日＝誕生日の前日。その月が65歳到達月
+    var t65 = new Date(by + 65, bm, bdd - 1);
+    var y65 = t65.getFullYear(), m65 = t65.getMonth();
+    var old5 = (by < 1962) || (by === 1962 && (bm < 3 || (bm === 3 && bdd <= 1)));
+    var old70 = (by < 1952) || (by === 1952 && (bm < 3 || (bm === 3 && bdd <= 1)));
+    var redRate = old5 ? 0.005 : 0.004;
+    var maxMo = old70 ? 840 : 900;
+    if (startMo > maxMo) { alert("繰下げは" + (old70 ? "70歳" : "75歳") + "までです。受け取りはじめる年齢を見直してください"); return false; }
+    if (off > 0 && off < 12) {
+      box("この年齢では選べません", "繰下げの申出は66歳からです",
+        "65歳1か月〜65歳11か月で受け取りはじめることはできません。66歳以後に申し出ると、65歳になった月から数えた月数で増えます。65歳から受け取るか、66歳以後で比べ直してください。", true);
+      $("memo").textContent = ""; $("ng").textContent = "・繰下げの申出は66歳から"; $("result").hidden = false; return true;
+    }
+    if (off < 0 && which !== "both") { which = "both"; $("which").value = "both"; }
+
+    var kind = off < 0 ? "kuriage" : (off === 0 ? "none" : "kurisage");
+    var rate = 0, kisoNew = kiso, koseiNew = kosei, kisoOff = 0, koseiOff = 0;
+    if (kind === "kuriage") {
+      rate = -redRate * (-off);
+      kisoNew = Math.round(kiso * (1 + rate)); koseiNew = Math.round(kosei * (1 + rate));
+      kisoOff = off; koseiOff = off;
+    } else if (kind === "kurisage") {
+      rate = 0.007 * off;
+      if (which !== "kosei") { kisoNew = Math.round(kiso * (1 + rate)); kisoOff = off; }
+      if (which !== "kiso") { koseiNew = Math.round(kosei * (1 + rate)); koseiOff = off; }
+    }
+    var base = kiso + kosei, nw = kisoNew + koseiNew;
+    var pct = Math.round(Math.abs(rate) * 1000) / 10;
+    var reqY = y65, reqM = m65 + off;
+
+    if (kind === "none") {
+      box("65歳から受け取る", "年 " + yen(base) + "（月あたり約" + yen(base / 12) + "）", "増えも減りもしない、ふつうの受け取り方です。65歳になる月は " + ym(y65, m65) + " です。", false);
+    } else {
+      var tgt = kind === "kuriage" ? "両方" : (which === "both" ? "両方" : (which === "kiso" ? "基礎年金だけ" : "厚生年金だけ"));
+      box(kind === "kuriage" ? "繰上げ（早める）" : "繰下げ（遅らせる）",
+        agetxt(startMo) + "から：" + (kind === "kuriage" ? "−" : "＋") + pct + "%（" + tgt + "）",
+        (kind === "kuriage" ? (redRate * 100).toFixed(1) + "%×" + (-off) + "か月" : "0.7%×" + off + "か月") + "＝" + pct + "%。" +
+        (kind === "kuriage" ? "減った額は一生そのままで、あとから取り消せません。" : "増えた額は一生そのままです。") +
+        "請求（申出）する月の目安は " + ym(reqY, reqM) + " で、年金はその翌月分から出ます。", kind === "kuriage");
+      box("1年あたりの額", "年 " + yen(nw) + "（月あたり約" + yen(nw / 12) + "）",
+        "65歳からなら 年 " + yen(base) + "。" + (kind === "kuriage" ? "差は 年 " + yen(base - nw) + " 少ない" : "差は 年 " + yen(nw - base) + " 多い") +
+        "。\n基礎年金 " + yen(kiso) + "→" + yen(kisoNew) + "\n厚生年金 " + yen(kosei) + "→" + yen(koseiNew), false);
+    }
+
+    // 合計の比べ（税・保険料を引く前）
+    function total(ageMo, kOff, cOff, kA, cA) {
+      var s = 0;
+      var kStart = 780 + kOff, cStart = 780 + cOff;
+      if (ageMo > kStart) s += kA / 12 * (ageMo - kStart);
+      if (ageMo > cStart) s += cA / 12 * (ageMo - cStart);
+      return s;
+    }
+    if (kind !== "none") {
+      var lines = [], cross = null;
+      [75, 80, 85, 90, 95].forEach(function (ag) {
+        var A = total(ag * 12, kisoOff, koseiOff, kisoNew, koseiNew), B = total(ag * 12, 0, 0, kiso, kosei);
+        lines.push(ag + "歳まで\n　選んだ形 " + man(A) + "\n　65歳から " + man(B));
+      });
+      for (var mo = 720; mo <= 1320; mo++) {
+        var A2 = total(mo, kisoOff, koseiOff, kisoNew, koseiNew), B2 = total(mo, 0, 0, kiso, kosei);
+        if (kind === "kurisage" && mo > 780 + off && A2 >= B2) { cross = mo; break; }
+        if (kind === "kuriage" && mo > 780 && B2 >= A2) { cross = mo; break; }
+      }
+      box("受け取った合計の比べ（税・保険料の前）", cross ? agetxt(cross) + "ごろに入れ替わる" : "110歳までに入れ替わらない",
+        (kind === "kuriage"
+          ? "繰上げは、" + (cross ? agetxt(cross) + "ごろまでは合計が多く、そのあとは65歳から受け取った人の合計のほうが多くなります。" : "") + "受け取りはじめてから約" + (old5 ? "16年8か月" : "20年10か月") + "が目安です。"
+          : "繰下げは、" + (cross ? agetxt(cross) + "ごろに65歳から受け取った人の合計に追いつき、そのあとは多くなります。" : "") + "受け取りはじめてから約11年11か月が目安です。") +
+        "\n" + lines.join("\n"), false);
+    }
+
+    // 加給年金
+    if (kakyu > 0 && kind === "kurisage" && which !== "kiso") {
+      var waitY = off / 12;
+      box("加給年金", "待つあいだは出ません（増えもしません）",
+        "厚生年金を遅らせると、待っているあいだ加給年金（年 " + yen(kakyu) + "）は受け取れず、遅らせても増えません。加給年金が出る期間（配偶者が65歳になるまでなど）と重なると、最大で 年 " + yen(kakyu) + "×" + (Math.round(waitY * 10) / 10) + "年＝" + yen(kakyu * waitY) + " を受け取れないことがあります。基礎年金だけ遅らせる形なら、加給年金は65歳から受け取れます。", true);
+    } else if (kakyu > 0 && kind === "kurisage" && which === "kiso") {
+      box("加給年金", "65歳から受け取れる見込み", "厚生年金は65歳から受け取るので、加給年金も止まりません。基礎年金を遅らせると、振替加算がある人は、待っているあいだ振替加算は受け取れず、増えもしません。", false);
+    }
+
+    // 注意
+    var ng = [];
+    if (kind === "kuriage") {
+      ng.push("・繰上げは取り消せない。減った額は一生続く");
+      ng.push("・繰上げのあとは、事後重症などの障害年金の請求ができない");
+      ng.push("・寡婦年金は受け取れなくなる（受け取り中なら権利がなくなる）");
+      ng.push("・国民年金の任意加入・追納ができなくなる");
+      ng.push("・65歳までは、遺族厚生年金とどちらか1つを選ぶ");
+      ng.push("・65歳まで失業保険を受けると、厚生年金の分が止まる");
+      if (sp) ng.push("・特別支給の老齢厚生年金がある人は、繰上げの扱いがちがう。年金事務所で確かめる");
+    } else if (kind === "kurisage") {
+      ng.push("・繰下げの申出は66歳から");
+      ng.push("・加給年金・振替加算は増えず、待つあいだは出ない");
+      ng.push("・働いて在職老齢年金で止まる分は、増える対象にならない");
+      ng.push("・待つあいだに遺族年金・障害年金を受けられるようになると、その時点で増える率が止まる");
+      ng.push("・70歳を過ぎてから65歳にさかのぼって受け取ると、5年前に申し出たとみなして増えた分を一度に受け取る形になる（80歳以後などは対象外）");
+      ng.push("・年金が増えると、税金・保険料も増えることがある");
+      if (sp) ng.push("・65歳前の特別支給の老齢厚生年金は、繰下げで増えない");
+    } else {
+      ng.push("・65歳から受け取るには、65歳になる前に届く請求書を出す");
+    }
+    ng.push("・額は税金・保険料を引く前の目安。決めるのは日本年金機構");
+    $("ng").textContent = ng.join("\n");
+
+    // 次にやること
+    li("ねんきん定期便（またはねんきんネット）で、65歳からの見込み額と加入記録を確かめる");
+    if (kind === "kuriage") {
+      li("65歳まで働くか・失業保険を受けるか・障害や遺族の年金の可能性があるかを整理する");
+      li("年金事務所で、繰上げしたときの額と、できなくなることを確かめる（取り消せないので、決める前に）");
+      li(ym(reqY, reqM) + "ごろに、繰上げの請求書を年金事務所に出す");
+    } else if (kind === "kurisage") {
+      li("65歳になる前に届く請求書をどう出すか（" + (which === "both" ? "両方を遅らせる" : "片方だけ65歳から受け取る") + "）を、年金事務所で確かめてから出す・待つ");
+      li("待つあいだの生活費（給料・貯金）が足りるかを、月ごとに確かめる");
+      li(ym(reqY, reqM) + "ごろに、年金事務所で繰下げの申出をする");
+    } else {
+      li("65歳になる前に届く請求書を、年金事務所に出す");
+    }
+    if (kakyu > 0) li("加給年金がいつまで出るか（配偶者の年齢など）を、年金事務所で確かめる");
+
+    // メモ
+    var mm = "生年月日は\n" + by + "年" + (bm + 1) + "月" + bdd + "日です。\n";
+    if (kind === "kuriage") mm += agetxt(startMo) + "から\n繰上げした場合の\n年金額と、\nできなくなることを\n教えてください。";
+    else if (kind === "kurisage") mm += agetxt(startMo) + "から\n" + (which === "both" ? "" : (which === "kiso" ? "基礎年金だけ\n" : "厚生年金だけ\n")) + "繰下げした場合の\n年金額と、\n加給年金・振替加算の\n扱いを教えてください。";
+    else mm += "65歳からの\n年金額と、\n請求書の出し方を\n教えてください。";
+    $("memo").textContent = mm;
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("bd").value = "1963-08-15"; $("kiso").value = "780000"; $("kosei").value = "900000";
+    $("ay").value = "68"; $("am").value = "0"; $("which").value = "both"; $("kakyu").value = ""; $("sp").value = "no";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
