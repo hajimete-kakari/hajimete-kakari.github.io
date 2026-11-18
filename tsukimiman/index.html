@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>入社1年未満の傷病手当金の額｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], input[type=month], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; }
+  .row > div { flex: 1; min-width: 0; }
+  .row .sm { font-size: .82rem; color: var(--sub); display: block; margin-bottom: 4px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>入社1年未満の傷病手当金の額</h1>
+  <p class="lead">いまの健康保険に入った日と、手当が最初に出る日、標準報酬月額を入れると、平均を出す月が12か月に足りるか、足りないときに比べる2つの額、使う額、1日あたりの額の目安を出します。もらえるかどうかや額を決めるものではなく、決めるのは加入している保険者です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="join">いまの健康保険に入った日<span class="hint">ふつうは入社日です。協会けんぽの中で会社を移った・任意継続になった人は、続けて入っている最初の日</span></label>
+    <input type="date" id="join">
+    <label class="f" for="start">手当が最初に出る日（支給開始日）<span class="hint">休み始めて、待期の3日が終わった次の日です</span></label>
+    <input type="date" id="start">
+  </div>
+
+  <div class="card">
+    <h2>2. 健康保険</h2>
+    <label class="f" for="ins">入っている健康保険</label>
+    <select id="ins">
+      <option value="k">協会けんぽ</option>
+      <option value="u">健康保険組合</option>
+    </select>
+    <label class="f" for="uavg" id="ul" hidden>組合の平均額（円）<span class="hint">組合に聞いた額。わからなければ空のままで</span></label>
+    <input type="number" id="uavg" inputmode="numeric" min="0" step="1" placeholder="例 380000" hidden>
+  </div>
+
+  <div class="card">
+    <h2>3. 標準報酬月額</h2>
+    <label class="f" for="m1">入ってからの標準報酬月額（円）<span class="hint">給与明細の総支給額ではなく、保険料を決める区切りの額です。会社に聞くとわかります</span></label>
+    <input type="number" id="m1" inputmode="numeric" min="0" step="1" placeholder="例 360000">
+    <label class="f" for="chg">途中で額が変わった月<span class="hint">変わっていなければ空のままで</span></label>
+    <input type="month" id="chg">
+    <label class="f" for="m2">変わったあとの額（円）</label>
+    <input type="number" id="m2" inputmode="numeric" min="0" step="1" placeholder="例 380000">
+  </div>
+  <button id="make" type="button">額の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>会社か保険者に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※健康保険法99条2項と、協会けんぽの「傷病手当金」のページの計算のしかたで出した目安です。1日あたりの額は、支給開始日の属する月以前の直近の継続した12か月の標準報酬月額の平均÷30日（10円未満四捨五入）の2/3（1円未満四捨五入）。12か月に満たないときは、①支給開始日の属する月以前の直近の継続した各月の標準報酬月額の平均と、②標準報酬月額の平均額（協会けんぽは、支給開始日が令和7年4月1日以降なら32万円、令和7年3月31日以前なら30万円）の、低い方を使います。健康保険組合の②は組合ごとの額です。会社を休んだ日に給料が出たときは、差額だけになることがあります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = $(id).value; if (v === "" || v === null) return null; v = Number(v); return isFinite(v) ? v : NaN; }
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function dt(id) { var v = $(id).value; if (!v) return null; var p = v.split("-"); return [+p[0], +p[1], +(p[2] || 1)]; }
+  function ym(a) { return a[0] + "年" + a[1] + "月"; }
+  function idx(a) { return a[0] * 12 + (a[1] - 1); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function todo(t) { var li = document.createElement("li"); li.textContent = t; $("todo").appendChild(li); }
+  function daily(avg) { var b = Math.round(avg / 30 / 10) * 10; return Math.round(b * 2 / 3); }
+  function ins() { var u = $("ins").value === "u"; $("ul").hidden = !u; $("uavg").hidden = !u; }
+  $("ins").addEventListener("change", ins);
+  function make() {
+    var join = dt("join"), start = dt("start"), m1 = num("m1"), chg = dt("chg"), m2 = num("m2"), uni = $("ins").value === "u", ua = uni ? num("uavg") : null;
+    if (join === null || start === null) { alert("入った日と、手当が最初に出る日を入れてください"); return false; }
+    var j = Date.UTC(join[0], join[1] - 1, join[2]), s = Date.UTC(start[0], start[1] - 1, start[2]);
+    if (s <= j) { alert("手当が最初に出る日が、入った日より前か同じ日になっています"); return false; }
+    if (m1 === null || isNaN(m1) || m1 < 50000 || m1 > 1500000) { alert("標準報酬月額を、円で入れてください（例 360000）"); return false; }
+    if (chg !== null && (m2 === null || isNaN(m2) || m2 < 50000 || m2 > 1500000)) { alert("変わったあとの額を入れてください"); return false; }
+    if (chg === null && m2 !== null) { alert("額が変わった月を入れてください"); return false; }
+    if (ua !== null && (isNaN(ua) || ua < 50000 || ua > 1500000)) { alert("組合の平均額を、円で入れてください"); return false; }
+    var a = idx(join), b = idx(start);
+    if (chg !== null && (idx(chg) <= a || idx(chg) > b)) { alert("額が変わった月は、入った月の次から、手当が出る月までの間で入れてください"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var n = b - a + 1, use = Math.min(n, 12), from = b - use + 1, tot = 0;
+    for (var i = from; i <= b; i++) tot += (chg !== null && i >= idx(chg)) ? m2 : m1;
+    var avg = Math.round(tot / use);
+    var fy = start[0] > 2025 || (start[0] === 2025 && start[1] >= 4);
+    var P = uni ? ua : (fy ? 320000 : 300000);
+    var short = n < 12, base, kind;
+    var fromYm = [Math.floor(from / 12), from % 12 + 1];
+    box("平均を出す月", short ? n + "か月：12か月に足りません" : "12か月そろっています", ym(fromYm) + "〜" + ym(start) + "の" + use + "か月（入った月と、手当が最初に出る月も数えます）。" + (short ? "足りないので、この" + n + "か月の平均と、保険者の平均額の低い方を使います。" : "ふつうの計算で、この12か月の平均を使います。"), false);
+    if (!short) {
+      base = avg; kind = 0;
+      box("使う額", yen(base), "12か月の標準報酬月額の平均です。", false);
+    } else if (P === null) {
+      base = avg; kind = 3;
+      box("比べる2つの額", "①入ってからの平均 " + yen(avg) + "／②組合の平均額 わからない", "②がわからないので、①で出した目安です。①の方が多いときは、②の額まで下がります。", true);
+    } else {
+      base = Math.min(avg, P); kind = avg > P ? 1 : 2;
+      box("比べる2つの額", "①入ってからの平均 " + yen(avg) + "／②" + (uni ? "組合の平均額 " : "協会けんぽの平均額 ") + yen(P), kind === 1 ? "①の方が多いので、低い②の額を使います。入ってからの給料が高い人は、ここで額が下がります。" : "①が②と同じか少ないので、①の額を使います。", kind === 1);
+    }
+    var b30 = Math.round(base / 30 / 10) * 10, d = daily(base);
+    box("1日あたりの額（目安）", yen(d), yen(base) + "÷30日＝" + yen(b30) + "（10円未満四捨五入）、その2/3で" + yen(d) + "（1円未満四捨五入）。30日休むと " + yen(d * 30) + " くらいです。" + (kind === 1 ? "①で計算したときの " + yen(daily(avg)) + " より、1日 " + yen(daily(avg) - d) + " 少なくなります。" : ""), false);
+    if (short) {
+      var rs = [Math.floor((a + 11) / 12), (a + 11) % 12 + 1];
+      box("12か月そろう月", ym(rs) + "から", "手当が最初に出る日が" + ym(rs) + "以降なら、12か月の平均で計算します（あと" + (12 - n) + "か月）。いったん支給が始まると、そのあとの額は最初に出た日で決まった額のままです。", false);
+    }
+    todo("会社か保険者に、入ってからの標準報酬月額（月ごと）を聞いて、入れた額と合っているか確かめる");
+    if (kind === 3) todo("組合に、12か月に足りないときの平均額を聞いて、入れ直す");
+    todo("休み始めた日と、待期の3日が終わる日をメモして、医師に労務不能の欄を書いてもらう");
+    todo("申請書を出したら、支給の通知で決まった1日あたりの額を確かめる");
+    $("memo").textContent = short ? "入社して" + n + "か月目で、\n傷病手当金を申請します。\n1日あたりの額は、\n" + (uni ? "組合の平均額と\n" : (P / 10000) + "万円と\n") + "比べた低い方に\nなりますか。\n標準報酬月額も\n教えてください。" : "傷病手当金を申請します。\n休む前の12か月の\n標準報酬月額を\n教えてください。";
+    $("ng").textContent = "・数えるのは、いまの保険に続けて入っている月だけ。途中で抜けた期間があると、そのあとから数え直す\n・協会けんぽの中で会社を移った・任意継続になったときは「健康保険加入状況等申告書」を付ける\n・健康保険組合から移ったなど、保険者が変わったときは、前の期間を数えるかを保険者に確かめる\n・標準報酬月額は総支給額とはちがう。会社に聞いた額で計算する\n・休んだ日に給料が出たら、差額だけになることがある\n・ここでの額は目安。決まった額は保険者の支給の通知で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("join").value = "2026-06-01"; $("start").value = "2026-11-10"; $("ins").value = "k"; ins(); $("m1").value = "360000"; make(); }
+})();
+</script>
+</body>
+</html>
