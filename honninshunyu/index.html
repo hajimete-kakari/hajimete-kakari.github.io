@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金の本人収入8万円、バイト代は入る？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.who { margin: 0; padding-left: 1.2em; } ul.who li { margin-bottom: 4px; font-size: .92rem; }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  .row2 { display: flex; gap: 8px; } .row2 > div { flex: 1; min-width: 0; }
+  .or { font-size: .85rem; color: var(--sub); margin: 8px 0 0; }
+  [hidden] { display: none !important; }
+  .mihon .lead, .mihon .note, .mihon #c3, .mihon .hm, .mihon .or { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #items li, .mihon #per li, .mihon #todo li, .mihon #memo, .mihon #ng, .mihon #ask li { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金の本人収入8万円、バイト代は入る？</h1>
+  <p class="lead">求職者支援制度の月10万円の給付金（職業訓練受講給付金）を受けながら、アルバイトや仕送りがある人向けです。訓練が始まる日と、1か月の区切りのあいだに入るお金を入れると、本人の収入の合計（税金を引く前）と、8万円・12万円の線のどこに入るかの目安を出します。給付金が出るかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 訓練が始まる日</h2>
+    <label class="f" for="start">訓練の開始日<span class="hint">1か月の区切り（支給単位期間）は、この日から数えます</span></label>
+    <input type="date" id="start">
+  </div>
+
+  <div class="card">
+    <h2>2. 1か月の区切りのあいだの本人の収入</h2>
+    <label class="f" for="pay">アルバイト・パートの給料<span class="hint">税金や保険料を引く前の額（額面）。円</span></label>
+    <input type="number" id="pay" min="0" inputmode="numeric" value="0">
+    <label class="f" for="paykind">上の給料の額は</label>
+    <select id="paykind">
+      <option value="gaku">明細の「総支給額」（額面）で入れた</option>
+      <option value="tedori">振り込まれた額（手取り）で入れた</option>
+      <option value="yotei">まだ働く前なので、見込みで入れた</option>
+    </select>
+    <p class="or">給料がまだわからないときは、時給と時間から出せます（上の給料が0のときだけ使います）</p>
+    <div class="row2">
+      <div><label class="f" for="jikyu">時給<span class="hint">円</span></label>
+      <input type="number" id="jikyu" min="0" inputmode="numeric" value="0"></div>
+      <div><label class="f" for="jikan">1か月に働く時間<span class="hint">時間</span></label>
+      <input type="number" id="jikan" min="0" inputmode="numeric" value="0"></div>
+    </div>
+    <div class="hm"><label class="f" for="nenkin">年金<span class="hint">遺族年金・障害年金なども。1か月分（円）</span></label>
+    <input type="number" id="nenkin" min="0" inputmode="numeric" value="0"></div>
+    <label class="f" for="shiokuri">仕送り・養育費<span class="hint">家族などから受け取るお金（円）</span></label>
+    <input type="number" id="shiokuri" min="0" inputmode="numeric" value="0">
+    <div class="hm"><label class="f" for="other">そのほかの収入<span class="hint">フリマ・内職・家賃収入・事業の収入など（円）</span></label>
+    <input type="number" id="other" min="0" inputmode="numeric" value="0"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. アルバイトのこと</h2>
+    <label class="f" for="baito">アルバイト・パートは</label>
+    <select id="baito">
+      <option value="new">訓練が始まってから始めた（始める予定）</option>
+      <option value="before">訓練の前からしていて、続けている</option>
+      <option value="none">していない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>4. 家族の収入（わかれば）</h2>
+    <label class="f" for="fam">自分以外の世帯の人の収入の合計<span class="hint">同居や生計が同じの配偶者・子・父母の、同じ期間の額面。わからなければ空のまま</span></label>
+    <input type="number" id="fam" min="0" inputmode="numeric" value="">
+  </div>
+  <button id="make" type="button">本人の収入を数える</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <h3>数える収入</h3>
+    <ul class="who" id="items"></ul>
+    <div id="sum" style="margin-top:12px"></div>
+    <h3>1か月の区切り（支給単位期間）</h3>
+    <ul class="who" id="per"></ul>
+    <h3>窓口で確かめること</h3>
+    <ul class="who" id="ask"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで伝えるときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度のご案内」「求職者支援制度・訓練受講のしおり」の支給要件（支給単位期間ごとに、本人の収入が8万円以下・世帯全体の収入が30万円以下など。満たさなくても本人12万円以下・世帯34万円以下なら通所手当のみ。「収入」は税引前の給与（賞与含）・事業収入・各種年金・仕送り・養育費などで、手取りではない。支給単位期間は訓練開始日から1か月ごと。就職したら収入額にかかわらず指定来所日に申し出る）で出した目安です。月の区切りの日付は目安で、正しい日はハローワークの書類で確かめてください。給料日が区切りをまたぐときの数え方、算定対象外の収入、出席・金融資産など、ほかの要件は見ていません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var L1 = 80000, L2 = 120000, F1 = 300000, F2 = 340000;
+  function yen(x) { return Math.round(x).toLocaleString("ja-JP") + "円"; }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function num(id, label) {
+    var v = $(id).value.trim(), n = Number(v);
+    if (v === "" || !isFinite(n) || n < 0) { alert(label + "を、0以上の数で入れてください（なければ0）"); return null; }
+    return n;
+  }
+  function addMonths(d, k) {
+    var y = d.getFullYear(), m = d.getMonth() + k, day = d.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(day, last));
+  }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function make() {
+    var pay = num("pay", "給料"); if (pay === null) return false;
+    var jikyu = num("jikyu", "時給"); if (jikyu === null) return false;
+    var jikan = num("jikan", "時間"); if (jikan === null) return false;
+    var nenkin = num("nenkin", "年金"); if (nenkin === null) return false;
+    var shiokuri = num("shiokuri", "仕送り・養育費"); if (shiokuri === null) return false;
+    var other = num("other", "そのほかの収入"); if (other === null) return false;
+    var fv = $("fam").value.trim(), fam = null;
+    if (fv !== "") { fam = Number(fv); if (!isFinite(fam) || fam < 0) { alert("家族の収入は、0以上の数で入れるか、空のままにしてください"); return false; } }
+    var kind = $("paykind").value, baito = $("baito").value;
+    var fromJikyu = false;
+    if (pay === 0 && jikyu > 0 && jikan > 0) { pay = jikyu * jikan; fromJikyu = true; }
+    $("items").innerHTML = ""; $("sum").innerHTML = ""; $("per").innerHTML = ""; $("ask").innerHTML = ""; $("todo").innerHTML = "";
+
+    if (pay > 0) li("items", "給料：" + yen(pay) + (fromJikyu ? "（時給" + yen(jikyu) + "×" + jikan + "時間で出した見込み）" : kind === "tedori" ? "（手取りで入れているので、額面はこれより多いはず）" : kind === "yotei" ? "（見込み）" : "（額面）"));
+    if (nenkin > 0) li("items", "年金：" + yen(nenkin));
+    if (shiokuri > 0) li("items", "仕送り・養育費：" + yen(shiokuri));
+    if (other > 0) li("items", "そのほか：" + yen(other));
+    if (!$("items").children.length) li("items", "入っている収入はありません");
+
+    var total = pay + nenkin + shiokuri + other;
+    var tedori = (kind === "tedori" && pay > 0 && !fromJikyu);
+    var band = total <= L1 ? 1 : total <= L2 ? 2 : 3;
+    var s1;
+    if (band === 1) {
+      s1 = (total === L1 ? "ちょうど8万円で、「以下」なので収まります。" : "8万円まで、あと" + yen(L1 - total) + "です。") +
+        "本人の収入の条件は満たす見込みです（世帯・出席など、ほかの条件も要ります）。";
+      if (tedori) s1 += "ただ、給料を手取りで入れています。額面に直すと8万円をこえることがあります。";
+    } else if (band === 2) {
+      s1 = "8万円を" + yen(total - L1) + "こえています。この1か月は、月10万円（職業訓練受講手当）は出ない見込みです。12万円以下なので、世帯の収入が34万円以下などほかの条件を満たせば、交通費（通所手当）だけは出ることがあります。";
+    } else {
+      s1 = "12万円を" + yen(total - L2) + "こえています。この1か月は、月10万円も交通費（通所手当）も出ない見込みです。";
+    }
+    box("1か月の本人の収入（税金を引く前）", yen(total), s1, band !== 1);
+
+    if (jikyu > 0) {
+      var h8 = Math.floor((L1 - nenkin - shiokuri - other) / jikyu);
+      box("8万円までに働ける時間の目安", h8 > 0 ? "時給" + yen(jikyu) + "で約" + h8 + "時間" : "ほかの収入だけで8万円に届いています",
+        h8 > 0 ? "年金・仕送りなどを引いた残りを、時給で割った目安です。交通費の支給や残業代、深夜の割増があると早く届きます。" : "アルバイトの給料を足さなくても、8万円をこえています。", h8 <= 0);
+    }
+    if (fam !== null) {
+      var ft = total + fam;
+      var fs = ft <= F1 ? "30万円以下です。" : ft <= F2 ? "30万円をこえ、34万円以下です。月10万円は出ず、交通費（通所手当）だけの線です。" : "34万円をこえています。この1か月は、交通費（通所手当）も出ない見込みです。";
+      box("世帯の収入（自分を含む）", yen(ft), fs, ft > F1);
+    }
+
+    var sv = $("start").value;
+    if (sv) {
+      var p = sv.split("-"), d0 = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+      for (var k = 0; k < 3; k++) {
+        var a = addMonths(d0, k), b = addMonths(d0, k + 1); b.setDate(b.getDate() - 1);
+        li("per", (k + 1) + "つ目：" + md(a) + "〜" + md(b) + "（このあいだの収入を合わせて見ます）");
+      }
+      if (d0.getDate() >= 29) li("per", "開始日が月末に近いので、短い月の区切りの日は、ここに出た日とずれることがあります");
+      li("per", "区切りが終わるごとに、ハローワークが決めた日（指定来所日）に申請します。日付は目安で、正しい日は渡される書類で確かめます");
+    } else {
+      li("per", "訓練の開始日を入れると、区切りの日付の目安が出ます。区切りは開始日から1か月ごとで、カレンダーの1日〜月末ではありません");
+    }
+
+    if (pay > 0 && !fromJikyu) li("ask", "給料日が区切りをまたぐとき、どの区切りの収入として書くか（申請書には「その期間に得た税引前の収入」と書かれています）");
+    if (fromJikyu || kind === "yotei") li("ask", "見込みの額で8万円に近いときは、シフトを決める前に窓口で相談する");
+    if (shiokuri > 0) li("ask", "養育費は、子の養育のためと書類で確かめられると数えないことがあります。書類があれば持っていく");
+    if (other > 0) li("ask", "フリマの売上など、収入に入るか迷うもの（しおりには「一部算定対象外の収入もある」とあります）");
+    if (!$("ask").children.length) li("ask", "特にありません。迷ったら申請の日に聞きます");
+
+    if (baito === "new") li("todo", "アルバイトを始めたことを、次の指定来所日にハローワークへ申し出る（就職状況報告書を出す。収入の額や雇用保険の加入にかかわらず）");
+    if (baito === "before") li("todo", "事前審査のときに伝えた給料と変わっていないか確かめる。変わったら申請書で「変更有」にする");
+    if (pay > 0) li("todo", "給与明細を区切りごとに取っておく（総支給額を見る）");
+    li("todo", "区切りが終わったら、申請書の本人収入の欄に、その期間の税引前の収入を書く");
+    if (band === 1 && total > L1 * 0.85) li("todo", "8万円に近いので、残業やシフトを足す前に、この区切りの合計を見直す");
+    if (band !== 1) li("todo", "この区切りが外れても、次の区切りで8万円以下にもどれば、その区切りはまた対象になりえます。窓口で確かめる");
+
+    var memo = "職業訓練受講給付金を\n受けています（受ける予定です）。\n";
+    if (baito === "new") memo += "訓練中にアルバイトを\n始めました。\n";
+    memo += total === 0 ? "この区切りの本人の収入は\nない見込みです。\n" : "この区切りの本人の収入は\n額面で" + yen(total) + "の見込みです。\n";
+    memo += total === 0 ? "書き方を確かめたいです。" : band === 1 ? "8万円以下で合っているか\n確かめたいです。" : band === 2 ? "8万円をこえるので、\n通所手当だけになるか\n確かめたいです。" : "12万円をこえるので、\nこの区切りの扱いを\n確かめたいです。";
+    $("memo").textContent = memo;
+    $("ng").textContent = "・数えるのは手取りではなく、税金・保険料を引く前の額\n・ボーナス（賞与）も給料に入る\n・年金・仕送り・家賃収入なども本人の収入に入る\n・8万円ちょうどは「以下」なので入る\n・区切りは開始日から1か月ごと。カレンダーの月とずれる\n・アルバイトを申し出ずに受け取ると、返すことになる場合がある";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("start").value = "2026-12-07"; $("jikyu").value = "1100"; $("jikan").value = "60"; $("shiokuri").value = "20000";
+    $("paykind").value = "yotei"; $("baito").value = "new";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
