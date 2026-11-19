@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>短期訓練受講費、対象かと申請の期限｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #before li, .mihon #bring li, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>短期訓練受講費、対象かと申請の期限</h1>
+  <p class="lead">失業保険を受けている人が、1か月未満の短い講座を受けたときに、入学料と受講料の2割（上限10万円）が戻る「短期訓練受講費」について、対象になりそうか、戻る額の目安、受講の前と後にやること、申請の期限を出します。対象かどうかと額を決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの段階</h2>
+    <label class="f" for="st">講座とハローワークの手続きは、いまどこまで？<span class="hint">受講指導は、講座を始める前にハローワークの職業相談の窓口で受けるものです</span></label>
+    <select id="st">
+      <option value="pre">まだ講座に申し込んでいない</option>
+      <option value="app">申し込んだが、講座はまだ始まっていない（受講指導はまだ）</option>
+      <option value="shido">ハローワークで受講指導を受けた（受講指導書をもらった）</option>
+      <option value="started">受講指導を受けずに、講座を始めた（または終えた）</option>
+    </select>
+    <label class="f" for="tk">講座を始めるのは、待期の7日が終わった後？<span class="hint">待期は、ハローワークで申し込んでから最初の7日間です</span></label>
+    <select id="tk">
+      <option value="after">待期が終わった後</option>
+      <option value="during">待期の7日のあいだに始まる</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="rk">いま、失業保険を受けられる期間の中？<span class="hint">受講指導を受ける日に、受給資格者などであることが条件です</span></label>
+    <select id="rk">
+      <option value="yes">期間の中（受給資格者証がある）</option>
+      <option value="end">もう期間が終わった・給付日数を全部受けた</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 講座の中身</h2>
+    <label class="f" for="len">講座の長さ</label>
+    <select id="len">
+      <option value="short">1か月未満</option>
+      <option value="long">1か月以上</option>
+    </select>
+    <label class="f" for="goal">公的な職業資格をとるための講座？<span class="hint">国家資格や公的な資格の取得を目標にしているか、講座の案内で確かめます</span></label>
+    <select id="goal">
+      <option value="yes">はい</option>
+      <option value="no">いいえ（趣味・教養が目的など）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="sch">講座を行う学校・会社は、一般教育訓練給付の講座も行っている？<span class="hint">厚生労働省の「教育訓練給付制度 検索システム」で、学校の名前を探せます</span></label>
+    <select id="sch">
+      <option value="yes">行っている</option>
+      <option value="no">行っていない</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="shitei">受けたい講座そのものは、一般教育訓練給付の指定講座？</label>
+    <select id="shitei">
+      <option value="no">指定講座ではない</option>
+      <option value="yes_ok">指定講座で、自分は教育訓練給付金の条件を満たす</option>
+      <option value="yes_ng">指定講座だが、自分は教育訓練給付金の条件を満たさない</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 費用と日付</h2>
+    <label class="f" for="fee">入学料と受講料の合計（円）<span class="hint">教材費・交通費・検定の受験料などは入れません</span></label>
+    <input type="number" id="fee" min="0" max="9999999" step="1" inputmode="numeric" placeholder="例：60000">
+    <label class="f" for="ed">講座を終える日（修了日・予定の日）</label>
+    <input type="date" id="ed">
+  </div>
+  <button id="make" type="button">対象かと期限を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>講座を始める前にやること</h3>
+    <ol class="tl" id="before"></ol>
+    <h3>終わったあとの申請で出すもの</h3>
+    <ul class="tl" id="bring"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークに聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法施行規則 第100条の2〜第100条の5と、ハローワークインターネットサービス「就職促進給付」の短期訓練受講費の説明をもとにした目安です。戻る額は、入学料と受講料の合計の2割（上限10万円）として出しています（1円未満の扱いなど、実際の額はハローワークが決めます）。申請の期限は、修了日の翌日から数えて1か月以内の最後の日を出しています（その日が土日祝日のときの扱いは、ハローワークに確かめてください）。講座が対象になるかは、このほか、始まる時期・内容・対象者・目標・修了の基準がはっきりしていて、学校が受講と修了を確かめるものかどうかでも決まります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function fd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  // 修了日の翌日から数えて1か月：翌月の同じ日（その日がなければ翌月の末日）
+  function deadline(e) {
+    var y = e.getFullYear(), m = e.getMonth() + 1, d = e.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(d, last));
+  }
+  window.__deadline = deadline;
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function make() {
+    ["sum", "before", "bring", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var st = $("st").value, tk = $("tk").value, rk = $("rk").value, len = $("len").value, goal = $("goal").value,
+        sch = $("sch").value, shitei = $("shitei").value, feeS = $("fee").value, ed = $("ed").value;
+    if (feeS === "" || isNaN(Number(feeS)) || Number(feeS) < 0) { alert("入学料と受講料の合計を、数字（円）で入れてください"); return false; }
+    if (!ed) { alert("講座を終える日（予定の日）を入れてください"); return false; }
+    var fee = Math.floor(Number(feeS));
+    var pre = (st === "pre" || st === "app");
+    var no = [], ask = [];
+    if (st === "started") no.push("条件は、講座を始める前にハローワークの受講指導を受けていることです。受講指導を受けずに始めた講座は、あたらない見込みです。");
+    if (tk === "during") no.push("待期の7日のあいだに始まる講座は、条件の「待期が過ぎた後に始めた」にあたりません。");
+    if (rk === "end") no.push("受講指導を受ける日に、失業保険を受けられる人（受給資格者など）であることが条件です。期間が終わっていると、あたらない見込みです。");
+    if (len === "long") no.push("対象は1か月未満の講座です。1か月以上の講座は、教育訓練給付金や職業訓練のほうを確かめます。");
+    if (goal === "no") no.push("対象は、公的な職業資格をとることを目標にした講座です。");
+    if (sch === "no") no.push("対象は、一般教育訓練給付の講座を行っている学校・会社が行う講座です。");
+    if (shitei === "yes_ok") no.push("一般教育訓練給付の指定講座で、教育訓練給付金の条件を満たす人は、短期訓練受講費の対象になりません。教育訓練給付金のほうを確かめます。");
+    if (fee === 0) no.push("入学料と受講料がかからない講座は、戻る額がありません。");
+    if (tk === "unk") ask.push("講座が始まる日が待期の後かどうかは、受給資格者証の日付やハローワークで確かめられます。");
+    if (rk === "unk") ask.push("失業保険を受けられる期間の中かどうかを、受給資格者証で確かめてください。");
+    if (goal === "unk") ask.push("講座の案内で、どの資格の取得を目標にしているかを確かめてください。");
+    if (sch === "unk") ask.push("学校が一般教育訓練給付の講座を行っているかは、「教育訓練給付制度 検索システム」で学校の名前を探すとわかります。");
+    if (shitei === "yes_ng") ask.push("指定講座でも、教育訓練給付金の条件を満たさない人が受けるときは対象になります。条件を満たさないことを、ハローワークで確かめてください。");
+    if (shitei === "unk") ask.push("講座が一般教育訓練給付の指定講座かどうかを、検索システムか学校に確かめてください。");
+    if (st === "app") ask.push("申し込みが済んでいても、講座が始まる前なら、照会票と受講指導の手続きはまだできます。");
+    if (no.length) box("対象になりそう？", "このままでは、対象にならない見込みです", no.join(""), true);
+    else if (ask.length) box("対象になりそう？", "確かめることが残っていますが、対象になる可能性があります", ask.join(""), false);
+    else box("対象になりそう？", "条件にあてはまる見込みです", (pre ? "講座を始める前にハローワークの受講指導を受け、" : "") + "講座を修了したあとに申請すれば、短期訓練受講費の対象になる見込みです。", false);
+    if (no.length && ask.length) box("ほかに確かめること", "あわせて確かめてください", ask.join(""), false);
+
+    var amt = Math.min(Math.floor(fee * 0.2), 100000);
+    if (fee > 0) box("戻る額の目安", "約" + yen(amt), "入学料と受講料の合計 " + yen(fee) + " の2割" + (fee * 0.2 > 100000 ? "は10万円を超えるので、上限の10万円です。" : "です。") + "残りの" + yen(fee - amt) + "は自分の負担です。" + (no.length ? "（条件にあてはまったときの額です）" : ""), false);
+
+    var e = pd(ed), dl = deadline(e);
+    var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var left = Math.round((dl - now) / 86400000), before = e >= now;
+    box("申請の期限", fd(dl) + " まで", "修了日 " + fd(e) + " の翌日から数えて1か月以内です。" + (before ? "講座を終えたら、住んでいる所のハローワークへ出します。" : left >= 0 ? "今日からあと" + left + "日です。" : "期限を" + (-left) + "日過ぎています。出せるかどうか、すぐにハローワークに相談してください。"), !before && left < 0);
+
+    if (pre) {
+      li("before", "「短期訓練受講費支給要件照会票」に、学校の証明を書いてもらう（用紙はハローワークで聞く）");
+      li("before", "照会票を、住んでいる所のハローワークの雇用保険の窓口に出す");
+      li("before", "「支給要件回答書」に、条件を満たすと書かれているか確かめる");
+      li("before", "回答書を持って職業相談の窓口で受講指導を受け、「短期訓練受講指導書」をもらう");
+      li("before", "そのあとで講座を始める");
+    } else if (st === "shido") {
+      li("before", before ? "受講指導は済んでいます。受講指導書をなくさないようにして、講座を始めます" : "受講指導は済んでいます。受講指導書は、申請が終わるまで手元に置いておきます");
+    } else {
+      li("before", "受講指導を受けずに始めた講座は、条件にあたらない見込みです。次に別の講座を受けるときは、始める前にハローワークで手続きします");
+    }
+
+    li("bring", "求職活動支援費（短期訓練受講費）支給申請書（ハローワークでもらう）");
+    li("bring", "講座を修了したことの証明（学校が証明したもの）");
+    li("bring", "入学料と受講料を払った額がわかるもの（領収書など）");
+    li("bring", "受給資格者証（受給資格通知の人は、マイナンバーカード）");
+    li("bring", "そのほかハローワークに言われた書類");
+
+    if (no.length) {
+      if (st === "started") {
+        li("todo", "受講指導を受けずに始めたことを伝えて、出せる見込みがないかをハローワークに聞く");
+        li("todo", "次に講座を受けるときは、始める前に照会票と受講指導を済ませる");
+      } else {
+        li("todo", "あてはまらない条件が変えられないか（始める日をずらす・別の講座にするなど）を、講座を始める前にハローワークで相談する");
+        if (shitei === "yes_ok") li("todo", "教育訓練給付金の手続きと期限を確かめる");
+        else li("todo", "対象にならないときは、費用を自分で払う前提で受けるか決める");
+      }
+    } else {
+      if (pre) li("todo", "講座が始まる前に、照会票を持ってハローワークへ行き、受講指導まで済ませる");
+      if (before) li("todo", "講座を最後まで受けて、修了の証明と領収書をもらう");
+      li("todo", (left >= 0 ? fd(dl) + " までに、" : "期限を過ぎていることを伝えて、") + "住んでいる所のハローワークへ申請書を出す");
+    }
+    $("memo").textContent = "1か月未満の講座を\n" + (st === "started" || !before ? "受けました。" : "受けようと思っています。") + "\n入学料と受講料は\n合わせて" + yen(fee) + "です。\n短期訓練受講費の対象か、\n" + (pre ? "始める前の照会票と\n受講指導の手続きを\n" : "申請に出すものを\n") + "教えてください。";
+    $("ng").textContent = "・講座を始める前に、受講指導を受ける\n・照会票は、講座を始める前に出す\n・待期の7日が過ぎてから始める\n・対象かどうかと額は、ハローワークが決める\n・教育訓練給付金の条件を満たす指定講座は対象外\n・申請は、修了日の翌日から1か月以内";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("st").value = "pre"; $("tk").value = "after"; $("rk").value = "yes"; $("len").value = "short"; $("goal").value = "yes"; $("sch").value = "yes"; $("shitei").value = "no"; $("fee").value = "60000"; $("ed").value = "2027-01-22"; make(); }
+})();
+</script>
+</body>
+</html>
