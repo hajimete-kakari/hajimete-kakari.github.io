@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>遺族年金：誰がいくら受け取れるかの判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>遺族年金：誰がいくら受け取れるかの判定</h1>
+  <p class="lead">亡くなった方の年金の入り方と、あなたとの関係・年齢・子の人数、ねんきん定期便の厚生年金の額を入れると、遺族基礎年金・遺族厚生年金・中高齢の寡婦加算の対象かどうかと、1年あたりの額の目安、国民年金だけの人の寡婦年金・死亡一時金、気をつけること、次にやることを出します。額は令和8年度の額による目安で、決めるのは日本年金機構です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 亡くなった方のこと</h2>
+    <label class="f" for="dstat">亡くなったときの年金の入り方</label>
+    <select id="dstat">
+      <option value="kosei_now">会社員・公務員として働いていた（厚生年金に加入中）</option>
+      <option value="kokumin_now">自営業・無職など（国民年金に加入中、または60〜64歳で国内に住んでいた）</option>
+      <option value="long25">年金を受け取っていた、または加入期間が合わせて25年以上</option>
+      <option value="shoshin5">退職後、会社員のときに初診日がある病気で、初診日から5年以内に亡くなった</option>
+      <option value="shogai12">1級・2級の障害厚生年金を受け取っていた</option>
+    </select>
+    <label class="f" for="nofu">保険料の納め方<span class="hint">死亡日の前々月までの加入期間のうち、未納が3分の1を超えていないか。または、前々月までの直近1年に未納がないか（65歳未満・令和18年3月末までの特例）</span></label>
+    <select id="nofu">
+      <option value="ok">どちらかに当てはまる（未納は少ない）</option>
+      <option value="unknown">わからない</option>
+      <option value="ng">どちらにも当てはまらない（未納が多い）</option>
+    </select>
+    <label class="f" for="hosyu">亡くなった方の老齢厚生年金の年額（円）<span class="hint">ねんきん定期便の「老齢厚生年金」の欄（報酬比例部分）。会社員の期間がなければ空</span></label>
+    <input type="number" id="hosyu" min="0" max="10000000" inputmode="numeric" placeholder="例：450000">
+    <label class="f" for="kmonths">亡くなった方の厚生年金の加入月数<span class="hint">ねんきん定期便の加入期間の「厚生年金保険」の月数。なければ0</span></label>
+    <input type="number" id="kmonths" min="0" max="600" inputmode="numeric" placeholder="例：180">
+    <div class="mh">
+      <label class="f" for="kmonthsN">国民年金（自営業などの期間）で保険料を納めた月数<span class="hint">寡婦年金・死亡一時金の目安に使います。会社員の期間は入れない。わからなければ空</span></label>
+      <input type="number" id="kmonthsN" min="0" max="480" inputmode="numeric" placeholder="例：120">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. あなた（受け取る人）のこと</h2>
+    <label class="f" for="rel">亡くなった方から見て、あなたは</label>
+    <select id="rel">
+      <option value="tsuma">妻</option>
+      <option value="otto">夫</option>
+      <option value="ko">子</option>
+      <option value="fubo">父・母</option>
+      <option value="mago">孫</option>
+      <option value="sofubo">祖父・祖母</option>
+    </select>
+    <label class="f" for="age">亡くなったときの、あなたの年齢</label>
+    <input type="number" id="age" min="0" max="110" inputmode="numeric" placeholder="例：38">
+    <label class="f" for="nko">子の人数<span class="hint">亡くなった方の子（養子を含む）で、18歳になった年度の3月31日まで、または20歳未満で障害等級1級・2級、結婚していない人。あなたが「子」なら、あなたも数える</span></label>
+    <input type="number" id="nko" min="0" max="10" inputmode="numeric" placeholder="例：2">
+    <label class="f" for="inc">あなたの年収</label>
+    <select id="inc">
+      <option value="ok">850万円未満</option>
+      <option value="soon">850万円以上だが、おおむね5年以内に850万円未満になる（退職など）</option>
+      <option value="ng">850万円以上</option>
+    </select>
+    <div class="mh">
+      <label class="f" for="higher">父母・孫・祖父母の人だけ：亡くなった方に、遺族年金を受け取れる配偶者や子はいる？</label>
+      <select id="higher">
+        <option value="no">いない</option>
+        <option value="yes">いる</option>
+      </select>
+      <label class="f" for="own">妻・夫で65歳以上の人だけ：あなた自身の老齢厚生年金の年額（円）</label>
+      <input type="number" id="own" min="0" max="10000000" inputmode="numeric" placeholder="例：500000">
+      <label class="f" for="kon">妻で国民年金だけの人のとき：結婚して10年以上（事実婚を含む）？</label>
+      <select id="kon">
+        <option value="yes">10年以上</option>
+        <option value="no">10年未満</option>
+      </select>
+    </div>
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>年金事務所で聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「遺族年金ガイド 令和8年度版」をもとにした目安です。遺族基礎年金は年847,300円（昭和31年4月1日以前生まれの方は844,900円）、子の加算は1人目・2人目が各243,800円、3人目以降が各81,300円、中高齢の寡婦加算は635,500円（令和8年度）。遺族厚生年金は、亡くなった方の老齢厚生年金の報酬比例部分の4分の3で、在職中の死亡などで加入期間が300月未満なら300月とみなします（ねんきん定期便の額から、月数の比で割り戻した目安。乗率のちがいは入れていません）。税金を引く前の額です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  var KISO = 847300, KISO_OLD = 844900, ADD12 = 243800, ADD3 = 81300, CHUKO = 635500;
+  var REL = { tsuma: "妻", otto: "夫", ko: "子", fubo: "父・母", mago: "孫", sofubo: "祖父・祖母" };
+  function ichiji(m) {
+    if (m >= 420) return 320000; if (m >= 360) return 270000; if (m >= 300) return 220000;
+    if (m >= 240) return 170000; if (m >= 180) return 145000; if (m >= 36) return 120000; return 0;
+  }
+
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("memo").textContent = ""; $("ng").textContent = ""; $("result").hidden = true;
+    if ($("age").value === "") { alert("亡くなったときのあなたの年齢を入れてください"); return false; }
+    var dstat = $("dstat").value, nofu = $("nofu").value, rel = $("rel").value, inc = $("inc").value;
+    var age = Math.floor(Number($("age").value)), nko = Math.floor(Number($("nko").value || 0));
+    var hosyu = Math.floor(Number($("hosyu").value || 0)), km = Math.floor(Number($("kmonths").value || 0));
+    var kmN = $("kmonthsN").value === "" ? -1 : Math.floor(Number($("kmonthsN").value));
+    var own = Math.floor(Number($("own").value || 0));
+    if (!(age >= 0) || !(nko >= 0) || !(hosyu >= 0) || !(km >= 0)) { alert("数は0以上で入れてください"); return false; }
+    if (rel === "ko" && nko < 1) { nko = 1; $("nko").value = "1"; }
+    var ng = [], memoLines = [];
+    var spouse = (rel === "tsuma" || rel === "otto");
+    var lower = (rel === "fubo" || rel === "mago" || rel === "sofubo");
+
+    // 亡くなった方の要件
+    var needNofu = (dstat === "kosei_now" || dstat === "kokumin_now" || dstat === "shoshin5");
+    var nofuNG = needNofu && nofu === "ng";
+    var short = (dstat === "kosei_now" || dstat === "shoshin5" || dstat === "shogai12");
+    var deadKiso = (dstat === "kosei_now" || dstat === "kokumin_now" || dstat === "long25") && !nofuNG;
+    var deadKisoMaybe = (dstat === "shoshin5" || dstat === "shogai12");
+    var deadKosei = (short || (dstat === "long25" && km > 0)) && !nofuNG;
+
+    if (inc === "ng") {
+      box("生計維持", "対象になりにくい", "遺族年金は、亡くなった方に生計を維持されていた人が対象で、原則として年収850万円未満の人です。おおむね5年以内に850万円未満になる事情（退職・廃業など）があれば対象になります。年金事務所で確かめてください。", true);
+      ng.push("・年収850万円以上だと、原則として遺族年金の対象にならない");
+    }
+    if (nofuNG) {
+      box("保険料の納付要件", "満たしていない見込み",
+        "在職中の死亡など（加入中・60〜64歳・初診日から5年以内）は、保険料の納付要件があります。前々月までの加入期間の3分の2以上を納めている（免除・厚生年金の期間を含む）か、65歳未満で直近1年に未納がないことが必要です。記録のもれもあるので、年金事務所で加入記録を確かめてください。", true);
+    }
+    if (lower && $("higher").value === "yes") {
+      box("受け取る順番", REL[rel] + "は、いまは受け取れません",
+        "遺族年金は、いちばん順位の高い人が受け取ります。順位は「配偶者・子」→父母→孫→祖父母です。配偶者や子が受け取れる間は、" + REL[rel] + "には出ません。", true);
+      ng.push("・順位の高い遺族がいると、" + REL[rel] + "は受け取れない");
+      finish(0, ng, memoLines, rel, dstat, false); return true;
+    }
+
+    var kiso = 0, kosei = 0, chuko = 0, koseiFrom = "", koseiNote = "";
+    // 遺族基礎年金
+    var kisoBase = (spouse && age >= 70) ? KISO_OLD : KISO;
+    if (spouse && nko > 0) {
+      if (deadKiso || deadKisoMaybe) {
+        var addK = 0;
+        for (var i = 1; i <= nko; i++) addK += (i <= 2 ? ADD12 : ADD3);
+        kiso = kisoBase + addK;
+        box("遺族基礎年金（子のある配偶者）", "年 " + yen(kiso) + "（月あたり約" + yen(kiso / 12) + "）",
+          yen(kisoBase) + "＋子の加算 " + yen(addK) + "（子" + nko + "人）。\n子が18歳になった年度の3月31日（障害等級1級・2級なら20歳）を過ぎるごとに、その子の加算がなくなります。全員が過ぎると、遺族基礎年金は終わります。" +
+          (deadKisoMaybe ? "\n※亡くなった方が、亡くなったときに国民年金に入っていた（退職後の国民年金を含む）か、加入期間が25年以上あるときの額です。年金事務所で確かめてください。" : ""), false);
+      } else if (!nofuNG) {
+        box("遺族基礎年金", "対象外の見込み", "亡くなった方の要件に当てはまりません。", true);
+      }
+    } else if (rel === "ko" && (deadKiso || deadKisoMaybe)) {
+      var tot = KISO;
+      for (var j = 2; j <= nko; j++) tot += (j <= 2 ? ADD12 : ADD3);
+      kiso = tot / nko;
+      box("遺族基礎年金（子が受け取る）", "1人あたり 年 " + yen(kiso),
+        "（" + yen(KISO) + "＋2人目以降の加算）÷子" + nko + "人＝1人 " + yen(kiso) + "。\nただし、子と生計を同じくする父または母がいる間は、子の遺族基礎年金は止まります（2028年4月からは、生計を同じくする父または母がいても受け取れるように変わります）。子のある配偶者が受け取っている間は、子には出ません。", false);
+      ng.push("・子と暮らす父または母がいると、子の遺族基礎年金は止まる（2028年4月からは止まらなくなる）");
+    } else if (spouse && nko === 0) {
+      box("遺族基礎年金", "対象外（子がいない）", "遺族基礎年金は「子のある配偶者」か「子」が受け取ります。子のいない配偶者は対象になりません。", true);
+    } else if (lower) {
+      box("遺族基礎年金", "対象外", "遺族基礎年金は「子のある配偶者」か「子」だけです。" + REL[rel] + "は遺族厚生年金だけが対象です。", true);
+    }
+
+    // 遺族厚生年金
+    var koseiFull = 0;
+    if (deadKosei) {
+      var calcable = hosyu > 0;
+      if (calcable) {
+        var b = hosyu;
+        if (short && km > 0 && km < 300) { b = hosyu * 300 / km; koseiNote = "加入" + km + "か月を300か月とみなして " + yen(hosyu) + "×300÷" + km + "＝" + yen(b) + "。"; }
+        koseiFull = b * 3 / 4;
+      }
+      var ok = true, reason = "";
+      if (rel === "otto" || rel === "fubo" || rel === "sofubo") {
+        if (age < 55) {
+          ok = false; reason = "夫・父母・祖父母は、亡くなったときに55歳以上であることが必要です。" + (rel === "otto" && nko > 0 ? "子がいるので、遺族厚生年金は子が受け取る形になります（子の人数で分けます）。" : "");
+        } else {
+          koseiFrom = (age >= 60 ? "いまから" : "60歳から") + (rel === "otto" && kiso > 0 && age < 60 ? "（遺族基礎年金を受け取る間は60歳前でも合わせて受け取れる）" : "");
+          if (rel === "otto" && kiso > 0 && age < 60) koseiFrom = "いまから（遺族基礎年金を受け取る間）。遺族基礎年金が終わったあとは60歳まで止まる";
+        }
+      } else if (rel === "tsuma") {
+        koseiFrom = (nko === 0 && age < 30) ? "いまから5年間（30歳未満で子のない妻は5年の有期）" : "いまから";
+      } else {
+        koseiFrom = "いまから（18歳になった年度の3月31日まで。障害等級1級・2級なら20歳まで）";
+      }
+      if (!ok) {
+        box("遺族厚生年金", "対象外の見込み", reason, true);
+      } else {
+        var per = (rel === "ko" || rel === "mago") ? nko : 1;
+        if (rel === "mago" && per < 1) per = 1;
+        kosei = calcable ? koseiFull / per : 0;
+        var s = calcable ? ((koseiNote ? koseiNote + "その" : "老齢厚生年金 " + yen(hosyu) + " の") + "4分の3＝" + yen(koseiFull) + (per > 1 ? "。子" + per + "人で分けて1人 " + yen(kosei) : "") + "。") : "ねんきん定期便の老齢厚生年金の額を入れると、目安が出ます。式は「亡くなった方の報酬比例部分×4分の3」です。";
+        s += "\n受け取れる時期：" + koseiFrom;
+        if (dstat === "long25") s += "\n※加入期間25年以上による場合は、加入月数を300か月とみなさず、乗率も生年月日で変わります。";
+        // 65歳以上の配偶者
+        if (spouse && age >= 65 && calcable) {
+          var A = koseiFull, B = koseiFull * 2 / 3 + own / 2, X = Math.max(A, B);
+          var paid = Math.max(0, X - own);
+          s += "\n65歳以上で自分の老齢厚生年金があるとき：①" + yen(A) + " と ②" + yen(koseiFull * 2 / 3) + "＋自分の" + yen(own) + "÷2＝" + yen(B) + " の高いほう（" + yen(X) + "）が遺族厚生年金の額。自分の老齢厚生年金は全額出て、遺族厚生年金はその分（" + yen(own) + "）が止まり、実際に出るのは " + yen(paid) + "。";
+          kosei = paid;
+          if (own > 0) ng.push("・65歳以上は、自分の老齢厚生年金が先に全額出て、遺族厚生年金はその分が止まる。老齢厚生年金の請求も要る");
+        }
+        if (age < 60 && (rel === "fubo" || rel === "sofubo" || (rel === "otto" && kiso === 0))) {
+          box("遺族厚生年金", calcable ? "年 " + yen(kosei) + "（60歳から）" : "対象（60歳から）", s, false);
+          if (age < 60) kosei = 0;
+        } else {
+          box("遺族厚生年金", calcable ? "年 " + yen(kosei) + "（月あたり約" + yen(kosei / 12) + "）" : "対象の見込み（額は入力すると出ます）", s, false);
+        }
+        if (rel === "tsuma" && nko === 0 && age < 30) ng.push("・30歳未満で子のない妻の遺族厚生年金は、5年で終わる");
+        // 中高齢の寡婦加算
+        if (rel === "tsuma") {
+          var chukoOK = short || km >= 240;
+          if (nko === 0 && age >= 40 && age < 65) {
+            if (chukoOK) {
+              chuko = CHUKO;
+              box("中高齢の寡婦加算", "年 " + yen(CHUKO) + "（65歳になるまで）", "夫が亡くなったときに40歳以上65歳未満で、生計を同じくする子がいない妻の遺族厚生年金に加算されます。65歳で加算はなくなり、自分の老齢基礎年金を受け取る形になります（昭和31年4月1日以前生まれの人は、経過的寡婦加算に変わります）。", false);
+            } else {
+              box("中高齢の寡婦加算", "つかない見込み", "加入期間25年以上による遺族厚生年金のときは、夫の厚生年金の加入期間が20年（240か月）以上ないと加算されません（中高齢の期間短縮の特例などの例外があります）。", true);
+            }
+          } else if (nko > 0 && chukoOK) {
+            box("中高齢の寡婦加算（あとで）", "子が18歳の年度末を過ぎたときに40歳以上なら", "いまは遺族基礎年金を受け取るので、中高齢の寡婦加算はつきません。40歳になったときに子がいて遺族基礎年金を受けていた妻は、末の子が18歳になった年度の3月31日（障害があれば20歳）を過ぎて遺族基礎年金が終わったあと、65歳まで 年 " + yen(CHUKO) + " が加算されます。", false);
+          }
+        }
+      }
+    } else if (dstat === "kokumin_now" || (dstat === "long25" && km === 0)) {
+      box("遺族厚生年金", "対象外（厚生年金の期間がない）", "亡くなった方に会社員・公務員の期間がないと、遺族厚生年金はありません。", true);
+    }
+
+    // 国民年金だけ：寡婦年金・死亡一時金
+    if (dstat === "kokumin_now" && kiso === 0 && !nofuNG) {
+      if (rel === "tsuma") {
+        if ($("kon").value === "yes" && kmN >= 120) {
+          var kafu = Math.round(KISO * kmN / 480 * 3 / 4);
+          box("寡婦年金", "60歳から65歳まで 年 約" + yen(kafu), "夫の国民年金（自営業などの期間）の納付・免除が10年以上、結婚10年以上の妻が、60歳から65歳になるまで受け取れます。額は夫の自営業などの期間で計算した老齢基礎年金の4分の3（全部納めた月として " + yen(KISO) + "×" + kmN + "÷480×3/4 で計算した目安）。夫が老齢基礎年金・障害基礎年金を受け取ったことがある、妻が繰上げの老齢基礎年金を受け取っているときは請求できません。死亡一時金とどちらか一方を選びます。", false);
+        } else if (kmN >= 0 || $("kon").value === "no") {
+          box("寡婦年金", "対象外の見込み", "夫の国民年金（自営業などの期間）の納付・免除が10年以上、結婚10年以上が条件です。", true);
+        }
+      }
+      if (kmN >= 36) {
+        var ij = ichiji(kmN);
+        box("死亡一時金", yen(ij) + "（1回）", "国民年金（自営業などの期間）の保険料を36か月以上納めた人が、年金を受け取らずに亡くなったとき、生計を同じくしていた遺族（配偶者→子→父母→孫→祖父母→兄弟姉妹の順）が受け取れます。付加保険料を36か月以上納めていれば8,500円が加わります。亡くなった日の翌日から2年で請求できなくなります。", false);
+        ng.push("・死亡一時金は、亡くなった日の翌日から2年を過ぎると請求できない");
+      } else if (kmN >= 0) {
+        box("死亡一時金", "対象外の見込み", "国民年金（自営業などの期間）の保険料を36か月以上納めていることが条件です（一部納付は月数を割り引いて数えます）。", true);
+      }
+    }
+
+    var total = kiso + kosei + chuko;
+    finish(total, ng, memoLines, rel, dstat, kiso > 0, kosei > 0 || deadKosei, nko, age);
+    return true;
+  }
+
+  function finish(total, ng, memoLines, rel, dstat, hasKiso, hasKosei, nko, age) {
+    if (total > 0) box("合わせて（税金を引く前）", "年 " + yen(total) + "（月あたり約" + yen(total / 12) + "）", "年金は偶数月に、2か月分ずつ振り込まれます。亡くなった月の翌月分から出ます。", false);
+    if ((rel === "tsuma" || rel === "otto") && nko === 0 && age < 60 && hasKosei) {
+      ng.push("・2028年4月から、60歳未満で子のない配偶者の遺族厚生年金は原則5年の有期に見直される予定。厚生労働省の案内では、すでに遺族厚生年金を受け取っている人は影響を受けない");
+    }
+    if (hasKiso) ng.push("・遺族基礎年金を受けている人は、所得の条件しだいで遺族年金生活者支援給付金（月5,620円）も対象");
+    ng.push("・権利がなくなったとき（結婚など）は届出が要る（遺族基礎年金は14日以内、遺族厚生年金は10日以内）");
+    ng.push("・児童扶養手当を受けている人は、止まったり減ったりすることがある。市区町村で確かめる");
+    ng.push("・額は令和8年度の目安。決めるのは日本年金機構");
+    $("ng").textContent = ng.join("\n");
+
+    li("亡くなった方の基礎年金番号がわかるもの（年金手帳・ねんきん定期便など）と、加入記録を確かめる");
+    li("年金事務所か街角の年金相談センターに予約して、添付書類（戸籍謄本・死亡診断書など）を電話で確かめる");
+    li(dstat === "kokumin_now" ? "年金請求書を出す（遺族基礎年金だけ・寡婦年金・死亡一時金は、住んでいる市区町村の役所に出す）" : "年金請求書を年金事務所に出す（遺族基礎年金だけのときは市区町村の役所でも出せる）");
+    li("年金証書は出してから1か月ほど（記録の確認が要ると2か月ほど）で届き、その1〜2か月後に振込が始まる");
+    if ((rel === "tsuma" || rel === "otto") && age >= 65) li("自分の老齢厚生年金をまだ請求していなければ、いっしょに請求する");
+
+    var mm = "亡くなった方の\n基礎年金番号と、\n私の年金手帳などを\n持っています。\n" + REL[rel] + "として、\n遺族基礎年金・\n遺族厚生年金の\n対象かどうかと額、\n添付書類を\n教えてください。";
+    if (rel === "tsuma" && dstat === "kokumin_now") mm += "\n寡婦年金と\n死亡一時金の\nどちらがよいかも\n知りたいです。";
+    $("memo").textContent = mm;
+    $("result").hidden = false;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("dstat").value = "kosei_now"; $("nofu").value = "ok"; $("hosyu").value = "450000"; $("kmonths").value = "180";
+    $("rel").value = "tsuma"; $("age").value = "38"; $("nko").value = "2"; $("inc").value = "ok";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
