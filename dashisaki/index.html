@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の請求書、出す先と持っていくもの｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の請求書、出す先と持っていくもの</h1>
+  <p class="lead">初診日（その病気やけがで、はじめて医師にかかった日）にどの年金に入っていたかを選ぶと、障害年金の請求書を出す窓口、請求書の種類、持っていくもの、電話で伝える一言が出ます。日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 初診日のころ</h2>
+    <label class="f" for="kanyu">初診日に、どうしていましたか<span class="hint">いまではなく、初診日の時点で選びます</span></label>
+    <select id="kanyu">
+      <option value="">選んでください</option>
+      <option value="kosei">会社員として働いていた（厚生年金に入っていた）</option>
+      <option value="kyosai">公務員・私立学校の教職員だった（共済組合）</option>
+      <option value="sango">会社員・公務員の家族の扶養に入っていた（3号）</option>
+      <option value="ichigo">自営業・無職・学生・扶養外のアルバイトなど（国民年金）</option>
+      <option value="mae20">20歳になる前で、年金に入っていなかった</option>
+      <option value="roku">60〜64歳で日本に住み、年金に入っていなかった</option>
+      <option value="wakaranai">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 書類の準備</h2>
+    <label class="f" for="byoin">初診の病院と、いま診断書を書いてもらう病院は</label>
+    <select id="byoin">
+      <option value="onaji">同じ</option>
+      <option value="chigau">ちがう</option>
+      <option value="wakaranai">まだわからない</option>
+    </select>
+    <label class="f" for="kazoku">一緒に暮らす家族<span class="hint">18歳になった年度の末までの子（障害のある子は20歳未満）や配偶者</span></label>
+    <select id="kazoku">
+      <option value="nashi">いない</option>
+      <option value="ko">子がいる</option>
+      <option value="haigu">配偶者がいる（子はいない）</option>
+      <option value="ryoho">配偶者と子がいる</option>
+    </select>
+    <label class="f" for="mynum">マイナンバーを請求書に書けますか<span class="hint">年金機構に登録済みでもよい</span></label>
+    <select id="mynum">
+      <option value="yes">書ける</option>
+      <option value="no">書けない・わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">出す先と持っていくものを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>電話で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害基礎年金を受けられるとき」「障害厚生年金を受けられるとき」「障害基礎年金の受給要件・請求時期・年金額」と、よくある質問「先天性の病気などにより20歳前から障害がありますが…」で出した目安です（障害基礎年金の請求書は住所地の市区町村役場、初診日が3号の期間なら年金事務所か街角の年金相談センター。障害厚生年金の請求書は年金事務所か街角の年金相談センター、電子申請も可）。受け取れるかどうか、等級、年金額は判定しません。共済組合の期間の扱いは、共済組合等と年金事務所で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  var NENKIN = "近くの年金事務所か、街角の年金相談センター";
+  var SHIYAKU = "住んでいる市区町村役場の国民年金の窓口";
+  function make() {
+    var k = $("kanyu").value, b = $("byoin").value, f = $("kazoku").value, my = $("mynum").value;
+    $("sum").innerHTML = "";
+    if (!k) {
+      box("初診日のころ", "選んでください", "上の「初診日に、どうしていましたか」を選ぶと、出す先が出ます。", true);
+      $("memo").textContent = "（初診日のころを選ぶと出ます）";
+      $("ng").textContent = "・選ぶのは、いまではなく初診日の時点";
+      $("result").hidden = false; return true;
+    }
+    var kiso = (k === "ichigo" || k === "mae20" || k === "roku" || k === "sango");
+    var saki, shu, kind, why;
+    if (k === "kosei") {
+      kind = "障害厚生年金"; saki = NENKIN; shu = "年金請求書（様式第104号）";
+      why = "初診日に厚生年金に入っていたので、障害厚生年金の請求です。電子申請でも出せます。";
+    } else if (k === "kyosai") {
+      kind = "障害厚生年金（共済組合の期間）"; saki = "入っていた共済組合等か、" + NENKIN;
+      shu = "共済組合等で確かめる";
+      why = "初診日に共済組合に入っていた人は、どこに何を出すかが共済組合等で変わります。まず入っていた共済組合等に電話で確かめます。共済組合等に出すときは、住民票などが別に要ることがあります。";
+    } else if (k === "sango") {
+      kind = "障害基礎年金"; saki = NENKIN; shu = "年金請求書（様式第107号）";
+      why = "障害基礎年金はふだん市区町村役場に出しますが、初診日が3号（会社員・公務員の扶養）の期間なら、年金事務所か街角の年金相談センターに出します。";
+    } else if (k === "ichigo") {
+      kind = "障害基礎年金"; saki = SHIYAKU; shu = "年金請求書（様式第107号）";
+      why = "初診日に国民年金（1号）に入っていたので、障害基礎年金の請求です。出すのは年金事務所ではなく、住んでいる市区町村役場です。";
+    } else if (k === "mae20") {
+      kind = "障害基礎年金（20歳前の初診日）"; saki = SHIYAKU; shu = "年金請求書（様式第107号）";
+      why = "20歳前で年金に入っていない期間に初診日がある人は、障害基礎年金の請求で、出すのは市区町村役場です。保険料の納付要件はありませんが、本人の所得の書類が要ることがあります。";
+    } else if (k === "roku") {
+      kind = "障害基礎年金"; saki = SHIYAKU; shu = "年金請求書（様式第107号）";
+      why = "60〜64歳で日本に住み、年金に入っていない期間の初診日は、障害基礎年金の対象です（保険料の納付要件は要ります）。出すのは市区町村役場です。";
+    } else {
+      kind = "まだ決まらない"; saki = "まず年金事務所で、初診日の加入の記録を確かめる"; shu = "加入先がわかってから";
+      why = "出す先は、初診日にどの年金に入っていたかで決まります。初診日のころの記録を、ねんきんネットか年金事務所で見ます。会社員だった（厚生年金）なら年金事務所、国民年金なら市区町村役場です。";
+    }
+    box("出す先", saki, why, k === "wakaranai" || k === "kyosai");
+    box("請求の種類と請求書", kind + "／" + shu, (k === "wakaranai" || k === "kyosai") ? "どの請求書を使うかは、出す先がわかってから確かめます。" : "請求書は窓口でもらえます。もらうときに初診日と加入を伝えて、出す先も一緒に確かめると二度手間になりません。", false);
+
+    var list = [];
+    list.push("・年金請求書");
+    list.push("・医師の診断書（障害認定日から3か月以内の状態のもの。認定日から1年以上たってから出すなら、請求日前3か月以内の状態のものも）");
+    if (b === "chigau") list.push("・受診状況等証明書（初診の病院で書いてもらう）");
+    else if (b === "wakaranai") list.push("・受診状況等証明書（初診の病院と診断書の病院がちがうときに要る）");
+    list.push("・病歴・就労状況等申立書（自分で書く）");
+    list.push("・本人名義の通帳かキャッシュカードの写し（公金受取口座を使う、または金融機関の証明を受けるなら要らない）");
+    if (my === "no") list.push("・戸籍謄本・住民票など、生年月日がわかる書類（マイナンバーを書けるなら原則要らない）");
+    var haiguOk = (k === "kosei" || k === "kyosai");
+    if (f === "ko" || f === "ryoho") list.push("・子の分：戸籍謄本、世帯全員の住民票、子の収入がわかる書類など（子に障害があれば診断書も）");
+    if ((f === "haigu" || f === "ryoho") && haiguOk) list.push("・配偶者の分：戸籍謄本、世帯全員の住民票、配偶者の収入がわかる書類など");
+    if (k === "mae20") list.push("・本人の所得がわかる書類（20歳前の初診日のとき）");
+    if (k === "kyosai") list.push("・年金加入期間確認通知書（共済組合の期間があるとき）");
+    box("持っていくもの", list.length + "つ", list.join("\n"), false);
+    if ((f === "haigu") && !haiguOk && k !== "wakaranai") {
+      box("配偶者の分", "障害基礎年金では書類なし", "日本年金機構の障害基礎年金の案内では、配偶者の書類は挙がっていません。窓口で確かめてください。", false);
+    }
+
+    var m;
+    if (k === "wakaranai") {
+      m = "障害年金の請求を考えています。\n初診日は○年○月○日です。\nそのころどの年金に\n入っていたか記録を見て、\n請求書をどこに出すか\n教えていただけますか。";
+    } else if (k === "kyosai") {
+      m = "障害年金の請求を考えています。\n初診日は○年○月○日で、\nそのころ共済組合に\n入っていました。\n請求書をどこに出すかと、\n要る書類を\n教えていただけますか。";
+    } else {
+      m = "障害年金の請求を考えています。\n初診日は○年○月○日で、\nそのころ" + ({ kosei: "会社員で\n厚生年金に入っていました。", sango: "家族の扶養（3号）に\n入っていました。", ichigo: "国民年金に\n入っていました。", mae20: "20歳前で\n年金に入っていませんでした。", roku: "60歳を過ぎて\n年金に入っていませんでした。" }[k]) + "\n" + kind.replace("（20歳前の初診日）", "") + "の請求書は\nそちらで受け付けて\nいただけますか。\n行く日の前に、\n持っていくものも\n確かめたいです。";
+    }
+    $("memo").textContent = m;
+    $("ng").textContent = "・出す先は、いまの加入ではなく初診日の加入で決まる。転職や退職をしていても初診日で見る\n・初診日がずれると、出す先も変わることがある。初診日は受診状況等証明書などで確かめる\n・診断書は「いつの状態か」に期限がある。早く取りすぎると使えないことがある\n・窓口に行く前に電話して、初診日と加入を伝えておくと、持っていくものの漏れが減る\n・受け取れるかどうか（障害の状態に当たるか）や額は、このページでは決まらない";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("kanyu").value = "ichigo"; $("byoin").value = "chigau"; $("kazoku").value = "nashi"; $("mynum").value = "yes"; make(); }
+})();
+</script>
+</body>
+</html>
