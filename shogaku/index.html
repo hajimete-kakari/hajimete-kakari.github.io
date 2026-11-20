@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>奨学金が返せないとき：猶予と減額返還の判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #docs li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>奨学金が返せないとき：猶予と減額返還の判定</h1>
+  <p class="lead">日本学生支援機構（JASSO）の貸与奨学金を返している人向けです。いまの状況と年収、扶養している人の数、延滞のあるなしを入れると、返還期限猶予（しばらく返さない）と減額返還（月の額を減らす）のどちらに当てはまりそうか、減らしたときの月の額、出す書類、願い出る時期の目安を出します。承認するかどうかを決めるのは日本学生支援機構です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="jokyo">いまの状況にいちばん近いもの</label>
+    <select id="jokyo">
+      <option value="shitsu">仕事を辞めて、まだ次の仕事が決まっていない</option>
+      <option value="low">働いているが、収入が少ない（パート・アルバイト・無職で収入が少ないも）</option>
+      <option value="byoki">病気・けがで働けない、休職している</option>
+      <option value="ikuji">産休・育休中</option>
+    </select>
+    <label class="f" for="rishoku">辞めた人だけ：辞めたのはいつ？<span class="hint">「失業中」で願い出られるのは、辞めた月と、その翌月から6か月のあいだに猶予を始める場合</span></label>
+    <select id="rishoku">
+      <option value="in">辞めた月から7か月目まで（例：10月に辞めて、いまが4月まで）</option>
+      <option value="out">それより前に辞めた</option>
+    </select>
+    <label class="f" for="entai">いま、返還が遅れている（延滞している）？</label>
+    <select id="entai">
+      <option value="no">遅れていない</option>
+      <option value="yes">遅れている（口座から落ちなかった月がある）</option>
+    </select>
+    <div class="mh">
+    <label class="f" for="hoshiki">返し方<span class="hint">わからなければ「定額」。平成29年度以降に第一種（無利子）を借りて「所得連動返還方式」を選んだ人だけ下</span></label>
+    <select id="hoshiki">
+      <option value="teigaku">定額返還方式（毎月決まった額）・第二種（有利子）</option>
+      <option value="shotoku">所得連動返還方式（平成29年度以降の第一種）</option>
+    </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 年収と家族</h2>
+    <label class="f" for="kind">収入の種類</label>
+    <select id="kind">
+      <option value="kyuyo">給料だけ（会社員・パート・アルバイト）</option>
+      <option value="other">給料以外もある（自営業・フリーランスなど）</option>
+    </select>
+    <label class="f" for="nenshu">証明書に出る年収（万円）<span class="hint">給料だけの人は税込の年間収入（源泉徴収票の「支払金額」）。給料以外もある人は、必要経費を引いた年間所得。いまの年度の所得証明書は、前の年（1〜12月）の分</span></label>
+    <input type="number" id="nenshu" min="0" max="5000" step="1" inputmode="numeric" placeholder="例：320">
+    <div class="mh">
+    <label class="f" for="mikomi">今年の見込みの年収（万円）<span class="hint">辞めた・休んだ・減ったで、今年は大きく下がる人だけ。わからなければ空</span></label>
+    <input type="number" id="mikomi" min="0" max="5000" step="1" inputmode="numeric" placeholder="例：120">
+    </div>
+    <label class="f" for="fuyo">扶養している家族の人数（人）<span class="hint">税や健康保険の扶養に入っている人。1人につき38万円を年収から引いて審査されます</span></label>
+    <input type="number" id="fuyo" min="0" max="10" inputmode="numeric" placeholder="例：0">
+    <div class="mh">
+    <label class="f" for="kodomo">そのうち子どもの人数（人）<span class="hint">減額返還は、子どもが2人なら、3人以上なら、基準が上がります</span></label>
+    <input type="number" id="kodomo" min="0" max="10" inputmode="numeric" placeholder="例：0">
+    </div>
+  </div>
+
+  <div class="card mh">
+    <h2>3. 返している額と、これまで</h2>
+    <label class="f" for="getsu">いまの毎月の返還額（円）<span class="hint">スカラネット・パーソナルか、返還の案内で確かめる。わからなければ空</span></label>
+    <input type="number" id="getsu" min="0" max="500000" inputmode="numeric" placeholder="例：15000">
+    <div class="mh">
+      <label class="f" for="yuyonen">これまでに使った猶予の年数（年）<span class="hint">経済困難・失業中などで使った分。病気・育休・災害などの猶予は数えない。初めてなら0</span></label>
+      <input type="number" id="yuyonen" min="0" max="20" inputmode="numeric" placeholder="例：0">
+      <label class="f" for="gennen">これまでに使った減額返還の年数（年）</label>
+      <input type="number" id="gennen" min="0" max="20" inputmode="numeric" placeholder="例：0">
+    </div>
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>出す書類（証明書）</h3>
+    <ol class="tl" id="docs"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>電話で聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本学生支援機構「返還が難しくなった場合」「返還期限猶予」「一般猶予の申請事由と必要な証明書」（経済困難：給与所得者の年間収入300万円以下・給与以外の所得を含む場合は年間所得200万円以下、失業中：離職月とその翌月から6か月、通算10年）、「減額返還制度」（給与所得者400万円以下・子ども2人500万円以下・3人以上600万円以下、給与以外の所得を含む場合は300万・400万・500万円以下、被扶養者1人38万円控除、1回12か月・通算15年、2分の1・3分の1・4分の1・3分の2）をもとにした目安です。基準以下でも、状況によって追加の証明書を求められたり、承認されないことがあります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function man(n) { return (Math.round(n * 10) / 10) + "万円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function num(id, def) { var v = $(id).value; return v === "" ? def : Number(v); }
+
+  function make() {
+    ["sum", "docs", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    $("memo").textContent = ""; $("ng").textContent = ""; $("result").hidden = true;
+    var jokyo = $("jokyo").value, rishoku = $("rishoku").value, entai = $("entai").value, hoshiki = $("hoshiki").value;
+    var kind = $("kind").value, kyuyo = kind === "kyuyo";
+    if ($("nenshu").value === "" && jokyo !== "ikuji") { alert("証明書に出る年収（万円）を入れてください。収入がなければ0を入れます"); return false; }
+    var nenshu = num("nenshu", 0), mikomi = num("mikomi", -1), fuyo = Math.floor(num("fuyo", 0)), kodomo = Math.floor(num("kodomo", 0));
+    var getsu = Math.floor(num("getsu", 0)), yuyonen = num("yuyonen", 0), gennen = num("gennen", 0);
+    if (nenshu < 0 || fuyo < 0 || kodomo < 0 || getsu < 0 || yuyonen < 0 || gennen < 0) { alert("0以上の数を入れてください"); return false; }
+    if (kodomo > fuyo) fuyo = kodomo;
+    var ng = [];
+    var koujo = fuyo * 38;
+    var adj = Math.max(0, nenshu - koujo);
+    var adjM = mikomi >= 0 ? Math.max(0, mikomi - koujo) : -1;
+    var unit = kyuyo ? "年間収入（税込）" : "年間所得（経費を引いた後）";
+
+    // ---- 猶予 ----
+    var yLimitOk = yuyonen < 10;
+    var yLeft = Math.max(0, 10 - yuyonen);
+    var yuyo = { ok: false, jiyu: "", why: "", maybe: false };
+    var yBase = (jokyo === "byoki") ? (kyuyo ? 200 : 130) : (kyuyo ? 300 : 200);
+    if (jokyo === "ikuji") {
+      yuyo = { ok: true, jiyu: "産前休業・産後休業および育児休業", why: "産休・育休中は、猶予の事由の1つです。この事由は、通算10年の数えに入りません（年数の制限なし）。証明書は、勤め先が出す休業の証明などです。くわしくは日本学生支援機構の「一般猶予の申請事由と必要な証明書」で確かめます。" };
+    } else if (jokyo === "byoki") {
+      if (adj <= yBase) yuyo = { ok: true, jiyu: "傷病", why: "病気・けがで返すのが難しい人の事由です。年収の目安は、" + unit + "が" + yBase + "万円以下。この事由は、通算10年の数えに入りません（年数の制限なし）。医師の診断書など、病気・けがの証明が要ります。" };
+      else if (adjM >= 0 && adjM <= yBase) yuyo = { ok: false, maybe: true, jiyu: "傷病（休職で今年の見込みが下がる）", why: "証明書の年収は目安（" + yBase + "万円）を超えていますが、休職で今年の見込みが目安以下なら、審査してもらえる形があります（「収入基準を超える場合の猶予申請」の休職）。休職の証明など、書類が増えます。" };
+      else yuyo = { ok: false, jiyu: "傷病", why: "傷病の猶予の年収の目安は、" + unit + "が" + yBase + "万円以下です。いまの数字では超えています。減額返還も見てください。" };
+    } else if (jokyo === "shitsu" && rishoku === "in" && entai === "yes" && yLimitOk && adj > yBase) {
+      yuyo = { ok: false, maybe: true, jiyu: "失業中（失業前から遅れていなければ）", why: "辞めた月と、その翌月から6か月のあいだに猶予を始めるなら、「失業中」の事由があります。ただし、失業前から遅れていた人は使えません。遅れはじめたのが辞めたあとなら、ハローワークの書類（雇用保険受給資格者証・離職票など）のコピーで願い出られることがあります。" };
+    } else if (jokyo === "shitsu" && rishoku === "in" && entai === "no") {
+      yuyo = { ok: yLimitOk, jiyu: "失業中", why: yLimitOk ? "辞めた月と、その翌月から6か月のあいだに猶予を始めるなら、「失業中」の事由で願い出られます。雇用保険に入る仕事（正社員・派遣・アルバイトなど）に再就職していないことが条件です。ハローワークの書類（雇用保険受給資格者証・離職票など）のコピーで証明します。" : "失業中の猶予は、経済困難などと合わせて通算10年までです。すでに10年使っているので、この事由では願い出られません。" };
+    } else {
+      // 経済困難（・7か月以上前の失業）
+      var lbl = (jokyo === "shitsu") ? "経済困難（7か月以上前の失業）" : "経済困難";
+      if (!yLimitOk) yuyo = { ok: false, jiyu: lbl, why: "経済困難の猶予は、失業中などと合わせて通算10年までです。すでに10年使っているので、この事由では願い出られません。減額返還を見てください。" };
+      else if (adj <= yBase) yuyo = { ok: true, jiyu: lbl, why: "無職・未就職・低収入で返すのが難しい人の事由です。年収の目安は、" + unit + "が" + yBase + "万円以下。" + (koujo > 0 ? "扶養している人1人につき38万円を引いて比べています（" + man(nenshu) + "−" + koujo + "万円＝" + man(adj) + "）。" : "いまの数字は " + man(adj) + " です。") + (jokyo === "shitsu" ? "\n辞めてから7か月目より後なので、「失業中」ではなく、この事由で願い出ます。" : "") };
+      else if (adjM >= 0 && adjM <= yBase) yuyo = { ok: false, maybe: true, jiyu: lbl + "（今年の見込みで）", why: "証明書の年収（" + man(adj) + "）は目安の" + yBase + "万円を超えていますが、" + (jokyo === "shitsu" ? "失業" : "減収") + "で今年の見込み（" + man(adjM) + "）が目安以下なら、審査してもらえる形があります（「収入基準を超える場合の猶予申請」）。" + (jokyo === "shitsu" ? "市区町村の所得の証明と、ハローワークの失業の証明などが要り、スカラネット・パーソナルからは出せません（郵送）。" : "減った収入がわかる書類が別に要ります。") };
+      else yuyo = { ok: false, jiyu: lbl, why: "経済困難の猶予の年収の目安は、" + unit + "が" + yBase + "万円以下です。" + (koujo > 0 ? "扶養の38万円×" + fuyo + "人を引いても " + man(adj) + " で、" : "いまの数字（" + man(adj) + "）は") + "超えています。親への仕送り（年38万円まで）や、6か月以上の治療の医療費（年96万円まで）を引ける場合があります。" };
+    }
+    // 延滞ありの猶予
+    var entaiNote = "";
+    if (entai === "yes" && jokyo !== "ikuji") {
+      entaiNote = "\n遅れている（延滞がある）ときは、遅れはじめた月から今までの分の証明書を出せれば、一般猶予で願い出ます。途中からしか出せないときは、それより前の分を払ってから。どちらもできないときは「延滞据置猶予」（年収の目安は給料だけなら200万円以下・給料以外もあるなら130万円以下）になります。遅れはじめた月から1年ごとに書類が要ります。";
+      if (jokyo === "shitsu" && yuyo.jiyu.indexOf("失業中") < 0 && rishoku === "in") entaiNote +="\n失業前から遅れていた人は、「失業中」の事由は使えません。";
+    }
+
+    // ---- 減額 ----
+    var kidsAdd = kodomo >= 3 ? 200 : (kodomo === 2 ? 100 : 0);
+    var gBase = (kyuyo ? 400 : 300) + kidsAdd;
+    var gen = { ok: false, why: "" };
+    var gLeft = Math.max(0, 15 - gennen);
+    if (hoshiki === "shotoku") gen = { ok: false, why: "平成29年度以降に第一種を借りて所得連動返還方式を選んでいる人は、減額返還は願い出られません。" };
+    else if (gennen >= 15) gen = { ok: false, why: "減額返還は通算15年（180か月）までです。すでに使い切っています。" };
+    else if (jokyo === "ikuji" && $("nenshu").value === "") gen = { ok: false, why: "年収が入っていないので、減額返還の判定はしていません。" };
+    else if (adj <= gBase) gen = { ok: entai === "no", why: "目安は、" + unit + "が" + gBase + "万円以下" + (kidsAdd ? "（子ども" + (kodomo >= 3 ? "3人以上" : "2人") + "の基準）" : "") + "。" + (koujo > 0 ? "扶養の38万円×" + fuyo + "人を引いて " + man(adj) + " です。" : "いまの数字は " + man(adj) + " です。") + (entai === "yes" ? "\nただし、願い出るときと審査のときに遅れて（延滞して）いないことが条件です。遅れている分を払えば願い出られます。" : "") };
+    else gen = { ok: false, why: "減額返還の年収の目安は、" + unit + "が" + gBase + "万円以下です。いまの数字（" + man(adj) + "）は超えています。" + (adjM >= 0 ? "減額返還のページには、今年の見込みで比べる形は書かれていません。" : "") };
+
+    // ---- まとめ ----
+    var head, headS;
+    if (yuyo.ok && gen.ok) { head = "猶予も減額返還も、当てはまりそう"; headS = "いま返す余裕がまったくないなら猶予（しばらく返さない）、少しなら返せるなら減額返還（月の額を減らす）が向いています。どちらも、返す総額が減るわけではなく、終わる時期が後ろに延びます。"; }
+    else if (yuyo.ok) { head = "猶予（しばらく返さない）に当てはまりそう"; headS = "承認された期間は返さなくてよくなります。ただ、免除ではないので、期間が終わると返還が始まり、終わる時期も後ろに延びます。"; }
+    else if (!gen.ok && entai === "yes" && hoshiki !== "shotoku" && gennen < 15 && adj <= gBase) { head = "遅れている分を払えば、減額返還に当てはまりそう"; headS = "減額返還は、願い出るときと審査のときに遅れていないことが条件です。遅れている分を払ってから願い出ます。" + (yuyo.maybe ? "払えないときは、下の猶予の形を日本学生支援機構に相談します。" : "払えないときは、猶予（延滞据置猶予など）を日本学生支援機構に相談します。"); }
+    else if (yuyo.maybe && gen.ok) { head = "減額返還に当てはまりそう。猶予は条件しだい"; headS = "書類をそろえる手間が少ないのは減額返還です。いま収入がほとんどないなら、下の猶予の形も相談できます。"; }
+    else if (yuyo.maybe) { head = "猶予は、条件しだいで願い出られるかも"; headS = (entai === "yes" ? "遅れている分があるので、減額返還はそのままでは願い出られません。" : "証明書の年収では目安を超えますが、今年の収入が大きく下がる人の申請の形があります。") + "書類が増えるので、先に日本学生支援機構に聞くと確実です。"; }
+    else if (gen.ok) { head = "減額返還（月の額を減らす）に当てはまりそう"; headS = "月の返還額を2分の1・3分の1・4分の1・3分の2のどれかに減らせます。1回の願い出で12か月。返す総額は変わらず、終わる時期が後ろに延びます。"; }
+    else { head = "この数字では、どちらも目安を超えている"; headS = "引ける控除がないか、今年の見込みで比べられないか、遅れている分がないかを見直します。それでも難しいときは、日本学生支援機構の窓口（電話）に相談します。"; }
+    box("判定", head, headS, !(yuyo.ok || gen.ok || yuyo.maybe));
+
+    box("返還期限猶予（しばらく返さない）", yuyo.ok ? "当てはまりそう：" + yuyo.jiyu : (yuyo.maybe ? "相談の余地あり：" + yuyo.jiyu : "このままでは難しい"),
+      yuyo.why + entaiNote + (yuyo.ok && (yuyo.jiyu === "失業中" || yuyo.jiyu.indexOf("経済困難") === 0) ? "\n1年ごとに願い出ます。経済困難・失業中などは通算10年まで（あと" + yLeft + "年）。" : ""), !(yuyo.ok || yuyo.maybe));
+
+    var gS = gen.why;
+    if (gen.ok || (hoshiki !== "shotoku" && gennen < 15 && $("nenshu").value !== "" && adj <= gBase)) {
+      gS += "\n1回の願い出で12か月。通算15年（180か月）まで（あと" + gLeft + "年）。口座振替（リレー口座）で、毎月返している人が対象です。";
+      if (getsu > 0) {
+        var rs = [["2分の1", 1 / 2], ["3分の1", 1 / 3], ["4分の1", 1 / 4], ["3分の2", 2 / 3]];
+        var lines = rs.map(function (r) { var m = Math.floor(getsu * r[1]); return "・" + r[0] + "：月 約" + yen(m) + "（12か月で " + yen(getsu * 12 - m * 12) + " が後ろに回る）"; });
+        gS += "\nいまの月 " + yen(getsu) + " を減らすと（目安）：\n" + lines.join("\n") + "\n減らした分は消えずに、終わる時期が後ろに延びます。実際の額は日本学生支援機構が決めます。";
+      }
+    }
+    if ($("nenshu").value === "") box("減額返還（月の額を減らす）", "年収を入れると判定します", gS, false); else
+    box("減額返還（月の額を減らす）", gen.ok ?"当てはまりそう（目安 " + gBase + "万円以下）" : (hoshiki !== "shotoku" && adj <= gBase && entai === "yes" ? "遅れている分を払えば当てはまりそう" : "このままでは難しい"), gS, !gen.ok);
+
+    // 時期
+    var when = "スカラネット・パーソナルから：始めたい月の3か月前から（例：10月からなら7月から）。マイナンバーを日本学生支援機構に出していて、毎月返している人が使えます。結果はおおむね2週間後に画面で見られます（3週間以上かかることも）。\n郵送：始めたい月の3か月前から前々月の末までに、「猶予減額受付窓口」へ。";
+    if (entai === "yes") when += "\n遅れているときは、できるだけ早く出します。";
+    if (yuyo.maybe && yuyo.jiyu.indexOf("7か月以上") >= 0) when += "\n今年の見込みで出す失業の猶予は、証明書を出す必要があるので、郵送だけです。";
+    box("願い出る時期と方法", "始めたい月の3か月前から", when, false);
+
+    // 書類
+    var useYuyo = yuyo.ok || yuyo.maybe;
+    if (useYuyo || gen.ok) li("docs", (useYuyo ? "奨学金返還期限猶予願" : "") + (useYuyo && gen.ok ? "（減額返還にするなら奨学金減額返還願）" : (gen.ok ? "奨学金減額返還願" : "")) + "。スカラネット・パーソナルから出すなら、画面で入力");
+    if (!(useYuyo || gen.ok)) li("docs", "（いまはどちらも目安を超えているので、相談するときに手元に置くもの）");
+    if (jokyo === "shitsu" && yuyo.jiyu.indexOf("失業中") === 0) {
+      li("docs", "次のどれか1つのコピー：雇用保険受給資格者証（求職活動の記録の面も）・雇用保険被保険者離職票・資格喪失確認通知書（離職とわかるもの）");
+      li("docs", "マイナンバーを出していれば、上のコピーは省けるものがある（受給資格者証の求職活動の記録の面は省けない）");
+    } else if (jokyo === "ikuji") {
+      li("docs", "産休・育休の証明（勤め先が出すもの）。くわしい様式は日本学生支援機構のページで確かめる");
+    } else if (jokyo === "byoki") {
+      li("docs", "医師の診断書など、病気・けがで働けないことの証明");
+      li("docs", "くわしい書類は、日本学生支援機構の「一般猶予の申請事由と必要な証明書」の傷病の欄で確かめる");
+    } else {
+      li("docs", "次のどれか1つの原本：所得証明書・市県民税（所得・課税）証明書（収入か所得の額が出ているもの）・住民税非課税証明書");
+      li("docs", "マイナンバーを出していれば、証明書を省けることがある");
+      if (yuyo.maybe) li("docs", (jokyo === "shitsu" ? "ハローワークの失業の証明（受給資格者証など）と、" : "減った収入がわかる書類（給与明細など）と、") + "健康保険の資格がわかる画面か資格確認書のコピー（番号は黒く塗る）");
+    }
+    if (koujo > 0) li("docs", "扶養している人が所得証明書にのっていないときは、マイナポータルの健康保険証の情報の画面か資格確認書のコピー（番号は黒く塗る）");
+
+    // 次にやること
+    li("todo", "スカラネット・パーソナルに入って、いまの返還額・返し方（定額か所得連動か）・延滞があるかを確かめる");
+    if (entai === "yes") li("todo", "遅れている分と月数を確かめる。減額返還にするなら、先に遅れている分を払う");
+    if (useYuyo || gen.ok) li("todo", "始めたい月の3か月前になったら、スカラネット・パーソナルの「各種手続」から願い出る（出せないときは願出用紙を郵送）");
+    li("todo", "審査のあいだも、口座からの引き落としは止まらない。結果が出るまでは、口座に返還額を入れておく");
+    if (useYuyo || gen.ok) li("todo", "承認されたら、終わる月を手帳に書く。続けて使うなら、終わる前にもう一度願い出る");
+    if (!(yuyo.ok || gen.ok || yuyo.maybe)) li("todo", "日本学生支援機構の奨学金相談センター（電話）に、いまの収入と事情を伝えて、使える形がないか聞く");
+
+    // 一言
+    $("memo").textContent = "奨学金の返還が\nむずかしくなりました。\n" + (jokyo === "shitsu" ? "○月に仕事を辞めて、\nいま次を探しています。\n" : jokyo === "byoki" ? "病気で働けず、\n休んでいます。\n" : jokyo === "ikuji" ? "いま育休中です。\n" : "いまの収入が\n年○○万円ほどです。\n") + (entai === "yes" ? "○月分から\n遅れています。\n" : "") + "猶予か減額返還を\n使えるか、出す書類と\n時期を教えてください。";
+
+    ng.push("・猶予も減額返還も、返す総額は減らない（免除ではない）。終わる時期が後ろに延びる");
+    ng.push("・審査中も引き落としは止まらない。延滞の督促も止まらない");
+    ng.push("・減額返還の途中で、引き落としが2回続けてできないと、さかのぼって取り消され、延滞金がかかることがある");
+    ng.push("・令和7年12月以後に卒業・退学した人は「新卒等」の事由になる。ここでは扱っていない");
+    ng.push("・基準以下でも、追加の書類を求められたり、承認されないことがある。ここに出るのは目安");
+    ng.push("・死亡や、働けないほどの障害のときは、返還免除の制度がある（別の手続き）");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("jokyo").value = "shitsu"; $("rishoku").value = "in"; $("entai").value = "no"; $("hoshiki").value = "teigaku";
+    $("kind").value = "kyuyo"; $("nenshu").value = "320"; $("fuyo").value = "0"; $("kodomo").value = "0"; $("getsu").value = "15000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
