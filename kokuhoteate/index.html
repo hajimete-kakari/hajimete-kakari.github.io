@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>いまの保険で傷病手当金が出るか（国保・任意継続・扶養）｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>いまの保険で傷病手当金が出るか</h1>
+  <p class="lead">病気やけがで働けないとき、いま入っている保険（国民健康保険・任意継続・家族の扶養など）から傷病手当金が出るかを見分けます。退職前の会社の健康保険から続けて受けられる場合と、窓口に聞く一言も出します。出るかを決めるのは、加入している保険の窓口です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの保険</h2>
+    <label class="f" for="hk">いま使っている保険証（資格確認書）は？<span class="hint">保険証や資格確認書の「保険者名」の欄でわかります</span></label>
+    <select id="hk">
+      <option value="shaho">会社の健康保険（協会けんぽ・健康保険組合）の本人</option>
+      <option value="kyosai">共済組合の本人（公務員・私立学校の教職員など）</option>
+      <option value="nini">任意継続（辞めた会社の健康保険を続けている）</option>
+      <option value="fuyo">家族の健康保険の扶養に入っている</option>
+      <option value="kokuho">国民健康保険（市区町村）</option>
+      <option value="kumiai">国民健康保険組合（業種ごとの国保の組合）</option>
+    </select>
+    <label class="f" for="ws">病気やけがは、どんな場面で起きた？</label>
+    <select id="ws">
+      <option value="priv">仕事と関係ない（私生活・持病など）</option>
+      <option value="work">仕事中・通勤の途中</option>
+    </select>
+  </div>
+
+  <div class="card" id="kzcard">
+    <h2>2. 退職前の健康保険</h2>
+    <label class="f" for="kz">辞める前の会社の健康保険に、続けて1年以上入っていて、退職日に傷病手当金を受けていた（受けられる状態だった）？<span class="hint">「受けられる状態」は、退職日までに働けない日が3日続き、退職日も休んでいたことです。1年には任意継続・国保の期間は入りません</span></label>
+    <select id="kz">
+      <option value="no">いいえ（辞めたあとに病気やけがをした、など）</option>
+      <option value="yes">はい</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">出るかを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国民健康保険法 第58条第2項（市町村と国民健康保険組合は、条例または規約の定めるところにより、傷病手当金の支給を「行うことができる」）、健康保険法 第99条（傷病手当金は被保険者が対象で、任意継続被保険者を除く）・第104条（資格喪失後の継続給付）、国家公務員共済組合法 第66条、協会けんぽ「病気やケガで会社を休んだとき（傷病手当金）」をもとにした目安です。仕事中・通勤の途中の病気やけがは、雇われて働いている人なら労災保険の対象で、労働基準監督署が決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  var AFTER = { nini: 1, fuyo: 1, kokuho: 1, kumiai: 1 };
+  function sync() { $("kzcard").hidden = !AFTER[$("hk").value]; }
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var hk = $("hk").value, ws = $("ws").value, kz = AFTER[hk] ? $("kz").value : "";
+    var memo = "", ng = [];
+
+    if (ws === "work") {
+      box("仕事中・通勤の途中なら", "労災保険（労働基準監督署）が先", "雇われて働いている人の、仕事中・通勤の途中の病気やけがは、入っている保険の種類に関係なく、労災保険の休業（補償）給付の対象です。健康保険の傷病手当金は、仕事と関係ない病気やけがのためのものです。自営業・フリーランスの人は、労災保険に特別加入していなければ対象になりません。", false);
+    }
+
+    if (ws === "work" && (hk === "shaho" || hk === "kyosai")) {
+      box("いまの保険から", "仕事中・通勤の途中の分は出ない", (hk === "shaho" ? "会社の健康保険" : "共済組合") + "の傷病手当金は、仕事と関係ない病気やけがのためのものです。仕事中・通勤の途中の病気やけがは、労災保険の休業（補償）給付を先に確かめます。労災にあたらないと決まったら、傷病手当金の対象になります。", true);
+      li("会社に、仕事中（通勤の途中）の病気やけがで休むことを伝え、労災の手続きを頼む");
+      li("労災にあたるか迷うときは、会社の所在地を受け持つ労働基準監督署に相談する");
+      memo = "仕事中（通勤の途中）の\nけがで休むことに\nなりました。\n労災の手続きを\nお願いできますか。";
+    } else if (hk === "shaho") {
+      box("いまの保険から", "出る（傷病手当金の対象）", "会社の健康保険の本人は、仕事と関係ない病気やけがで働けず、給料が出ない日に、傷病手当金の対象になります。働けない日が連続して3日続いたあと（待期）、4日目から出ます。申請先は、保険証の協会けんぽ・健康保険組合です。", false);
+      li("医師に、働けない状態かどうかを聞いておく");
+      li("会社に、休むことと、傷病手当金の申請書の会社の欄を頼む");
+      li("協会けんぽ・健康保険組合に申請書を出す");
+      memo = "仕事とは関係ない\n病気（けが）で\n休むことになりました。\n傷病手当金の申請書の\n会社の欄を\nお願いできますか。";
+    } else if (hk === "kyosai") {
+      box("いまの保険から", "出る（共済組合の傷病手当金）", "共済組合の組合員も、仕事と関係ない病気やけがで働けないときの傷病手当金があります。待期や額の決まり、申請書は共済組合ごとに案内があるので、職場の共済の担当か、共済組合に確かめます。", false);
+      li("職場の共済の担当か、共済組合に、傷病手当金の申請書と出し方を聞く");
+      li("医師の証明と、職場の証明をそろえて出す");
+      memo = "病気（けが）で\n休むことになりました。\n傷病手当金の申請書と、\n出し方を教えてください。";
+    } else if (hk === "nini") {
+      box("いまの保険から", "出ない（任意継続の期間中の病気・けが）", "任意継続の人は、法律で傷病手当金の対象から外されています。任意継続に入ってから起きた病気やけがには、傷病手当金は出ません。", true);
+    } else if (hk === "fuyo") {
+      box("いまの保険から", "出ない（扶養の家族は対象外）", "傷病手当金は、健康保険の本人（被保険者）が働けないときのものです。家族の扶養に入っている人には出ません。", true);
+    } else if (hk === "kokuho") {
+      box("いまの保険から", "市区町村の条例しだい（決まっていなければ出ない）", "国民健康保険の傷病手当金は、法律で「出さなければならない」ものではなく、市区町村が条例で定めたときだけ出せるものです。条例で定めていなければ出ません。住んでいる市区町村の国民健康保険の窓口で、傷病手当金の条例があるかを確かめます。", true);
+      li("住んでいる市区町村の国民健康保険の窓口に、傷病手当金の決まりがあるかを電話で聞く");
+    } else {
+      box("いまの保険から", "組合の規約しだい", "国民健康保険組合は、規約で定めていれば傷病手当金を出せます。出すかどうか、出るときの日額や日数は組合ごとに違います。加入している組合の窓口で確かめます。", true);
+      li("加入している国民健康保険組合に、傷病手当金があるか、条件と申請書を聞く");
+    }
+
+    if (AFTER[hk]) {
+      if (kz === "yes") {
+        box("退職前の健康保険から", "続けて受けられる場合がある（継続給付）", "辞める前の会社の健康保険に、任意継続や国保の期間を除いて続けて1年以上入っていて、退職日に傷病手当金を受けていた（受けられる状態だった）なら、辞めたあとも同じ病気やけがで、前の健康保険から続けて受けられます。いまの保険の種類とは関係ありません。いったん働ける状態になると、そのあとはまた働けなくなっても出ません。", false);
+        li("辞める前の健康保険（協会けんぽ・健康保険組合）に、退職後の分の申請書を出す");
+        li("退職後の分の書き方（会社の欄が要るか）は、前の健康保険の案内で確かめる");
+      } else if (kz === "unk") {
+        box("退職前の健康保険から", "3つの条件で決まる", "①辞める前の会社の健康保険に、任意継続・国保の期間を除いて続けて1年以上、②退職日までに働けない日が3日続いていた、③退職日も働けずに休んでいた。この3つがそろえば、前の健康保険から続けて受けられます。退職日に出勤していると、受けられません。", true);
+        li("前の会社の健康保険の加入期間と、退職日前後に休んだ日を、手元の記録で確かめる");
+        li("辞める前の健康保険（協会けんぽ・健康保険組合）に、継続給付にあたるかを聞く");
+      } else {
+        box("退職前の健康保険から", "継続給付にはあたらない", "辞めたあとに起きた病気やけがや、退職日に受けていなかった（受けられる状態でなかった）ときは、前の健康保険から続けて受けることはできません。", true);
+      }
+      if (hk === "nini" || hk === "fuyo") {
+        if (kz !== "yes") li("長く働けない見込みなら、障害年金の対象になるかを年金事務所で確かめる");
+      } else if (kz !== "yes") {
+        li("長く働けない見込みなら、障害年金の対象になるかを年金事務所・市区町村の窓口で確かめる");
+      }
+      if (kz === "unk") memo = "〇月〇日に退職しました。\n退職日の前から\n病気で休んでいました。\n退職後も傷病手当金を\n続けて受けられるか、\n教えてください。";
+      else if (kz === "yes") memo ="〇月〇日に退職しました。\n退職日まで続けて\n休んでいて、\n傷病手当金を\n受けていました。\n退職後の分の\n申請書と出し方を\n教えてください。";
+      else if (hk === "kokuho") memo = "病気で働けなく\nなりました。\nこちらの国民健康保険に、\n傷病手当金の\n決まりはありますか。";
+      else if (hk === "kumiai") memo = "病気で働けなく\nなりました。\nこちらの組合に、\n傷病手当金は\nありますか。\nあれば、条件と\n申請書を教えてください。";
+      else memo = "病気で働けなく\nなりました。\n辞める前の健康保険から\n受けられるものが\nあるか、教えてください。";
+    }
+
+    if (ws === "work" && AFTER[hk]) li("仕事中・通勤の途中のときは、先に会社と労働基準監督署に労災の手続きを相談する");
+    li("働けなかった日と、病院に行った日を、メモに残しておく");
+    $("memo").textContent = memo;
+
+    ng.push("・国保の傷病手当金は、市区町村の条例しだい");
+    ng.push("・任意継続の期間中の病気には出ない");
+    ng.push("・扶養の家族は対象外");
+    ng.push("・継続給付は、退職日に出勤すると受けられない");
+    ng.push("・1年には、任意継続と国保の期間は入らない");
+    ng.push("・仕事中のけがは、先に労災を確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("hk").addEventListener("change", sync);
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("hk").value = "kokuho"; $("ws").value = "priv"; $("kz").value = "no"; }
+  sync();
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
