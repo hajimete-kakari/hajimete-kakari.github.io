@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>指定来所日に行けないとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #mochi li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>指定来所日に行けないとき</h1>
+  <p class="lead">職業訓練受講給付金（求職者支援制度の月10万円）を受けながら訓練に通っている人向けです。月に1回の「指定来所日」に、ハローワークへ行けなくなったとき、行けない理由と日付を入れると、理由が「やむを得ない理由」の例に入るか、いつまでに何をするか、持ち物、電話で伝える一言がわかります。認めるかどうかを決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="d1">指定来所日<span class="hint">就職支援計画書に書かれている日です</span></label>
+    <input type="date" id="d1">
+    <label class="f" for="d0">今日の日付</label>
+    <input type="date" id="d0">
+  </div>
+
+  <div class="card">
+    <h2>2. 行けない理由</h2>
+    <label class="f" for="why">いちばん近いもの</label>
+    <select id="why">
+      <option value="byoki">自分の病気・けが</option>
+      <option value="kango">家族の病気・けがの看護、介護</option>
+      <option value="mensetsu">会社の面接・採用試験</option>
+      <option value="shiken">国家試験・検定などの資格試験</option>
+      <option value="sougi">家族の危篤・亡くなった・葬儀</option>
+      <option value="kekkon">自分や家族の結婚</option>
+      <option value="houji">法事</option>
+      <option value="nyugaku">子どもの入学式・卒業式など</option>
+      <option value="tensai">大雨・大雪・電車の遅れ・事故など</option>
+      <option value="nintei">雇用保険の説明会・失業認定日と重なった</option>
+      <option value="kunren">訓練の日と重なった</option>
+      <option value="baito">アルバイト・仕事の予定</option>
+      <option value="other">私用・寝坊・忘れていた・そのほか</option>
+    </select>
+    <label class="f" for="kind">受けている訓練</label>
+    <select id="kind">
+      <option value="kyushoku">求職者支援訓練</option>
+      <option value="kokyo">公共職業訓練</option>
+    </select>
+    <label class="f" for="t">次のどれかに当てはまるか<span class="hint">求職者支援訓練の基礎コースを受けている／子を育てている／決まった範囲の家族を介護している</span></label>
+    <select id="t">
+      <option value="no">当てはまらない</option>
+      <option value="yes">当てはまる</option>
+    </select>
+    <label class="f" for="nm">名前（電話の一言に入ります。空でもかまいません）</label>
+    <input type="text" id="nm" placeholder="例：山田">
+  </div>
+  <button id="make" type="button">やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3 id="h_mochi">変更後の指定来所日に持っていくもの</h3>
+    <ul class="mo" id="mochi"></ul>
+    <h3 id="h_memo">ハローワークへの電話の一言</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度・訓練受講のしおり」（指定来所日・支給申請の必要書類・不支給・やむを得ない理由の例・Q&amp;A）と「求職者支援制度のご案内」をもとにした目安です。やむを得ない理由に当たるか、どの証明書類が要るかは、ハローワークが決めます。理由の例は「など」と書かれていて、ここにない理由がすべて認められないわけではありません。失業保険（基本手当）の失業認定日の変更は、決まりが別です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  var R = {
+    byoki: ["自分の病気・けが", "病院の領収書や診断書など、病気・けがの日がわかるもの"],
+    kango: ["家族の看護・介護", "家族の通院・入院の日がわかるものなど"],
+    mensetsu: ["会社の面接・採用試験", "面接の日時が書かれた案内や、会社の証明など"],
+    shiken: ["資格試験", "受験票など、試験の日がわかるもの"],
+    sougi: ["家族の危篤・葬儀", "会葬礼状など、日付がわかるもの"],
+    kekkon: ["結婚", "結婚の日がわかるもの"],
+    houji: ["法事", "法事の日と、誰の法事かがわかるもの"],
+    nyugaku: ["子どもの入学式・卒業式", "学校の案内など、式の日がわかるもの"],
+    tensai: ["大雨・大雪・電車の遅れ・事故", "遅延証明書など"],
+    nintei: ["雇用保険の説明会・失業認定日", "雇用保険の受給資格者証など"]
+  };
+  function make() {
+    var d1 = pd($("d1").value), d0 = pd($("d0").value);
+    if (!d1 || !d0) { alert("指定来所日と今日の日付を入れてください"); return false; }
+    var why = $("why").value, kind = $("kind").value, t = $("t").value === "yes";
+    var nm = $("nm").value.trim();
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("mochi").innerHTML = "";
+    var diff = Math.round((d1 - d0) / 86400000);
+    var ex = R[why];
+    var reason, warnR = false, memoWhy;
+
+    // 1. 理由
+    if (why === "kunren" && kind === "kokyo") {
+      box("理由の目安", "ハローワークへ行く日です",
+        "公共職業訓練を受けている人は、指定来所日が訓練の日にあたることがあります。このときは、ハローワークへ行くほうが先です。訓練施設に「指定来所日なので休みます」と伝えます。指定来所日にハローワークへ行くための欠席は、やむを得ない理由の例に入っています。", false);
+      reason = "kokyo"; memoWhy = "訓練の日と重なって、\n行けませんでした";
+    } else if (why === "kunren") {
+      box("理由の目安", "まず日付を確かめる",
+        "求職者支援訓練では、指定来所日は原則として訓練のない日に決められます。訓練の日と重なって見えるときは、時間割の変更などがあったのかもしれません。行けないかどうかを決める前に、ハローワークに電話して、どちらを先にするか聞きます。", true);
+      reason = "ask"; memoWhy = "訓練の日と\n重なっているように見えます";
+    } else if (ex) {
+      box("理由の目安", "やむを得ない理由の例に入っています",
+        "しおりに書かれた「やむを得ない理由」の例に、" + ex[0] + "が入っています。ただし、認められるかと、どの証明書類が要るかは、ハローワークが決めます。日付と理由がわかる書類は、捨てずに取っておきます。" +
+        (why === "nintei" ? "失業保険を受けている人は、失業認定日を指定来所日と同じ日にできる場合があります。" : ""), false);
+      reason = "ok"; memoWhy = ex[0] + "のため、\n行けなくなりました";
+    } else if (why === "baito") {
+      box("理由の目安", "例には入っていません",
+        "アルバイトや仕事の予定は、しおりのやむを得ない理由の例には書かれていません。例は「など」となっているので、まずハローワークに電話して、日を変えられるか聞きます。行かないままにしないことが大事です。", true);
+      reason = "ng"; warnR = true; memoWhy = "仕事の予定が入っていて、\n行けるか迷っています";
+    } else {
+      box("理由の目安", "例には入っていません",
+        "私用・寝坊・忘れていたなどは、しおりのやむを得ない理由の例には書かれていません。理由なく行かないと、次の回からの給付金が出なくなります" +
+        (t ? "（基礎コース・子育て・介護に当てはまる人は、この扱いから外れると書かれています）。" : "。") + "それでも、すぐにハローワークへ電話して相談します。", true);
+      reason = "ng"; warnR = true; memoWhy = "行けなくなりました";
+    }
+
+    // 2. 連絡の期限
+    var when;
+    if (reason === "kokyo") {
+      when = diff >= 0 ? "訓練施設に、" + md(d1) + "の欠席を早めに伝える" : "指定来所日の" + md(d1) + "は過ぎています。すぐハローワークに電話する";
+      box("連絡の期限", diff >= 0 ? md(d1) + "より前に（訓練施設へ）" : "すぐ（ハローワークへ）", when + "。", diff < 0);
+    } else if (diff > 1) {
+      box("連絡の期限", md(d1) + "より前に（あと" + diff + "日）",
+        "行けないとわかった今のうちに、ハローワークへ電話します。しおりには「すみやかに（事前に）」連絡するよう書かれています。前の日まで待たなくてかまいません。", false);
+    } else if (diff === 1) {
+      box("連絡の期限", "今日のうちに（指定来所日は明日）",
+        "指定来所日は明日の" + md(d1) + "です。今日、ハローワークが開いている時間に電話します。", true);
+    } else if (diff === 0) {
+      box("連絡の期限", "今すぐ（指定来所日は今日）",
+        "今日が指定来所日です。窓口が開いたらすぐ電話します。", true);
+    } else {
+      box("連絡の期限", "今すぐ（" + (-diff) + "日過ぎています）",
+        "指定来所日の" + md(d1) + "は過ぎています。しおりには、事前に連絡できなかった場合も、すみやかに連絡するよう書かれています。今日のうちに電話します。", true);
+    }
+
+    // 3. やること
+    if (reason === "kokyo" && diff >= 0) {
+      li("todo", "訓練施設に、指定来所日のため" + md(d1) + "は休むと伝える");
+      li("todo", md(d1) + "に、就職支援計画書を持ってハローワークへ行く");
+      li("todo", "職業相談のあと、給付金の支給申請をする");
+    } else {
+      li("todo", "ハローワークに電話して、行けない理由を伝え、やむを得ない理由に当たるか聞く");
+      li("todo", "要る証明書類を聞いて、メモする");
+      li("todo", "ハローワークが決めた、変更後の指定来所日をメモする");
+      li("todo", "変更後の日が訓練の日と重なったら、訓練施設に伝える");
+      li("todo", "変更後の指定来所日に、職業相談を受けてから支給申請をする");
+    }
+
+    // 4. 持ち物
+    var kk = (reason === "kokyo" && diff >= 0);
+    $("h_mochi").textContent = kk ? "指定来所日に持っていくもの" : "変更後の指定来所日に持っていくもの";
+    $("h_memo").textContent = kk ? "訓練施設への一言" : "ハローワークへの電話の一言";
+    li("mochi", "就職支援計画書");
+    li("mochi", "職業訓練受講給付金支給申請書（訓練施設の受講証明が入ったもの）");
+    li("mochi", "職業訓練受講給付金支給状況（支給記録）");
+    if (!(reason === "kokyo" && diff >= 0)) li("mochi", "行けなかった理由の証明書類（どの書類が要るかは、電話でハローワークに聞く）");
+
+    // 5. 電話の一言
+    var memo;
+    if (reason === "kokyo" && diff >= 0) {
+      memo = "（訓練施設へ）\n" + (nm ? nm + "です。\n" : "") + md(d1) + "は、ハローワークの\n指定来所日のため、\n訓練をお休みします。";
+    } else {
+      memo = "職業訓練受講給付金を\n受けている" + (nm ? nm : "〇〇") + "です。\n" + md(d1) + "の指定来所日ですが、\n" + memoWhy + "。\n" +
+        (diff < 0 ? "連絡が遅れて、\nすみません。\n" : "") +
+        "やむを得ない理由に当たるか、\n要る書類と、\n変更後の日を教えてください。";
+    }
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・やむを得ない理由かどうかは、自分で決めずにハローワークに聞く\n・理由なく指定来所日に行かないと、次の回からの給付金が出なくなる（基礎コース・子育て・介護の人を除く）\n・支給申請は、指定来所日にしかできない（変更後の日を含む）\n・就職支援計画書か支給申請書を忘れると、申請できず出直しになる\n・変更後の日に訓練を休むことになったら、やむを得ない理由の欠席として扱われる\n・訓練が終わったあとの3か月も、月1回の指定来所日は続く";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  var today = new Date();
+  $("d0").value = iso(today);
+  if (DEMO) { $("d1").value = "2026-12-08"; $("d0").value = "2026-12-04"; $("why").value = "byoki"; $("nm").value = "山田"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
