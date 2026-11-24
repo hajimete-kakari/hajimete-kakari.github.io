@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の結果が届くまでの日付｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の結果が届くまでの日付</h1>
+  <p class="lead">障害年金の請求書を出したあと、結果の通知が届く目安・振り込みが始まる目安・何月分から受け取れるかを出します。通知が届いた人は、次にやることと期限も出ます。日本年金機構の案内で出した目安で、等級や結果は判定しません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 出した請求</h2>
+    <label class="f" for="seikyu">請求書を出した日<span class="hint">年金事務所や役場で受け付けた日。控えや受付の印で確かめます</span></label>
+    <input type="date" id="seikyu">
+    <label class="f" for="shurui">請求のしかた<span class="hint">障害認定日（ふつうは初診日から1年6か月）の状態で請求したか、そのあと重くなってから請求したか</span></label>
+    <select id="shurui">
+      <option value="nintei">障害認定日による請求（さかのぼる請求も）</option>
+      <option value="jigo">事後重症による請求</option>
+      <option value="wakaranai">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="jokyo">届いたもの</label>
+    <select id="jokyo">
+      <option value="mada">まだ何も届いていない</option>
+      <option value="shosho">年金証書・年金決定通知書が届いた</option>
+      <option value="fushi">不支給決定通知書が届いた</option>
+    </select>
+    <div id="todokiwrap" hidden>
+      <label class="f" for="todoki">届いた日</label>
+      <input type="date" id="todoki">
+    </div>
+    <label class="f" for="today">今日の日付<span class="hint">ふつうはそのままで大丈夫です</span></label>
+    <input type="date" id="today">
+  </div>
+  <button id="make" type="button">日付を見る</button>
+  <div class="err" id="err" hidden></div>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3 id="memoh">問い合わせるときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>手元にそろえるもの</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害年金ガイド 令和8年度版」（年金証書・年金決定通知書は請求書の提出から3カ月程度で届く・詳しい確認が要るときは時間がかかることがある・受け取れないときは不支給決定通知書・年金証書が届いてから約1〜2カ月後に振り込みが始まる・偶数月に2カ月分・障害認定日による請求は障害認定日の翌月分から・事後重症による請求は請求日の翌月分から）、「年金の決定に不服があるとき（審査請求）」（決定があったことを知った日の翌日から起算して3か月以内に、文書または口頭で地方厚生局の社会保険審査官へ）で出した目安です。通知が届いた日を「知った日」として数えています。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var now = new Date();
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  $("today").value = iso(now);
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function fm(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  // d の n か月後の同じ日（その日がない月は月末）
+  function addM(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(d.getDate(), last));
+  }
+  function mon(d, n) { return new Date(d.getFullYear(), d.getMonth() + n, 1); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function sync() { $("todokiwrap").hidden = $("jokyo").value === "mada"; }
+  $("jokyo").addEventListener("change", sync);
+
+  function make() {
+    var S = parse($("seikyu").value), sh = $("shurui").value, jk = $("jokyo").value;
+    var T = parse($("today").value) || new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var D = parse($("todoki").value);
+    $("err").hidden = true;
+    if (!S) { $("err").textContent = "請求書を出した日を入れてください。"; $("err").hidden = false; return false; }
+    if (jk !== "mada" && !D) { $("err").textContent = "届いた日を入れてください。"; $("err").hidden = false; return false; }
+    if (S > T) { $("err").textContent = "請求書を出した日が、今日より後になっています。"; $("err").hidden = false; return false; }
+    $("sum").innerHTML = "";
+    var R = addM(S, 3);               // 結果が届く目安（3カ月程度）
+    var ng = [], memo = "";
+
+    // 何月分から（不支給のときは出さない）
+    if (jk === "fushi") {
+    } else if (sh === "jigo") {
+      box("何月分から受け取れるか", fm(mon(S, 1)) + "分から", "事後重症による請求は、請求日の翌月分からです。請求日が遅いほど、受け取りの始まりも遅くなります。", false);
+    } else if (sh === "nintei") {
+      box("何月分から受け取れるか", "障害認定日の翌月分から", "障害認定日の状態で認められると、障害認定日の翌月分から受け取れます。さかのぼる分は、まとめて振り込まれます。何年分さかのぼるかは、年金決定通知書で確かめます。", false);
+    } else {
+      box("何月分から受け取れるか", "請求のしかたで変わる", "障害認定日による請求なら障害認定日の翌月分から、事後重症による請求なら請求日の翌月分（" + fm(mon(S, 1)) + "分）からです。請求書の控えか、年金事務所で確かめます。", true);
+    }
+
+    if (jk === "mada") {
+      var over = T > R;
+      if (over) {
+        box("結果が届く目安", fm(R) + "ごろ（過ぎています）", "案内では、請求書の提出から3カ月程度で届きます。障害の状態を詳しく確かめる必要があるときなどは、もっとかかることがあります。目安を過ぎたら、請求書を出した窓口（年金事務所など）に、いまどうなっているかを問い合わせます。", true);
+      } else {
+        box("結果が届く目安", fm(R) + "ごろ", "案内では、請求書の提出から3カ月程度で届きます。認められたときは年金証書・年金決定通知書が、認められないときは不支給決定通知書が、日本年金機構から家に届きます。詳しい確認が要るときは、もっとかかることがあります。", false);
+      }
+      box("振り込みが始まる目安", fm(mon(R, 1)) + "〜" + fm(mon(R, 2)) + "ごろ", "年金証書が届いてから約1〜2カ月後に振り込みが始まります。結果が目安どおりに届いたときの見込みです。そのあとは、偶数月に2カ月分ずつ振り込まれます。", false);
+      box("待っている間", "住所と口座を変えない", "引っ越しや口座の変更があると、届かなかったり振り込めなかったりします。変わるときは、年金事務所に早めに伝えます。", false);
+      $("memoh").textContent = "問い合わせるときの一言";
+      memo = "障害年金の請求書を\n" + f(S) + "に出しました。\n";
+      memo += over ? "3か月ほどたちましたが、\n通知が届いていません。\n" : "結果の通知は、\nいつごろになりますか。\n";
+      memo += "いまどの段階か、\n書類の追加が要るかを\n教えてください。";
+      ng.push("・年金請求書の控え（受付の日付があるもの）");
+      ng.push("・基礎年金番号がわかるもの");
+      ng.push("・本人確認の書類");
+      ng.push("・家族が問い合わせるときは委任状（窓口で確かめる）");
+    } else if (jk === "shosho") {
+      box("振り込みが始まる目安", fm(mon(D, 1)) + "〜" + fm(mon(D, 2)) + "ごろ", "年金証書が届いてから約1〜2カ月後に、請求のときに決めた口座へ振り込まれます。そのあとは、偶数月に2カ月分ずつです。", false);
+      box("届いたらすぐ見るところ", "等級・金額・次の診断書の年月", "年金決定通知書で、等級・年金額・受け取りの始まりを確かめます。年金証書の「次回診断書提出年月」は、次の更新の期限です。メモしておきます。", false);
+      box("等級に納得できないとき", f(addM(D, 3)) + "まで", "決定の内容に不服があるときは、決定を知った日の翌日から数えて3か月以内に、地方厚生局の社会保険審査官へ審査請求ができます（文書か口頭）。届いた日を知った日とした目安です。", false);
+      $("memoh").textContent = "問い合わせるときの一言";
+      memo = "障害年金の年金証書が\n" + f(D) + "に届きました。\n";
+      memo += "初めての振り込みは\nいつごろになりますか。\n振り込まれる口座も\n確かめたいです。";
+      ng.push("・年金証書と年金決定通知書");
+      ng.push("・同封のリーフレット（今後の手続き）");
+      ng.push("・通帳など、振込先の口座がわかるもの");
+      ng.push("・次回診断書提出年月のメモ");
+    } else {
+      var lim = addM(D, 3), late = T > lim;
+      box("審査請求の期限", f(lim) + "まで" + (late ? "（過ぎています）" : ""), (late ? "決定を知った日の翌日から数えて3か月を過ぎています。過ぎたときの扱いは、地方厚生局の社会保険審査官か年金事務所で確かめます。あきらめる前に、まず相談します。" : "決定を知った日の翌日から数えて3か月以内に、地方厚生局の社会保険審査官へ審査請求ができます（文書か口頭）。届いた日を知った日とした目安です。"), late);
+      box("まずやること", "不支給の理由を読む", "不支給決定通知書に、認められなかった理由が書いてあります。保険料の納付要件なのか、障害の程度なのかで、次の一手が変わります。わからない言葉は、年金事務所で聞けます。", false);
+      box("ほかの道", "あとで重くなったら", "今回認められなくても、そのあと重くなって障害の状態になったときは、事後重症による請求ができる場合があります（請求書は65歳の誕生日の前々日まで）。", false);
+      $("memoh").textContent = "問い合わせるときの一言";
+      memo = "障害年金の不支給決定\n通知書が" + f(D) + "に\n届きました。\n";
+      memo += "理由の意味と、\n審査請求の出し方を\n教えてください。";
+      ng.push("・不支給決定通知書");
+      ng.push("・年金請求書の控えと、出した診断書のコピー");
+      ng.push("・基礎年金番号がわかるもの");
+      ng.push("・審査請求の期限（" + f(lim) + "）のメモ");
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("seikyu").value = "2026-09-10"; $("shurui").value = "nintei"; $("jokyo").value = "mada"; $("today").value = "2026-11-24"; sync(); make(); }
+  window.__make = make;
+})();
+</script>
+</body>
+</html>
