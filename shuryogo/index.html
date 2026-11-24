@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の終了後手当チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+  .mihon .lead, .mihon .mh { display: none; }
+  ol.tl { list-style: none; padding-left: 0; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の終了後手当チェック</h1>
+  <p class="lead">ハローワークの受講指示（受講あっせん）で公共職業訓練を受けていて、訓練が終わるころに失業保険の残りが少ない人向けです。訓練が終わる日と、そのときの残りの日数、終わる前4週間の応募の回数などを入れると、終了後手当（訓練が終わったあと、最大30日まで失業保険が延びるしくみ）の条件に当てはまりそうか、何日まで延びうるか、終わる前にしておくことを順に並べます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付と残りの日数</h2>
+    <label class="f" for="d0">今日の日付</label>
+    <input type="date" id="d0">
+    <label class="f" for="de">訓練が終わる日（受講終了日）</label>
+    <input type="date" id="de">
+    <label class="f" for="nz">訓練が終わる日の時点で残る、失業保険の日数<span class="hint">受講終了日の翌日から受給期間の最後の日までに、もらえる日数です。残っていなければ 0。わからなければ認定日にハローワークで聞けます</span></label>
+    <input type="number" id="nz" min="0" max="400" step="1" inputmode="numeric">
+  </div>
+
+  <div class="card">
+    <h2>2. 訓練と、いまの状況</h2>
+    <label class="f" for="sj">訓練の受け方</label>
+    <select id="sj">
+      <option value="shiji">ハローワークの受講指示（受講あっせん）で受けている</option>
+      <option value="other">受講指示ではない・わからない</option>
+    </select>
+    <label class="f mh" for="fin">最後まで受けるか</label>
+    <select id="fin" class="mh">
+      <option value="yes">最後まで受ける（受けた）</option>
+      <option value="no">途中でやめる（やめた）</option>
+    </select>
+    <label class="f" for="ob">終わる前の4週間に、訓練の職種の求人へ応募・面接した回数<span class="hint">ハローワークの紹介のほか、民間の紹介会社や、自分で直接応募したものも数えます</span></label>
+    <select id="ob">
+      <option value="0">0回</option>
+      <option value="1">1回</option>
+      <option value="2">2回以上</option>
+    </select>
+    <label class="f mh" for="nt">内定は</label>
+    <select id="nt" class="mh">
+      <option value="no">まだない</option>
+      <option value="yes">ある（就職が決まった）</option>
+    </select>
+    <label class="f mh" for="kb">希望する仕事</label>
+    <select id="kb" class="mh">
+      <option value="same">訓練の職種で、雇用保険に入る働き方</option>
+      <option value="other">訓練とは別の職種</option>
+      <option value="short">短い時間だけ・雇用保険に入らない働き方</option>
+    </select>
+    <label class="f mh" for="ks">認定日に行かなかった日や、紹介・指導を断ったことは<span class="hint">証明認定など、ハローワークが認めた場合は「ない」でかまいません</span></label>
+    <select id="ks" class="mh">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>終わる前にすること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで確かめること</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>失業認定申告書に書くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「雇用保険に関する業務取扱要領」（令和8年4月版 52351〜52356 訓練延長給付）と、厚生労働省・都道府県労働局・ハローワークのリーフレット「公共職業訓練等を受け終わった者に対する延長給付（終了後手当）」をもとにした目安です。終了後手当を出すかどうかは、ハローワークが審査して決めます。このページの結果で決まるものではありません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  function addD(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("chk").appendChild(e); }
+  function make() {
+    $("result").hidden = true;
+    var d0 = pd($("d0").value), de = pd($("de").value), nzs = $("nz").value.trim();
+    if (!d0 || !de) { alert("今日の日付と、訓練が終わる日を入れてください"); return false; }
+    if (!/^\d{1,3}$/.test(nzs)) { alert("訓練が終わる日の時点で残る日数を、0以上の数字で入れてください"); return false; }
+    var nz = +nzs;
+    var shiji = $("sj").value === "shiji", fin = $("fin").value === "yes", ob = +$("ob").value,
+      nt = $("nt").value === "yes", kb = $("kb").value, ks = $("ks").value === "yes";
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("chk").innerHTML = "";
+
+    var w0 = addD(de, -28), w1 = addD(de, -1);
+    var toEnd = dd(d0, de);
+    var lim = Math.max(0, 30 - nz);
+
+    // 外れる理由を集める
+    var out = [], weak = [];
+    if (!shiji) out.push("終了後手当は、ハローワークの受講指示で受ける公共職業訓練等が対象です。受講指示かどうかは、ハローワークで確かめます");
+    if (!fin) out.push("訓練を途中でやめた人は「受け終わった人」に当たらないため、終了後手当の対象になりません");
+    if (nz >= 30) out.push("終わる日の時点の残りが30日以上あるので、終了後手当の条件（残り30日未満）に当たりません。残りの日数分の失業保険を、ふつうどおり受けます");
+    if (nt) out.push("就職が決まっている人は、「就職の見込みがない」という条件に当たりません。就職の手続き（再就職手当など）を確かめます");
+    if (ks) out.push("認定日に行かなかったり、紹介・受講指示・職業指導を正当な理由なく断ったりしたことがあると、条件に当たらないものとして扱われます");
+    if (kb === "other") weak.push("訓練の職種で、雇用保険に入る仕事を希望していることが条件です。別の職種を希望していると当たりません");
+    if (kb === "short") weak.push("短い時間だけの働き方を希望している人は、「特に再就職の援助が必要」かどうかを、ハローワークが慎重に判断します");
+    if (ob < 2) weak.push("終わる前の4週間に、訓練の職種の求人への応募（面接も含む）が複数回あることが条件です。いまは" + ob + "回です");
+
+    // 1. あなたの場合
+    if (out.length) {
+      box("あなたの場合", "終了後手当の条件に当たらない見込み", out[0] + "。", true);
+    } else if (weak.length) {
+      box("あなたの場合", "このままだと条件が足りない見込み", weak.join("。") + "。", true);
+    } else {
+      box("あなたの場合", "条件に当てはまりそう（決めるのはハローワーク）",
+        "受講指示の訓練を最後まで受け、終わる日の残りが30日未満で、訓練の職種で複数回応募しても内定がない状態です。このほか、地域でその職種の求人が少ない（都道府県の有効求人倍率が1倍以下）ことが条件で、ハローワークが審査して決めます。", false);
+    }
+
+    // 2. 延びうる日数
+    if (!out.length) {
+      box("延びうる日数", (weak.length ? "条件がそろえば最大" : "最大") + lim + "日（30日−残り" + nz + "日）",
+        "終了後手当は、30日から終わる日の残りの日数を引いた日数が上限です。" +
+        (nz > 0 ? "先に残りの" + nz + "日分を受け、そのあとに延びる形です。" : "残りがないので、終わった翌日からの分になります。") +
+        "受給期間も、そのぶん延びます。", false);
+    } else {
+      box("延びうる日数", "終了後手当としては0日",
+        nz >= 30 ? "残り" + nz + "日分は、ふつうの失業保険として受けます。" : "条件に当たらないため、延びる日数はありません。", true);
+    }
+
+    // 3. 4週間
+    var wTxt = md(w0) + "〜" + md(w1);
+    var wNote;
+    if (dd(d0, w0) > 0) wNote = "あと" + dd(d0, w0) + "日で、この4週間に入ります。";
+    else if (dd(d0, de) > 0) wNote = "いま、この4週間の中です。終わる日まで、あと" + toEnd + "日です。";
+    else wNote = "この4週間は、もう過ぎています。";
+    box("応募を数える4週間（目安）", wTxt, "訓練が終わる日の前までの4週間です。" + wNote + "この間より前に応募して、面接がこの間にあったものも数えてよいとされています。", false);
+
+    // 4. 順番
+    var n = 1;
+    if (out.length) {
+      step(n++ + ". 次の認定日に、窓口で自分の場合を確かめる", "次の認定日", out.join("。") + "。");
+      if (nt) step(n++ + ". 就職の届け出をする", "決まったら早めに", "就職が決まったら、ハローワークに届け出ます（行く日と持ち物は窓口で確かめます）。訓練の残りをどうするかも、訓練をする施設とハローワークに相談します。");
+    } else if (dd(d0, de) > 0) {
+      step(n++ + ". 次の認定日に、終わる日の残りの日数を聞く", "次の認定日", "受講証明書を出すときに、受講終了日の時点で何日残るかと、終了後手当の相談先を聞きます。");
+      step(n++ + ". 訓練の職種の求人に、2回以上応募する", wTxt, "ハローワークの紹介・民間の紹介会社・自分で直接応募、どれも数えます。面接を受けたものも入ります。");
+      step(n++ + ". 応募した求人の職種を、失業認定申告書に書く", "応募したあとの認定日", "応募の有無と、その求人の職種を書きます。ハローワークは、これで応募の実績を確かめます。");
+      step(n++ + ". 呼び出しの日にハローワークへ", "残りを受け終わる日、または終わる日（翌日のことも）", "終了後手当を出すかどうかの、事情が変わっていないかの確認があります。修了式などで行けない日は、前もって相談します。");
+    } else {
+      step(n++ + ". すぐにハローワークへ相談する", "今すぐ", "訓練はもう終わっています。終了後手当の対象になるかどうか、残りの日数とあわせて窓口で確かめます。");
+      step(n++ + ". 応募した求人の職種を、失業認定申告書に書く", "次の認定日", "終わる前4週間の応募・面接を、申告書に書いて伝えます。");
+    }
+    if (!out.length) step(n++ + ". 受給資格者証（受給資格通知）の記載を確かめる", "決まったあと", "出ることになったら、受給資格者証または受給資格通知に記載されます。延びた受給期間の最後の日も書かれます。");
+
+    // 5. 確かめること
+    li("訓練が終わる日の時点で、失業保険が何日残るか");
+    li("自分が受けている訓練が、受講指示によるものか");
+    li("訓練の職種（受講証明書の「訓練受講職種」）は何か、どの求人なら数えられるか");
+    li("終了後手当の確認で、いつハローワークに行けばよいか");
+
+    // 6. メモ
+    $("memo").textContent = "応募した求人の職種：\n（訓練の職種と同じ〇〇）\n応募した日：〇月〇日\n応募の方法：\n（ハローワークの紹介／\n紹介会社／直接応募）\n面接：〇月〇日に受けた\n結果：不採用／結果待ち";
+
+    $("ng").textContent = "・対象は、受講指示で受けた2年以内の公共職業訓練等を、最後まで受けた人\n・終わる日の残りが30日未満で、延びるのは「30日−残り」まで\n・終わる前4週間に、訓練の職種で複数回の応募（面接も含む）があっても内定がないこと\n・訓練の職種で雇用保険に入る仕事を希望していること\n・地域でその職種の有効求人倍率（都道府県単位）が1倍以下であること。6〜11月の判断は同じ年の4月、12〜5月の判断は10月の倍率を使う\n・途中でやめた人、認定日に行かなかった人、紹介や指導を正当な理由なく断った人は対象外\n・出すかどうかはハローワークが審査して決める";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("d0").value = iso(new Date());
+  if (DEMO) { $("d0").value = "2026-12-01"; $("de").value = "2027-01-29"; $("nz").value = "12"; $("ob").value = "2"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
