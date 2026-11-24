@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の額改定請求、出せる日と診断書の期間｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; }
+  .row select { flex: 1; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の額改定請求、出せる日と診断書の期間</h1>
+  <p class="lead">障害年金を受けていて、障害の程度が重くなったときに出す「額改定請求」の日付を出します。いまの等級や年金を受ける権利が発生した日などを入れると、出せるかどうか・出せる日の目安・診断書に書いてもらう状態の期間・出す先・医師に頼むときの一言が出ます。日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いま受けている年金</h2>
+    <label class="f" for="kyu">いまの等級</label>
+    <select id="kyu">
+      <option value="2">2級</option>
+      <option value="3">3級</option>
+      <option value="1">1級</option>
+    </select>
+    <label class="f" for="shu">受けている年金<span class="hint">年金証書に書いてあります。3級は障害厚生年金だけにある等級です</span></label>
+    <select id="shu">
+      <option value="kiso">障害基礎年金だけ</option>
+      <option value="kosei">障害厚生年金（障害基礎年金とあわせて受けている人も）</option>
+    </select>
+    <label class="f" for="age">年齢</label>
+    <select id="age">
+      <option value="u65">65歳になっていない</option>
+      <option value="o65">65歳以上</option>
+    </select>
+    <div id="pastWrap" hidden>
+      <label class="f" for="past">これまでに1級か2級になったことは<span class="hint">同じ病気やけがで、障害基礎年金を受ける権利があったことがあるか</span></label>
+      <select id="past">
+        <option value="no">ない</option>
+        <option value="yes">ある</option>
+        <option value="unk">わからない</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 日付</h2>
+    <label class="f" for="kenri">年金を受ける権利が発生した日<span class="hint">年金証書の「受給権を取得した年月」のあたりに書いてあります</span></label>
+    <input type="date" id="kenri">
+    <label class="f" for="shinsa">最後に障害の程度の診査を受けた日<span class="hint">更新の診断書（障害状態確認届）や前の額改定請求で審査を受けた日。わからなければ空けておきます</span></label>
+    <input type="date" id="shinsa">
+    <label class="f" for="ichiran">1年を待たずに出せる状態（一覧）に当たりますか<span class="hint">目・耳・手足の欠損や完全まひ、人工透析、人工心臓、人工呼吸器など、省令で決まった状態です。一覧は日本年金機構の「記入上の注意事項（1年を待たずに額改定請求を行う場合）」にあります</span></label>
+    <select id="ichiran">
+      <option value="no">当たらない・わからない</option>
+      <option value="yes">当たる（権利が発生した日・診査の日より後に当たった）</option>
+    </select>
+    <label class="f" for="plan">出す予定の日<span class="hint">わからなければ今日のままで大丈夫です</span></label>
+    <input type="date" id="plan">
+  </div>
+  <button id="make" type="button">出せる日を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>医師に頼むときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>出す前に見るところ</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害の程度が変わったとき」（額改定請求書に医師の診断書を付けて年金事務所・街角の年金相談センターへ、障害基礎年金だけなら市区町村役場の窓口でも・権利が発生した日または診査を受けた日から1年を経過した日を過ぎていないと請求できない・省令で定めた障害の程度が増進したことが明らかな場合は1年を待たずに・3級の障害厚生年金で過去に同じ事由の障害基礎年金の受給権がなかった人は65歳以上になると請求できない）、「平成26年4月1日から障害年金の額（障害等級）の改定を請求できる時期が変わります」（一覧に当たるのは受給権を取得した日か診査の日のどちらか遅い日以降に限る・請求が認められても等級が変わらないことがある）、様式「障害給付 額改定請求書」の記入上の注意（提出する日前3月以内の障害の状態が書かれた診断書・年金証書）、国民年金法34条で出した目安です。等級が上がるかどうかは判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var now = new Date();
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  $("plan").value = iso(now);
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addM(d, n) { // n か月ずらした同じ日（ない日は月末）
+    var y = d.getFullYear(), m = d.getMonth() + n, last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(d.getDate(), last));
+  }
+  function plus1y(d) { // 1年後の同じ日（2月29日は3月1日）
+    var r = new Date(d.getFullYear() + 1, d.getMonth(), d.getDate());
+    if (r.getMonth() !== d.getMonth()) r = new Date(d.getFullYear() + 1, d.getMonth() + 1, 1);
+    return r;
+  }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function sync() {
+    var k = $("kyu").value;
+    if (k === "3") $("shu").value = "kosei";
+    $("pastWrap").hidden = !(k === "3" && $("age").value === "o65");
+  }
+  $("kyu").addEventListener("change", sync); $("age").addEventListener("change", sync);
+  function make() {
+    sync();
+    var kyu = $("kyu").value, shu = $("shu").value, age = $("age").value, past = $("past").value, ich = $("ichiran").value;
+    var K = parse($("kenri").value), S = parse($("shinsa").value);
+    var P = parse($("plan").value) || new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    $("sum").innerHTML = "";
+    var ng = [], ok = true;
+
+    if (kyu === "1") {
+      box("出せるか", "上がる等級がありません", "1級はいちばん上の等級なので、額改定請求で上がる先がありません。別の病気やけがが重なったときの扱いなどは、年金事務所で確かめます。", true);
+      ok = false;
+    } else if (kyu === "3" && age === "o65" && past !== "yes") {
+      if (past === "unk") {
+        box("出せるか", "年金事務所で確かめる", "3級の障害厚生年金を受けていて65歳以上の人は、過去に同じ病気やけがで障害基礎年金（1級か2級）を受ける権利があった人を除いて、額改定請求はできません。あったかどうかを年金事務所で確かめてから進めます。", true);
+      } else {
+        box("出せるか", "65歳以上のため出せません", "3級の障害厚生年金を受けていて、過去に同じ病気やけがで障害基礎年金（1級か2級）を受ける権利がなかった人は、65歳以上になると額改定請求ができません。", true);
+      }
+      ok = false;
+    }
+    if (!ok) {
+      $("memo").textContent = "（出せないときは作りません）";
+      $("ng").textContent = "・年金証書で、等級と受けている年金を\n　もう一度見る\n・わからないところは年金事務所で聞く";
+      $("result").hidden = false; return true;
+    }
+    if (!K) { $("result").hidden = true; alert("年金を受ける権利が発生した日を入れてください"); return false; }
+
+    var base = K, baseName = "年金を受ける権利が発生した日";
+    if (S && S > K) { base = S; baseName = "最後に診査を受けた日"; }
+    var first = plus1y(base);
+    var early = ich === "yes";
+
+    if (early) {
+      box("出せる日", "1年を待たずに出せます", "一覧の状態に当たるときは、" + baseName + "（" + f(base) + "）から1年たっていなくても出せます。ただし、当たったのが" + f(base) + "より後のときに限ります。医師に、1年を待たずに出すためのチェックシートを渡します。", false);
+    } else {
+      box("出せる日", f(first) + "以後", baseName + "（" + f(base) + "）から1年を過ぎてから出せます。" + (S ? "" : "\n最後に診査を受けた日が入っていないので、権利が発生した日で数えています。更新の診断書を出したことがあれば、その審査の日のほうが後になり、出せる日も後になります。わからなければ年金事務所で聞けます。") + "\nぎりぎりの日に出すときは、その日で出せるかを年金事務所で確かめます。", false);
+    }
+
+    var Q = P;
+    if (!early && P < first) {
+      box("出す予定の日", f(P) + "では早すぎます", "この日はまだ1年を過ぎていないので、出せません。出せる日（" + f(first) + "）以後に出す予定に直して、下の期間を見ます。", true);
+      Q = first;
+    }
+    var from = addM(Q, -3);
+    box("診断書の状態の期間", f(from) + "ごろ〜" + f(Q), "額改定請求書には、出す日の前3か月以内の障害の状態が書かれた診断書を付けます。出す日を" + f(Q) + "とすると、この間に受診した状態で書いてもらいます。できあがりまでの日数は病院によってちがうので、受診の日に聞いて、出す日に間に合うように逆に数えます。", false);
+    box("出す先", shu === "kiso" ? "年金事務所・市区町村役場など" : "年金事務所・街角の年金相談センター", shu === "kiso" ? "近くの年金事務所か街角の年金相談センターに出します。障害基礎年金だけを受けている人は、市区町村役場の窓口でも出せます。" : "近くの年金事務所か街角の年金相談センターに出します。", false);
+    box("そろえるもの", "請求書・診断書・年金証書", "額改定請求書（年金事務所でもらうか、日本年金機構のホームページの様式）、出す日の前3か月以内の状態の診断書、年金証書。" + (early ? "一覧に当たるときは、障害状態チェックシートも医師に渡します。" : "") + "配偶者や子の加算がある人は、ほかの書類が要ることがあるので、年金事務所で確かめます。", false);
+    box("認められたら", "改定された月の翌月分から", "法律では、額が改定されたら、改定が行われた日の月の翌月分から新しい額になります。何月分から増えるかは、届く通知で確かめます。請求が認められても、診査の結果で等級が変わらないこともあります。", false);
+
+    var memo = "障害年金の額改定請求に\n使う診断書を\nお願いしたいです。\n";
+    memo += f(Q) + "ごろに\n出す予定なので、\nその前3か月以内の\n状態で書いていただく\n必要があります。\n";
+    if (early) memo += "1年を待たずに出すので、\nチェックシートの\n当たる状態に\n印をお願いします。\n";
+    memo += "できあがりの日数も\n教えてください。";
+    $("memo").textContent = memo;
+
+    ng.push("・出す日が" + (early ? "決まった状態に当たった日より後か" : f(first) + "以後か"));
+    ng.push("・診断書の状態の日付が、出す日の前3か月以内か");
+    ng.push("・診断書の種類が、いまの障害（眼・肢体・精神など）に合っているか");
+    ng.push("・医師の欄（医療機関名・氏名・作成日）が入っているか");
+    ng.push("・請求書の書きもれ、出す前にコピーを取る");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("kyu").value = "2"; $("shu").value = "kiso"; $("age").value = "u65"; $("kenri").value = "2025-06-10"; $("shinsa").value = ""; $("ichiran").value = "no"; $("plan").value = "2026-11-24"; make(); }
+  window.__make = make;
+})();
+</script>
+</body>
+</html>
