@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>労災の申請、何がもらえる？出す書類と休業の額の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  .row { display: flex; gap: 8px; } .row > div { flex: 1; min-width: 0; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #docs li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>労災の申請、何がもらえる？出す書類と休業の額の目安</h1>
+  <p class="lead">けがや病気が起きた場面・かかった病院・休んだ日数・けがの前の給料・会社の協力のぐあいを入れると、出す先、もらえる給付と請求書の様式、休業の額の目安、最初の3日の扱い、請求の期限の目安、次にやること、会社や労働基準監督署に伝える一言を並べます。労災にあたるか・額を決めるのは労働基準監督署です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. けがや病気が起きた場面</h2>
+    <label class="f" for="bamen">いつ・どこで起きた？</label>
+    <select id="bamen">
+      <option value="gyomu">仕事中（会社の中・出張・外回り・休憩中に会社の設備で）</option>
+      <option value="tsukin">通勤の途中（家と会社の行き帰り・仕事場から別の仕事場へ）</option>
+      <option value="shiteki">仕事と関係ない（休日・私用の時間）</option>
+      <option value="wakaranai">わからない（長時間労働のあとの病気・仕事中の私用など）</option>
+    </select>
+    <label class="f mh" for="yorimichi">通勤の途中だった人：寄り道は？<span class="hint">仕事中・仕事と関係ない人は「寄り道なし」のままで</span></label>
+    <select id="yorimichi" class="mh">
+      <option value="none">寄り道なし（ふだんの道・遠回りは渋滞などでやむを得ず）</option>
+      <option value="small">日用品の買い物・病院など、生活に要ることで少し寄って、いつもの道に戻ってから</option>
+      <option value="big">飲み会・映画など私用で寄り道をして、そのあと</option>
+    </select>
+    <label class="f mh" for="aite">相手がいるけが？<span class="hint">交通事故・人や物にぶつけられたなど</span></label>
+    <select id="aite" class="mh">
+      <option value="no">相手はいない</option>
+      <option value="yes">相手がいる（交通事故など）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. あなたの働き方</h2>
+    <label class="f mh" for="koyou">雇われ方</label>
+    <select id="koyou" class="mh">
+      <option value="rodosha">会社に雇われている（正社員・契約社員・パート・アルバイト）</option>
+      <option value="yakuin">会社の役員・自営業・業務委託</option>
+    </select>
+    <label class="f" for="kyuryo">けがの前3か月の、月の給料の平均（円）<span class="hint">税金や保険料を引く前の額面。残業代・通勤手当は入れ、ボーナスは入れません</span></label>
+    <input type="number" id="kyuryo" min="0" max="3000000" step="1000" inputmode="numeric" placeholder="例：270000">
+    <label class="f mh" for="hisu">その3か月の日数<span class="hint">給料の締め日があるときは、けがの日の直前の締め日からさかのぼった3か月の、カレンダーの日数</span></label>
+    <select id="hisu" class="mh">
+      <option value="92">92日</option>
+      <option value="91">91日</option>
+      <option value="90">90日</option>
+      <option value="89">89日</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 病院と休み</h2>
+    <label class="f mh" for="byoin">かかった病院</label>
+    <select id="byoin" class="mh">
+      <option value="shitei">労災病院・労災保険の指定の病院</option>
+      <option value="hishitei">指定でない病院（いったん自分で払った）</option>
+      <option value="hoken">健康保険証を使ってしまった</option>
+      <option value="mada">まだかかっていない・わからない</option>
+    </select>
+    <label class="f" for="kyujitsu">仕事を休んだ日数（見込みでも）<span class="hint">医師に働けないと言われて休んだ日。土日・休日もふくめて、休み始めた日から数えます</span></label>
+    <input type="number" id="kyujitsu" min="0" max="2000" step="1" inputmode="numeric" placeholder="例：30">
+    <label class="f mh" for="start">休み始めた日<span class="hint">請求の期限の目安に使います</span></label>
+    <input type="date" id="start" class="mh">
+    <label class="f mh" for="kyuyo">休んだ日に、会社から給料は出る？</label>
+    <select id="kyuyo" class="mh">
+      <option value="no">出ない</option>
+      <option value="part">一部だけ出る（通院で半日休んだ日など）</option>
+      <option value="full">全額出る（有給休暇を使ったなど）</option>
+    </select>
+    <label class="f mh" for="kaisha">会社の協力</label>
+    <select id="kaisha" class="mh">
+      <option value="ok">手続きに協力してくれる</option>
+      <option value="ng">労災にしたがらない・請求書の証明を断られた</option>
+      <option value="nai">会社がなくなった・連絡がつかない</option>
+      <option value="taishoku">もう辞めた（2回目以降の請求）</option>
+    </select>
+  </div>
+  <button id="make" type="button">調べる</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>出すもの・用意するもの</h3>
+    <ol class="tl" id="docs"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>伝えるときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「労災保険給付の概要」（令和8年7月）、「休業（補償）等給付・傷病（補償）等年金の請求手続」、「療養（補償）等給付の請求手続」、厚生労働省「労災補償」のページ、労働基準法第12条・第19条・第76条、労働者災害補償保険法施行規則第23条をもとにした目安です。休業（補償）等給付は休業4日目から給付基礎日額の60%、休業特別支給金は20%。業務災害の最初の3日は事業主が平均賃金の60%を休業補償として払います。通勤災害は初回の休業給付から一部負担金200円が引かれます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.floor(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function d2s(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addD(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function addY(d, n) { var y = d.getFullYear() + n, m = d.getMonth(), last = new Date(y, m + 1, 0).getDate(); return new Date(y, m, Math.min(d.getDate(), last)); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+
+  function make() {
+    ["sum", "docs", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    $("memo").textContent = ""; $("ng").textContent = ""; $("result").hidden = true;
+    if ($("kyuryo").value === "") { alert("けがの前3か月の、月の給料の平均（円）を入れてください"); return false; }
+    if ($("kyujitsu").value === "") { alert("仕事を休んだ日数を入れてください（休んでいなければ0）"); return false; }
+    var kyuryo = Number($("kyuryo").value), days = Math.floor(Number($("kyujitsu").value));
+    if (kyuryo < 0 || days < 0) { alert("0以上の数を入れてください"); return false; }
+    var bamen = $("bamen").value, yori = $("yorimichi").value, aite = $("aite").value, koyou = $("koyou").value;
+    var hisu = Number($("hisu").value), byoin = $("byoin").value, kyuyo = $("kyuyo").value, kaisha = $("kaisha").value;
+    var start = parse($("start").value);
+    var ng = [];
+
+    // ---- 区分 ----
+    var kind = bamen; // gyomu / tsukin / shiteki / wakaranai
+    var tsukinNote = "";
+    if (bamen === "tsukin" && yori === "big") {
+      kind = "wakaranai";
+      tsukinNote = "通勤の途中で、私用（飲み会・映画など）のために道をそれたり止まったりすると、その間とそのあとの移動は、原則として「通勤」になりません。ただ、寄り道の中身や場所によって扱いが変わることがあるので、労働基準監督署で確かめます。";
+    }
+    var rousai = kind === "gyomu" || kind === "tsukin";
+    var yakuin = koyou === "yakuin";
+    var show = (rousai || kind === "wakaranai") && !yakuin;
+
+    var title, body, no = false;
+    if (yakuin) {
+      title = "労災保険の対象外のことがある";
+      body = "労災保険は、会社に雇われて働く人（パート・アルバイトもふくむ）のための保険です。会社の役員・自営業・業務委託の人は、働き方の実態によっては対象にならないことがあります。対象になるかは、労働基準監督署に、働き方（指示を受けて働いているか・給料の払われ方など）を伝えて確かめます。";
+      no = true;
+    } else if (kind === "gyomu") {
+      title = "労災（業務災害）として、労働基準監督署に出す";
+      body = "仕事中のけがや、仕事が原因の病気は「業務災害」です。健康保険（傷病手当金・保険証）ではなく、労災保険から給付を受けます。パート・アルバイトでも対象です。";
+    } else if (kind === "tsukin") {
+      title = "労災（通勤災害）として、労働基準監督署に出す";
+      body = "家と会社の行き帰りなど、ふだんの道・ふだんの方法での移動中のけがは「通勤災害」です。健康保険（傷病手当金・保険証）ではなく、労災保険から給付を受けます。" +
+        (yori === "small" ? "\n日用品の買い物や病院など、生活に要ることで少しだけ寄った場合は、寄っている間を除き、いつもの道に戻ってからは再び通勤になります。" : "");
+    } else if (kind === "shiteki") {
+      title = "健康保険の傷病手当金に出す";
+      body = "仕事とも通勤とも関係ない病気やけがは、労災ではなく、健康保険で治療を受け、休んだ間は健康保険の傷病手当金（標準報酬月額の平均÷30の3分の2が目安）を申請します。休み始めの連続3日（待期）のあと、4日目からが対象です。";
+    } else {
+      title = "傷病手当金を出す前に、労働基準監督署で確かめる";
+      body = (tsukinNote ? tsukinNote + "\n" : "") + "仕事が原因かどうか迷うときは、先に労働基準監督署に相談します。労災にあたるかを決めるのは、会社ではなく労働基準監督署です。協会けんぽの傷病手当金の申請書でも、仕事中を選んだときは、申請の前に労働基準監督署で労災にあたるか確かめるよう案内されています。\n仕事中でも、私用をしていたとき・わざとのとき・個人的な恨みで暴力を受けたとき・地震や台風などの天災のとき（仕事の事情で被害を受けやすかった場合は別）は、業務災害と認められないことがあります。長時間労働のあとの病気などは、仕事との因果関係を調べて決まります。";
+      no = true;
+    }
+    box("出す先", title, body, no);
+
+    // ---- 給付基礎日額 ----
+    var total3 = kyuryo * 3;
+    var nichi = hisu > 0 ? total3 / hisu : 0;
+    var n60 = Math.floor(nichi * 0.6), n20 = Math.floor(nichi * 0.2);
+    if (show) box("給付基礎日額（1日あたりの給料）の目安", yen(nichi),
+      "けがの前3か月の給料の合計÷その3か月の日数\n＝" + yen(total3) + "÷" + hisu + "日＝" + yen(nichi) +
+      "\n労働基準法の「平均賃金」にあたる額です。ボーナスや臨時の給料は入りません。実際は、会社が請求書に書く賃金で労働基準監督署が決めます。\n1日あたり：休業の給付 60%＝" + yen(n60) + "、特別支給金 20%＝" + yen(n20) + "、合わせて" + yen(n60 + n20), false);
+
+    // ---- もらえる給付 ----
+    var g = [];
+    if (show) {
+      var pre = kind === "wakaranai" ? "（労災と認められた場合）\n" : "";
+      var ryo = byoin === "hishitei" ? "療養の費用の支給：いったん自分で払った治療費・薬代を、あとで請求して受け取る" :
+        "療養の給付：労災病院・指定の病院や薬局なら、治療や薬を無料で受けられる";
+      g.push("■治療費（療養（補償）等給付）\n" + ryo + (kind === "tsukin" ? "\n通勤災害は、一部負担金として200円がかかり、初回の休業給付から引かれる（休業給付がないときの扱いは労働基準監督署で確かめる）" : ""));
+      g.push("■休んだ間のお金（休業（補償）等給付）\n働けず給料を受けない日の4日目から、1日につき給付基礎日額の60%＋休業特別支給金20%");
+      if (days > 548) g.push("■傷病（補償）等年金\n治療を始めて1年6か月たっても治らず、障害の程度が傷病等級（1〜3級）にあたるときは、傷病（補償）等年金が支給される");
+      g.push("■治ったあと（症状が固定したあと）に障害が残ったとき\n障害等級1〜7級は年金、8〜14級は一時金（障害（補償）等給付）");
+      box("もらえる給付", rousai ? "治療費と、休んだ間のお金" : "労災なら、治療費と休んだ間のお金", pre + g.join("\n\n"), false);
+    }
+
+    // ---- 休業の額 ----
+    if (show) {
+      var payDays = Math.max(0, days - 3);
+      var wait = Math.min(3, days);
+      var kyu = n60 * payDays, tok = n20 * payDays;
+      var minus = (kind === "tsukin" && payDays > 0) ? 200 : 0;
+      var lines = [];
+      if (days === 0) lines.push("まだ休んでいない（0日）。休業の給付は、働けず給料を受けない日の4日目からが対象");
+      else lines.push("休んだ日数 " + days + "日のうち、最初の" + wait + "日は待期（4日目からが対象）");
+      lines.push("4日目から " + payDays + "日分");
+      lines.push("  休業の給付 " + yen(n60) + "×" + payDays + "日＝" + yen(kyu));
+      lines.push("  特別支給金 " + yen(n20) + "×" + payDays + "日＝" + yen(tok));
+      if (minus) lines.push("  通勤災害の一部負担金 −200円（初回の休業給付から）");
+      var waitTxt;
+      if (kind === "gyomu") {
+        waitTxt = "最初の" + wait + "日：会社が休業補償として平均賃金の60%を払う決まり（労働基準法）\n  " + yen(n60) + "×" + wait + "日＝" + yen(n60 * wait);
+      } else if (kind === "tsukin") {
+        waitTxt = "最初の" + wait + "日：通勤災害は、会社が払う決まりはない（会社の制度で出ることはある）";
+      } else {
+        waitTxt = "最初の" + wait + "日：仕事中のけがと認められれば会社が平均賃金の60%を払う。通勤災害なら会社が払う決まりはない";
+      }
+      lines.push(waitTxt);
+      var sum = kyu + tok - minus;
+      var memo2 = "";
+      if (kyuyo === "full") memo2 = "\n※休んだ日に会社から給料が全額出る日（有給休暇を使った日など）は「給料を受けない日」にあたらないので、その日は休業の給付の対象になりません。";
+      if (kyuyo === "part") memo2 = "\n※通院などで1日の一部だけ休んだ日は、給付基礎日額から、働いた分の給料を引いた額の60%になります。上の額はまる1日休んだ日だけの計算です。";
+      if (days > 548) memo2 += "\n※治療を始めて1年6か月をこえると、年齢ごとの最低・最高の限度額が使われたり、傷病（補償）等年金の対象になったりするので、上の額より変わることがあります。";
+      box("休んだ間のお金の目安（労災から）", yen(sum) + "（" + payDays + "日分）",
+        lines.join("\n") + memo2 + "\n1日あたりの額は円未満を切り捨てた目安です。", payDays === 0 || kind === "wakaranai");
+    }
+
+    // ---- 様式 ----
+    if (show) {
+      var isT = kind === "tsukin";
+      var f = [];
+      if (byoin === "hishitei") f.push("治療費：" + (isT ? "様式第16号の5" : "様式第7号") + "（療養の費用請求書）を、労働基準監督署へ。領収書もそろえる");
+      else f.push("治療費：" + (isT ? "様式第16号の3" : "様式第5号") + "（療養の給付請求書）を、かかっている指定の病院・薬局に出す（病院を経由して労働基準監督署へ）");
+      f.push("休んだ間のお金：" + (isT ? "様式第16号の6" : "様式第8号") + "（休業" + (isT ? "給付" : "補償給付") + "支給請求書）を、会社の所在地を受け持つ労働基準監督署へ。医師の証明欄と、会社の証明欄がある");
+      if (aite === "yes") f.push("相手がいるけが：あわせて「第三者行為災害届」を出す。正当な理由なく出さないと、給付が一時止められることがある");
+      box("請求書の様式（" + (isT ? "通勤災害" : kind === "gyomu" ? "業務災害" : "業務災害なら") + "）", isT ? "16号の3・16号の5・16号の6" : "5号・7号・8号",
+        f.join("\n") + (kind === "wakaranai" ? "\n通勤災害と判断されたら、16号の3・16号の5・16号の6を使います。" : "") + "\n様式は厚生労働省のホームページの「労災保険給付関係請求書等ダウンロード」から手に入ります。労働基準監督署の窓口にもあります。", false);
+    }
+
+    // ---- 期限 ----
+    if (show) {
+      var ks = "休業の給付：働けず給料を受けない日ごとに、その翌日から2年\n治療費を立て替えた分：費用を払った日の翌日から2年\n障害の給付：治った日（症状固定）の翌日から5年";
+      if (start && days >= 4) {
+        var d4 = addD(start, 3);
+        ks = "休み始めた日：" + d2s(start) + "\n4日目（休業の給付の初日）：" + d2s(d4) + "\nその日の分の請求の期限の目安：" + d2s(addY(d4, 2)) + "\n（休んだ日ごとに、その翌日から2年。1日ずつ期限が来るので、長く休むときは、休みが終わるのを待たずに出せるかを労働基準監督署に聞いておきます）\n\n" + ks;
+      }
+      box("請求の期限の目安", "休業の給付は2年で時効", ks, false);
+    }
+
+    // ---- 会社の協力 ----
+    if (show && kaisha !== "ok") {
+      var kt = "";
+      if (kaisha === "ng") kt = "会社は、請求の手続きを手伝い、証明を求められたらすみやかに証明しなければならないと決められています（労災保険法施行規則第23条）。それでも会社が証明を断るときは、証明がなくても請求はできます。証明をもらえなかった事情を伝えて、労働基準監督署に相談します。\n労災にあたるかを決めるのは、会社ではなく労働基準監督署です。";
+      if (kaisha === "nai") kt = "会社がなくなった・連絡がつかないなどで会社の証明がもらえなくても、請求はできます。最寄りの労働局か労働基準監督署に相談します。";
+      if (kaisha === "taishoku") kt = "2回目以降の請求が辞めたあとなら、会社の証明は要りません。ただし、その請求で休んだ期間の一部でも辞める前の日があるときは、会社の証明が要ります。";
+      box("会社の証明がもらえないとき", kaisha === "taishoku" ? "辞めたあとの請求" : "証明がなくても請求できる", kt, kaisha !== "taishoku");
+    }
+
+    // ---- 解雇 ----
+    if (kind === "gyomu" && days > 0 && !yakuin) {
+      box("休んでいる間の仕事", "業務災害で休む間とその後30日は、解雇できない決まり",
+        "労働基準法第19条で、仕事中のけがや病気の治療で休む期間と、その後30日間は、会社は解雇してはならないと決められています（例外：打切補償を払った場合、天災などで事業を続けられない場合）。通勤災害には、この決まりはありません。", false);
+    }
+
+    // ---- 出すもの ----
+    if (kind === "shiteki") {
+      li("docs", "健康保険傷病手当金支給申請書（本人・会社・医師の3つの欄）");
+      li("docs", "休んだ期間がわかる出勤簿など（会社が用意）");
+      li("docs", "振込先の口座");
+    } else if (yakuin) {
+      li("docs", "働き方がわかるもの（契約書・報酬の明細など）");
+    } else {
+      li("docs", "請求書（治療費の様式と、休業の様式。上の「請求書の様式」のとおり）");
+      li("docs", "けがが起きた日時・場所・どうしてそうなったかのメモ（請求書の「災害の原因及び発生状況」の欄に書く）");
+      li("docs", "医師の証明（休業の請求書の医師の欄）");
+      li("docs", "会社の証明（請求書の会社の欄）。もらえないときは、その事情のメモ");
+      li("docs", "けがの前3か月の給料明細（平均賃金を確かめるため）");
+      if (byoin === "hishitei") li("docs", "治療費・薬代の領収書");
+      if (aite === "yes") li("docs", "第三者行為災害届、交通事故なら交通事故証明書など");
+      li("docs", "振込先の口座");
+    }
+
+    // ---- 次にやること ----
+    if (kind === "shiteki") {
+      li("todo", "健康保険証で受診し、医師に働けない期間を聞く");
+      li("todo", "会社に休むことを伝え、傷病手当金の申請書の会社の欄を頼む");
+      li("todo", "休み始めの連続3日（待期）のあと、4日目からの分を申請する");
+    } else if (yakuin) {
+      li("todo", "労働基準監督署に、働き方（指示を受けて働いているか・報酬の払われ方）を伝えて、労災保険の対象になるか確かめる");
+      li("todo", "対象にならないときは、加入している健康保険で使える給付を、その保険の窓口で確かめる");
+    } else {
+      if (byoin === "hoken") li("todo", "受診した病院の窓口に、仕事中（通勤の途中）のけがだと伝えて、労災に切りかえられるか相談する。切りかえ方は病院と労働基準監督署で確かめる");
+      if (byoin === "mada") li("todo", "労災病院か、労災保険の指定の病院で受診する。窓口で「労災です」と伝え、健康保険証は使わない");
+      if (byoin === "shitei" && kind === "wakaranai") li("todo", "病院の窓口で、仕事中（通勤の途中）のけがかもしれないと伝えて、労働基準監督署の判断が出るまでの払い方を相談する");
+      if (byoin === "shitei" && kind !== "wakaranai") li("todo", "病院の窓口で「労災です」と伝え、治療費の請求書（" + (kind === "tsukin" ? "16号の3" : "5号") + "）を病院に出す");
+      if (byoin === "hishitei" && kind === "wakaranai") li("todo", "払った治療費の領収書を取っておく（労災と認められたら、立て替えた分を請求する）");
+      if (byoin === "hishitei" && kind !== "wakaranai") li("todo","払った治療費の領収書を取っておき、" + (kind === "tsukin" ? "16号の5" : "7号") + "で請求する。指定の病院に移るときは、移った先の病院に" + (kind === "tsukin" ? "16号の3" : "5号") + "を出す");
+      if (kaisha === "ok") li("todo", "会社に、労災の手続きをしたいことと、休む見込みを伝える");
+      if (kaisha === "ng") li("todo", "会社に証明を頼んだ日・相手・断られた理由をメモしておく");
+      if (kaisha === "nai") li("todo", "最寄りの労働局か労働基準監督署に、会社の証明がもらえない事情を伝えて相談する");
+      if (kaisha === "taishoku") li("todo", "休んだ期間に辞める前の日がふくまれるかを確かめる（ふくまれるなら会社の証明が要る）");
+      if (kind === "wakaranai") li("todo", "労働基準監督署に、起きたときの様子を伝えて、労災にあたるか相談する（傷病手当金を出す前に）");
+      li("todo", kaisha === "ok" ? "休業の請求書に医師の証明をもらい、会社の証明をもらう（もらえなければ事情を書いて相談）" : "休業の請求書に医師の証明をもらう（会社の欄は、上の相談のとおりに）");
+      li("todo", "会社の所在地を受け持つ労働基準監督署に、休業の請求書を出す。休みが長いときは、終わるのを待たずに出せるかを聞く");
+      if (aite === "yes") li("todo", "相手の連絡先・事故の状況を記録し、第三者行為災害届を出す。自賠責保険と労災、どちらを先に受けるかは自分で選べる");
+      li("todo", "支給決定の通知と振込を確かめる");
+    }
+
+    // ---- 一言 ----
+    if (kind === "shiteki") {
+      $("memo").textContent = "病気（けが）で、\n○日ほど休む見込みです。\n傷病手当金の申請書の\n会社の欄の記入を\nお願いできますか。";
+    } else if (yakuin) {
+      $("memo").textContent = "○月○日、仕事中に\nけがをしました。\n業務委託（役員）として\n働いていますが、\n労災保険の対象に\nなるか、働き方を\nお伝えして\n相談させてください。";
+    } else if (kind === "wakaranai") {
+      $("memo").textContent = "○月○日、○○の途中で\nけが（病気）をしました。\n仕事が原因になるか\nわかりません。\n労災にあたるか、\n相談させてください。";
+    } else if (kaisha === "nai") {
+      $("memo").textContent = "○月○日の" + (kind === "tsukin" ? "通勤の途中" : "仕事中") + "の\nけがで休んでいます。\n会社がなくなり（連絡が\nつかず）、請求書の\n会社の証明が\nもらえません。\n請求のしかたを\n相談させてください。";
+    } else if (kaisha === "ng") {
+      $("memo").textContent = "○月○日の" + (kind === "tsukin" ? "通勤の途中" : "仕事中") + "の\nけがについて、\n労災の請求書の\n会社の証明を\nお願いしましたが、\nいただけませんでした。\n請求のしかたを\n相談させてください。";
+    } else {
+      $("memo").textContent = (kind === "tsukin" ? "通勤の途中" : "仕事中") + "のけがで、\n○日ほど休む見込みです。\n労災の手続きを\nお願いできますか。\n請求書の会社の欄の\n証明もお願いします。";
+    }
+
+    // ---- 気をつけること ----
+    if (yakuin) {
+      ng.push("・対象になるかは、働き方を伝えて労働基準監督署で確かめる。ここでは決められない");
+      ng.push("・労災保険の相談は、労災保険相談ダイヤル（0570-006031、平日8:30〜17:15）でもできる");
+    } else if (kind !== "shiteki") {
+      ng.push("・仕事中・通勤の途中のけがに、健康保険（保険証・傷病手当金）は使えない");
+      ng.push("・休業の給付は、休んだ日ごとに翌日から2年で時効になる");
+      ng.push("・休業の給付は、医師が働けないと認めた日で、給料を受けない日が対象");
+      ng.push("・労災にあたるか・額を決めるのは労働基準監督署。ここに出るのは目安");
+      if (kind === "tsukin") ng.push("・通勤災害の最初の3日は、会社が払う決まりがない");
+      if (aite === "yes") ng.push("・相手から先に損害賠償（示談金）を受けると、その分だけ労災の給付が調整されることがある。示談の前に労働基準監督署に相談する");
+      ng.push("・労災保険の相談は、労災保険相談ダイヤル（0570-006031、平日8:30〜17:15）でもできる");
+    } else {
+      ng.push("・あとで仕事が原因とわかったら、傷病手当金ではなく労災になる。迷うなら先に労働基準監督署へ");
+      ng.push("・休み始めの3日は、連続して休んだ日でないと待期にならない");
+    }
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("bamen").value = "gyomu"; $("yorimichi").value = "none"; $("aite").value = "no"; $("koyou").value = "rodosha";
+    $("kyuryo").value = "270000"; $("hisu").value = "92"; $("byoin").value = "shitei";
+    $("kyujitsu").value = "30"; $("start").value = "2026-11-24"; $("kyuyo").value = "no"; $("kaisha").value = "ok";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
