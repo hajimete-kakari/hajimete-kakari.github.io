@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>確定申告の控えに受付印がないとき、何で示すか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #ways li, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .note { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>確定申告の控えに受付印がないとき、何で示すか</h1>
+  <p class="lead">2025年1月から、税務署は申告書の控えに受付の日付の印（収受日付印）を押さなくなりました。銀行・役所・保育の手続きなどで「申告したことがわかるもの」を求められた人向けに、出し方と目的に合う手段の候補と、日数・手数料の目安を出します。何が受け付けられるかは、提出先が決めます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 申告のこと</h2>
+    <label class="f" for="dashi">どうやって出した？</label>
+    <select id="dashi">
+      <option value="etax">e-Tax（スマホ・パソコンから送信）</option>
+      <option value="mado">税務署の窓口に紙で出した</option>
+      <option value="yuso">税務署に紙を郵送した</option>
+      <option value="mada">まだ出していない（これから出す）</option>
+    </select>
+    <label class="f" for="nen">どの年の分の申告？<span class="hint">2026年の2〜3月に出したなら、ふつうは2025年の分です</span></label>
+    <select id="nen">
+      <option value="2024">2024年の分</option><option value="2025" selected>2025年の分</option><option value="2026">2026年の分</option>
+    </select>
+    <label class="f" for="kigen">3月15日までに出した？</label>
+    <select id="kigen">
+      <option value="in">3月15日までに出した（出す）</option>
+      <option value="out">3月15日を過ぎてから出した（出す）</option>
+    </select>
+    <label class="f" for="card">マイナンバーカード（暗証番号がわかるもの）は？</label>
+    <select id="card">
+      <option value="yes">ある</option>
+      <option value="no">ない・暗証番号がわからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 何に使う？</h2>
+    <label class="f" for="mok">提出先に求められているもの<span class="hint">わからないときは、提出先に「何があればよいか」を先に聞くのが近道です</span></label>
+    <select id="mok">
+      <option value="hi">申告したことと、出した日</option>
+      <option value="naka">申告書の中身（写し）</option>
+      <option value="gaku">所得や納めた税金の額の証明</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="isogi">いつまでに要る？</label>
+    <select id="isogi">
+      <option value="soon">1週間ほどで要る</option>
+      <option value="month">1か月ほど待てる</option>
+    </select>
+  </div>
+  <button id="make" type="button">候補を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>手段の候補（上から合いやすい順）</h3>
+    <ol class="tl" id="ways"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>提出先に聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁「令和７年１月からの申告書等の控えへの収受日付印の押なつについて」（令和６年12月16日更新）をもとにした目安です。手数料・日数は、そのページに書かれているものです。窓口のリーフレットに日付と税務署名を書いて渡す取り扱いは「当分の間」とされているので、今も行っているかは税務署に確かめてください。所得の証明として何を出せばよいかは、提出先が決めます。住民税の証明書（所得証明書・課税証明書）は、市区町村の窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function big(k, v, s, no) {
+    var d = document.createElement("div"); d.className = "big" + (no ? " no" : "");
+    d.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    d.children[0].textContent = k; d.children[1].textContent = v; d.children[2].textContent = s || "";
+    $("sum").appendChild(d);
+  }
+  function make() {
+    var dashi = $("dashi").value, nen = +$("nen").value, kigen = $("kigen").value, card = $("card").value;
+    var mok = $("mok").value, isogi = $("isogi").value;
+    ["sum", "ways", "todo"].forEach(function (id) { $(id).innerHTML = ""; });
+    var hasCard = card === "yes";
+    var shutoku = (nen + 1) + "年5月1日";
+    var later = kigen === "out" ? "（3月15日を過ぎて出した分は、税務署の処理のため、もっと後になることがあります）" : "";
+
+    var W = {
+      jushin: "e-Taxの受信通知：送信した人の名前・受付番号・受付日時が見られます。受信通知から「電子申請等証明書」の交付も請求できます" + (hasCard ? "" : "（見るにはマイナンバーカードなどの電子証明書が要ります）"),
+      leaf: "窓口や郵送で受け取ったリーフレット：受け取った日付と税務署名が書かれたもの（希望した人に渡す、当分の間の取り扱い）",
+      shutoku: "申告書等情報取得サービス：紙で出した申告書も、e-TaxからPDFで無料でもらえます。マイナンバーカードが要ります。申し込みからPDFまで数日。申し込めるのは、原則として" + shutoku + "以降" + later,
+      kaiji: "保有個人情報の開示請求：出した申告書の中身を確かめられます。手数料300円（オンラインは200円）。写しを受け取るときは1か月程度かかります",
+      etsuran: "税務署での閲覧：自分が出した申告書を、税務署の窓口で見られます（申し込みは窓口だけ。出した当日は原則できません。保管場所の都合があるので、先に電話を）",
+      nozei: "納税証明書：申告した所得の額や納めた税額の証明です。手数料は1年度1枚400円（オンラインは370円）。ただし出した日は確かめられません"
+    };
+    var order;
+    if (dashi === "mada") {
+      order = (hasCard ? ["jushin", "leaf"] : ["leaf"]).concat(mok === "gaku" ? ["nozei"] : mok === "naka" ? (hasCard ? ["shutoku"] : ["kaiji"]) : []);
+    } else if (mok === "hi") {
+      order = dashi === "etax" ? ["jushin", "etsuran", "kaiji"] : ["leaf", "etsuran", "kaiji"];
+    } else if (mok === "naka") {
+      if (hasCard) order = isogi === "month" ? ["shutoku", "kaiji", "etsuran"] : ["shutoku", "etsuran", "kaiji"];
+      else order = isogi === "soon" ? ["etsuran", "kaiji"] : ["kaiji", "etsuran"];
+    } else if (mok === "gaku") {
+      order = ["nozei"].concat(hasCard ? ["shutoku", "kaiji"] : ["kaiji", "etsuran"]);
+    } else {
+      order = dashi === "etax" ? ["jushin", "nozei", "shutoku"] : ["leaf", "nozei", hasCard ? "shutoku" : "kaiji"];
+    }
+    if (!hasCard) order = order.filter(function (k) { return k !== "shutoku"; });
+    if (order.length < 2 && dashi !== "mada") order.push("kaiji");
+    var seen = {}; order = order.filter(function (k) { if (seen[k]) return false; seen[k] = 1; return true; });
+    order.forEach(function (k) { li("ways", W[k]); });
+
+    var NAME = { jushin: "e-Taxの受信通知", leaf: "窓口や郵送のリーフレット", shutoku: "申告書等情報取得サービス", kaiji: "開示請求", etsuran: "税務署での閲覧", nozei: "納税証明書" };
+    if (dashi === "mada") {
+      big("出すときの用意", hasCard ? "e-Taxで出して受信通知を残す" : "窓口・郵送でリーフレットをもらう", "あわせて、自分用の控えに出した日と税務署名を書いておきます");
+    } else {
+      big("まず当たる手段", NAME[order[0]], "提出先が受け付けるかは、先に確かめてください");
+    }
+    if (dashi === "mada") {
+    } else if (mok === "hi" && dashi !== "etax") {
+      big("リーフレットがないとき", "閲覧か開示請求", "納税証明書では、出した日はわかりません", true);
+    } else if (mok === "naka" && !hasCard) {
+      big("写しが要るとき", isogi === "soon" ? "急ぐなら、まず税務署で閲覧" : "写しは開示請求（1か月程度）", "カードがあれば、PDFで数日のサービスも使えます", true);
+    } else if (mok === "naka" && hasCard) {
+      big("PDFが取れる時期", shutoku + "以降", kigen === "out" ? "3月15日を過ぎて出した分は、もっと後になることがあります" : "申し込みからPDFまで数日かかります", isogi === "soon");
+    } else if (mok === "gaku") {
+      big("額の証明", "納税証明書（1年度1枚400円）", "出した日は書かれません");
+    }
+
+    if (dashi === "mada") {
+      li("todo", "提出用（正本）と別に、自分用の控えを作る（コピーや、作成コーナーで印刷したもの）");
+      li("todo", "控えに、出した日と出した先の税務署名を自分で書いておく");
+      if (hasCard) li("todo", "e-Taxで出すと、受信通知に受付日時が残ります");
+      li("todo", "窓口で出すなら、日付と税務署名を書いたリーフレットがほしいと伝える");
+      li("todo", "郵送なら、切手を貼った返信用封筒を入れると、リーフレットを返送してもらえます（当分の間の取り扱い）");
+    } else {
+      li("todo", "提出先に「受付印のない控えで足りるか、ほかに何があればよいか」を聞く");
+      if (order.indexOf("jushin") >= 0) li("todo", "e-Taxのメッセージボックスで受信通知を開き、受付番号と受付日時を確かめる");
+      if (order.indexOf("leaf") >= 0) li("todo", "申告書の控えと一緒に、受け取ったリーフレットが残っていないか探す");
+      if (order.indexOf("shutoku") >= 0) li("todo", "e-Taxで申告書等情報取得サービスを申し込む（" + shutoku + "以降）");
+      if (order.indexOf("nozei") >= 0) li("todo", "納税証明書は、税務署の窓口かオンラインで頼む（どの種類が要るかは提出先に聞く）");
+      if (order.indexOf("etsuran") >= 0) li("todo", "閲覧するなら、申告書を出した税務署に先に電話して、行く日を決める");
+      if (order.indexOf("kaiji") >= 0) li("todo", "時間に余裕があれば、開示請求で写しをもらう（1か月程度）");
+    }
+
+    var mtxt = { hi: "申告したことと\n出した日", naka: "申告書の写し", gaku: "所得や税額の\n証明", unk: "申告したことが\nわかるもの" }[mok];
+    $("memo").textContent = nen + "年の分の確定申告を\n" + (dashi === "etax" ? "e-Taxで出しました。" : dashi === "mada" ? "これから出します。" : "紙で出しました。") + (dashi === "mada" ? "\n控えに受付印は\n押されないと聞きました。\n" : "\n控えに受付印は\nありません。\n") + mtxt + "として、\n何を出せば\nよいですか。";
+    $("ng").textContent = "・2025年1月から、控えに\n　受付印は押されない\n・納税証明書では、\n　出した日はわからない\n・PDFのサービスは\n　マイナンバーカードが要る\n・リーフレットは\n　当分の間の取り扱い\n・何を受け付けるかは提出先";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  window.__mk = make;
+  if (DEMO) { $("dashi").value = "mado"; $("nen").value = "2025"; $("kigen").value = "in"; $("card").value = "yes"; $("mok").value = "naka"; $("isogi").value = "month"; make(); }
+})();
+</script>
+</body>
+</html>
