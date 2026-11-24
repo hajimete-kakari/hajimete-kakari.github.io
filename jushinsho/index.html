@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の受診状況等証明書、要るかと頼み方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の受診状況等証明書、要るかと頼み方</h1>
+  <p class="lead">受診状況等証明書は、初診日（その病気やけがで、はじめて医師にかかった日）を、最初の病院に証明してもらう書類です。病院のことを選ぶと、この書類が要るか、どこに頼むか、頼むときの一言、受け取ったら見るところが出ます。日本年金機構の案内と様式で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 病院のこと</h2>
+    <label class="f" for="byoin">最初にかかった病院と、いま診断書を書いてもらう病院は<span class="hint">同じ病気で、いちばん最初に受診したところで考えます</span></label>
+    <select id="byoin">
+      <option value="">選んでください</option>
+      <option value="onaji">同じ（ずっと同じ病院）</option>
+      <option value="chigau">ちがう（転院した）</option>
+      <option value="wakaranai">最初の病院がはっきりしない</option>
+    </select>
+    <label class="f" for="aru">最初の病院は、いま<span class="hint">わからなければ「わからない」</span></label>
+    <select id="aru">
+      <option value="aru">ある（カルテもありそう）</option>
+      <option value="wakaranai">ある（カルテが残っているかわからない）</option>
+      <option value="nai">閉院した・カルテがないと言われた</option>
+    </select>
+    <label class="f" for="shokai">最初の病院から次の病院への紹介状<span class="hint">次の病院でもらったコピーなども含む</span></label>
+    <select id="shokai">
+      <option value="nai">ない・わからない</option>
+      <option value="aru">ある（コピーを持っている）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 頼み方</h2>
+    <label class="f" for="how">最初の病院に、どう頼みますか</label>
+    <select id="how">
+      <option value="mado">窓口に行って頼む</option>
+      <option value="yuso">電話してから、郵送で頼む</option>
+    </select>
+  </div>
+  <button id="make" type="button">要るかと頼み方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>頼むときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>受け取ったら見るところ</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害基礎年金を受けられるとき」（受診状況等証明書は、初診時の医療機関と診断書を作成した医療機関が異なる場合に、初診日の確認のために出す）と、様式「受診状況等証明書」「受診状況等証明書が添付できない申立書」、案内「障害年金の初診日証明書類のご案内」で出した目安です。初診日がいつになるか、受け取れるかどうかは判定しません。文書料は病院ごとにちがいます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var b = $("byoin").value, a = $("aru").value, s = $("shokai").value, h = $("how").value;
+    $("sum").innerHTML = "";
+    if (!b) {
+      box("病院のこと", "選んでください", "上の「最初にかかった病院と、いま診断書を書いてもらう病院は」を選ぶと出ます。", true);
+      $("memo").textContent = "（病院のことを選ぶと出ます）";
+      $("ng").textContent = "・考えるのは、同じ病気でいちばん最初にかかった病院";
+      $("result").hidden = false; return true;
+    }
+    var list = [];
+    if (b === "onaji") {
+      box("この書類は", "要らない見込み", "最初にかかった病院が、そのまま診断書を書くなら、受診状況等証明書は出さないのがふつうです（日本年金機構の案内では、初診の病院と診断書の病院がちがうときに出す書類）。ただし、その病院の前に、同じ症状で別の病院やクリニックにかかっていたなら、そちらが最初の病院です。", false);
+      box("頼む先", "なし（診断書の病院だけ）", "診断書を頼むときに、初診日の欄をカルテのとおり書いてもらえるかを一緒に確かめます。", false);
+      list.push("・同じ症状で、その病院の前にかかったところがないか、お薬手帳・診察券・領収書で見直す");
+      list.push("・診断書を頼むときに、初診日がいつになっているか聞いておく");
+      $("memo").textContent = "障害年金の診断書を\nお願いしたいです。\n初診からずっと\nこちらにかかっています。\n初診日の欄は\nカルテのとおりに\n書いていただけますか。";
+    } else if (b === "wakaranai") {
+      box("この書類は", "まず最初の病院を決める", "受診状況等証明書は「同じ病気で、はじめて受診した病院」に書いてもらう書類です。どこが最初かがはっきりしないうちは、頼む先も決まりません。手元の記録で、いちばん古い受診を探します。", true);
+      box("頼む先", "いちばん古い受診の病院", "お薬手帳・診察券・領収書・健康保険の医療費のお知らせなどで、いちばん古い日付の病院を探します。迷うときは、年金事務所で相談するときにその記録を持っていきます。", true);
+      list.push("・お薬手帳、診察券、病院の領収書を日付の古い順に並べる");
+      list.push("・健康診断で指摘されて受診したなど、きっかけも思い出してメモする");
+      list.push("・候補の病院がわかったら、カルテが残っているか電話で聞く");
+      $("memo").textContent = "以前そちらに\nかかっていたか\n確かめたいのですが、\n○年ごろに受診した\n記録は残っていますか。\n残っていれば、\n障害年金の受診状況等証明書を\nお願いしたいです。";
+    } else {
+      if (a === "nai") {
+        box("この書類は", "要るが、取れないかも", "初診の病院と診断書の病院がちがうので、本来は受診状況等証明書が要ります。閉院やカルテの廃棄で書いてもらえないときは、日本年金機構の様式「受診状況等証明書が添付できない申立書」に理由を書き、初診日がわかる資料をつけて出す道があります。", true);
+        box("頼む先", "まず年金事務所で相談", "申立書には、初診日ごろの受診がわかる参考資料（お薬手帳・診察券・領収書・健康保険の給付記録・健康診断の記録など、様式に並んでいるもの）のコピーをつけます。次にかかった病院のカルテに、最初の病院のことが書かれていることもあります（受診状況等証明書には、前の病院を書く欄があります）。どの書類をそろえるかは、年金事務所で相談しながら決めます。", true);
+        list.push("・最初の病院に「カルテがない（閉院）」と確かめた日と、電話か訪問かをメモする（申立書に書く欄がある）");
+        list.push("・お薬手帳、診察券、領収書、健康診断の記録など、初診日ごろの受診がわかる資料を集める");
+        list.push("・次にかかった病院に、前の病院のことがカルテに残っていないか聞く");
+        if (s === "aru") list.push("・紹介状のコピー（初診日ごろの受診がわかる資料として、年金事務所で見てもらう）");
+      } else {
+        box("この書類は", "要る", "最初にかかった病院と、診断書を書く病院がちがうので、初診日の確認のために受診状況等証明書を出します。書いてもらうのは、最初の病院です。", false);
+        box("頼む先", "最初にかかった病院", (a === "wakaranai" ? "カルテが残っているかわからないときは、頼む前に電話で「○年ごろの受診の記録が残っているか」を聞きます。残っていなければ、「受診状況等証明書が添付できない申立書」の道に切り替えます。" : "その病院の受付（文書の窓口）に頼みます。文書料がかかることが多く、金額やできあがりまでの日数は病院で確かめます。") + (h === "yuso" ? " 郵送で頼むときは、先に電話で送り方と文書料の払い方を聞きます。" : ""), false);
+        list.push("・様式「受診状況等証明書」（年金事務所でもらうか、日本年金機構のホームページから印刷）");
+        list.push("・病名と、受診したおおよその時期のメモ");
+        if (h === "yuso") list.push("・返信用の封筒（切手をはる）と、病院に言われた文書料の払い方");
+        else list.push("・本人確認の書類（病院に言われたもの）");
+      }
+      if (s === "aru" && a !== "nai") list.push("・紹介状のコピーは取っておく（最初の病院で証明が取れなかったときの手がかりになる）");
+      var memo;
+      if (a === "nai") {
+        memo = "障害年金の請求を\n考えています。\n最初にかかった病院が\n閉院（カルテなし）で、\n受診状況等証明書が\n取れません。\n申立書と一緒に出す資料を\n相談したいです。";
+      } else {
+        memo = "障害年金の請求のため、\n受診状況等証明書を\nお願いしたいです。\n○年ごろに、\n○○の症状で\nかかっていました。\n" + (h === "yuso" ? "郵送でお願いできるか、\n文書料の払い方と\nあわせて教えてください。" : "受付はこちらで\nよろしいでしょうか。\nできあがりの日数も\n教えてください。");
+      }
+      $("memo").textContent = memo;
+    }
+    box("頼む前にそろえること", list.length + "つ", list.join("\n"), false);
+    var ng = [];
+    if (b === "onaji") {
+      ng.push("・診断書の初診日の欄が、自分の思う初診日とちがっていないか");
+      ng.push("・ちがっていたら、その病院の前にかかったところがないか見直し、年金事務所で相談する");
+    } else {
+      ng.push("・⑥初診年月日：自分の思う初診日とずれていないか");
+      ng.push("・⑩の記載の根拠：「４ 本人の申し立て」だけに○がついていると、初診日の証明にならない（様式の裏面）");
+      ng.push("・⑤発病から初診までの経過：前の病院の名前が書かれていたら、そちらが最初の病院の可能性がある。年金事務所で相談する");
+      ng.push("・⑪医療機関名・医師の氏名と日付が入っているか");
+    }
+    ng.push("・書いてもらった書類はコピーを取っておく");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("byoin").value = "chigau"; $("aru").value = "aru"; $("shokai").value = "aru"; $("how").value = "yuso"; make(); }
+})();
+</script>
+</body>
+</html>
