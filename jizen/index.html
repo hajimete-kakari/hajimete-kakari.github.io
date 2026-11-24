@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練受講給付金の事前審査の持ち物｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0; font-size: .95rem; }
+  label.c input { margin-top: 6px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .grp { font-weight: 700; font-size: .92rem; margin: 12px 0 4px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #list li, .mihon #ask li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練受講給付金の事前審査の持ち物</h1>
+  <p class="lead">求職者支援制度の職業訓練受講給付金（月10万円など）を考えている人向けです。ハローワークに事前審査を申し込みに行く日と、家族や収入のことを選ぶと、持っていく書類のリストと、住民票・通帳・収入の書類が「いつの分」かの目安を出します。窓口で聞くことと、伝える一言もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 行く日</h2>
+    <label class="f" for="d0">ハローワークに事前審査を申し込みに行く日</label>
+    <input type="date" id="d0">
+    <label class="f" for="mo">訓練の受講申込みも、その日にする？</label>
+    <select id="mo">
+      <option value="same">同じ日にする</option>
+      <option value="done">受講申込みはもう済んだ</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 本人のこと</h2>
+    <label class="f" for="mn">マイナンバーカード</label>
+    <select id="mn">
+      <option value="card">持っている</option>
+      <option value="none">持っていない</option>
+    </select>
+    <label class="f" for="inc">行く日の前の月に、収入があった？<span class="hint">給料・アルバイト代・年金・仕送りなど。手取りではなく、引かれる前の額で見ます</span></label>
+    <select id="inc">
+      <option value="no">なかった</option>
+      <option value="yes">あった</option>
+    </select>
+    <label class="f" for="nen">本人か家族に、公的年金を受けている人がいる？</label>
+    <select id="nen">
+      <option value="no">いない</option>
+      <option value="yes">いる</option>
+    </select>
+    <label class="f" for="kz">給付金の振込先</label>
+    <select id="kz">
+      <option value="other">自分の銀行口座を書く</option>
+      <option value="kokin">マイナポータルの公金受取口座にする</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 家族（同居、または別居でも生計が同じ人）</h2>
+    <span class="hint">兄弟姉妹・祖父母・配偶者の父母は、ここには入れません（迷うときは窓口で聞きます）</span>
+    <label class="c"><input type="checkbox" id="h_sp"> 配偶者（事実婚を含む）</label>
+    <label class="c"><input type="checkbox" id="h_pa"> 父・母</label>
+    <label class="c"><input type="checkbox" id="h_c20"> 子（20歳以上、または学校に通っていない）</label>
+    <label class="c"><input type="checkbox" id="h_chs"> 子（20歳未満で、高校・大学などに通っている）</label>
+    <label class="c"><input type="checkbox" id="h_cel"> 子（小学生・中学生）</label>
+    <label class="c"><input type="checkbox" id="h_cpr"> 子（小学校に入る前）</label>
+  </div>
+
+  <div class="card">
+    <h2>4. 育児・介護（訓練中に）</h2>
+    <label class="c"><input type="checkbox" id="k_sho"> 障害のある子を育てている</label>
+    <label class="c"><input type="checkbox" id="k_kai"> 家族を介護している</label>
+  </div>
+  <button id="make" type="button">持ち物を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>持っていくもの</h3>
+    <div id="list"></div>
+    <h3>窓口で聞くこと</h3>
+    <ul class="mo" id="ask"></ul>
+    <h3>ハローワークの窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・都道府県労働局・ハローワーク「求職者支援制度・訓練受講のしおり」（PL070401）の「ステップ１ 事前審査」と「事前審査の必要書類」をもとにした目安です。人によって、このほかの書類を求められることがあります。3か月以内・1か月以内の境目の日の数え方、書類を省けるかどうかは、ハローワークの窓口で確かめてください。給付金を受けられるかは、ハローワークが決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function back(d, m) {
+    var y = d.getFullYear(), mm = d.getMonth() - m, day = d.getDate();
+    var last = new Date(y, mm + 1, 0).getDate();
+    return new Date(y, mm, Math.min(day, last));
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  var cur;
+  function grp(t) {
+    var h = document.createElement("div"); h.className = "grp"; h.textContent = t; $("list").appendChild(h);
+    cur = document.createElement("ul"); cur.className = "mo"; $("list").appendChild(cur);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = "□ " + t; cur.appendChild(e); }
+  function ask(t) { var e = document.createElement("li"); e.textContent = t; $("ask").appendChild(e); }
+  function make() {
+    var d0 = pd($("d0").value);
+    if (!d0) { alert("ハローワークに行く日を入れてください"); return false; }
+    var same = $("mo").value === "same", card = $("mn").value === "card", inc = $("inc").value === "yes",
+      nen = $("nen").value === "yes", kokin = $("kz").value === "kokin";
+    var sp = $("h_sp").checked, pa = $("h_pa").checked, c20 = $("h_c20").checked, chs = $("h_chs").checked,
+      cel = $("h_cel").checked, cpr = $("h_cpr").checked, sho = $("k_sho").checked, kai = $("k_kai").checked;
+    var fam = sp || pa || c20 || chs || cel || cpr;
+    var incFam = sp || pa || c20;
+    $("sum").innerHTML = ""; $("list").innerHTML = ""; $("ask").innerHTML = "";
+
+    var pm = back(d0, 1), m3 = back(d0, 3), m1 = back(d0, 1);
+    var pmName = pm.getFullYear() + "年" + (pm.getMonth() + 1) + "月";
+
+    box("収入の書類は、いつの分？", pmName + "分（行く日の前の月）",
+      (inc ? "前の月に得た収入がわかる書類（給料の明細など）を持っていきます。" : "前の月に収入がなかったときは、預貯金通帳などで示します。") +
+      (incFam ? "家族の分も、同じ" + (pm.getMonth() + 1) + "月分です。" : ""), false);
+    box("住民票の写しは、いつ以降の交付？", "目安：" + md(m3) + "ごろより後",
+      "直近3か月以内に交付を受けた、世帯全員が載ったもの。マイナンバーを使った情報照会で、出さずに済むことがあります。境目の日の数え方と、省けるかは窓口で聞きます。", false);
+    box("通帳・残高証明は？", md(d0) + "の残高",
+      "行く日の残高が載っている通帳（記帳しておく）か、残高証明。どちらも、行く日の1か月以内（目安：" + md(m1) + "ごろより後）に発行されたもの。" + (fam ? "家族の分も、すべての口座です（本人以外は写しでよい）。" : "持っている口座すべてです。"), false);
+    box("事前審査は、いつまでに？", same ? "受講申込みと同じ日がいちばん早い" : "支給申請の前か、同じ日まで",
+      same ? "受講申込みと同時に事前審査を申し込めます。最初の支給申請は、原則として訓練が始まって2か月目の指定来所日です。"
+        : "受講申込みのあとは、いつでも申し込めます。ただ、遅れると給付金の支給が始まるのが遅れたり、受けられなくなったりすることがあります。支給申請だけを先にすることはできません。", !same);
+
+    grp("ハローワークでもらう用紙（書いて出す）");
+    li("受講申込・事前審査書（安定所提出用）");
+    li("職業訓練受講給付金要件申告書");
+    li("職業訓練受講給付金通所届");
+    li("地方税関係情報の照会に係る同意書（同意する人だけ）");
+    if (sho || kai) li("育児・介護実施状況申告書");
+    if (same) li("受講申込書（顔写真 たて4cm×よこ3cmを貼る）");
+
+    grp("マイナンバーと、本人の確認");
+    if (card) {
+      li("マイナンバーカード（これ1枚で、マイナンバーと本人の確認の両方）");
+    } else {
+      li("マイナンバーがわかるもの1つ：通知カード（氏名・住所が住民票と同じ場合だけ）か、マイナンバーが載った住民票の写し");
+      li("本人の確認1つ：運転免許証・パスポート・在留カードなど。ない人は、資格確認書・年金手帳などから2つ");
+    }
+
+    grp("家族・収入・お金の確認");
+    li("住民票の写し（世帯全員が載ったもの・3か月以内）か、住民票記載事項証明書（世帯の構成と続柄が載ったもの）");
+    li(inc ? "本人の" + pmName + "分の収入がわかる書類（給料の明細など）" : "本人の" + pmName + "に収入がなかったことがわかるもの（預貯金通帳など）");
+    if (incFam) {
+      var who = [];
+      if (sp) who.push("配偶者"); if (pa) who.push("父・母"); if (c20) who.push("子（20歳以上など）");
+      li(who.join("・") + "の" + pmName + "分の収入がわかる書類（給料の明細・源泉徴収票・確定申告書の控え・所得証明書など。収入がなければ通帳や無収入・非課税の証明書。証明書は額面が載ったもの）");
+    }
+    li((fam ? "本人と家族全員" : "本人") + "の、行く日の残高があるすべての預貯金通帳" + (fam ? "（本人以外は写しでよい）" : "") + "か、残高証明（1か月以内に発行）");
+    if (chs) li("20歳未満で学校に通っている子の、在学がわかるもの（在校証明書・生徒手帳・学生証など）");
+    if (!kokin) li("給付金の振込先の通帳の写し（名前と口座番号のページ）");
+    if (sho) li("障害のある子の、障害者手帳・特別支援学校に通っているとわかる書類・福祉サービスを受けているとわかる書類のどれか");
+    if (kai) li("介護している家族の、介護保険の被保険者証の「要介護2以上」が載った部分（保険者番号と被保険者の番号は隠す）。要介護認定がない人は、申告書の判断基準表に書く");
+
+    if (nen) ask("年金を受けている人の収入の書類は、マイナンバーの情報照会で省けるか");
+    ask("住民票の写しは、マイナンバーの情報照会で省けるか");
+    if (cpr) ask("小学校に入る前の子の収入の書類が要るか（原文で省けると書かれているのは、20歳未満で学校に通っている子）");
+    if (cel) ask("小学生・中学生の子は、収入の書類と在学の書類が要らない扱いでよいか");
+    ask("このほかに、自分の場合に要る書類があるか");
+    if (!same) ask("最初の支給申請の指定来所日はいつか、事前審査が間に合うか");
+
+    $("memo").textContent = "職業訓練受講給付金の\n事前審査を申し込みたいです。\n" +
+      (same ? "訓練の受講申込みも\n今日いっしょにします。\n" : "受講申込みは済んでいます。\n") +
+      (fam ? "家族は、" + [sp ? "配偶者" : "", pa ? "父・母" : "", (c20 || chs || cel || cpr) ? "子" : ""].filter(Boolean).join("・") + "がいます。\n" : "") +
+      "持ってきた書類で\n足りないものがあれば\n教えてください。";
+
+    $("ng").textContent = "・事前審査は、支給申請の前か同じ日に。支給申請だけを先にすることはできない\n・遅れると、給付金の支給が始まるのが遅れたり、受けられなくなったりすることがある\n・収入は、行く日の前の月の分。手取りではなく、引かれる前の額\n・通帳は、本人（家族がいれば家族の分も）のすべての口座。行く日の残高が載るように記帳する\n・このページのほかに、ハローワークから書類を求められることがある\n・いま条件を満たさなくても、あとで満たすようになれば、そのときに申し込める";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("d0").value = iso(new Date());
+  if (DEMO) { $("d0").value = "2026-12-03"; $("mo").value = "same"; $("mn").value = "card"; $("inc").value = "no"; $("h_sp").checked = true; $("h_chs").checked = true; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
