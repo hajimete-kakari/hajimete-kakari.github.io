@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金が不支給・等級が低いとき、審査請求の期限と次にやること｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng, .mihon #motsu { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金が不支給・等級が低いとき、審査請求の期限と次にやること</h1>
+  <p class="lead">障害年金の請求の結果が「不支給」だった、等級が思っていたより低かった、というときに、通知を受け取った日から、審査請求の期限の目安と、まず確かめること、年金事務所への問い合わせの一言を出します。審査請求の決定書が届いたあとの、再審査請求の期限も出せます。決めるのは日本年金機構と、社会保険審査官・社会保険審査会です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの段階</h2>
+    <label class="f" for="st">どこまで進んでいる？</label>
+    <select id="st">
+      <option value="first">結果の通知が届いた（まだ審査請求していない）</option>
+      <option value="second">審査請求をして、決定書が届いた</option>
+    </select>
+    <label class="f" for="dt"><span id="dtl">通知を受け取って、結果を知った日</span><span class="hint" id="dth">郵便を開けて読んだ日です。封筒と一緒に、受け取った日のメモを残しておきます</span></label>
+    <input type="date" id="dt">
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 届いた結果</h2>
+    <label class="f" for="rs">いちばん近いものを選ぶ</label>
+    <select id="rs">
+      <option value="fushi">不支給（障害の状態が等級にあたらない）</option>
+      <option value="tokyu">支給されたが、等級が思っていたより低い</option>
+      <option value="shoshin">初診日や保険料の納め方を理由に、受け取れない</option>
+      <option value="jigo">障害認定日の分が認められず、請求日の翌月分からになった</option>
+      <option value="unk">理由がよくわからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">期限と次にやることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>年金事務所に問い合わせるときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>手元にそろえるもの</h3>
+    <div class="memo" id="motsu"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「年金の決定に不服があるとき（審査請求）」（決定があったことを知った日の翌日から起算して3か月以内に、文書または口頭で地方厚生局の社会保険審査官へ。決定書の謄本が送付された日の翌日から起算して2か月以内に社会保険審査会へ再審査請求）、近畿厚生局「社会保険審査官」の案内（年金関係は年金事務所を経由して出すこともできる。決定通知書の写しを付ける。あらかじめ処分の内容の説明を受ける。期間を過ぎると原則として認められないが、正当な理由があると認められた場合はこの限りでない）をもとにした目安です。期限の日は、起算の日の3か月後（再審査請求は2か月後）の同じ日（その月に同じ日がないときは月末）として出しています。間に合うかが心配なときは、その日より早めに出します。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  var W = ["日", "月", "火", "水", "木", "金", "土"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + W[d.getDay()] + "）"; }
+  function plusM(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, day = d.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(day, last));
+  }
+  function sync() {
+    var s = $("st").value === "second";
+    $("dtl").textContent = s ? "決定書の謄本が送られた日" : "通知を受け取って、結果を知った日";
+    $("dth").textContent = s ? "決まりは「送付された日」の翌日からです。送られた日がわからなければ、届いた日より前と考えて、早めに動きます" : "郵便を開けて読んだ日です。封筒と一緒に、受け取った日のメモを残しておきます";
+    $("c2").hidden = s;
+  }
+  var R = {
+    fushi: ["障害の状態が等級にあたらない", "診断書などから、障害の状態が年金の等級にあたらないと判断された、という結果です。どの書類のどこで判断したかで、次の手が変わります。"],
+    tokyu: ["等級が思っていたより低い", "支給はされたものの、等級が思っていたより低かった、という結果です。等級に納得できないときも、決定への不服として審査請求ができます。"],
+    shoshin: ["初診日・保険料の納め方", "障害の状態ではなく、初診日が認められない、初診日の前の保険料の納め方が足りない、といった理由です。初診日の証明や、納めた記録の見直しが中心になります。"],
+    jigo: ["障害認定日の分が認められない", "障害認定日のころの状態が等級にあたらないとされ、請求日の翌月分からになった、という結果です。さかのぼる分を求めるなら、認定日のころの状態を示す書類が中心になります。"],
+    unk: ["理由を確かめる", "理由がわからないまま審査請求をしても、何を示せばよいかが決まりません。まず、年金事務所で決定の内容の説明を受けます。"]
+  };
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var st = $("st").value, dS = $("dt").value, rs = $("rs").value;
+    if (!dS) { alert(st === "second" ? "決定書の謄本が送られた日を入れてください" : "通知を受け取って、結果を知った日を入れてください"); return false; }
+    var p = dS.split("-"), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var lim = plusM(d, st === "second" ? 2 : 3);
+    var left = Math.round((lim - today) / 86400000);
+    var dd = (d.getMonth() + 1) + "月" + d.getDate() + "日";
+    if (st === "first") {
+      var ls = left < 0 ? "目安の期限を過ぎています。期限を過ぎたことに正当な理由があると認められれば、この限りではないとされています。理由を書き添えて、早めに地方厚生局の社会保険審査官に相談します。" : "今日から数えて、あと" + left + "日です。知った日の翌日から数えて3か月以内が決まりです。説明を受けているうちに間に合わなくならないよう、日付をメモしておきます。";
+      box("審査請求の期限の目安", fmt(lim) + "まで", ls, left < 0);
+      box("届いた結果", R[rs][0], R[rs][1], false);
+      box("出す先", "地方厚生局の社会保険審査官", "文書（審査請求書）か口頭で出します。年金事務所を経由して出すこともできます。審査請求書には、決定通知書の写しを付けます。", false);
+      li("通知に書かれた結果と理由、決定の日付を、そのまま書き写す");
+      li("年金事務所で、決定の内容と、どの書類のどこで判断したかの説明を受ける（審査請求の前に、できるだけ詳しく説明を受けるよう案内されています）");
+      if (rs === "fushi" || rs === "tokyu") {
+        li("出した診断書の写しを、自分で読み直す。日常生活や仕事で困っていることが、書かれていたかを確かめる");
+        li("通っている医師に通知を見せて、その時期の状態について話す");
+      } else if (rs === "shoshin") {
+        li("初診日の証明（受診状況等証明書など）と、初診日の前の保険料の記録を、年金事務所で一緒に見直す");
+        li("初診の病院の記録が残っていないときに使える書類がないかを、年金事務所に聞く");
+      } else if (rs === "jigo") {
+        li("障害認定日のころの診断書が、その時期の状態をどう書いていたかを確かめる");
+        li("さかのぼる分だけを求めて審査請求するときの書き方を、年金事務所に聞く");
+      } else {
+        li("説明を聞いた日時・相手・答えを、メモに残す");
+      }
+      li("納得できないときは、審査請求書に決定通知書の写しを付けて、期限までに出す");
+      li("審査請求の決定書が届いたら、その結果にも不服があるときの再審査請求（社会保険審査会へ、2か月以内）を知っておく");
+      $("memo").textContent = "障害年金の決定の\n通知について伺います。\n" + dd + "に受け取りました。\n" + (rs === "unk" ? "決定の理由と、\nどの書類で判断したかを\n教えてください。" : "「" + R[rs][0] + "」\nと判断した理由と、\nどの書類のどこで\n判断したかを\n教えてください。") + "\n審査請求を考えています。";
+      $("motsu").textContent = "・届いた通知（写しも1部）\n・請求書の控え\n・出した診断書の写し\n・基礎年金番号が\n　わかるもの\n・本人確認の書類";
+      $("ng").textContent = "・期限は、知った日の翌日から3か月\n・受け取った日をメモしておく\n・審査請求には通知書の写しを付ける\n・説明を受けてから出すかを決める\n・期限が近いときは、先に出すかを相談";
+    } else {
+      var ls2 = left < 0 ? "目安の期限を過ぎています。過ぎたときの扱いは、社会保険審査会に早めに相談します。" : "今日から数えて、あと" + left + "日です。決定書の謄本が送付された日の翌日から数えて2か月以内です。3か月ではないので気をつけます。";
+      box("再審査請求の期限の目安", fmt(lim) + "まで", ls2, left < 0);
+      box("出す先", "社会保険審査会（厚生労働省内）", "社会保険審査官の決定に不服があるときの、2回目の申し立てです。再審査請求書の様式と記入例は、厚生労働省の社会保険審査会のページにあります。", false);
+      li("届いた決定書で、審査請求がどう判断されたか（理由の部分）を読み、書き写す");
+      li("決定書の送付の日付を確かめて、期限の日をメモする");
+      li("審査請求で出した書類と、決定書の理由を並べて、どこが足りないとされたかを確かめる");
+      li("納得できないときは、再審査請求書を期限までに社会保険審査会へ出す");
+      li("ひとりで書くのが難しいときは、年金事務所や、障害年金を扱う社会保険労務士に相談する");
+      $("memo").textContent = "障害年金の審査請求の\n決定書が届きました。\n送付の日付は" + dd + "です。\n再審査請求の出し方と、\n様式の入手先を\n教えてください。";
+      $("motsu").textContent = "・審査請求の決定書\n・最初の決定通知書\n・審査請求で出した\n　書類の控え\n・本人確認の書類";
+      $("ng").textContent = "・期限は、送付日の翌日から2か月\n・審査請求の3か月とまちがえない\n・決定書の封筒も残しておく\n・出した書類は控えを取る";
+    }
+    $("result").hidden = false;
+    return true;
+  }
+  $("st").addEventListener("change", sync);
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("st").value = "first"; $("dt").value = "2026-11-20"; $("rs").value = "fushi"; sync(); make(); }
+})();
+</script>
+</body>
+</html>
