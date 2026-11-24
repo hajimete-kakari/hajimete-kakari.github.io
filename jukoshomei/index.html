@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練中の受講証明書の日付｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 8px; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+  ol.tl li.now .t::after { content: "　← 次に出す分"; color: var(--warn); font-size: .85rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #kes li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練中の受講証明書の日付</h1>
+  <p class="lead">ハローワークから受講の指示を受けて、失業保険（基本手当）を受けながら公共職業訓練（受講指示を受けた求職者支援訓練を含む）に通う人向けです。訓練の期間を入れると、月ごとの受講証明書の対象の日・日数・施設から受け取る日の目安を並べます。休んだ日の理由を選ぶと、証明書の記号と、出す書類の目安もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 訓練の期間</h2>
+    <label class="f" for="d0">今日の日付</label>
+    <input type="date" id="d0">
+    <label class="f" for="ds">訓練が始まる日（始まった日）</label>
+    <input type="date" id="ds">
+    <label class="f" for="de">訓練が終わる日（修了の予定日）</label>
+    <input type="date" id="de">
+  </div>
+
+  <div class="card">
+    <h2>2. 休んだ日があるとき</h2>
+    <label class="f" for="rs">休んだ理由<span class="hint">遅刻・早退は、その日の訓練の半分以上に出ていれば出席の扱いです</span></label>
+    <select id="rs">
+      <option value="none">休んでいない・半分以上は出た</option>
+      <option value="byo">自分の病気・けが（14日まで）</option>
+      <option value="byo15">自分の病気・けがで15日以上続けて休む</option>
+      <option value="kango">家族の病気の看護</option>
+      <option value="kibiki">家族の葬儀（忌引）</option>
+      <option value="shiken">訓練に関係する資格試験・就職の面接</option>
+      <option value="kotsu">災害・事故で電車などが止まった</option>
+      <option value="shiyo">寝坊・私用など（理由の証明がない）</option>
+    </select>
+  </div>
+  <button id="make" type="button">日付を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>月ごとの受講証明書</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>休んだ日のこと</h3>
+    <ul class="mo" id="kes"></ul>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・都道府県労働局・ハローワークのリーフレット（受講指示の対象に求職者支援訓練が追加されたことの案内）と、大阪労働局「公共職業訓練等受講証明書等の記載方法について」をもとにした目安です。欠席の理由ごとの書類と日数は、大阪労働局の表をもとにしています。施設から受け取る日の「翌月10日（土日祝日ならその次の平日）」は、大阪労働局が訓練をする施設に向けて示している日付で、地域や施設で違うことがあります。年末年始の休みは数えていません。認定の日数・額・欠席の扱いの最後の判断は、ハローワークがします。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  // 祝日（国民の祝日・振替休日・国民の休日）
+  function nthMon(y, m, n) { var d = new Date(y, m, 1); var off = (8 - d.getDay()) % 7; return 1 + off + (n - 1) * 7; }
+  var HC = {};
+  function hols(y) {
+    if (HC[y]) return HC[y];
+    var h = {}, add = function (m, d) { h[iso(new Date(y, m, d))] = 1; };
+    var shun = Math.floor(20.8431 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
+    var shu = Math.floor(23.2488 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
+    add(0, 1); add(0, nthMon(y, 0, 2)); add(1, 11); add(1, 23); add(2, shun); add(3, 29);
+    add(4, 3); add(4, 4); add(4, 5); add(6, nthMon(y, 6, 3)); add(7, 11); add(8, nthMon(y, 8, 3));
+    add(8, shu); add(9, nthMon(y, 9, 2)); add(10, 3); add(10, 23);
+    var base = Object.keys(h).sort();
+    base.forEach(function (k) { // 振替休日
+      var d = pd(k); if (d.getDay() !== 0) return;
+      var n = new Date(d); do { n.setDate(n.getDate() + 1); } while (h[iso(n)]);
+      h[iso(n)] = 1;
+    });
+    for (var m = 0; m < 12; m++) for (var d = 2; d <= 30; d++) { // 国民の休日
+      var c = new Date(y, m, d), p = new Date(y, m, d - 1), q = new Date(y, m, d + 1);
+      if (!h[iso(c)] && c.getDay() !== 0 && h[iso(p)] && h[iso(q)]) h[iso(c)] = 1;
+    }
+    return HC[y] = h;
+  }
+  function closed(d) { return d.getDay() === 0 || d.getDay() === 6 || hols(d.getFullYear())[iso(d)]; }
+  function nextOpen(d) { d = new Date(d); while (closed(d)) d.setDate(d.getDate() + 1); return d; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w, now) {
+    var e = document.createElement("li"); if (now) e.className = "now";
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("kes").appendChild(e); }
+  var RS = {
+    none: null,
+    byo: ["○", "やむを得ない理由の欠席（病気・けが）", "傷病による欠席理由申立書と、病院の領収書や市販薬の領収書など（受診した日・病院の名前がわかるもの）。写しでよい場合があります", "続けて14日までが目安です"],
+    byo15: ["○", "15日以上続けて休むと、扱いが変わります", "15日以上続けて休むときは、基本手当の代わりに「傷病手当」の申請ができる場合があります（給付日数が終わった人・受給期間が終わった人は出ません）", "すぐにハローワークに相談します"],
+    kango: ["△", "やむを得ない理由の欠席（家族の看護）", "病院の領収書など（看護が要る人の名前・受診した日・病院の名前がわかるもの）と、続柄がわかるもの（住民票・親族続柄申立書など）", "続けて14日までが目安です"],
+    kibiki: ["△", "やむを得ない理由の欠席（葬儀）", "会葬礼状・死亡診断書など（亡くなった人の名前・日付がわかるもの）と、続柄がわかるもの（住民票・親族続柄申立書など）", "目安は、父母・子・配偶者が続けて7日まで、祖父母・兄弟姉妹・配偶者の父母・孫が続けて3日までです"],
+    shiken: ["△", "やむを得ない理由の欠席（訓練の職種に関係する試験・面接）", "試験は受験票・受験証明書など、面接は面接証明書など（日付・名前・受けたことがわかるもの）", "訓練の職種に関係するものが対象です"],
+    kotsu: ["△", "やむを得ない理由の欠席（交通が止まった）", "公的機関や鉄道会社などが出す証明", "天災や避けられない事故によるものが対象です"],
+    shiyo: ["×", "やむを得ない理由のない欠席", "理由の証明がないと×になり、その日の分の基本手当は出ません", "土日などの休校日の前後を×で休み、休校日も働けない状態だったと見られると、休校日の分も出ないことがあります"]
+  };
+  function make() {
+    var d0 = pd($("d0").value), ds = pd($("ds").value), de = pd($("de").value);
+    if (!d0 || !ds || !de) { alert("今日の日付・訓練が始まる日・終わる日を入れてください"); return false; }
+    if (de < ds) { alert("訓練が終わる日が、始まる日より前になっています"); return false; }
+    var months = (de.getFullYear() - ds.getFullYear()) * 12 + de.getMonth() - ds.getMonth() + 1;
+    if (months > 30) { alert("訓練の期間が長すぎます（30か月まで）"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("kes").innerHTML = "";
+    var nowIdx = -1, list = [];
+    for (var i = 0; i < months; i++) {
+      var y = ds.getFullYear(), m = ds.getMonth() + i;
+      var a = new Date(y, m, 1), b = new Date(y, m + 1, 0);
+      if (a < ds) a = ds; var last = false; if (b >= de) { b = de; last = true; }
+      var get = last ? new Date(de) : nextOpen(new Date(y, m + 1, 10));
+      list.push({ a: a, b: b, n: dd(a, b) + 1, get: get, last: last, mo: (a.getMonth() + 1) });
+      if (nowIdx < 0 && dd(d0, get) >= 0) nowIdx = i;
+    }
+    // できあがり
+    if (nowIdx < 0) {
+      box("次に出す分", "訓練は終わっています", "最後の月の受講証明書は、修了の日に施設から受け取ります。まだハローワークに出していなければ、すぐに出し方を確かめます。訓練のあとの認定日もハローワークで確かめます。", true);
+    } else {
+      var x = list[nowIdx];
+      box("次に出す分", x.mo + "月分（" + x.n + "日分）",
+        md(x.a) + "〜" + md(x.b) + "の分です。施設から受け取る目安は" + md(x.get) + (x.last ? "（修了の日）" : "まで") + "で、受け取ったら管轄のハローワークに出します。持参・郵送（特定記録郵便など）・家族などの代理（委任状が要る）でも出せます。", dd(d0, x.get) <= 3);
+    }
+    box("訓練中の認定", "月に1回・その月の日数分", "受講の指示を受けたあとは、4週間ごとの認定日の代わりに、施設が証明した受講証明書を出して、1か月に1回認定を受けます。全部で" + months + "回の目安です。", false);
+
+    list.forEach(function (x, i) {
+      step(x.mo + "月分（" + x.n + "日分）", (x.last ? "修了の日 " + md(x.get) + " に受け取る" : "受け取る目安 " + md(x.get) + "まで"),
+        md(x.a) + "〜" + md(x.b) + "。" + (i === 0 ? "始めは、施設の証明を受けた受講届・通所届もすぐに出します。" : "") + (x.last ? "最後の月です。修了のあとの手続きも窓口で聞きます。" : "受け取ったら、ハローワークへ出します。"), i === nowIdx);
+    });
+
+    var r = RS[$("rs").value];
+    if (!r) {
+      li("休んだ日がなければ、カレンダーは無印（出席）のままです");
+      li("遅刻・早退は、その日の訓練の半分以上に出ていれば出席の扱いです。半分以上欠けたら、欠席の扱いになります");
+      li("休んだら、その日のうちに施設へ連絡し、理由がわかる書類を残しておきます");
+    } else {
+      li("受講証明書の記号：" + r[0] + "（" + r[1] + "）");
+      li("出す書類：" + r[2]);
+      li(r[3]);
+      if (r[0] !== "×") li("やむを得ない理由でも、証明する書類がないと×（理由のない欠席）の扱いになります");
+    }
+
+    $("ng").textContent = "・休んだ日は、原則として基本手当が出ない。やむを得ない理由で書類があれば、出る場合がある\n・欠席は、1日の訓練の半分以上に出られなかった日\n・証明書の内容で基本手当などの額が決まる。記号や日数がちがっていたら、出す前に施設に聞く\n・就職・アルバイト・内職・手伝いをした日は、証明書の自分で書く欄に正しく書く\n・通う道が変わったら（引っ越し・実習など）、そのたびに受講届・通所届を出し直す\n・最後の判断はハローワーク。迷ったら管轄のハローワークの雇用保険の窓口で聞く";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("d0").value = iso(new Date());
+  if (DEMO) { $("d0").value = "2026-12-01"; $("ds").value = "2026-10-06"; $("de").value = "2027-03-29"; $("rs").value = "byo"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
