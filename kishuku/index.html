@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の寄宿手当、出る？いくら？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=month], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の寄宿手当、出る？いくら？</h1>
+  <p class="lead">失業保険（基本手当）を受けながら、ハローワークの受講指示で公共職業訓練に通うために、家族と離れて寮やアパートに住む人が、寄宿手当（月10,700円）の対象になりそうかと、ひと月の額の目安を出します。決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 訓練</h2>
+    <label class="f" for="k">ハローワークの受講指示は？</label>
+    <select id="k">
+      <option value="yes">受けた（受ける予定）</option>
+      <option value="no">受けていない（自分で申し込んだ講座など）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="t">受けている給付は？<span class="hint">失業保険を受けながら通う訓練と、失業保険のない人の求職者支援訓練では、寄宿手当の決まりが別です</span></label>
+    <select id="t">
+      <option value="koyo">失業保険（基本手当）</option>
+      <option value="kyushoku">職業訓練受講給付金（求職者支援訓練）</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 離れる家族と住まい</h2>
+    <label class="f" for="fam">これまで一緒に住んでいた家族は？<span class="hint">「養っている」は、その家族の暮らしが主にあなたの収入で成り立っていることです</span></label>
+    <select id="fam">
+      <option value="yes">養っている家族がいた（配偶者・子・親など）</option>
+      <option value="notkeep">一緒に住んでいたが、養ってはいない</option>
+      <option value="alone">ひとり暮らしだった</option>
+    </select>
+    <label class="f" for="h">訓練のあいだの住まいは？</label>
+    <select id="h">
+      <option value="dorm">訓練の施設の寮</option>
+      <option value="rent">アパート・下宿などを借りる</option>
+      <option value="own">自分の持ち家</option>
+    </select>
+    <label class="f" for="why">家を離れる理由に近いのは？<span class="hint">ハローワークが「住まいを移す必要がある」と認めるかの目安です</span></label>
+    <select id="why">
+      <option value="4h">家から通うと往復おおむね4時間以上</option>
+      <option value="bin">始発・終発などの便が悪く、通うのがとても難しい</option>
+      <option value="shisetsu">訓練の施設の事情で、住まいを移すことになった</option>
+      <option value="other">どれでもない（たまたま同じころに引っ越した など）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 計算する月と、減る日</h2>
+    <label class="f" for="mo">計算する月</label>
+    <input type="month" id="mo">
+    <label class="f" for="out">訓練の期間に入らない日・基本手当の対象にならない日<span class="hint">月の途中で訓練が始まる（終わる）ときの前後の日、待期の日などの合計です。訓練の期間の中の土日などの休みの日は入れません</span></label>
+    <input type="number" id="out" min="0" max="31" inputmode="numeric" placeholder="例：0">
+    <label class="f" for="home">寮・アパートを離れて家に戻っていた日<span class="hint">連続しておおむね14日までの帰省は「一時的」として、ふつうは減りません。それを超えて戻っていた日を入れます</span></label>
+    <input type="number" id="home" min="0" max="31" inputmode="numeric" placeholder="例：0">
+    <label class="f" for="abs">理由なく休んだ日<span class="hint">病気・けが（15日未満）、家族の看護、忌引などは「やむを得ない理由」として扱われることがあります。迷う日はここに入れずに、ハローワークに聞いてください</span></label>
+    <input type="number" id="abs" min="0" max="31" inputmode="numeric" placeholder="例：0">
+  </div>
+  <button id="make" type="button">対象かと額を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法 第36条第2項・第3項（受講指示の公共職業訓練等を受けるため、生計を維持している同居の親族と別居して寄宿するときに、その期間について出す。給付制限の期間は出ない）、雇用保険法施行規則 第60条（月額10,700円。別居して寄宿していない日、訓練の期間に入らない日、基本手当の対象にならない日、理由なく訓練を受けなかった日のある月は日割りで減らす）・第61条（基本手当の支給日に前の月の末日までの分を出す、受講証明書を出す）、厚生労働省「雇用保険に関する業務取扱要領」52705・52708・52901〜52952（親族は6親等内の血族・配偶者・3親等内の姻族と内縁の配偶者、寄宿は施設の寮・アパート・貸間・下宿で持ち家は入らない、受講と寄宿のつながりが要る、連続おおむね14日までの一時的な帰省は減らさない、円未満は切り捨て、必要に応じて親族の有無の市町村長の証明書）、57551（住まいを移す必要があると認める目安：往復おおむね4時間以上・始発終発の便が悪い・訓練施設の特殊性）をもとにした目安です。求職者支援訓練の寄宿手当は別の決まりで、ここでは扱っていません。対象か・額・減る日は、ハローワークが受講届と受講証明書をもとに決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var M = 10700;
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function num(id) { var s = $(id).value; return s === "" ? 0 : Math.floor(Number(s)); }
+  function calc(cut, n) { cut = Math.min(cut, n); var g = Math.floor(M - M * cut / n); return { cut: cut, gaku: g, minus: M - g }; }
+  window.__calc = calc;
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = "";
+    var k = $("k").value, t = $("t").value, fam = $("fam").value, h = $("h").value, why = $("why").value;
+    var m = /^(\d{4})-(\d{2})$/.exec($("mo").value);
+    if (!m) { alert("計算する月を入れてください"); return false; }
+    var y = +m[1], mon = +m[2], n = new Date(Date.UTC(y, mon, 0)).getUTCDate();
+    var out = num("out"), home = num("home"), abs = num("abs");
+    if (!(out >= 0) || !(home >= 0) || !(abs >= 0)) { alert("減る日は、0以上の数で入れてください"); return false; }
+    if (out + home + abs > n) { alert("減る日の合計が、その月の日数（" + n + "日）を超えています"); return false; }
+
+    var ng = [];
+    if (k === "no") ng.push("受講指示のない訓練は、寄宿手当の対象になりません。自分で申し込んだ講座や、教育訓練給付の講座は別のものです。");
+    if (t === "kyushoku") ng.push("職業訓練受講給付金（求職者支援訓練）の寄宿手当は別の決まりで、このページでは判定できません。ハローワークで確かめてください。");
+    if (fam === "notkeep") ng.push("養っていない家族と離れて住むときは、対象になりません。");
+    if (fam === "alone") ng.push("ひとり暮らしの人が訓練のために引っ越すときは、離れる家族がいないので対象になりません（引っ越しの費用は、移転費の対象になることがあります）。");
+    if (h === "own") ng.push("自分の持ち家に住むときは「寄宿」にあたらず、対象になりません。");
+    if (why === "other") ng.push("たまたま訓練と同じころに引っ越しただけでは、受講のための寄宿とは見られず、ふつうは対象になりません。");
+    var unk = (k === "unk" || t === "unk");
+    var bad = ng.length > 0;
+
+    if (bad) {
+      box("判定", t === "kyushoku" && ng.length === 1 ? "このページでは判定できません" : "対象にならない見込みです", ng.join(""), true);
+    } else if (unk) {
+      box("判定", "先に確かめることがあります", "受講指示を受けたか・受けている給付がどちらかを、ハローワークで確かめてください。下は、受講指示を受けて失業保険で通う場合の参考です。", true);
+    } else {
+      box("判定", "対象になりそうです", "受講指示の訓練のために、養っている家族と離れて" + (h === "dorm" ? "寮" : "アパートなど") + "に住む場合にあたります。住まいを移す必要があるかは、ハローワークが受講届をもとに決めます。", false);
+    }
+
+    var c = calc(out + home + abs, n);
+    var s;
+    if (c.cut >= n) s = "その月の全部の日が減る日にあたるので、この月は出ません。";
+    else if (c.cut > 0) s = "減る日が " + c.cut + "日あるので、10,700円 × " + c.cut + "日 ÷ " + n + "日 ＝ 約" + yen(c.minus) + " を引きます（円未満は切り捨て）。";
+    else s = "減る日がないので、月10,700円のままです。";
+    if (t !== "kyushoku") box(y + "年" + mon + "月の寄宿手当" + (bad || unk ? "（対象になった場合）" : ""), yen(c.gaku), s, bad);
+    if (t !== "kyushoku") box("いつ振り込まれる？", "基本手当の支給日", "ふつうは、基本手当の支給日に、前の月の末日までの分が、受講手当・通所手当といっしょに振り込まれます。自分の都合で辞めた人の給付制限のあいだは、出ません。", false);
+
+    if (t === "kyushoku") {
+      li("職業訓練受講給付金の寄宿手当の条件を、ハローワークで聞く");
+    } else if (bad) {
+      li("寄宿手当が出なくても、受講手当と通所手当は出ることがあるので、受講届・通所届は出す");
+      if (fam === "alone") li("引っ越しの費用は、移転費の対象になるかをハローワークで聞く（引っ越す前に）");
+    } else {
+      li("受講届に、家族と離れて寄宿することを書いて出す（寄宿手当を出すかはここで決まる）");
+      li("家族の有無を示す市区町村の証明書を求められることがあるので、何が要るかを先に聞く");
+      li("認定日ごとに、受講証明書と受給資格者証を出す");
+      li("寮・アパートを離れて家に戻っていた日があれば、受講証明書にその日と理由を書く");
+      li("家族の状況や住まいが変わったら、受講届の変更を届け出る");
+    }
+
+    $("memo").textContent = "職業訓練の\n寄宿手当について\n確かめたいです。\n" + (t === "kyushoku" ? "求職者支援訓練です。\n" : "失業保険を受けて\n訓練に通います。\n") + (fam === "yes" ? "養っている家族と\n離れて住みます。\n" : fam === "notkeep" ? "家族と離れますが\n養ってはいません。\n" : "ひとり暮らしです。\n") + "住まいは" + (h === "dorm" ? "施設の寮です。" : h === "rent" ? "借りる部屋です。" : "持ち家です。") + "\n出す書類と\n振り込みの時期を\n教えてください。";
+    $("ng").textContent = "・受講指示のない訓練は対象外\n・養っていない家族と離れても対象外\n・持ち家に住むときは対象外\n・給付制限のあいだは出ない\n・長く家に戻った日は日割りで減る\n・決めるのはハローワーク";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("k").value = "yes"; $("t").value = "koyo"; $("fam").value = "yes"; $("h").value = "dorm"; $("why").value = "4h"; $("mo").value = "2027-01"; $("out").value = "0"; $("home").value = "0"; $("abs").value = "1"; make(); }
+})();
+</script>
+</body>
+</html>
