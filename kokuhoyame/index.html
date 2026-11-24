@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>再就職したら国保をやめる手続き｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng, .mihon #hito { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>再就職したら国保をやめる手続き</h1>
+  <p class="lead">就職して会社の健康保険に入ったら、国民健康保険（国保）は自分で届け出てやめます。入った日や家族のことを選ぶと、届け出の期限の目安、国保の保険料がかかる月、持っていくもの、会社に頼む一言、気をつけることが出ます。市区町村の案内をもとにした目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="shutoku">会社の健康保険に入った日<span class="hint">資格取得日。ふつうは入社日。会社の書類に書いてあります</span></label>
+    <input type="date" id="shutoku">
+    <label class="f" for="kyou">役所に届け出る予定の日<span class="hint">空欄なら今日で数えます</span></label>
+    <input type="date" id="kyou">
+  </div>
+
+  <div class="card">
+    <h2>2. 家族と払い方</h2>
+    <label class="f" for="kazoku">国保に入っている家族<span class="hint">同じ世帯で国保に入っている人</span></label>
+    <select id="kazoku">
+      <option value="hitori">自分だけ</option>
+      <option value="fuyou">自分と、会社の健康保険の扶養に入る家族</option>
+      <option value="nokoru">自分だけ抜けて、ほかの家族は国保に残る</option>
+    </select>
+    <label class="f" for="harai">国保の保険料の払い方</label>
+    <select id="harai">
+      <option value="koza">口座振替</option>
+      <option value="nofu">納付書</option>
+      <option value="wakaran">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 手元の書類と受診</h2>
+    <label class="f" for="shorui">会社の健康保険の書類<span class="hint">入った日がわかるもの</span></label>
+    <select id="shorui">
+      <option value="aru">資格確認書・資格情報のお知らせ・資格取得証明書のどれかがある</option>
+      <option value="myna">マイナポータルの資格情報の画面だけ</option>
+      <option value="mada">まだ何ももらっていない</option>
+    </select>
+    <label class="f" for="jushin">入った日のあとに、国保の資格確認書や保険証で病院にかかった</label>
+    <select id="jushin">
+      <option value="no">かかっていない</option>
+      <option value="yes">かかった</option>
+      <option value="wakaran">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>持っていくもの</h3>
+    <div class="memo" id="memo"></div>
+    <h3>会社に頼むときの一言</h3>
+    <div class="memo" id="hito"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※大阪市住吉区「社会保険等の資格を取得して大阪市の国民健康保険の資格を喪失（脱退）する手続き」（資格を取得した日から14日以内に世帯主が届出、保険料は資格喪失日の属する月の前月分まで、払いすぎは還付、資格取得日以降に国保で受診した分は返還請求・社保へは受診日から2年）、横浜市のFAQ（14日以内・やめる方全員分の資格取得日がわかるもの・郵送やオンラインも可）、国民健康保険法施行規則（世帯主が14日以内に届出）で出した目安です。持ち物や郵送・オンラインの可否は市区町村ごとにちがうので、お住まいの役所の案内で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addD(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var S = parse($("shutoku").value);
+    var K = parse($("kyou").value);
+    if (!K) { var n = new Date(); K = new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+    var kazoku = $("kazoku").value, harai = $("harai").value, shorui = $("shorui").value, jushin = $("jushin").value;
+    $("sum").innerHTML = "";
+    if (!S) {
+      box("会社の健康保険に入った日", "入れてください", "期限と保険料の月は、入った日から数えます。まだわからなければ、入社日を仮に入れます。", true);
+      $("memo").textContent = "（日付を入れると出ます）";
+      $("hito").textContent = "（日付を入れると出ます）";
+      $("ng").textContent = "・会社の書類の「資格取得日」の欄";
+      $("result").hidden = false; return true;
+    }
+    var limit = addD(S, 14);
+    var ng = [];
+    if (K < S) {
+      box("届け出の時期", "入った日のあとに届け出る", "国保をやめる届け出は、会社の健康保険に入ったあとにします。入った日がわかる書類がそろってから行きます。期限の目安は" + f(limit) + "ごろです（入った日から14日以内）。", false);
+    } else if (K <= limit) {
+      box("届け出の期限の目安", f(limit) + "ごろまで", "会社の健康保険に入った日から14日以内に、世帯主が届け出ます。14日の数え方は、念のため役所の案内で確かめてください。", false);
+    } else {
+      box("届け出の期限の目安", "14日を過ぎています", "入った日から14日以内（" + f(limit) + "ごろ）が目安でした。届け出ないと、国保の納付書や引き落としが続きます。できるだけ早く役所へ行きます。", true);
+    }
+    var m = S.getMonth() + 1, prevM = m === 1 ? 12 : m - 1;
+    box("国保の保険料がかかる月", prevM + "月分まで", "国保の保険料は、会社の健康保険に入った日がある月の前の月の分までです。" + m + "月分からは会社の健康保険の保険料になります。" + (S.getDate() === 1 ? "1日に入ったときも、" + m + "月分から会社の健康保険です。" : "月の途中に入っても、" + m + "月分の国保の保険料はかかりません。") + "\n届け出たあと、保険料が計算し直され、通知が届きます。", false);
+    if (harai === "koza") {
+      box("払いすぎた分", "届け出たあと精算", "口座振替は、届け出るまで引き落としが続きます。払いすぎた分は戻され（還付）、足りない分があれば払います。戻る時期や方法は、届いた通知で確かめます。", false);
+    } else if (harai === "nofu") {
+      box("払いすぎた分", "届け出たあと精算", "届け出るまでは、もとの額の納付書が届きます。払いすぎた分は戻され（還付）、足りない分があれば払います。手元の納付書を払ってよいかは、届け出のときに窓口で聞きます。", false);
+    } else {
+      box("払いすぎた分", "届け出たあと精算", "払い方がわからなくても、届け出のあとに保険料が計算し直されます。払いすぎた分は戻され（還付）、足りない分があれば払います。通帳か届いた納付書で、払い方を見ておきます。", false);
+    }
+    if (kazoku === "fuyou") {
+      box("家族の分", "扶養に入る家族も届け出る", "会社の健康保険の扶養に入る家族も、国保をやめる届け出が要ります。家族の分も、会社の健康保険の資格がわかる書類をそろえます。扶養の手続きは会社でします。", false);
+    } else if (kazoku === "nokoru") {
+      box("残る家族の分", "国保は続く", "やめるのはあなたの分だけで、ほかの家族の国保は続きます。世帯の保険料は計算し直されます。国保の届け出は世帯主がするので、世帯主があなたでなければ、世帯主に頼むか、代わりに行くときの持ち物を役所に確かめます。", false);
+    }
+    if (shorui === "mada") {
+      box("会社の書類", "まず会社に頼む", "入った日がわかる書類（資格確認書・資格情報のお知らせ・資格取得証明書のどれか）がないと、手続きが進まないことがあります。会社に頼み、" + (K > limit ? "届くまでに日がかかりそうなら、すぐ役所へ相談します。" : "14日に間に合いそうになければ、期限の前に役所へ相談します。") + "", true);
+    } else if (shorui === "myna") {
+      box("会社の書類", "画面で通るか確かめる", "マイナポータルの資格情報の画面で受け付ける市（横浜市など）もあります。使えるかは市区町村ごとにちがうので、行く前に役所の案内で確かめます。だめなら会社に「資格情報のお知らせ」か「資格取得証明書」を頼みます。", false);
+    }
+    if (jushin === "yes") {
+      box("国保で病院にかかった分", "あとで返す請求が来る", "入った日のあとに国保で受診すると、国保が払った分を返すよう請求されます。返した分は、会社の健康保険に請求できます（受診日から2年以内）。領収書はとっておきます。次からは会社の健康保険の資格確認書かマイナ保険証で受診します。", true);
+    } else if (jushin === "wakaran") {
+      box("国保で病院にかかった分", "領収書を見ておく", "入った日（" + f(S) + "）のあとに国保で受診していたら、国保が払った分を返すよう請求されます。返した分は会社の健康保険に請求できます（受診日から2年以内）。領収書の日付を見ておきます。", false);
+    }
+    var memo = [];
+    memo.push("・本人確認書類（マイナンバーカード・運転免許証など）");
+    memo.push("・国保の資格確認書（持っている人だけ" + (kazoku === "fuyou" ? "、やめる家族全員分" : "") + "）");
+    memo.push("・会社の健康保険に入った日がわかるもの" + (kazoku === "fuyou" ? "（やめる家族全員分）" : "") + "\n　資格確認書／資格情報のお知らせ／資格取得証明書のどれか");
+    memo.push("・郵送やオンラインで届け出られる市もあります（原本を送らないなど決まりがあるので、市の案内を見る）");
+    $("memo").textContent = memo.join("\n");
+    var hito = "健康保険の手続き、\nありがとうございます。\n国民健康保険をやめる\n届け出に使うので、\n資格取得日がわかる書類\n（資格情報のお知らせか\n資格取得証明書）を\nいただけますか。";
+    if (kazoku === "fuyou") hito += "\n扶養に入る家族の分も\nお願いします。";
+    $("hito").textContent = hito;
+    ng.push("・国保は、会社の健康保険に入っても自分で届け出ないとやめられない");
+    ng.push("・国保の資格確認書は、届け出のときに返す");
+    ng.push("・保険料の計算し直しの通知が届いたら、払いすぎ・足りない分を見る");
+    if (harai === "koza") ng.push("・引き落としが止まったかを通帳で見る");
+    ng.push("・持ち物は市区町村でちがうので、行く前に役所の案内を見る");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("shutoku").value = "2026-12-01"; $("kyou").value = "2026-12-08"; $("kazoku").value = "fuyou"; $("harai").value = "koza"; $("shorui").value = "aru"; $("jushin").value = "no"; make(); }
+})();
+</script>
+</body>
+</html>
