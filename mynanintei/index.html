@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の認定、マイナンバーカードと受給資格者証どちら？｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0; font-size: .95rem; }
+  label.c input { margin-top: 6px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .grp { font-weight: 700; font-size: .92rem; margin: 12px 0 4px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #list li, .mihon #flow li, .mihon #ask li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の認定、マイナンバーカードと受給資格者証どちら？</h1>
+  <p class="lead">失業保険（雇用保険の基本手当）の手続きで、認定日の本人確認をマイナンバーカードでするか、写真を貼った受給資格者証でするかを決める前の人向けです。いまの状況を選ぶと、自分に合いそうな方と、初日の持ち物、認定日ごとの流れ、窓口で聞くことがわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの段階</h2>
+    <label class="f" for="st">ハローワークでの手続きは？</label>
+    <select id="st">
+      <option value="before">これから（離職票を出しに行く前）</option>
+      <option value="after">受給資格の決定は済んだ（説明会の前後）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. マイナンバーカード</h2>
+    <label class="f" for="mn">マイナンバーカード</label>
+    <select id="mn">
+      <option value="card">持っている</option>
+      <option value="apply">申請中・受け取り待ち</option>
+      <option value="none">持っていない</option>
+    </select>
+    <label class="f" for="pw">カードの4桁の暗証番号<span class="hint">利用者証明用電子証明書の暗証番号（コンビニで住民票を取るときなどに入れる4桁）</span></label>
+    <select id="pw">
+      <option value="ok">覚えている</option>
+      <option value="ng">自信がない・忘れた</option>
+    </select>
+    <label class="f" for="carry">認定日（4週間に1回）に、毎回カードを持っていける？</label>
+    <select id="carry">
+      <option value="ok">持っていける</option>
+      <option value="ng">家族に預けているなど、不安がある</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 写真</h2>
+    <label class="f" for="ph">証明写真（たて3cm×よこ2.4cm）2枚</label>
+    <select id="ph">
+      <option value="no">まだ用意していない</option>
+      <option value="yes">用意してある</option>
+    </select>
+  </div>
+  <button id="make" type="button">どちらが合うか見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>初日に持っていくもの（本人確認まわり）</h3>
+    <div id="list"></div>
+    <h3>認定日ごとの流れ</h3>
+    <ul class="mo" id="flow"></ul>
+    <h3>窓口で聞くこと</h3>
+    <ul class="mo" id="ask"></ul>
+    <h3>ハローワークの窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※都道府県労働局・ハローワークのリーフレット「マイナンバーカードで失業認定手続ができるようになります」（LL041001保01）をもとにした目安です。離職票など、ほかの持ち物はハローワークの案内で確かめてください。途中で切り替えられるか、自分の場合の扱いは、ハローワークの窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  var cur;
+  function grp(t) {
+    var h = document.createElement("div"); h.className = "grp"; h.textContent = t; $("list").appendChild(h);
+    cur = document.createElement("ul"); cur.className = "mo"; $("list").appendChild(cur);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = "□ " + t; cur.appendChild(e); }
+  function fl(t) { var e = document.createElement("li"); e.textContent = t; $("flow").appendChild(e); }
+  function ask(t) { var e = document.createElement("li"); e.textContent = t; $("ask").appendChild(e); }
+  function make() {
+    var before = $("st").value === "before", mn = $("mn").value, pwok = $("pw").value === "ok",
+      carry = $("carry").value === "ok", ph = $("ph").value === "yes";
+    $("sum").innerHTML = ""; $("list").innerHTML = ""; $("flow").innerHTML = ""; $("ask").innerHTML = "";
+    var my;
+    if (mn !== "card") my = false;
+    else my = pwok && carry;
+    var why;
+    if (mn === "none") why = "カードがない人は、これまでどおり写真を貼った受給資格者証で手続きします。";
+    else if (mn === "apply") why = "初日にカードが手元にないなら、受給資格者証で進めることになります。受け取りが初日に間に合うかで決まります。";
+    else if (!pwok) why = "認定日ごとにタブレットで4桁の暗証番号を入れます。3回続けてまちがえるとロックされ、住民票のある市区町村の窓口で再設定が要ります。先に暗証番号を確かめてから選ぶと安心です。";
+    else if (!carry) why = "マイナンバーカードを選ぶと、認定日ごとにカードの持参と提示が要ります。毎回持っていけないなら、受給資格者証の方が合います。";
+    else why = "写真2枚が要らず、認定日に受給資格者証を持っていく必要もなくなります。毎回カードで本人確認をします。";
+    box("合いそうなのは？", my ? "マイナンバーカード" : (mn === "card" ? "いったん受給資格者証（暗証番号・持参を確かめてから決める）" : "受給資格者証"), why, !my && mn === "card");
+    box("一度選んだら？", "原則、受給資格者証には戻せない",
+      "マイナンバーカードでの手続きを選ぶと、その後は原則として受給資格者証での手続きに変えられません。迷うなら、選ぶ前に窓口で聞きます。", true);
+    box("もらう紙は？", my ? "受給資格通知（初回は全件版、その後は最新の処理状況版）" : "受給資格者証（写真付き・認定日ごとに返される）",
+      my ? "説明会で全件版、認定日ごとに処理結果が印字された最新版を受け取ります。受給期間が終わる日まで、大切に保管します。"
+        : "説明会で交付され、認定日ごとに出して、処理結果が印字されて返ってきます。", false);
+    if (!before) box("受給資格の決定が済んでいる人は", "途中から変えられるかは窓口で",
+      "リーフレットには、決定のときにカードを出して選ぶ流れが書かれています。決定のあとで切り替えられるかは書かれていないので、次の認定日の前に窓口で聞きます。", true);
+
+    grp("本人確認まわり（離職票など、ほかの持ち物は別に）");
+    if (my) {
+      li("マイナンバーカード（受給資格者証に貼る写真2枚は要らない）");
+      li("4桁の暗証番号（覚えておく。紙に書いてカードと一緒にしない）");
+    } else {
+      li("証明写真 たて3cm×よこ2.4cm 2枚" + (ph ? "（用意済み）" : "（まだなら証明写真の機械で撮る）"));
+      if (mn === "card") li("マイナンバーカード（マイナンバーと本人の確認のため）");
+      else li("マイナンバーがわかるものと、本人確認の書類（ハローワークの案内で確かめる）");
+    }
+
+    if (my) {
+      fl("1. 認定日に、マイナンバーカードを持ってハローワークへ");
+      fl("2. 職員の案内で、備え付けのタブレットにカードを読ませ、4桁の暗証番号を入れる");
+      fl("3. 出てきたバーコードの紙と失業認定申告書を窓口に出す");
+      fl("4. 処理結果が印字された受給資格通知（最新の処理状況版）を受け取る");
+      fl("※前回もらった最新の受給資格通知を出せば、タブレットの操作は省けることがある。その場合もカードの持参と提示は要る");
+    } else {
+      fl("1. 認定日に、受給資格者証（写真付き）と失業認定申告書を持ってハローワークへ");
+      fl("2. 窓口に出して、失業の認定を受ける");
+      fl("3. 処理結果が印字された受給資格者証が返ってくる");
+    }
+
+    ask("自分は、マイナンバーカードでの手続きを選べるか");
+    if (!before) ask("受給資格の決定のあとからでも、マイナンバーカードに切り替えられるか");
+    if (mn === "apply") ask("初日にカードが間に合わないとき、あとからカードでの手続きにできるか");
+    if (!pwok) ask("暗証番号がわからないとき、市区町村で再設定してから選んでもよいか");
+    ask("全件版の受給資格通知がほしいときは、いつ言えばよいか");
+
+    $("memo").textContent = my
+      ? "失業保険の手続きで、\n認定の本人確認を\nマイナンバーカードで\nしたいです。\n戻せないことは\nわかっています。\n写真は持ってきて\nいませんが、\nこれで大丈夫ですか。"
+      : "失業保険の手続きで、\n認定は受給資格者証で\nしたいです。\n写真2枚を持ってきました。\nほかに足りないものが\nあれば教えてください。";
+
+    $("ng").textContent = "・マイナンバーカードを選ぶと、原則として受給資格者証に戻せない\n・暗証番号を3回続けてまちがえるとロック。住民票のある市区町村の窓口で再設定が要る\n・マイナンバーカードを選んでも、認定日ごとにカードの持参と提示が要る\n・受給資格通知は、受給期間が終わる日まで保管する\n・カードがない・選ばない人は、これまでどおり受給資格者証（写真2枚）";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) { $("st").value = "before"; $("mn").value = "card"; $("pw").value = "ok"; $("carry").value = "ok"; $("ph").value = "no"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
