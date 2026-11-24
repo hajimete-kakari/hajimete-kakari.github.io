@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>再就職手当と税金・年末調整｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .chk { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0; font-size: .95rem; }
+  .chk input { margin-top: 6px; width: 18px; height: 18px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>再就職手当と税金・年末調整</h1>
+  <p class="lead">その年に受け取ったお金と、入社先の年末調整の様子を入れると、税金の書類に書くもの・書かないもの、入社先に出す書類、確定申告が要りそうかが出ます。税額の計算はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. その年に受け取ったお金</h2>
+    <span class="hint">あてはまるものに全部チェックします</span>
+    <label class="chk"><input type="checkbox" id="m_sai" checked>再就職手当</label>
+    <label class="chk"><input type="checkbox" id="m_kihon">失業保険（基本手当）</label>
+    <label class="chk"><input type="checkbox" id="m_teichaku">就業促進定着手当</label>
+    <label class="chk"><input type="checkbox" id="m_mae">前の会社の給料（同じ年に辞めた会社）</label>
+    <label class="chk"><input type="checkbox" id="m_now">入社先の給料</label>
+  </div>
+
+  <div class="card">
+    <h2>2. 年末調整と書類</h2>
+    <label class="f" for="nencho">入社先で年末まで働く予定ですか</label>
+    <select id="nencho">
+      <option value="yes">はい（12月も入社先にいる）</option>
+      <option value="no">いいえ（年内に辞める予定）</option>
+    </select>
+    <label class="f" for="gensen">前の会社の源泉徴収票<span class="hint">同じ年に辞めた会社から届く紙</span></label>
+    <select id="gensen">
+      <option value="aru">手元にある</option>
+      <option value="nai">まだ届いていない・なくした</option>
+      <option value="none">同じ年に辞めた会社はない</option>
+    </select>
+    <label class="f" for="fuyo">家族の扶養（税金の控除）</label>
+    <select id="fuyo">
+      <option value="none">家族の扶養のことは関係ない</option>
+      <option value="hairu">自分が家族の扶養に入っている・入りたい</option>
+      <option value="ireru">自分が家族を扶養している</option>
+    </select>
+  </div>
+  <button id="make" type="button">書くもの・書かないものを見る</button>
+  <div class="err" id="err" hidden></div>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>入社先の担当の人に言う一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>書かないもの・まちがえやすいもの</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法第10条（失業等給付には就職促進給付が入り、就職促進給付には就業促進手当が入る）・第12条（失業等給付として受けたお金には、税金などをかけることができない）、国税庁タックスアンサー No.1191 のQ&A（Q4：求職者給付は失業等給付にあたり、雇用保険法第12条で課税されないので、配偶者控除の判定の合計所得金額に入れない）、No.2674「中途就職者の年末調整」（同じ年にほかの会社から受けた給料も含めて年末調整する・前の会社の源泉徴収票で確かめる・確かめられないときは本人が確定申告する）をもとにしています。健康保険の扶養は税金とは別の決まりなので、このページでは判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+
+  function make() {
+    var sai = $("m_sai").checked, kihon = $("m_kihon").checked, tei = $("m_teichaku").checked,
+        mae = $("m_mae").checked, now = $("m_now").checked;
+    var nencho = $("nencho").value, gensen = $("gensen").value, fuyo = $("fuyo").value;
+    $("err").hidden = true;
+    function err(t) { $("err").textContent = t; $("err").hidden = false; return false; }
+    if (!sai && !kihon && !tei && !mae && !now) return err("受け取ったお金に、1つ以上チェックしてください。");
+    if (mae && gensen === "none") return err("前の会社の給料にチェックがあります。源泉徴収票の欄を「手元にある」か「まだ届いていない」にしてください。");
+    $("sum").innerHTML = "";
+    var hika = [], kaku = [];
+    if (sai) hika.push("再就職手当");
+    if (kihon) hika.push("失業保険（基本手当）");
+    if (tei) hika.push("就業促進定着手当");
+    if (mae) kaku.push("前の会社の給料");
+    if (now) kaku.push("入社先の給料");
+    var ng = [];
+
+    if (hika.length) {
+      box("税金のかからないお金", hika.join("・"), "雇用保険から出るお金（失業等給付）には、税金をかけないと法律で決まっています。年末調整の書類にも、確定申告にも書きません。源泉徴収票にも載りません。", false);
+    }
+    if (kaku.length) {
+      box("税金の計算に入るお金", kaku.join("・"), kaku.length > 1 ? "給料は税金の計算に入ります。同じ年に2つの会社から受け取ったときは、2つを合わせて精算します。" : "給料は税金の計算に入ります。", false);
+    } else {
+      box("税金の計算に入るお金", "チェックした中にはありません", "この年に受け取ったのが雇用保険のお金だけなら、税金の計算に入るものはありません。ほかに収入があるときは別に考えます。", false);
+    }
+
+    var need = false, why = "";
+    if (nencho === "yes") {
+      if (mae && gensen === "aru") {
+        box("入社先に出す書類", "前の会社の源泉徴収票", "年末調整の前に、入社先の担当の人に渡します。入社先がこれを見て、前の会社の分も合わせて年末調整をします。再就職手当の通知書や振込の記録は出しません。", false);
+      } else if (mae && gensen === "nai") {
+        box("入社先に出す書類", "前の会社の源泉徴収票（まだない）", "前の会社に、源泉徴収票を送ってほしいと頼みます。年末調整に間に合わないと、入社先は前の会社の分を含めて精算できず、自分で確定申告をすることになります。", true);
+        need = true; why = "前の会社の源泉徴収票が年末調整に間に合わないとき";
+      } else {
+        box("入社先に出す書類", "年末調整の申告書だけ", "同じ年に辞めた会社の給料がなければ、前の会社の源泉徴収票は要りません。入社先から配られる年末調整の申告書を出します。再就職手当のことは書きません。", false);
+      }
+    } else if (!kaku.length) {
+      box("入社先に出す書類", "給料がなければ年末調整はない", "年末調整は、会社が給料の税金を精算するしくみです。雇用保険のお金だけなら、年末調整で出すものはありません。", false);
+    } else {
+      box("入社先に出す書類", "年末調整は受けない見込み", "年の途中で辞めると、ふつうは年末調整の対象になりません。辞めるときにもらう源泉徴収票をとっておきます。", true);
+      if (mae || now) { need = true; why = "年末調整を受けずに年を越すとき"; }
+    }
+
+    if (need) {
+      box("確定申告", "確定申告で精算する（" + why + "）", "年末調整で精算されなかった給料の税金は、翌年に源泉徴収票を全部そろえて確定申告で精算します。そのときも、再就職手当などの雇用保険のお金は書きません。", true);
+    } else if (kaku.length) {
+      box("確定申告", "この入力では、ふつうは要らない見込み", "年末調整で精算が済む形です。医療費控除などを受けたいときや、ほかの収入があるときは別に考えます。", false);
+    } else {
+      box("確定申告", "雇用保険のお金のためには要らない", "雇用保険のお金は書かないので、そのために確定申告をすることはありません。", false);
+    }
+
+    if (fuyo === "hairu") {
+      box("家族の扶養（税金）", "雇用保険のお金は所得に入れない", "家族があなたを扶養の控除に入れるかどうかは、あなたの「合計所得金額」で決まります。国税庁のQ&Aでは、失業保険（求職者給付）はここに入れないとしています。再就職手当も同じ雇用保険の失業等給付です。数えるのは給料などです。", false);
+      box("家族の扶養（健康保険）", "税金とは別に確かめる", "健康保険の扶養は、税金とは別の決まりです。失業保険を受けている間の扱いなども、家族が入っている健康保険（会社の健保・協会けんぽなど）に確かめます。", true);
+      ng.push("・家族の会社に出す扶養の書類に、再就職手当の額を「所得」として足さない");
+    } else if (fuyo === "ireru") {
+      box("家族の扶養（税金）", "家族の雇用保険のお金は所得に入れない", "扶養している家族が再就職手当や失業保険を受け取っていても、その額は家族の「合計所得金額」に入れません。国税庁のQ&Aで、失業保険（求職者給付）はそう扱うとしています。数えるのは給料などです。", false);
+      box("家族の扶養（健康保険）", "税金とは別に確かめる", "健康保険の扶養は、税金とは別の決まりです。自分が入っている健康保険（会社の健保・協会けんぽなど）に確かめます。", true);
+      ng.push("・年末調整の申告書の家族の所得の欄に、再就職手当などを足さない");
+    }
+
+    if (hika.length) ng.unshift("・" + hika.join("・") + "は、年末調整の書類・確定申告に書かない");
+    ng.push("・「税金がかからない」のは雇用保険から出るお金だけ。入社先の給料にはかかる");
+    if (mae && gensen === "nai") ng.push("・前の会社の源泉徴収票を待たずに年末調整を終えると、あとで自分で確定申告になる");
+
+    var memo = "年末調整の書類について\n確認させてください。\n";
+    if (mae && gensen === "aru") memo += "前の会社の源泉徴収票が\nあります。いつまでに\nどなたに渡せばよいですか。\n";
+    else if (mae && gensen === "nai") memo += "前の会社の源泉徴収票を\nいま取り寄せています。\n締め切りはいつですか。\n";
+    if (sai) memo += "再就職手当は\n税金がかからないお金なので、\n書類には書かなくて\nよいですよね。";
+    else memo += "雇用保険のお金は\n書類に書かなくて\nよいですよね。";
+    $("memo").textContent = memo;
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("m_sai").checked = true; $("m_kihon").checked = true; $("m_mae").checked = true; $("m_now").checked = true; $("nencho").value = "yes"; $("gensen").value = "aru"; $("fuyo").value = "hairu"; make(); }
+  window.__make = make;
+})();
+</script>
+</body>
+</html>
