@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の更新、障害状態確認届の日付｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { display: flex; gap: 8px; }
+  .row select { flex: 1; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の更新、障害状態確認届の日付</h1>
+  <p class="lead">障害年金を受けている人に届く「障害状態確認届（診断書）」の日付を出します。次の提出年月と、いまの状況を入れると、用紙が届く時期・受診してよい期間・出す期限・医師に頼むときの一言が出ます。日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 次の提出年月</h2>
+    <label class="f" for="y">提出期限の年と月<span class="hint">ふつうは誕生月。初めての更新は年金証書の「次回診断書提出年月」、2回目からは「次回の診断書の提出について（お知らせ）」などに書いてあります</span></label>
+    <div class="row">
+      <select id="y"></select>
+      <select id="m"></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="jokyo">用紙は届いていますか</label>
+    <select id="jokyo">
+      <option value="mada">まだ届いていない</option>
+      <option value="todoita">届いた</option>
+      <option value="nakushita">届いたが、なくした</option>
+    </select>
+    <label class="f" for="today">今日の日付<span class="hint">ふつうはそのままで大丈夫です</span></label>
+    <input type="date" id="today">
+  </div>
+  <button id="make" type="button">日付を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>医師に頼むときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>出す前に見るところ</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害状態確認届（診断書）が届いたとき」（誕生月の3カ月前の月末に送付・提出期限は誕生月の末日までに到着・提出期限前3カ月以内の障害の状態・遅れたり不備があると支払いが一時止まることがある・提出先）、「海外にお住まいの年金を受けている方が誕生月を迎えたとき」（誕生月が8月なら6月1日〜8月31日の現症日）、年金Q&A「障害状態確認届（診断書）が届いたとき」（届く時期・提出期限のわかる書類・なくしたとき・期日までに出せなかったとき・重くなったときは提出期限の翌月分から増額、軽くなったときは提出期限の4カ月後の年金額から減額または支給停止）で出した目安です。等級が変わるかどうかは判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var now = new Date();
+  var ys = $("y"), ms = $("m");
+  for (var yy = now.getFullYear() - 1; yy <= now.getFullYear() + 5; yy++) {
+    var o = document.createElement("option"); o.value = yy; o.textContent = yy + "年"; ys.appendChild(o);
+  }
+  for (var mm = 1; mm <= 12; mm++) {
+    var o2 = document.createElement("option"); o2.value = mm; o2.textContent = mm + "月"; ms.appendChild(o2);
+  }
+  ys.value = now.getFullYear(); ms.value = now.getMonth() + 1;
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  $("today").value = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function fm(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  function lastDay(y, m0) { return new Date(y, m0 + 1, 0); } // m0: 0始まり
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var Y = +ys.value, M0 = +ms.value - 1, jk = $("jokyo").value;
+    var T = parse($("today").value) || new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    $("sum").innerHTML = "";
+    var due = lastDay(Y, M0);                 // 提出期限（その月の末日）
+    var send = lastDay(Y, M0 - 3);            // 用紙が届く目安（3か月前の月末まで）
+    var from = new Date(Y, M0 - 2, 1);        // 受診してよい期間の始まり
+    var after4 = new Date(Y, M0 + 4, 1);      // 軽くなったとき：4か月後の年金額から
+    var next1 = new Date(Y, M0 + 1, 1);       // 重くなったとき：翌月分から
+    var late = T > due, inWin = T >= from && T <= due, before = T < from;
+    var ng = [];
+
+    if (late) {
+      box("提出期限", f(due) + "（過ぎています）", "期限までに出していないと、年金の支払いが一時止まります。いまからでも、医師に「診断書」欄を書いてもらい、すぐに出します。障害の状態の確認が終わると、障害の程度に応じて、止まっていた分もさかのぼって支払われます。", true);
+      box("受診のしかた", "なるべく早く受診", "期限を過ぎたときの現症日（いつの状態を書くか）の扱いは、案内には書かれていません。受診の前に、年金事務所かねんきんダイヤルで確かめてから頼みます。", true);
+    } else {
+      box("提出期限", f(due) + "までに届くように", "日本年金機構に、この日までに着いている必要があります。郵送なら、何日か前に出します。", false);
+    }
+
+    if (!late) {
+      if (jk === "mada") {
+        if (T > send) {
+          box("用紙が届く時期", f(send) + "までに届くはず", "届くはずの時期を過ぎています。年金事務所かねんきんダイヤルに、まず提出が要る年か、用紙を送ったかを確かめます。様式がわかれば、日本年金機構のホームページから取ることもできます。", true);
+        } else {
+          box("用紙が届く時期", f(send) + "までに届く見込み", "提出期限の3か月前の月末までに、日本年金機構から送られてきます。届くまでに、いつもの病院の受診日を確かめておきます。", false);
+        }
+      } else if (jk === "nakushita") {
+        box("なくしたとき", "年金事務所に相談", "近くの年金事務所か街角の年金相談センターに相談します。自分の診断書の種類（眼・肢体・精神など）がわかれば、日本年金機構のホームページの「障害年金の請求手続き等に使用する診断書」から取り直すこともできます。", true);
+      } else {
+        box("用紙", "届いています", "「診断書」欄を医師に書いてもらい、ほかの欄は自分で書きます。書き方がわからない欄は、年金事務所で聞けます。", false);
+      }
+      box("受診してよい期間", f(from) + "〜" + f(due) + "の間", "診断書は、提出期限の前3か月以内の状態を書いたものが要ります。この間に受診して、その日の状態で書いてもらいます。" + (before ? "\nいまはまだ期間の前です。" + f(from) + "より前の受診の状態では使えないので、予約の日に気をつけます。" : (inWin ? "\nいまは期間の中です。早めに受診の予約をします。" : "")), false);
+      box("医師に頼む時期", f(from) + "以後の受診で", "できあがるまでの日数は、病院によってちがいます。受診の日にできあがりの日数を聞き、郵送の日数も入れて、" + f(due) + "に着くように逆に数えます。期限の月に入ってからの受診だと、間に合わないことがあります。", false);
+    }
+
+    box("出す先", "返信用封筒・年金事務所など", "同封の返信用封筒で日本年金機構に郵送するか、年金事務所・街角の年金相談センターに出します。障害基礎年金だけを受けている人は、市区町村役場の窓口でも出せます。", false);
+    box("審査のあと", "変わらない・重い・軽い", "前の認定と同じなら、そのまま続きます。重くなって上の等級になるときは、提出期限の翌月分（" + fm(next1) + "分）から増えます。軽くなって下の等級になるときは、提出期限の4か月後（" + fm(after4) + "）の年金額から減るか、止まります。", false);
+
+    var memo = "障害年金の\n障害状態確認届（診断書）を\nお願いしたいです。\n";
+    memo += "提出期限が" + f(due) + "で、\n";
+    memo += f(from) + "から\n" + f(due) + "までの間の\n状態で書いていただく\n必要があります。\n";
+    memo += "郵送の日数があるので、\nできあがりの日数も\n教えてください。";
+    $("memo").textContent = memo;
+
+    ng.push("・現症日が、" + f(from) + "〜" + f(due) + "の間か" + (late ? "（期限後は年金事務所で確かめる）" : ""));
+    ng.push("・医師の欄（医療機関名・氏名・作成日）が入っているか");
+    ng.push("・自分で書く欄（氏名・住所など）に書きもれがないか");
+    ng.push("・日常生活や仕事の様子が、いまの状態と合っているか");
+    ng.push("・出す前にコピーを取っておく");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { ys.value = 2027; ms.value = 2; $("jokyo").value = "mada"; $("today").value = "2026-11-24"; make(); }
+  window.__make = make;
+})();
+</script>
+</body>
+</html>
