@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>児童手当の月額・第3子の数え方・いつまでの判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  .row2 { display: flex; gap: 8px; } .row2 > * { flex: 1; min-width: 0; }
+  .kid { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 12px; }
+  .kid:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+  .kid .t { font-weight: 700; font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #chg li, .mihon #todo li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh, .mihon .kid.empty, .mihon #evcard, .mihon .kid .sp { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>児童手当の月額・第3子の数え方・いつまでの判定</h1>
+  <p class="lead">子どもの生年月日（大学生年代の上の子も）を入れると、選んだ月の1人ずつの月額、何番目の子として数えるか、次の支給月と振り込まれる額の目安、これから月額が変わる時期、いつまで受け取れるかを並べます。出生・転入などの日を入れると、申請の期限と、何月分から受け取れるかも出ます。こども家庭庁の案内（2024年10月分からの制度）に当てはめた目安です。最終の判断は市区町村（公務員は勤務先）で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いつの月で見るか</h2>
+    <label class="f">見たい月<span class="hint">この月の月額と、次の支給月を出します</span></label>
+    <div class="row2">
+      <select id="by"></select>
+      <select id="bm"></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 子どもの生年月日</h2>
+    <p class="hint mh" style="margin-top:0">上の子から順でなくてもかまいません。22歳の年度末（3月31日）までの子を、全員入れてください。手当の対象ではない大学生年代の子も、第3子の数え方に関わります。</p>
+    <div id="kids"></div>
+  </div>
+
+  <div class="card" id="evcard">
+    <h2>3. 申請の期限を見る（使う人だけ）</h2>
+    <label class="f" for="ev">申請のきっかけ<span class="hint">すでに受け取っていて、何も変わっていなければ「なし」</span></label>
+    <select id="ev">
+      <option value="none">なし（期限は見ない）</option>
+      <option value="birth">子どもが生まれた（初めての子・2人目以降も）</option>
+      <option value="move">ほかの市区町村へ引っ越した</option>
+      <option value="koumuin_out">公務員をやめた（退職など）</option>
+      <option value="koumuin_in">公務員になった</option>
+    </select>
+    <label class="f" for="evd">その日<span class="hint">生まれた日・転出予定日（引っ越した日）・公務員でなくなった日・公務員になった日</span></label>
+    <input type="date" id="evd">
+    <label class="f" for="apd">申請した（する）日<span class="hint">まだ決めていなければ空のまま</span></label>
+    <input type="date" id="apd">
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>これから月額が変わる時期</h3>
+    <ol class="tl" id="chg"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※こども家庭庁「児童手当制度のご案内」（0歳から18歳に達する日以後の最初の3月31日までの子。月額は3歳未満15,000円・3歳以上高校生年代まで10,000円、第3子以降は30,000円。第3子は、児童と、22歳に達する日以後の最初の3月31日までの兄姉等で親等が経済的負担をしている子のうち、年齢が上の子から数えて3人目以降。支給は2・4・6・8・10・12月に前月分までの2か月分。出生・転入は翌日から15日以内に申請。原則、申請した月の翌月分から。遅れると原則、遅れた月分は受けられない）、「児童手当Q&A」、「もっと子育て応援！児童手当」をもとにした目安です。3歳になる月の前後の切り替わり・支給日・受け取る人の判断は、市区町村の通知で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var N = 6;
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+
+  // 年月の選択肢
+  var now = new Date();
+  for (var y = 2024; y <= 2045; y++) { var o = document.createElement("option"); o.value = y; o.textContent = y + "年"; $("by").appendChild(o); }
+  for (var m = 1; m <= 12; m++) { var o2 = document.createElement("option"); o2.value = m; o2.textContent = m + "月"; $("bm").appendChild(o2); }
+  $("by").value = Math.min(2045, Math.max(2024, now.getFullYear())); $("bm").value = now.getMonth() + 1;
+
+  // 子どもの欄
+  var names = ["1人目", "2人目", "3人目", "4人目", "5人目", "6人目"];
+  for (var i = 0; i < N; i++) {
+    var d = document.createElement("div"); d.className = "kid";
+    d.innerHTML = '<div class="t">' + names[i] + '</div>' +
+      '<label class="f" for="b' + i + '">生年月日<span class="hint">いない欄は空のまま</span></label>' +
+      '<input type="date" id="b' + i + '">' +
+      '<label class="f" for="s' + i + '">高校卒業の年代を過ぎた子のとき：親が生活費などを負担しているか<span class="hint">18歳の年度末を過ぎて、22歳の年度末までの子だけに使います（大学生・専門学校生・働いていない子など）。それ以外の子は、どちらでもかまいません</span></label>' +
+      '<select id="s' + i + '"><option value="yes">負担している</option><option value="no">負担していない（自分で生計を立てている）</option></select>';
+    $("kids").appendChild(d);
+  }
+
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); }
+  function ym(d) { return d.getFullYear() * 12 + d.getMonth(); }        // 月の通し番号
+  function ymText(k) { return Math.floor(k / 12) + "年" + (k % 12 + 1) + "月"; }
+  function dText(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function reach(b, n) { var d = new Date(b.getFullYear() + n, b.getMonth(), b.getDate()); d.setDate(d.getDate() - 1); return d; } // n歳に達する日（誕生日の前日）
+  function fyEnd(d) { var y = d.getMonth() <= 2 ? d.getFullYear() : d.getFullYear() + 1; return new Date(y, 2, 31); }   // その日以後の最初の3月31日
+
+  function kidInfo(b, sup) {
+    var e18 = fyEnd(reach(b, 18)), e22 = fyEnd(reach(b, 22)), r3 = reach(b, 3);
+    return { b: b, sup: sup, e18: e18, e22: e22, r3: r3, kb: ym(b), k18: ym(e18), k22: ym(e22), k3: ym(r3) };
+  }
+  // 月 k のときの状態
+  function stat(c, k) {
+    if (k <= c.kb) return "before";                 // 生まれた月まで（翌月分から）
+    if (k <= c.k18) return "jidou";                 // 手当の対象
+    if (k <= c.k22) return c.sup ? "ani" : "out";   // 兄姉等として数える
+    return "out";
+  }
+  function calc(kids, k) {
+    var order = kids.slice().sort(function (a, b) { return a.b - b.b; });
+    var cnt = 0, res = [];
+    order.forEach(function (c) {
+      var s = stat(c, k), no = 0, amt = 0;
+      if (s === "jidou" || s === "ani") { cnt++; no = cnt; }
+      if (s === "jidou") amt = no >= 3 ? 30000 : (k <= c.k3 ? 15000 : 10000);
+      res.push({ c: c, s: s, no: no, amt: amt });
+    });
+    var total = res.reduce(function (a, r) { return a + r.amt; }, 0);
+    return { res: res, total: total };
+  }
+
+  function make() {
+    ["sum", "chg", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var K = Number($("by").value) * 12 + Number($("bm").value) - 1;
+    var kids = [], bad = false, future = false;
+    for (var i = 0; i < N; i++) {
+      var b = parse($("b" + i).value);
+      if (!b) continue;
+      if (isNaN(b.getTime())) { bad = true; continue; }
+      if (ym(b) > K) future = true;
+      kids.push(kidInfo(b, $("s" + i).value === "yes"));
+    }
+    if (bad) {
+      box("入力をなおしてください", "生年月日が読み取れません", "生年月日を入れ直してください。", true);
+      $("ng").textContent = "・いない子の欄は空のままでかまいません";
+      $("result").hidden = false; return true;
+    }
+    if (!kids.length) {
+      box("入力が足りません", "子どもの生年月日を入れてください", "少なくとも1人の生年月日を入れると判定できます。", true);
+      $("ng").textContent = "・大学生年代の上の子も、22歳の年度末（3月31日）までなら入れてください";
+      $("result").hidden = false; return true;
+    }
+    kids.sort(function (a, b) { return a.b - b.b; });
+    var now = calc(kids, K);
+
+    // 1人ずつ
+    var lines = [];
+    now.res.forEach(function (r, idx) {
+      var c = r.c, t = "生まれ " + dText(c.b) + "：";
+      if (r.s === "before") t += "見たい月にはまだ数えません（生まれた月の翌月分から）";
+      else if (r.s === "jidou") t += "第" + r.no + "子として数える → 月額 " + yen(r.amt) + (r.no >= 3 ? "（第3子以降）" : (r.amt === 15000 ? "（3歳未満）" : "（3歳以上）")) + "\n　" + dText(c.e18) + "（" + ymText(c.k18) + "分）まで";
+      else if (r.s === "ani") t += "手当の対象ではないが、第" + r.no + "子として数える（親が生活費などを負担）\n　数えるのは " + dText(c.e22) + " まで";
+      else if (ym(c.b) <= K && K <= c.k22) t += "手当の対象でなく、数えもしない（親が負担していない）";
+      else t += "22歳の年度末を過ぎたので、数えない";
+      lines.push(t);
+    });
+    box(ymText(K) + "の1人ずつ", now.total > 0 ? "対象の子がいます" : "この月は手当の対象の子がいません", lines.join("\n"), now.total === 0);
+
+    box(ymText(K) + "分の月額の合計", yen(now.total), now.total > 0 ? "第3子以降は年齢にかかわらず月30,000円です。第3子は、手当の対象の子と、22歳の年度末までの上の子（親が生活費などを負担）を、上から数えた3人目以降です。" : "対象になる子がいない月です。", now.total === 0);
+
+    // 次の支給
+    var mo = K % 12 + 1;                  // 1〜12
+    var P = mo % 2 === 1 ? K + 1 : K + 2; // 見たい月の分が入る支給月
+    var a1 = calc(kids, P - 2).total, a2 = calc(kids, P - 1).total;
+    box("見たい月の分が振り込まれる月", ymText(P) + "（" + ymText(P - 2).replace(/^\d+年/, "") + "・" + ymText(P - 1).replace(/^\d+年/, "") + "分）",
+      "支給は2・4・6・8・10・12月の年6回で、前月分までの2か月分がまとめて入ります。\nこの支給の目安：" + yen(a1) + " ＋ " + yen(a2) + " ＝ " + yen(a1 + a2) + "\n支給日は市区町村（公務員は勤務先）で決まります。", a1 + a2 === 0);
+
+    // 3歳の切り替わりが近い子
+    var near3 = kids.filter(function (c) { return Math.abs(c.k3 - K) <= 1 && stat(c, K) === "jidou"; });
+    if (near3.length) ng.push("・3歳になる月の前後です。15,000円から10,000円に変わる月は、市区町村の通知で確かめる（このページは、3歳に達する日（誕生日の前日）の月までを15,000円で数えています）");
+
+    // これからの変わり目
+    var prev = now.total, prevNos = now.res.map(function (r) { return r.no; }).join(","), n = 0;
+    for (var k = K + 1; k <= K + 12 * 23 && n < 12; k++) {
+      var cur = calc(kids, k);
+      if (cur.total !== prev) {
+        var why = [];
+        cur.res.forEach(function (r, j) {
+          var p = calc(kids, k - 1).res[j];
+          var who = "生まれ " + r.c.b.getFullYear() + "年" + (r.c.b.getMonth() + 1) + "月の子";
+          if (p.s === "before" && r.s === "jidou") why.push(who + "が数えられ始める");
+          else if (p.s === "jidou" && r.s !== "jidou") why.push(who + "が高校生年代の年度末を過ぎる");
+          else if (p.s === "ani" && r.s === "out") why.push(who + "が22歳の年度末を過ぎ、数えなくなる");
+          else if (p.amt === 15000 && r.amt === 10000) why.push(who + "が3歳になる");
+          else if (p.no !== r.no && r.s === "jidou") why.push(who + "が第" + r.no + "子になる");
+        });
+        li("chg", ymText(k) + "分から 月額 " + yen(cur.total) + "（" + (cur.total > prev ? "+" : "−") + yen(Math.abs(cur.total - prev)) + "）" + (why.length ? "：" + why.join("、") : ""));
+        prev = cur.total; n++;
+      }
+      if (cur.total === 0 && kids.every(function (c) { return k > c.k18; })) break;
+    }
+    if (!n) li("chg", "これから23年のあいだに、月額が変わる時期はありません（生まれる予定の子は入っていません）");
+    var lastKid = kids.reduce(function (a, c) { return c.k18 > a.k18 ? c : a; });
+    box("いつまで受け取れるか", ymText(lastKid.k18) + "分まで", "いちばん下の子が、18歳に達する日以後の最初の3月31日（" + dText(lastKid.e18) + "）を迎える月の分までです。最後の分は、その次の支給月（" + ymText((lastKid.k18 % 12 + 1) % 2 === 1 ? lastKid.k18 + 1 : lastKid.k18 + 2) + "ごろ）に入ります。", false);
+
+    // 申請の期限
+    var ev = $("ev").value, evd = parse($("evd").value), apd = parse($("apd").value);
+    if (ev !== "none") {
+      if (!evd) box("申請の期限", "その日を入れてください", "生まれた日・転出予定日・公務員でなくなった日などを入れると、期限が出ます。", true);
+      else {
+        var lim = new Date(evd.getFullYear(), evd.getMonth(), evd.getDate() + 15);
+        var where = ev === "birth" ? "お住まいの市区町村（公務員は勤務先）。里帰り出産でも、住民票のある市区町村" :
+          ev === "move" ? "引っ越し先の市区町村（公務員は勤務先）" :
+          ev === "koumuin_out" ? "お住まいの市区町村" : "お住まいの市区町村と、勤務先";
+        var start = ym(evd) + 1, s;
+        s = "その日の翌日から15日以内です。出す先：" + where + "。";
+        if (ev === "koumuin_in") s += "\n公務員は、勤務先から支給されます。";
+        if (apd) {
+          if (apd < evd) s += "\n申請日が、その日より前になっています。日付を見直してください。";
+          else if (apd <= lim) s += "\n" + dText(apd) + " の申請なら15日以内なので、" + ymText(start) + "分から受け取れます。";
+          else { var st2 = ym(apd) + 1; s += "\n" + dText(apd) + " の申請は15日を過ぎているので、原則、申請した月の翌月の" + ymText(st2) + "分からです。" + (st2 > start ? (st2 - start === 1 ? ymText(start) + "分" : ymText(start) + "〜" + ymText(st2 - 1) + "分の" + (st2 - start) + "か月分") + "は、原則受け取れません（上の月額・振り込みの目安は、その月も入れて計算しています）。" : ""); }
+        } else s += "\n期限までに申請すれば、" + ymText(start) + "分から受け取れます。遅れると、原則、申請した月の翌月分からになり、遅れた月の分は受け取れません。";
+        box("申請の期限", dText(lim) + " まで", s, !!(apd && apd > lim));
+      }
+    }
+
+    // 次にやること
+    if (ev === "birth") li("todo", "出生届とは別に、児童手当の申請（すでに受け取っていて子が増えたときは額を変える請求）を、生まれた日の翌日から15日以内に出す");
+    if (ev === "move") li("todo", "引っ越し先の市区町村で、転出予定日の翌日から15日以内に申請する（前の市区町村の分は、引っ越した月の分まで）");
+    if (ev === "koumuin_out") li("todo", "公務員でなくなった日の翌日から15日以内に、お住まいの市区町村で申請する（勤務先からの支給は止まる）");
+    if (ev === "koumuin_in") li("todo", "公務員になった日の翌日から15日以内に、市区町村へ届け出て、勤務先で申請する");
+    if (now.res.some(function (r) { return r.s === "ani"; })) li("todo", "高校卒業の年代を過ぎた上の子を数えるときは、「監護相当・生計費の負担についての確認書」が要る。市区町村で、出しているか確かめる");
+    var chgNo = []; for (var k2 = K + 1; k2 <= K + 12 * 23; k2++) { var c2 = calc(kids, k2); var other = c2.res.some(function (r) { return r.s === "jidou"; }); c2.res.forEach(function (r, j) { if (other && r.s === "ani" && calc(kids, k2 - 1).res[j].s === "jidou") chgNo.push(k2); }); }
+    if (chgNo.length) li("todo", ymText(chgNo[0]) + "から、高校卒業の年代を過ぎる子が出ます。その子を上の子として数え続けるには、確認書が要ることがある。春が近づいたら市区町村の案内を見る（このページは、選んだ「負担しているか」がそのまま続くとして数えています）");
+    li("todo", "受け取り口座は、手当を受け取る人の名義の口座だけ（子ども名義は使えない）");
+    li("todo", "住所・氏名・口座が変わったとき、対象の子がいなくなったときは、市区町村に届け出る");
+
+    ng.push("・申請は、翌日から15日以内。遅れると、原則、遅れた月の分は受け取れない");
+    ng.push("・里帰り出産でも、申請は住民票のある市区町村");
+    ng.push("・公務員は、市区町村ではなく勤務先から支給される");
+    ng.push("・第3子の数えに入る上の子は、22歳の年度末まで。親が生活費などを負担していることが条件で、確認書が要ることがある");
+    ng.push("・離婚協議中などで別居しているときは、子と同居している人に優先して支給される");
+    ng.push("・海外に住んでいる子は、原則として対象外（留学で条件を満たす場合を除く）");
+    ng.push("・現況届は原則いらないが、別居・離婚協議中の人などは出す。市区町村から案内が来たら出す");
+    if (future) ng.push("・見たい月より後に生まれた子がいます。その子は、生まれた月の翌月分から数えています");
+    ng.push("・支給日・受け取る人の判断・月額が切り替わる月は、市区町村（公務員は勤務先）の通知で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("by").value = "2026"; $("bm").value = "11";
+    $("b0").value = "2006-06-15"; $("s0").value = "yes";
+    $("b1").value = "2011-09-03";
+    $("b2").value = "2024-08-20";
+    $("ev").value = "none";
+    for (var q = 0; q < N; q++) { var kd = $("b" + q).closest(".kid"); if (!$("b" + q).value) kd.className += " empty"; else if (q > 0) kd.querySelectorAll("label.f")[1].className += " sp", $("s" + q).className = "sp"; }
+    make();
+  }
+})();
+</script>
+</body>
+</html>
