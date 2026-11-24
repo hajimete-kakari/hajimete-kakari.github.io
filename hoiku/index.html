@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>求職活動関係役務利用費、子どもの預け先の費用の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #before li, .mihon #bring li, .mihon #todo li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>求職活動関係役務利用費、子どもの預け先の費用の目安</h1>
+  <p class="lead">失業保険を受けている人が、面接や訓練のあいだ子どもを保育所や一時預かりに預けたとき、払った費用の8割（1日6,400円まで）が出る「求職活動関係役務利用費」について、対象になりそうか、出る額の目安、申請に出すもの、出す日を出します。対象かどうかと額を決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 何のために預けた？</h2>
+    <label class="f" for="why">子どもを預けたあいだ、何をした？<span class="hint">面接のほか、筆記試験、職業相談、個別相談のできる企業説明会など、求職活動の実績になる活動も「面接等」に入ります</span></label>
+    <select id="why">
+      <option value="mensetsu">会社の面接・筆記試験・職業相談など（面接等）</option>
+      <option value="kunren">職業訓練や、教育訓練給付・短期訓練受講費の対象の講座を受けた</option>
+      <option value="other">そのほか（買い物・通院・自分の勉強など）</option>
+    </select>
+    <label class="f" for="tk">預けたのは、待期の7日が終わった後？<span class="hint">待期は、ハローワークで申し込んでから最初の7日間です</span></label>
+    <select id="tk">
+      <option value="after">待期が終わった後</option>
+      <option value="during">待期の7日のあいだ</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="rk">預けた日に、失業保険を受けられる期間の中だった？</label>
+    <select id="rk">
+      <option value="yes">期間の中（受給資格者証などがある）</option>
+      <option value="no">期間の外・失業保険の手続きをしていない</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 預け先</h2>
+    <label class="f" for="svc">どこに預けた？</label>
+    <select id="svc">
+      <option value="nin">認可保育所・認定こども園・認可幼稚園の保育</option>
+      <option value="ichiji">一時預かり（市区町村の事業など）</option>
+      <option value="sitter">ベビーシッター・認可外の保育施設</option>
+      <option value="kazoku">家族・知人</option>
+    </select>
+    <label class="f" for="pay">料金の払い方</label>
+    <select id="pay">
+      <option value="day">1日ごと（その日の料金）</option>
+      <option value="month">月ぎめ（月額）</option>
+    </select>
+    <label class="f" for="fee"><span id="feeName">1日あたりの料金（円）</span><span class="hint">預け先に払った利用料（消費税込み）。市区町村などから補助を受けた分は引きます</span></label>
+    <input type="number" id="fee" min="0" max="9999999" step="1" inputmode="numeric" placeholder="例：3000">
+    <div id="mBox" hidden>
+      <label class="f" for="cal">その月の日数<span class="hint">月額 ÷ その月の暦日数 で1日あたりを出します</span></label>
+      <select id="cal"><option>31</option><option>30</option><option>29</option><option>28</option></select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 日数と出す日</h2>
+    <label class="f" for="days">今回、面接等や訓練をした日のうち、預けた日数</label>
+    <input type="number" id="days" min="0" max="366" step="1" inputmode="numeric" placeholder="例：2">
+    <label class="f" for="used">これまでにこの費用を受けた日数（同じ種類の分）<span class="hint">面接等は15日、訓練は60日までです。はじめてなら0</span></label>
+    <input type="number" id="used" min="0" max="366" step="1" inputmode="numeric" placeholder="例：0">
+    <label class="f" for="nd">預けた日が入る失業の認定日<span class="hint">受給資格者証などに書かれた、次の認定日</span></label>
+    <input type="date" id="nd">
+  </div>
+  <button id="make" type="button">対象かと額を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>預け先・会社・訓練先に頼むもの</h3>
+    <ol class="tl" id="before"></ol>
+    <h3>申請で出すもの</h3>
+    <ul class="tl" id="bring"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークに聞くときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法施行規則 第100条の6〜第100条の8と、ハローワークインターネットサービス「就職促進給付」の求職活動関係役務利用費の説明をもとにした目安です。額は、1日あたりの費用（8,000円まで）の8割として出しています（1円未満の扱いなど、実際の額はハローワークが決めます）。月ぎめの料金は「月額 ÷ その月の暦日数 × 面接等や訓練をした日数」で出しています。申請書は、預けた日が入る失業の認定日に、住んでいる所のハローワークへ出します（高年齢・特例・日雇の受給資格者や、職業訓練で証明認定を受ける人は出す時期がちがいます）。どの預け先が対象になるかは、ハローワークに確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { var a = s.split("-"); return new Date(Number(a[0]), Number(a[1]) - 1, Number(a[2])); }
+  function fd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function yen(n) { return n.toLocaleString("ja-JP") + "円"; }
+  function sync() {
+    var m = $("pay").value === "month";
+    $("mBox").hidden = !m;
+    $("feeName").textContent = m ? "月額の料金（円）" : "1日あたりの料金（円）";
+  }
+  $("pay").addEventListener("change", sync);
+  function make() {
+    ["sum", "before", "bring", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var why = $("why").value, tk = $("tk").value, rk = $("rk").value, svc = $("svc").value, pay = $("pay").value,
+        feeS = $("fee").value, daysS = $("days").value, usedS = $("used").value || "0", nd = $("nd").value;
+    if (feeS === "" || isNaN(Number(feeS)) || Number(feeS) < 0) { alert("料金を、数字（円）で入れてください"); return false; }
+    if (daysS === "" || isNaN(Number(daysS)) || Number(daysS) < 0) { alert("預けた日数を、数字で入れてください"); return false; }
+    if (isNaN(Number(usedS)) || Number(usedS) < 0) { alert("これまでに受けた日数を、数字で入れてください（はじめてなら0）"); return false; }
+    var fee = Math.floor(Number(feeS)), days = Math.floor(Number(daysS)), used = Math.floor(Number(usedS));
+    var kun = why === "kunren", cap = kun ? 60 : 15, kind = kun ? "訓練" : "面接等";
+    var no = [], ask = [];
+    if (why === "other") no.push("対象は、会社との面接等か、決められた訓練・講座を受けるために預けた日です。そのほかの用事で預けた日はあたりません。");
+    if (tk === "during") no.push("待期の7日のあいだに預けた分は、対象になりません（待期が過ぎた後の分だけです）。");
+    if (rk === "no") no.push("預けた日に、失業保険を受けられる人（受給資格者など）であることが条件です。");
+    if (svc === "kazoku") no.push("対象は保育所・一時預かりなどの保育等サービスです。家族や知人に預けた分は、お礼を払っても、あたらない見込みです。");
+    if (days === 0) no.push("面接等や訓練をした日に預けた日がないと、出る額はありません。");
+    if (fee === 0) no.push("料金がかからなかった（補助で全部まかなえた）ときは、出る額はありません。");
+    if (used >= cap) no.push(kind + "の分は" + cap + "日までです。これまでに" + cap + "日分を受けていると、この種類ではもう出ません。");
+    if (tk === "unk") ask.push("預けた日が待期の後かどうかを、受給資格者証の日付やハローワークで確かめてください。");
+    if (rk === "unk") ask.push("預けた日が、失業保険を受けられる期間の中かを確かめてください。");
+    if (svc === "sitter") ask.push("ベビーシッターや認可外の施設が対象になるかは、事業の種類で分かれます。預ける前に、ハローワークで確かめてください。");
+    if (no.length) box("対象になりそう？", "このままでは、対象にならない見込みです", no.join(""), true);
+    else if (ask.length) box("対象になりそう？", "確かめることが残っていますが、対象になる可能性があります", ask.join(""), false);
+    else box("対象になりそう？", "条件にあてはまる見込みです", kind + "をした日に預けた分として、申請すれば対象になる見込みです。", false);
+    if (no.length && ask.length) box("ほかに確かめること", "あわせて確かめてください", ask.join(""), false);
+
+    var perDay = pay === "month" ? fee / Number($("cal").value) : fee;
+    var perDayCap = Math.min(perDay, 8000);
+    var left = Math.max(cap - used, 0), cnt = Math.min(days, left);
+    var amt = Math.floor(perDayCap * 0.8 * cnt);
+    var s = (pay === "month" ? "月額 " + yen(fee) + " ÷ " + $("cal").value + "日 = 1日あたり約" + yen(Math.floor(perDay)) + "。" : "1日あたり " + yen(fee) + "。") +
+      (perDay > 8000 ? "1日8,000円を超える分は数えないので、8,000円の8割（6,400円）です。" : "その8割が1日あたり約" + yen(Math.floor(perDayCap * 0.8)) + "です。") +
+      (days > left ? kind + "の残りは" + left + "日なので、" + days + "日のうち" + cnt + "日分で出しています。" : cnt + "日分です。") +
+      (no.length ? "（条件にあてはまったときの額です）" : "");
+    if (cnt > 0 && fee > 0) box("出る額の目安", "約" + yen(amt), s, false);
+    box(kind + "の残りの日数", (left - cnt) + "日", kind + "の分は合わせて" + cap + "日までです。" + (cnt > 0 ? "今回の" + cnt + "日を使うと、残りは" + (left - cnt) + "日です。" : "いまの残りは" + left + "日です。"), false);
+
+    if (nd) {
+      var d = pd(nd), now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var r = Math.round((d - now) / 86400000);
+      box("申請書を出す日", fd(d), "預けた日が入る失業の認定日に、認定と一緒に出します。" + (r >= 0 ? "今日からあと" + r + "日です。それまでに書類をそろえます。" : "この認定日は過ぎています。出せるかどうか、すぐにハローワークに相談してください。"), r < 0);
+    } else {
+      box("申請書を出す日", "預けた日が入る失業の認定日", "認定日は受給資格者証などで確かめます。その日に、認定と一緒に出します。", false);
+    }
+
+    if (why === "other" || svc === "kazoku") li("before", "対象になる預け方（保育所・一時預かりなどに、面接等や訓練の日に預ける）のときに、次のものを頼みます");
+    li("before", "預け先に、領収書と「保育等サービス利用証明書」を書いてもらう（用紙はハローワークのページや窓口で）");
+    if (kun) li("before", "訓練先に「訓練等受講証明書（求職活動関係役務利用費）」を書いてもらう");
+    else li("before", "面接した会社などに「面接等求職活動証明書（求職活動関係役務利用費）」を書いてもらう");
+    li("before", "あとで料金の値引きなどで一部が戻ったときは、預け先に「返還金明細書」を出してもらう");
+
+    li("bring", "求職活動支援費（求職活動関係役務利用費）支給申請書");
+    li("bring", "受給資格者証（受給資格通知の人は、マイナンバーカード）");
+    li("bring", "預け先の領収書と、保育等サービス利用証明書");
+    li("bring", kun ? "訓練等受講証明書" : "面接等求職活動証明書");
+    li("bring", "子どもの名前と続柄がわかる住民票記載事項証明書など");
+    li("bring", "市区町村などから補助を受けたときは、その額がわかる書類");
+
+    if (no.length) {
+      li("todo", "あてはまらない条件を、預ける前・申請する前にハローワークで確かめる");
+      li("todo", "対象にならない分は、自分の負担として予定を立てる");
+    } else {
+      li("todo", "預けた日ごとに、領収書と証明書をそろえる");
+      li("todo", (nd ? fd(pd(nd)) + "の認定日に、" : "預けた日が入る認定日に、") + "申請書と書類を出す");
+      li("todo", "受けた日数を書き残しておく（" + kind + "は" + cap + "日まで）");
+    }
+    $("memo").textContent = (kun ? "訓練を受けるあいだ、\n" : "面接に行くあいだ、\n") + "子どもを" + (svc === "nin" ? "保育所" : svc === "ichiji" ? "一時預かり" : svc === "sitter" ? "シッター" : "家族") + "に\n預けました。\n求職活動関係役務利用費の\n対象になるか、\n出す書類を教えてください。";
+    $("ng").textContent = "・待期の7日のあいだの分は出ない\n・1日8,000円を超える分は数えない\n・面接等は15日、訓練は60日まで\n・申請は、その日が入る認定日に出す\n・補助を受けた分は、その額の書類も\n・対象かどうかと額は、ハローワークが決める";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("why").value = "mensetsu"; $("tk").value = "after"; $("rk").value = "yes"; $("svc").value = "ichiji"; $("pay").value = "day"; sync(); $("fee").value = "3000"; $("days").value = "2"; $("used").value = "0"; $("nd").value = "2026-12-08"; make(); }
+})();
+</script>
+</body>
+</html>
