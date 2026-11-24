@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>副業の確定申告と住民税の申告、要るかの判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: .95rem; }
+  label.c input { margin-top: 6px; width: 18px; height: 18px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #docs li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .mh { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>副業の確定申告と住民税の申告、要るかの判定</h1>
+  <p class="lead">本業の給料のこと、副業の形（アルバイトの給料か、それ以外か）、副業の収入と経費を入れると、副業の所得、所得税の確定申告が要るか、住民税の申告が要るか、出す時期、集めるもの、次にやることを並べます。国税庁と市の案内に書かれている決まりに当てはめた目安で、税額は計算しません。迷うときは税務署・市区町村の税の窓口で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いつの分か・本業の給料</h2>
+    <label class="f" for="nen">どの年の副業の分か</label>
+    <select id="nen">
+      <option value="2026">2026年（令和8年）1月〜12月の分</option>
+      <option value="2025">2025年（令和7年）1月〜12月の分</option>
+    </select>
+    <label class="f" for="hongyo">本業の給料は<span class="hint">いちばん長く勤めている会社の給料</span></label>
+    <select id="hongyo">
+      <option value="nencho">会社員などで、会社で年末調整をしてもらう（した）</option>
+      <option value="nashi_nencho">給料はあるが、年末調整を受けていない（年の途中で辞めたなど）</option>
+      <option value="none">給料はない（副業の収入だけ）</option>
+    </select>
+    <label class="c mh"><input type="checkbox" id="over2000"><span>本業の給料の年収（税金や保険料が引かれる前）が2,000万円を超える</span></label>
+  </div>
+
+  <div class="card">
+    <h2>2. 副業の形</h2>
+    <label class="c"><input type="checkbox" id="hasKyuyo"><span>別の会社でアルバイト・パートをして、給料（給与明細・源泉徴収票が出る）をもらった</span></label>
+    <label class="c"><input type="checkbox" id="hasZatsu"><span>給料以外の副業の収入がある（業務委託・原稿料・ネットでの販売・ハンドメイド・ベビーシッター・家庭教師など）</span></label>
+
+    <div id="boxKyuyo" hidden>
+      <h3>アルバイト・パートの給料</h3>
+      <label class="f" for="fukuKyuyo">副業先の給料の年収（円）<span class="hint">副業先の源泉徴収票の「支払金額」。年末調整は本業の会社でしてもらうので、ここは年末調整されていない給料です</span></label>
+      <input type="number" id="fukuKyuyo" min="0" max="50000000" step="1000" inputmode="numeric" placeholder="例：300000">
+      <label class="f mh" for="kyuyoGokei">本業と副業の給料の年収の合計（円）<span class="hint">次の欄とあわせて、150万円の決まりに当てはまるかを見ます。わからなければ空のまま</span></label>
+      <input type="number" id="kyuyoGokei" class="mh" min="0" max="100000000" step="1000" inputmode="numeric" placeholder="例：2800000">
+      <label class="f mh" for="kojo">所得控除の合計（円）<span class="hint">源泉徴収票の「社会保険料等の金額」「生命保険料の控除額」などの合計。基礎控除・医療費控除・寄附金控除（ふるさと納税）・雑損控除は入れません</span></label>
+      <input type="number" id="kojo" class="mh" min="0" max="50000000" step="1000" inputmode="numeric" placeholder="例：400000">
+    </div>
+
+    <div id="boxZatsu" hidden>
+      <h3>給料以外の副業</h3>
+      <label class="f" for="shurui">売ったもの・したことは</label>
+      <select id="shurui">
+        <option value="gyomu">仕事として続けている（業務委託・原稿料・作品の販売・仕入れて売るなど）</option>
+        <option value="seikatsu">自分の古着・家具・家電など、使っていたものをフリマで売っただけ</option>
+        <option value="mix">両方ある</option>
+      </select>
+      <label class="f" for="shunyu">仕事としての収入の年間合計（円）<span class="hint">1月〜12月に入った（入ることが決まった）額。使っていたものを売ったお金は入れません</span></label>
+      <input type="number" id="shunyu" min="0" max="100000000" step="1000" inputmode="numeric" placeholder="例：350000">
+      <label class="f" for="keihi">その仕事にかかった経費の合計（円）<span class="hint">材料・送料・手数料・道具など、その副業のために使ったお金</span></label>
+      <input type="number" id="keihi" min="0" max="100000000" step="1000" inputmode="numeric" placeholder="例：100000">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 税金が戻る申告をするか</h2>
+    <label class="c"><input type="checkbox" id="kanpu"><span>医療費控除・ふるさと納税（ワンストップ特例を使わない）・住宅ローン控除の1年目・年の途中で辞めて年末調整がなかったなど、税金を戻すための確定申告（還付申告）をするつもり</span></label>
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>集めておくもの</h3>
+    <ol class="tl" id="docs"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁タックスアンサー No.1900「給与所得者で確定申告が必要な人」とそのQ&A「確定申告を要しない場合の意義」（還付申告をするなら20万円以下の所得も合わせて申告する）、No.1906「給与所得者がネットオークション等により副収入を得た場合」（生活に使っていたものを売った所得は非課税）、No.1500「雑所得」（収入−必要経費）、No.2020「確定申告」（翌年2月16日〜3月15日）、No.2030「還付申告」（翌年1月1日から5年間）、国税通則法第10条第2項（期限が休日なら翌日）、横浜市「給与以外に副収入がある場合の住民税の申告は…」、神戸市「住民税（市県民税）の申告（個人）」をもとにした目安です。税額や、どの所得の区分に当たるかの最終の判断は、税務署・市区町村の窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function num(id) { var v = $(id).value; return v === "" ? 0 : Number(v); }
+  var WD = ["日", "月", "火", "水", "木", "金", "土"];
+  var HOL = { "2026-02-11": 1, "2026-02-23": 1, "2026-03-20": 1, "2027-02-11": 1, "2027-02-23": 1, "2027-03-21": 1, "2027-03-22": 1 };
+  function key(d) { var m = d.getMonth() + 1, dd = d.getDate(); return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (dd < 10 ? "0" : "") + dd; }
+  function nextOpen(d) { while (d.getDay() === 0 || d.getDay() === 6 || HOL[key(d)]) d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1); return d; }
+  function d2s(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD[d.getDay()] + "）"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+
+  function showBox() {
+    $("boxKyuyo").hidden = !$("hasKyuyo").checked;
+    $("boxZatsu").hidden = !$("hasZatsu").checked;
+  }
+  $("hasKyuyo").addEventListener("change", showBox);
+  $("hasZatsu").addEventListener("change", showBox);
+
+  function make() {
+    ["sum", "docs", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var y = Number($("nen").value), hongyo = $("hongyo").value, over = $("over2000").checked;
+    var hasK = $("hasKyuyo").checked, hasZ = $("hasZatsu").checked, kanpu = $("kanpu").checked;
+    var fk = hasK ? num("fukuKyuyo") : 0, shurui = $("shurui").value;
+    var shunyu = hasZ && shurui !== "seikatsu" ? num("shunyu") : 0, keihi = hasZ && shurui !== "seikatsu" ? num("keihi") : 0;
+    if (!hasK && !hasZ) {
+      box("入力が足りません", "副業の形を選んでください", "アルバイト・パートの給料か、給料以外の副業か（両方でも）にチェックを入れてください。", true);
+      $("ng").textContent = "・副業の収入がなければ、副業のための申告はありません";
+      $("result").hidden = false; return true;
+    }
+    if (hasK && fk <= 0) {
+      box("入力が足りません", "副業先の給料の年収を入れてください", "副業先の源泉徴収票の「支払金額」の額です。", true);
+      $("ng").textContent = "・源泉徴収票が手元にないときは、副業先に出してもらうよう頼みます";
+      $("result").hidden = false; return true;
+    }
+    if (hasZ && shurui !== "seikatsu" && $("shunyu").value === "") {
+      box("入力が足りません", "仕事としての収入を入れてください", "1月〜12月の収入の合計です。使っていたものを売っただけなら、上の選択で「フリマで売っただけ」を選んでください。", true);
+      $("ng").textContent = "・収入は、振込の記録や売上の画面で合計できます";
+      $("result").hidden = false; return true;
+    }
+
+    var zatsu = Math.max(0, shunyu - keihi);
+    var gai = zatsu; // 給料・退職金以外の所得
+    var hitsuyo, why, kind; // kind: yes / no / maybe
+
+    if (over) {
+      kind = "yes"; why = "給料の年収が2,000万円を超える人は、副業の額にかかわらず確定申告が要ります。";
+    } else if (hongyo === "none") {
+      kind = "maybe";
+      why = "給料がない人には、20万円の決まりは使えません。副業などの所得の合計が、基礎控除などの所得控除の合計より多いと、確定申告が要ります。";
+    } else if (hasK) {
+      var base = fk + gai;
+      if (base > 200000) {
+        var g = num("kyuyoGokei"), kj = num("kojo");
+        if ($("kyuyoGokei").value !== "" && g - kj <= 1500000 && gai <= 200000) {
+          kind = "no";
+          why = "副業先の給料と給料以外の所得の合計は " + yen(base) + " で20万円を超えますが、給料の年収の合計から所得控除を引いた額が " + yen(Math.max(0, g - kj)) + " で150万円以下、給料以外の所得も20万円以下なので、確定申告は要らない人に当たります。";
+        } else {
+          kind = "yes";
+          why = gai > 0 ? "副業先の給料（年末調整されていない給料） " + yen(fk) + " と給料以外の所得 " + yen(gai) + " の合計が " + yen(base) + " で、20万円を超えます。"
+            : "副業先の給料（年末調整されていない給料）が " + yen(fk) + " で、20万円を超えます。";
+          if ($("kyuyoGokei").value === "") why += "\n（給料の年収の合計と所得控除を入れると、150万円の決まりに当てはまるかも見ます）";
+        }
+      } else {
+        kind = "no";
+        why = gai > 0 ? "副業先の給料と給料以外の所得の合計が " + yen(base) + " で、20万円以下です。" : "副業先の給料が " + yen(base) + " で、20万円以下です。";
+      }
+    } else {
+      if (gai > 200000) { kind = "yes"; why = "給料以外の所得（収入−経費）が " + yen(gai) + " で、20万円を超えます。"; }
+      else { kind = "no"; why = "給料以外の所得（収入−経費）が " + yen(gai) + " で、20万円以下です。"; }
+    }
+    if (hongyo === "nashi_nencho" && kind !== "yes") {
+      kind = kanpu ? kind : "maybe";
+      why += "\n年末調整を受けていない給料は、確定申告をすると引かれすぎた税金が戻ることがあります（還付申告）。";
+    }
+
+    // 副業の所得
+    if (hasZ) {
+      if (shurui === "seikatsu") box("給料以外の副業の所得", "0円（税金がかからない売却）", "自分が使っていた古着・家具などを売った所得には、税金がかかりません。この分の申告は要りません。");
+      else box("給料以外の副業の所得（雑所得の目安）", yen(zatsu), "収入 " + yen(shunyu) + " − 経費 " + yen(keihi) + "\n20万円の境目は、収入ではなく、この「所得」で見ます。" + (shurui === "mix" ? "\n使っていたものを売った分は、ここに入れていません。" : ""));
+    }
+    if (hasK) box("副業先の給料", yen(fk), "年末調整されていない給料は、収入の額のまま20万円の境目に入ります。");
+
+    // 所得税
+    var shinkoku; // 確定申告を出すか
+    if (kind === "yes") {
+      box("所得税の確定申告", "要ります", why + (kanpu ? "\n税金を戻すための申告もいっしょに1枚で出します。" : ""), true);
+      shinkoku = true;
+    } else if (kind === "no" && kanpu) {
+      box("所得税の確定申告", "義務はないが、還付申告をするなら副業の分も書く", why + "\nただし、医療費控除などで確定申告をするときは、20万円以下の副業の所得も合わせて申告する必要があると、国税庁の案内に書かれています。");
+      shinkoku = true;
+    } else if (kind === "no") {
+      box("所得税の確定申告", "要らない人に当たります", why);
+      shinkoku = false;
+    } else {
+      box("所得税の確定申告", "要るかもしれません", why + "\n税務署か、国税庁の確定申告書等作成コーナーで、自分の数字で確かめます。", true);
+      shinkoku = null;
+    }
+
+    // 住民税
+    var juMin;
+    if (shinkoku === true) {
+      box("住民税の申告", "別に出さなくてよい", "所得税の確定申告をすると、住民税の申告もしたことになります。");
+      juMin = false;
+    } else {
+      var t = [];
+      if (gai > 200000) t.push("給料以外の副業の所得は、住民税の申告で市区町村に出します。");
+      else if (gai > 0) t.push("給料以外の副業の所得は、20万円以下でも住民税では申告が要ります（住民税には20万円の決まりがありません）。");
+      if (hasK) t.push("副業先の給料は、副業先が市区町村に「給与支払報告書」を出していれば、住民税の申告は要りません。出しているかは副業先に確かめます。");
+      if (!t.length) t.push("給料以外の所得が0円なので、この分の住民税の申告は要りません。");
+      if (shinkoku === null) t.unshift("所得税の確定申告をしないときは、次のとおりです。");
+      juMin = gai > 0;
+      box("住民税の申告", gai > 0 ? (shinkoku === null ? "確定申告をしないなら要ります" : "要ります（市区町村へ）") : (hasK ? "副業先に確かめる" : "要りません"), t.join("\n"), gai > 0);
+    }
+
+    // 時期
+    var s = nextOpen(new Date(y + 1, 1, 16)), e = nextOpen(new Date(y + 1, 2, 15));
+    var jiki = "確定申告：" + d2s(s) + "〜" + d2s(e) + "\n還付申告だけなら：" + (y + 1) + "年1月1日から5年間（" + (y + 5) + "年末まで）";
+    if (juMin && shinkoku !== true) jiki += "\n住民税の申告：期限はお住まいの市区町村で確かめる（例：神戸市は2月1日〜3月15日）";
+    var jv;
+    if (shinkoku === false && !juMin) { jv = "いま出すものはありません"; jiki = "医療費控除などで確定申告をすることになったら：\n" + jiki; }
+    else if (kind === "no" && kanpu) jv = "還付申告は " + (y + 1) + "年1月1日から出せます";
+    else if (shinkoku === false) jv = "住民税の申告を、市区町村の期限までに";
+    else jv = d2s(e) + " までが目安";
+    box(y + "年分を出す時期", jv, jiki);
+
+    // 集めるもの
+    if (hongyo !== "none") li("docs", "本業の源泉徴収票（" + (y + 1) + "年1月ごろまでにもらう。年の途中で辞めた人は前の会社から）");
+    if (hasK) li("docs", "副業先の源泉徴収票");
+    if (hasZ && shurui !== "seikatsu") {
+      li("docs", "副業の収入がわかるもの（支払調書・振込の記録・売上の画面の控え）");
+      li("docs", "経費の領収書・レシート・手数料の明細");
+    }
+    if (kanpu) li("docs", "戻す申告に使うもの（医療費の明細・ふるさと納税の受領証明書・住宅ローンの書類など）");
+    li("docs", "マイナンバーカード（スマホやパソコンで出すとき）");
+
+    // 次にやること
+    if (hasZ && shurui !== "seikatsu") li("todo", "1月〜12月の副業の収入と経費を、月ごとに合計しておく（売上の画面は年が明けると見えにくくなることがある）");
+    if (shinkoku === true) {
+      li("todo", "本業と副業の源泉徴収票がそろったら、国税庁の確定申告書等作成コーナーで入力する（給料・副業の所得・控除の順）");
+      li("todo", d2s(s) + "〜" + d2s(e) + " に出す。税金を戻すだけの申告は、" + (y + 1) + "年1月から出せる");
+      li("todo", "住民税の納め方（給料から引くか、自分で払うか）が気になる人は、出す前に市区町村の税の窓口で確かめる");
+    } else if (shinkoku === null) {
+      li("todo", "国税庁の確定申告書等作成コーナーで数字を入れて、納める税額が出るかを確かめる。迷ったら税務署に相談する");
+      li("todo", "確定申告をしないと決めたら、副業の所得を住民税の申告で市区町村に出す");
+    } else {
+      if (juMin) li("todo", "お住まいの市区町村に、副業の所得を書いた住民税の申告書を出す（期限と書き方は市区町村の窓口で確かめる。例：神戸市は" + (y + 1) + "年3月15日まで）");
+      if (hasK) li("todo", "副業先に、市区町村へ給与支払報告書を出しているかを聞く。出していなければ、住民税の申告をする");
+      if (!juMin && !hasK) li("todo", "出すものはありません。収入の記録は、念のため取っておく");
+      li("todo", "医療費控除やふるさと納税で確定申告をすることになったら、そのときは副業の所得も書く");
+    }
+
+    ng.push("・20万円は「収入」ではなく、収入から経費を引いた「所得」で見る（副業先の給料は収入の額で見る）");
+    ng.push("・20万円以下で確定申告が要らないのは所得税だけ。住民税には20万円の決まりがない");
+    ng.push("・医療費控除・ふるさと納税などで確定申告をするなら、20万円以下の副業の所得も書く");
+    if (kanpu) ng.push("・ふるさと納税のワンストップ特例を出していても、確定申告をすると特例は使えなくなる。寄付の分も申告書に書く");
+    if (hasZ && shurui !== "gyomu") ng.push("・使っていたものを売っても税金はかからないが、仕入れて売る・作って売るものは副業の収入になる");
+    if (hasZ && shurui !== "seikatsu") ng.push("・収入から引ける経費は、その副業のために使った分だけ。私用と分けて記録する");
+    ng.push("・確定申告をすれば税金が戻る人は、申告の義務はない（出せば戻る）");
+    ng.push("・どの所得の区分に当たるか（雑所得か事業所得かなど）や税額は、このページでは決めない。税務署で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("nen").value = "2026"; $("hongyo").value = "nencho";
+    $("hasZatsu").checked = true; showBox();
+    $("shurui").value = "gyomu"; $("shunyu").value = "350000"; $("keihi").value = "100000";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
