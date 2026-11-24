@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練中のアルバイトの書き方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  .row { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 14px; }
+  .row:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .row .n { font-weight: 700; font-size: .92rem; color: var(--accent); }
+  .row .g { display: flex; gap: 8px; }
+  .row .g > div { flex: 1; min-width: 0; }
+  .row label { display: block; font-size: .85rem; margin: 8px 0 4px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 8px; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #kes li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+  .mihon #rows .row:nth-of-type(3) { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練中のアルバイトの書き方</h1>
+  <p class="lead">失業保険（基本手当）を受けながら、ハローワークの受講指示で職業訓練に通う人向けです。働いた日と時間を入れると、受講証明書の自分で書く欄（6欄・7欄）にどちらを付けるか、失業認定申告書も要るか、日ごとの扱いの目安がわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 訓練の期間</h2>
+    <label class="f" for="ds">訓練が始まった日</label>
+    <input type="date" id="ds">
+    <label class="f" for="de">訓練が終わる日（修了の予定日）</label>
+    <input type="date" id="de">
+  </div>
+
+  <div class="card" id="rows">
+    <h2>2. 働いた日（3日まで）<span class="hint">収入がなかった手伝いやボランティアも入れます</span></h2>
+  </div>
+
+  <div class="card">
+    <h2>3. その仕事の契約</h2>
+    <label class="f" for="hk">週20時間以上で、31日以上続く見込みの仕事ですか<span class="hint">雇用保険に入る働き方かどうかの目安です</span></label>
+    <select id="hk">
+      <option value="no">いいえ（単発・短い時間）</option>
+      <option value="yes">はい</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">書き方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>日ごとの扱い</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>次にやること</h3>
+    <ul class="mo" id="kes"></ul>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※公共職業訓練等受講証明書（雇用保険法施行規則 様式第15号）の第2面の注意書きと、厚生労働省「Q&amp;A～労働者の皆様へ（基本手当、再就職手当）～」のQ24・Q36、大阪労働局「公共職業訓練等受講証明書等の記載方法について」をもとにした目安です。減る額の計算、就職かどうか、欠席の扱いの最後の判断は、ハローワークがします。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  var N = 3;
+  var html = "";
+  for (var i = 1; i <= N; i++) {
+    html += '<div class="row"><div class="n">' + i + '日目</div>' +
+      '<label for="w' + i + '">働いた日</label><input type="date" id="w' + i + '">' +
+      '<div class="g"><div><label for="h' + i + '">働いた時間</label><input type="number" id="h' + i + '" min="0" max="24" step="0.5" inputmode="decimal" placeholder="例：3"></div>' +
+      '<div><label for="m' + i + '">収入</label><select id="m' + i + '"><option value="1">あった</option><option value="0">なかった</option></select></div></div>' +
+      '<label for="k' + i + '">訓練との関係</label><select id="k' + i + '">' +
+      '<option value="off">訓練のない日（土日・休校日）</option>' +
+      '<option value="after">訓練の日で、訓練が終わってから</option>' +
+      '<option value="skip">訓練を休んで（遅れて・早く帰って）働いた</option></select></div>';
+  }
+  $("rows").insertAdjacentHTML("beforeend", html);
+
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("kes").appendChild(e); }
+
+  function make() {
+    $("result").hidden = true;
+    var ds = pd($("ds").value), de = pd($("de").value);
+    if (!ds || !de) { alert("訓練が始まった日と終わる日を入れてください"); return false; }
+    if (de < ds) { alert("訓練が終わる日が、始まった日より前になっています"); return false; }
+    var days = [];
+    for (var i = 1; i <= N; i++) {
+      var v = $("w" + i).value, hs = $("h" + i).value;
+      if (!v && !hs) continue;
+      var w = pd(v);
+      if (!w) { alert(i + "日目の働いた日を入れてください"); return false; }
+      var h = parseFloat(hs);
+      if (isNaN(h) || h <= 0 || h > 24) { alert(i + "日目の働いた時間を、0より大きく24までの数で入れてください"); return false; }
+      days.push({ w: w, h: h, m: $("m" + i).value === "1", k: $("k" + i).value });
+    }
+    if (!days.length) { alert("働いた日を1日以上入れてください"); return false; }
+    days.sort(function (a, b) { return a.w - b.w; });
+    var hk = $("hk").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("kes").innerHTML = "";
+
+    var c6 = false, c7 = false, skip = false, out = 0, shu = 0, nai = 0;
+    days.forEach(function (x) {
+      if (x.w < ds || x.w > de) {
+        out++;
+        step(md(x.w) + "：受講証明書の対象の外", "訓練の" + (x.w < ds ? "始まる前" : "終わったあと") + "の日",
+          "受講証明書の6欄・7欄の「期間」には、訓練の始まる前と修了したあとの日は入りません。この日は受講証明書ではなく、失業認定申告書で申告します。どの認定日に出すかは窓口で確かめます。");
+        return;
+      }
+      c6 = true;
+      var isShu = x.h >= 4 || hk === "yes";
+      var why = x.h >= 4 ? "1日4時間以上なので" : "4時間未満でも、雇用保険に入る働き方なので";
+      var t, d, s;
+      if (isShu) {
+        shu++;
+        t = md(x.w) + "：就職・就労（" + x.h + "時間）";
+        d = why + "「就職・就労」にあたります";
+        s = "収入がなくても就労です。その日は基本手当の対象にならない場合があります。" ;
+      } else {
+        nai++;
+        if (x.m) c7 = true;
+        t = md(x.w) + "：内職・手伝い（" + x.h + "時間）";
+        d = "4時間未満なので「内職・手伝い」にあたります";
+        s = x.m ? "収入があったので7欄も「イ 得た」。収入の額によって、その日の分が減る場合があります。" : "収入がなくても内職・手伝いとして6欄に書きます。7欄は「ロ 得ない」です。";
+      }
+      if (hk === "unk" && x.h < 4) s += "契約の中身によっては就職・就労になるので、窓口で確かめます。";
+      if (x.k === "skip") {
+        skip = true;
+        s += "訓練を休んだ分は欠席の数え方（その日の訓練の半分以上に出たか）でも見られます。";
+      }
+      step(t, d, s);
+    });
+
+    if (!c6) {
+      box("受講証明書の6欄・7欄", "6欄も7欄も「ロ」", "入れた日は、どれも訓練の期間の外です。受講証明書の6欄は「ロ しない」、7欄は「ロ 得ない」に○をします。期間の外の日は、失業認定申告書で申告します。", false);
+    } else {
+      box("6欄（就職・就労・内職・手伝いをしたか）", "イ した", "訓練の期間の中で、働いた日・手伝った日があるので「イ」に○をします。", false);
+      box("7欄（内職・手伝いで収入を得たか）", c7 ? "イ 得た" : "ロ 得ない",
+        c7 ? "4時間未満の内職・手伝いで収入があった日があるので「イ」に○をします。" : (shu && !nai ? "就職・就労の日だけで、内職・手伝いの日はないので「ロ」です。就労の収入は7欄には入りません。" : "内職・手伝いで収入を得た日はないので「ロ」です。"), false);
+      box("失業認定申告書", "いっしょに出す", "6欄か7欄で「イ」に○をしたら、その中身（日付・時間・収入）は失業認定申告書に書いて申告します。用紙はハローワークで受け取ります。", true);
+    }
+    if (hk === "yes") box("就職の手続き", "ハローワークに相談", "週20時間以上・31日以上の見込みの仕事は、雇用保険に入る働き方で「就職」にあたります。就職の手続きが要ります。訓練のことや、再就職手当の対象になるかも含めて、すぐに相談します。", true);
+
+    if (c6) {
+      li("施設から受け取った受講証明書の6欄・7欄に○をし、失業認定申告書に働いた日・時間・収入を書きます");
+      if (c7 || shu) li("収入があった日は、日付と金額（額面）がわかるメモや明細を残します。その日の分が出るか・いくら減るかは、ハローワークが決めます");
+    }
+    if (out) li("訓練の前・あとの日は、受講証明書には入れず、失業認定申告書で申告します。出す日は窓口で確かめます");
+    if (skip) li("仕事は、欠席のやむを得ない理由の表（病気・看護・葬儀・試験や面接・交通が止まったなど）に入っていません。休んだ日の記号は施設とハローワークに確かめます");
+    if (hk === "unk") li("契約書や求人票で、週の時間と期間を確かめてから、ハローワークに相談します");
+    li("迷ったら、受講証明書を出す前に管轄のハローワークの雇用保険の窓口で聞きます");
+
+    $("ng").textContent = "・働いた日を書かずに受け取ると不正受給になり、以後の支給が止まり、不正に受け取った額の3倍の額の納付を命じられることがある\n・収入がない手伝いやボランティアも、書く対象になる\n・土日など訓練のない日に働いた日も、訓練の期間の中なら書く\n・1日4時間以上なら就職・就労、4時間未満なら内職・手伝いが目安\n・最後の判断はハローワーク";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("ds").value = "2026-10-06"; $("de").value = "2027-03-29";
+    $("w1").value = "2026-11-07"; $("h1").value = "5"; $("m1").value = "1"; $("k1").value = "off";
+    $("w2").value = "2026-11-12"; $("h2").value = "2.5"; $("m2").value = "1"; $("k2").value = "after";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
