@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練が終わったあとの3か月｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #mochi li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練が終わったあとの3か月</h1>
+  <p class="lead">求職者支援制度の職業訓練（就職支援計画書をもらって受けている訓練）が終わる人向けです。訓練が終わる日と、修了後はじめての指定来所日を入れると、終わったあとの3か月に、いつ・どこへ・何を持って行くか、就職状況報告書をいつまでに出すかを順に並べます。窓口で聞くことと、伝える一言もわかります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付</h2>
+    <label class="f" for="d0">今日の日付</label>
+    <input type="date" id="d0">
+    <label class="f" for="de">訓練が終わる日（修了日）</label>
+    <input type="date" id="de">
+    <label class="f" for="dr">修了後はじめての指定来所日<span class="hint">ハローワークに行く日です。就職支援計画書などに書いてあります。わからなければ空のままでかまいません</span></label>
+    <input type="date" id="dr">
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="job">就職は</label>
+    <select id="job">
+      <option value="no">まだ決まっていない</option>
+      <option value="yes">決まった（これから働き始める・もう働いている）</option>
+    </select>
+    <label class="f" for="dj" id="djl">働き始める日（入社日）<span class="hint">「決まった」を選んだときだけ使います</span></label>
+    <input type="date" id="dj">
+    <label class="f" for="kf">職業訓練受講給付金（月10万円）<span class="hint">雇用保険の失業保険を受けながら訓練を受けている人は、このページの対象ではありません</span></label>
+    <select id="kf">
+      <option value="yes">受けている</option>
+      <option value="no">受けていない</option>
+    </select>
+  </div>
+  <button id="make" type="button">やることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>やることの順番</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口で聞くこと</h3>
+    <ul class="mo" id="mochi"></ul>
+    <h3>窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・都道府県労働局・ハローワーク「求職者支援制度・訓練受講のしおり」（支援期間のイメージ、訓練開始後の支援の流れ、訓練修了後、職業訓練受講給付金の不支給、Q3 就職が決まった時の手続き）をもとにした目安です。指定来所日は受講する訓練によって異なり、ハローワークが決めます。書類の出し方・期限は、訓練をする施設とハローワークの指示に従ってください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  function addM(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, day = d.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(day, last));
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("mochi").appendChild(e); }
+  function make() {
+    $("result").hidden = true;
+    var d0 = pd($("d0").value), de = pd($("de").value), dr = pd($("dr").value), dj = pd($("dj").value);
+    if (!d0 || !de) { alert("今日の日付と、訓練が終わる日を入れてください"); return false; }
+    var job = $("job").value === "yes", kf = $("kf").value === "yes";
+    if (job && !dj) { alert("就職が決まった場合は、働き始める日を入れてください"); return false; }
+    if (dr && dd(de, dr) <= 0) { alert("修了後はじめての指定来所日が、訓練が終わる日より前になっています。日付を見直してください"); return false; }
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("mochi").innerHTML = "";
+    var e3 = addM(de, 3);
+    var toEnd = dd(d0, de), toE3 = dd(d0, e3);
+    var rTxt = dr ? md(dr) : "修了後はじめての指定来所日";
+    var over = toE3 < 0;
+
+    // 1. あなたの場合
+    if (job) {
+      box("あなたの場合", "決まった時点で、就職状況報告書を出す",
+        "訓練中や修了後に就職する（した）人は、ハローワークと訓練をした施設の両方に、就職状況報告書を出します。修了後3か月がたつ前に決まったら、3か月を待たずに、その時点で出します。", false);
+    } else {
+      box("あなたの場合", "3か月は、月1回の指定来所日に行く",
+        "訓練が終わってから3か月（修了後3回目の指定来所日まで）は、求職者支援制度の支援が続きます。就職先が決まっていない人は、月に一度、指定来所日にハローワークへ行き、職業相談を受けます。3か月以内に、就職状況報告書も出します。", true);
+    }
+
+    // 2. 日付
+    var v2 = toEnd > 0 ? "訓練が終わるまで、あと" + toEnd + "日（" + md(de) + "）" : toEnd === 0 ? "今日が修了日" : "訓練が終わって" + (-toEnd) + "日";
+    box("日付", v2,
+      "修了日から3か月後は、およそ" + md(e3) + "です（支援が続くのは、正式には修了後3回目の指定来所日までです）。" +
+      (over ? "この日を過ぎています。就職状況報告書を出したか、施設とハローワークに確かめます。" : "") +
+      (dr ? "修了後はじめての指定来所日は" + md(dr) + (dd(d0, dr) >= 0 ? "で、あと" + dd(d0, dr) + "日です。" : "で、もう過ぎています。") : "修了後はじめての指定来所日がわからないときは、就職支援計画書で確かめるか、ハローワークに聞きます。"),
+      over);
+
+    // 3. 順番
+    var n = 1;
+    step(n++ + ". 修了日：施設から修了証などを受け取る", md(de),
+      "修了証の交付、受講者アンケート、就職状況報告書のことが、施設から案内されます。就職状況報告書の用紙は、出す先（施設・ハローワーク）でもらえます。");
+    step(n++ + ". 修了後はじめての指定来所日：ハローワークへ", rTxt,
+      "就職支援計画書を持って行きます。" + (kf ? "給付金を受けている人は、最後の期間の給付金支給申請書（施設の受講証明が入ったもの）も持って行きます。" : "") +
+      "ジョブ・カード（写し）、受講者アンケートなども、ハローワークの指示に合わせて用意します。");
+    if (!job) {
+      step(n++ + ". 修了後2回目・3回目の指定来所日", "月に一度（日はハローワークが決める）",
+        "就職支援計画書を持って行き、職業相談を受けます。求職活動の確認と、就職の状況の確認があります。");
+      step(n++ + ". 就職状況報告書を、ハローワークと施設の両方へ", "就職が決まったら、その時点で（決まらなくても修了後3か月以内に）",
+        "修了証をもらった人は、就職した人も、していない人も出します。出し方は、それぞれの出す先で確かめます。");
+    } else {
+      var toJob = dd(d0, dj);
+      step(n++ + ". 就職状況報告書を、ハローワークと施設の両方へ", "今すぐ〜できるだけ早く（働き始める日：" + md(dj) + (toJob >= 0 ? "、あと" + toJob + "日" : "、もう" + (-toJob) + "日たっています") + "）",
+        "修了後3か月がたつ前に就職が決まったら、その時点で出します。用紙は出す先でもらえます。");
+      if (dd(dj, de) > 0) {
+        step(n++ + ". 訓練の残りの日をどうするか、施設とハローワークに相談", "すぐ",
+          "働き始める日が修了日より前です。訓練の途中で就職するときは、続けるか・やめるかで手続きが変わります（続ける場合も、次の指定来所日に就職した事実を申し出ます）。");
+      }
+    }
+
+    // 4. 窓口で聞くこと
+    li("修了後の指定来所日（1回目〜3回目）はいつか");
+    li("就職状況報告書の用紙をどこでもらい、いつまでに、どうやって出すか");
+    if (kf) li("最後の期間の給付金の支給申請に、何を持って行くか");
+    if (!job) li("修了後の職業相談で、求職活動として何をしておくか");
+    else li("働き始めたあとの指定来所日は、行く必要があるか");
+
+    // 5. 一言
+    $("memo").textContent = "求職者支援訓練を受けていた\n〇〇です。\n訓練は" + md(de) + "に\n終わり" + (toEnd > 0 ? "ます。" : "ました。") + "\n" +
+      (job ? "就職が決まり、\n" + md(dj) + "から働きます。\n就職状況報告書の\n出し方を教えてください。"
+        : "まだ就職先は\n決まっていません。\n修了後の指定来所日と、\n就職状況報告書の出し方を\n教えてください。");
+
+    $("ng").textContent = "・修了後3か月（3回目の指定来所日まで）は支援が続く。決まっていない人は月1回、指定来所日に行く\n・就職状況報告書は、ハローワークと施設の両方へ。就職してもしなくても、修了後3か月以内に出す\n・3か月がたつ前に就職が決まったら、その時点で出す" +
+      (kf ? "\n・給付金を受けている人は、最後の期間の支給申請を、修了後はじめての指定来所日に行う" : "") +
+      "\n・正当な理由なく指定来所日に行かない、修了後の就職支援を断ることを繰り返すと、支援指示の取り消しや、給付金の返還命令などが行われることがある\n・指定来所日・書類の出し方は、施設とハローワークの指示が先";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("d0").value = iso(new Date());
+  if (DEMO) { $("d0").value = "2026-12-01"; $("de").value = "2026-12-25"; $("dr").value = "2027-01-08"; $("job").value = "no"; $("kf").value = "yes"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
