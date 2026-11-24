@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>再就職手当が振り込まれないとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>再就職手当が振り込まれないとき</h1>
+  <p class="lead">再就職手当の申請書を出したあと、まだ待つ段階か、ハローワークで確かめる段階かを出します。窓口で言う一言と、持っていくものも出ます。国と労働局の案内で出した目安で、支給されるかどうかは判定しません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 出した申請書</h2>
+    <label class="f" for="shinsei">再就職手当の申請書を出した日<span class="hint">窓口で出した日。郵送なら送った日を入れます</span></label>
+    <input type="date" id="shinsei">
+    <label class="f" for="hoho">出し方</label>
+    <select id="hoho">
+      <option value="madoguchi">ハローワークの窓口で出した</option>
+      <option value="yuso">郵送で出した</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="jokyo">届いたもの</label>
+    <select id="jokyo">
+      <option value="mada">まだ何も届いていない</option>
+      <option value="shikyu">支給決定の通知書が届いたが、まだ入らない</option>
+      <option value="fushi">不支給の通知書が届いた</option>
+    </select>
+    <div id="todokiwrap" hidden>
+      <label class="f" for="todoki">通知書が届いた日</label>
+      <input type="date" id="todoki">
+    </div>
+    <label class="f" for="kanyu">入社先の雇用保険の手続き<span class="hint">新しい会社で雇用保険に入る手続き。わからなければ「わからない」</span></label>
+    <select id="kanyu">
+      <option value="wakaranai">わからない</option>
+      <option value="sumi">済んだと聞いている</option>
+    </select>
+    <label class="f" for="today">今日の日付<span class="hint">ふつうはそのままで大丈夫です</span></label>
+    <input type="date" id="today">
+  </div>
+  <button id="make" type="button">いまの段階を見る</button>
+  <div class="err" id="err" hidden></div>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>窓口で言う一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>持っていくもの</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「Q&A～労働者の皆様へ（基本手当、再就職手当）～」（Q41：申請書を受理したあと審査をして支給の可否を判断するため、支給までには一定程度時間がかかる・審査の状況は申請したハローワークへ来所し、本人確認書類を見せて確かめる・電話での問い合わせには答えられない。Q39：要件の一つは、原則、雇用保険の被保険者になる条件での雇用であること。Q46：ハローワークの処分に不服があるときは、処分を知った日の翌日から3か月以内に、都道府県労働局の雇用保険審査官へ審査請求ができる）と、兵庫労働局のハローワークの案内（申請後1か月〜1か月半ぐらいで支給）で出した目安です。かかる日数は地域や時期で違います。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var now = new Date();
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  $("today").value = iso(now);
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function f(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addM(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(d.getDate(), last));
+  }
+  function addD(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function days(a, b) { return Math.round((b - a) / 86400000); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function sync() { $("todokiwrap").hidden = $("jokyo").value === "mada"; }
+  $("jokyo").addEventListener("change", sync);
+
+  function make() {
+    var S = parse($("shinsei").value), hoho = $("hoho").value, jk = $("jokyo").value, kanyu = $("kanyu").value;
+    var T = parse($("today").value) || new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var D = parse($("todoki").value);
+    $("err").hidden = true;
+    function err(t) { $("err").textContent = t; $("err").hidden = false; return false; }
+    if (!S) return err("申請書を出した日を入れてください。");
+    if (S > T) return err("申請書を出した日が、今日より後になっています。");
+    if (jk !== "mada" && !D) return err("通知書が届いた日を入れてください。");
+    if (jk !== "mada" && D < S) return err("通知書が届いた日が、申請書を出した日より前になっています。");
+    if (jk !== "mada" && D > T) return err("通知書が届いた日が、今日より後になっています。");
+    $("sum").innerHTML = "";
+    var A = addM(S, 1), B = addD(addM(S, 1), 15), n = days(S, T);
+    var memo = "", ng = [];
+    var yusoNote = hoho === "yuso" ? "郵送のときは、ハローワークに着いた日から数えるので、少し後ろにずれます。" : "";
+
+    if (jk === "mada") {
+      var stage, txt, no = false;
+      if (T < A) {
+        stage = "まだ待つ段階（出して" + n + "日）";
+        txt = "国の案内は「支給までには一定程度お時間を要します」とだけ書いています。労働局の案内には「申請後1か月〜1か月半ぐらい」とするものがあります。1か月たつのは" + f(A) + "です。" + yusoNote;
+      } else if (T <= B) {
+        stage = "そろそろの段階（出して" + n + "日）";
+        txt = "1か月を過ぎました。1か月半にあたる" + f(B) + "ごろまでは、労働局の案内の目安の中です。それを過ぎても届かなければ、申請したハローワークで確かめます。" + yusoNote;
+      } else {
+        stage = "窓口で確かめる段階（出して" + n + "日）";
+        txt = "1か月半（" + f(B) + "ごろ）を過ぎても何も届いていません。だめだったと決めつけずに、申請したハローワークへ行って、審査がどうなっているか、足りない書類がないかを聞きます。";
+        no = true;
+      }
+      box("いまの段階", stage, txt, no);
+      box("確かめ方", "電話ではなく、窓口へ行く", "審査の状況は、個人情報を守るため電話では答えてもらえません。申請したハローワークへ行き、本人確認の書類を見せて聞きます。", false);
+      if (kanyu === "wakaranai") {
+        box("先に聞いておくこと", "入社先の雇用保険の手続き", "再就職手当の要件の一つは、新しい会社で雇用保険に入ることです。会社の担当の人に「雇用保険の加入の手続きは済んでいますか」と聞いておくと、窓口で話が早く進みます。", true);
+      } else {
+        box("先に聞いておくこと", "手続きの日を聞いておく", "雇用保険の加入の手続きが済んでいるなら、いつ手続きしたかを会社に聞いておくと、窓口で話が早く進みます。", false);
+      }
+      box("待っている間", "入社先を辞めない・住所を変えない", "結果が出る前に辞めると対象外になる、と書いている案内もあります。通知書は家に届くので、引っ越すときは早めにハローワークへ伝えます。", false);
+      memo = "再就職手当の申請書を\n" + f(S) + "に" + (hoho === "yuso" ? "郵送で\n" : "") + "出しました。\n";
+      memo += "まだ通知が届いて\nいないのですが、\n審査はいまどの段階ですか。\n足りない書類があれば\n教えてください。";
+      ng.push("・本人確認の書類（運転免許証など）");
+      ng.push("・雇用保険受給資格者証");
+      ng.push("・申請書の控え（コピーがあれば）");
+      ng.push("・入社先の名前と入社日のメモ");
+    } else if (jk === "shikyu") {
+      var w = days(D, T);
+      box("いまの段階", "支給は決まっている（届いて" + w + "日）", "支給決定の通知書が届いていれば、支給は決まっています。通知書に書かれた中身（支給額など）を先に見ておきます。", false);
+      box("入らないとき", "通知書を持って窓口へ", "入金の日は、国の案内には書かれていません。待っても入らないときや、口座がちがっていたときは、通知書と通帳を持って、申請したハローワークで聞きます。電話では答えてもらえないので、窓口へ行きます。", false);
+      memo = "再就職手当の支給決定の\n通知書が" + f(D) + "に\n届きました。\nまだ口座に入っていないので、\n振込先と振込の予定を\n確かめたいです。";
+      ng.push("・支給決定の通知書");
+      ng.push("・通帳かキャッシュカード（振込先の口座）");
+      ng.push("・本人確認の書類（運転免許証など）");
+      ng.push("・雇用保険受給資格者証");
+    } else {
+      var lim = addM(D, 3), late = T > lim;
+      box("まずやること", "不支給の理由を読む", "通知書に、どの要件にあたらなかったかが書いてあります。紹介の経路なのか、入社先の雇用保険なのか、日数なのかで、次の一手が変わります。わからない言葉は、窓口で聞けます。", false);
+      box("納得できないとき", f(lim) + "ごろまで" + (late ? "（過ぎています）" : ""), late ? "処分を知った日の翌日から3か月を過ぎています。過ぎたときの扱いは、都道府県労働局の雇用保険審査官かハローワークで確かめます。" : "ハローワークの処分に不服があるときは、処分を知った日の翌日から3か月以内に、都道府県労働局の雇用保険審査官へ審査請求ができます。通知書が届いた日を知った日とした目安です。", late);
+      box("ほかの道", "基本手当の残り・ほかの手当", "再就職手当が出なくても、入社先を辞めたときに基本手当の残りを受け取れることがあります。ほかの手当にあたるかも、窓口で聞けます。", false);
+      memo = "再就職手当の不支給の\n通知書が" + f(D) + "に\n届きました。\n理由の意味と、\nほかに受け取れるものが\nあるかを教えてください。";
+      ng.push("・不支給の通知書");
+      ng.push("・本人確認の書類（運転免許証など）");
+      ng.push("・雇用保険受給資格者証");
+      ng.push("・入社先の雇用契約書か労働条件通知書");
+    }
+    $("memo").textContent = memo;
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("shinsei").value = "2026-10-06"; $("hoho").value = "madoguchi"; $("jokyo").value = "mada"; $("kanyu").value = "wakaranai"; $("today").value = "2026-11-24"; sync(); make(); }
+  window.__make = make;
+})();
+</script>
+</body>
+</html>
