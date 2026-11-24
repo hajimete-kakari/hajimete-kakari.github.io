@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金のさかのぼり、何か月分受け取れるか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金のさかのぼり、何か月分受け取れるか</h1>
+  <p class="lead">障害認定日による請求では、年金は障害認定日の翌月分から受け取れます。ただ、さかのぼって受けられるのは時効で5年分までです。障害認定日と、請求書を出す予定の日を入れると、受け取り始めの月、さかのぼる月数、5年を超えて受け取れない月数の目安、出す日をいつまでにすると減らないかが出ます。日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 障害認定日</h2>
+    <label class="f" for="nintei">障害認定日<span class="hint">ふつうは初診日から1年6か月の日</span></label>
+    <input type="date" id="nintei">
+    <label class="f" for="mae20">障害認定日のあとに20歳になりましたか<span class="hint">初診日が20歳になる前のとき</span></label>
+    <select id="mae20">
+      <option value="no">いいえ</option>
+      <option value="yes">はい（認定日のあとに20歳になった）</option>
+    </select>
+    <div id="b20wrap" hidden>
+      <label class="f" for="b20">20歳になった日<span class="hint">20歳の誕生日の前日</span></label>
+      <input type="date" id="b20">
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 出す日</h2>
+    <label class="f" for="seikyu">請求書を出す予定の日<span class="hint">年金事務所などに出す日</span></label>
+    <input type="date" id="seikyu">
+  </div>
+  <button id="make" type="button">受け取れる月数を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>年金事務所で確かめる一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>出すまでにやること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害基礎年金の受給要件・請求時期・年金額」（障害認定日による請求は障害認定日の翌月分から。障害認定日以後に20歳に達したときは20歳に達した日の翌月分から。請求書は障害認定日以降いつでも出せるが、遡及して受けられる年金は時効により5年分が限度。事後重症による請求は請求日の翌月から）、「障害基礎年金を受けられるとき」（障害認定日と年金請求日が1年以上離れているときは、直近の診断書もあわせて必要）で出した目安です。月数は「受け取り始めの月から、出す月まで」を数えた目安で、5年の境目の月や実際の振り込みの額は、年金事務所で確かめてください。受け取れるかどうかや等級は判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ym(d) { return d.getFullYear() * 12 + d.getMonth(); }
+  function fm(n) { return Math.floor(n / 12) + "年" + (n % 12 + 1) + "月"; }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function yrs(m) { var y = Math.floor(m / 12), r = m % 12; return (y ? y + "年" : "") + (r ? r + "か月" : (y ? "" : "0か月")); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function stop(k, v, t, nx) {
+    box(k, v, t, true);
+    $("memo").textContent = "（" + nx + "と出ます）";
+    $("ng").textContent = "・障害認定日と、出す予定の日";
+    $("result").hidden = false; return true;
+  }
+  $("mae20").addEventListener("change", function () { $("b20wrap").hidden = this.value !== "yes"; });
+  function make() {
+    var N = parse($("nintei").value), S = parse($("seikyu").value);
+    var y20 = $("mae20").value === "yes", B = parse($("b20").value);
+    $("sum").innerHTML = "";
+    if (!N) return stop("障害認定日", "入れてください", "受け取り始めの月は、障害認定日から決まります。ふつうは初診日から1年6か月の日です（その前に治った・症状が固定したときなどは、その日）。わからなければ、先に障害認定日を確かめます。", "障害認定日を入れる");
+    if (!S) return stop("請求書を出す予定の日", "入れてください", "さかのぼる月数は、出す日から数えます。まだ決まっていなければ、出せそうな日を仮に入れます。", "出す予定の日を入れる");
+    if (S < N) return stop("日付", "出す日が認定日より前", "障害認定日による請求の請求書は、障害認定日のあとに出します。日付を見直してください。", "日付を見直す");
+    if (y20 && !B) return stop("20歳になった日", "入れてください", "障害認定日のあとに20歳になったときは、20歳になった日の翌月分からになります。20歳になった日（誕生日の前日）を入れます。", "20歳になった日を入れる");
+    var base = N, why = "障害認定日（" + f(N) + "）の翌月分から";
+    if (y20 && B > N) { base = B; why = "20歳になった日（" + f(B) + "）の翌月分から"; }
+    var whyAdd = (y20 && B && B <= N) ? "20歳になった日が認定日より前なので、認定日で数えます。" : "";
+    var start = ym(base) + 1, sm = ym(S);
+    if (sm < start) {
+      box("受け取り始めの月", fm(start) + "分から", why + "です。出す日が、まだ受け取り始めの月より前です。", false);
+      $("memo").textContent = "障害認定日による請求を\n考えています。\n" + fm(start) + "分から\n受け取る形になるか、\n確かめたいです。";
+      $("ng").textContent = "・障害認定日のころの状態の診断書をそろえる\n・ほかの書類（受診状況等証明書など）をそろえる";
+      $("result").hidden = false; return true;
+    }
+    var M = sm - start + 1, over = Math.max(0, M - 60), keep = Math.min(M, 60);
+    box("受け取り始めの月", fm(start) + "分から", why + "です。" + whyAdd, false);
+    box("さかのぼる月数", M + "か月" + (M >= 12 ? "（" + yrs(M) + "）" : ""), fm(start) + "分から、出す月（" + fm(sm) + "）の分までを数えた目安です。", false);
+    if (over > 0) {
+      box("時効で受け取れない月数", over + "か月の目安", "5年（60か月）を超えた古い分です。" + (over === 1 ? fm(start) + "分の1か月" : fm(start) + "分から" + fm(start + over - 1) + "分まで") + "が、時効で受け取れなくなる目安です。", true);
+      box("さかのぼって受け取れる月数", keep + "か月（5年）の目安", fm(start + over) + "分から先の分です。", false);
+      box("出す日が1か月遅れると", "いちばん古い1か月分が減る", "すでに5年を超えているので、出す月が1か月遅れるたびに、いちばん古い月の分が1か月ずつ受け取れなくなる目安です。そろえる書類を先に決めて、早めに出します。", true);
+    } else {
+      box("時効で受け取れない月数", "なしの目安", "さかのぼる月数が5年（60か月）以内なので、" + fm(start) + "分からの全部をさかのぼれる目安です。", false);
+      box("5年を超え始める月", fm(start + 60) + "に出すと", fm(start + 60) + "以後に出すと、いちばん古い月の分から、時効で受け取れなくなり始める目安です。それより前に出せば、まだ減りません。", false);
+    }
+    var apart = S >= new Date(N.getFullYear() + 1, N.getMonth(), N.getDate());
+    box("診断書", apart ? "2枚の見込み" : "1枚の見込み", apart ? "出す日が障害認定日から1年以上あとなので、障害認定日から3か月以内の状態の診断書と、出す日の前3か月以内の状態の診断書の2枚が要る見込みです。" + (y20 ? "\n初診日が20歳前のときは、この範囲がちがうことがあります。年金事務所で確かめてください。" : "") : "出す日が障害認定日から1年たっていないので、障害認定日から3か月以内の状態の診断書1枚の見込みです。" + (y20 ? "\n初診日が20歳前のときは、この範囲がちがうことがあります。年金事務所で確かめてください。" : ""), false);
+    box("認定日のころの診断書が取れないとき", "事後重症の請求になる", "そのころのカルテがない・受診していなかったなどで、障害認定日のころの診断書が取れないときは、事後重症の請求になります。その場合はさかのぼらず、出した日の翌月分からです。", true);
+    var memo = "障害認定日による請求で、\nさかのぼって受け取りたいです。\n障害認定日は" + f(N) + "で、\n" + fm(start) + "分からと考えています。\n" + fm(sm) + "に出すと、\n";
+    memo += over > 0 ? "時効で受け取れない月は\nどこまでになりますか。" : "時効にかかる月は\nありませんか。";
+    memo += "\nあわせて、診断書の枚数と\n様式も教えてください。";
+    $("memo").textContent = memo;
+    var ng = ["・障害認定日のころにかかっていた病院に、カルテが残っているか電話で確かめる"];
+    ng.push(apart ? "・診断書2枚（認定日から3か月以内の状態／出す日の前3か月以内の状態）を頼む" : "・診断書（認定日から3か月以内の状態）を頼む");
+    ng.push("・受診状況等証明書・病歴・就労状況等申立書などをそろえる");
+    ng.push(over > 0 ? "・出す日を決めて、それより遅れないようにする（1か月ごとに減る目安）" : "・" + fm(start + 60) + "より前に出せるように段取りを組む");
+    ng.push("・出す前に、全部の書類のコピーを取っておく");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("nintei").value = "2020-06-15"; $("seikyu").value = "2026-12-10"; make(); }
+})();
+</script>
+</body>
+</html>
