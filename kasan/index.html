@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の子の加算・配偶者の加給、受給中に家族が増えたとき｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金の子の加算・配偶者の加給、受給中に家族が増えたとき</h1>
+  <p class="lead">障害年金をもらい始めたあとに子が生まれた・結婚したときも、条件に合えば年金に加算がつきます。ただ、届けを出さないと始まりません。受けている年金と、増えた家族のことを選ぶと、加算の対象になりそうか、加算が始まる月、年額の目安、出す届けと出す先、そろえる書類が出ます。日本年金機構の案内と法令で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 受けている年金</h2>
+    <label class="f" for="nenkin">いま受けている障害年金<span class="hint">年金証書の年金の種類で見る</span></label>
+    <select id="nenkin">
+      <option value="kiso">障害基礎年金だけ</option>
+      <option value="k12">障害厚生年金1級・2級（障害基礎年金も）</option>
+      <option value="k3">障害厚生年金3級だけ</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 増えた家族</h2>
+    <label class="f" for="who">だれが増えましたか</label>
+    <select id="who">
+      <option value="ko">子（生まれた・養子になった）</option>
+      <option value="haigu">配偶者（結婚した）</option>
+    </select>
+    <label class="f" for="hi">その日<span class="hint">生まれた日・養子縁組の日・結婚した日</span></label>
+    <input type="date" id="hi">
+    <div id="kowrap">
+      <label class="f" for="age">子の年齢</label>
+      <select id="age">
+        <option value="u18">18歳になった年度の3月31日まで</option>
+        <option value="u20">20歳未満で、障害等級1級・2級の状態</option>
+        <option value="over">そのどちらでもない</option>
+      </select>
+      <label class="f" for="nanbanme">加算の対象になる子の中で、何人目か</label>
+      <select id="nanbanme">
+        <option value="12">1人目・2人目</option>
+        <option value="3">3人目から</option>
+      </select>
+    </div>
+    <div id="hgwrap" hidden>
+      <label class="f" for="hage">配偶者の年齢</label>
+      <select id="hage">
+        <option value="u65">65歳未満</option>
+        <option value="o65">65歳以上</option>
+      </select>
+      <label class="f" for="hnen">配偶者が自分の年金を受け取る権利<span class="hint">厚生年金20年以上の老齢厚生年金や、障害年金</span></label>
+      <select id="hnen">
+        <option value="no">ない</option>
+        <option value="yes">ある</option>
+        <option value="unk">わからない</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 生計のこと</h2>
+    <label class="f" for="inc">増えた家族の前年の収入<span class="hint">850万円未満（または所得655万5千円未満）か</span></label>
+    <select id="inc">
+      <option value="yes">はい（未満）</option>
+      <option value="no">いいえ（それ以上）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="kurashi">暮らし方</label>
+    <select id="kurashi">
+      <option value="dou">一緒に暮らしている</option>
+      <option value="shiokuri">別居だが、仕送り・健康保険の扶養など</option>
+      <option value="betsu">別居で、仕送りなどもない</option>
+    </select>
+  </div>
+  <button id="make" type="button">加算になるか見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>窓口で確かめる一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>出すまでにやること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害年金を受けている方が、生計維持関係にある配偶者または子を有することになったとき」（権利が発生した後の結婚・出生で加算。障害給付加算額・加給年金額加算開始事由該当届。添付書類は戸籍抄本・世帯全員の住民票の写し・所得証明書等、子は義務教育終了後なら在学証明書等。提出先は障害基礎年金のみなら市区町村役場、障害厚生年金も受けているなら年金事務所）、「障害年金加算改善法」（平成23年4月施行）、「障害基礎年金の受給要件・請求時期・年金額」「障害厚生年金の受給要件・請求時期・年金額」（令和8年4月分からの額：子の加算 2人まで1人243,800円・3人目から1人81,300円、配偶者の加給年金額243,800円。配偶者の加給は65歳未満の配偶者。配偶者が老齢厚生年金（20年以上など）や障害年金を受け取る権利があると止まる）、年金用語集「生計維持」、国民年金法33条の2第2項・厚生年金保険法50条の2第3項（有するに至った日の属する月の翌月から改定）で出した目安です。額は年度ごとに変わります。加算になるかどうかの最終の判断と、さかのぼって受け取れる範囲は、窓口で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function parse(v) { if (!v) return null; var p = v.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ym(d) { return d.getFullYear() * 12 + d.getMonth(); }
+  function fm(n) { return Math.floor(n / 12) + "年" + (n % 12 + 1) + "月"; }
+  function f(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function stop(k, v, t, memo, ng) {
+    box(k, v, t, true);
+    $("memo").textContent = memo;
+    $("ng").textContent = ng;
+    $("result").hidden = false; return true;
+  }
+  function sync() {
+    var ko = $("who").value === "ko";
+    $("kowrap").hidden = !ko; $("hgwrap").hidden = ko;
+  }
+  $("who").addEventListener("change", sync);
+  function make() {
+    var nen = $("nenkin").value, ko = $("who").value === "ko", H = parse($("hi").value);
+    var inc = $("inc").value, kur = $("kurashi").value;
+    var mado = nen === "kiso" ? "住んでいる市区町村役場" : "年金事務所";
+    var fam = ko ? "子" : "配偶者";
+    $("sum").innerHTML = "";
+    if (nen === "k3") return stop("加算", "つかない見込み", "障害厚生年金3級だけのときは、子の加算も配偶者の加給年金額もつきません。子の加算は障害基礎年金に、配偶者の加給は障害厚生年金1級・2級につくものです。等級が2級以上に変わったときは、あらためて確かめます。", "障害厚生年金3級を\n受けています。\n" + fam + "が増えましたが、\n加算の対象にならないか\n確かめたいです。", "・年金証書で、年金の種類と等級を見直す\n・等級が変わったら、そのときに加算のことも確かめる");
+    if (!ko && nen === "kiso") return stop("配偶者の加給", "つかない見込み", "障害基礎年金だけのときは、配偶者の加算はありません（子の加算はあります）。配偶者の加給年金額は、障害厚生年金1級・2級につくものです。", "障害基礎年金を\n受けています。\n結婚しましたが、\n配偶者の加算はないか\n確かめたいです。", "・年金証書で、年金の種類を見直す\n・子が生まれたときは、子の加算の届けを出す");
+    if (!H) return stop(fam + "が増えた日", "入れてください", "加算が始まる月は、その日から決まります。" + (ko ? "生まれた日か、養子縁組の日" : "結婚した日") + "を入れます。", "（日付を入れると出ます）", "・" + fam + "が増えた日を入れる");
+    if (ko && $("age").value === "over") return stop("子の加算", "対象外の見込み", "子の加算は、18歳になった年度の3月31日までの子か、20歳未満で障害等級1級・2級の状態の子が対象です。どちらでもないときは、加算はつきません。", "子の加算の対象に\nならないか確かめたいです。\n子は18歳の年度末を\n過ぎています。", "・子の年齢と障害の状態を見直す");
+    if (!ko && $("hage").value === "o65") return stop("配偶者の加給", "対象外の見込み", "配偶者の加給年金額は、65歳未満の配偶者が対象です。65歳以上の配偶者のときは、加算はつきません。", "配偶者の加給年金額の\n対象にならないか\n確かめたいです。\n配偶者は65歳以上です。", "・配偶者の生年月日を見直す");
+    if (inc === "no") return stop("生計維持", "外れる見込み", "加算の対象になるのは、受給している人に生計を維持されている家族です。原則、前年の収入が850万円未満（または所得が655万5千円未満）であることが要件のひとつです。それ以上なら、ふつうは対象になりません（例外の扱いは窓口で確かめます）。", fam + "が増えましたが、\n収入が850万円以上です。\n加算の対象に\nならないか確かめたいです。", "・" + fam + "の前年の収入がわかる書類を手元に置く");
+    if (kur === "betsu") return stop("生計を同じくしているか", "窓口で確かめる", "生計維持の要件には、生計を同じくしていることもあります。別居でも、仕送りをしている・健康保険の扶養にしているなどがあれば認められます。どちらもないときは、対象になるかを先に窓口で確かめます。", fam + "と別居で、\n仕送りなどはしていません。\n加算の対象になるか、\n確かめたいです。", "・別居の理由と、お金のやりとりを書き出しておく\n・" + mado + "に電話で聞く");
+    var start = ym(H) + 1;
+    var gaku, gakuTxt;
+    if (ko) {
+      var n3 = $("nanbanme").value === "3";
+      gaku = n3 ? 81300 : 243800;
+      gakuTxt = (n3 ? "3人目からの子は1人" : "2人目までの子は1人") + yen(gaku) + "円（年額）です。1か月あたり約" + yen(Math.round(gaku / 12)) + "円。令和8年4月分からの額で、年度ごとに変わります。";
+    } else {
+      gaku = 243800;
+      gakuTxt = "配偶者の加給年金額は" + yen(gaku) + "円（年額）です。1か月あたり約" + yen(Math.round(gaku / 12)) + "円。令和8年4月分からの額で、年度ごとに変わります。";
+    }
+    box("加算", inc === "unk" ? "対象になりそう（収入を確かめる）" : "対象になりそう", (ko ? "障害年金の権利ができたあとに生まれた子・養子になった子も、" : "障害年金の権利ができたあとに結婚した配偶者も、") + "生計を維持していれば加算されます（平成23年4月から）。" + (inc === "unk" ? "\n前年の収入が850万円未満（または所得655万5千円未満）か、先に確かめます。" : "") + (kur === "shiokuri" ? "\n別居なので、仕送りや扶養のことがわかるものも用意します。" : ""), inc === "unk");
+    box("加算が始まる月", fm(start) + "分から", f(H) + "の翌月からです。届けを出した月からではありません。ただ、届けを出さないと加算は始まらないので、早めに出します。", false);
+    box("年額の目安", yen(gaku) + "円", gakuTxt, false);
+    if (!ko) {
+      var hn = $("hnen").value;
+      if (hn !== "no") box("配偶者の年金", hn === "yes" ? "加給が止まる見込み" : "先に確かめる", "配偶者が、厚生年金20年以上などの老齢厚生年金や、障害年金を受け取る権利があるときは、配偶者の加給年金額は止まります（実際に受け取っていなくても、権利があれば止まります）。" + (hn === "unk" ? "配偶者のねんきん定期便や年金証書で、先に確かめます。" : ""), true);
+    }
+    if (ko) box("児童扶養手当との関係", "子の加算が先", "同じ子で、配偶者が児童扶養手当も受けられるときは、子の加算を先に受けて、子の加算の額が手当の額より少ないときに差額の手当を受ける形になります。手当を受けている人は、手当の窓口にも伝えます。", false);
+    box("出す届け", "加算開始事由該当届", "正式な名前は「障害給付加算額・加給年金額加算開始事由該当届」です。出す先は" + mado + "です。" + (nen === "kiso" ? "（障害基礎年金だけの人）" : "（障害厚生年金も受けている人）"), false);
+    var sho = ["・戸籍抄本（" + fam + "との続柄がわかる）", "・世帯全員の住民票の写し（生計が同じとわかる）"];
+    if (ko) {
+      sho.push("・" + ($("age").value === "u18" ? "子の収入の書類（所得証明書など。要るかは窓口で確かめる）" : "子の収入の書類（所得証明書など）。障害の状態の子は、ほかに要る書類を窓口で確かめる"));
+      sho.push("・中学を卒業したあとの子なら、在学証明書や学生証など（義務教育が終わる前なら要らない）");
+    } else {
+      sho.push("・配偶者の収入の書類（所得証明書・課税（非課税）証明書・源泉徴収票など）");
+    }
+    if (kur === "shiokuri") sho.push("・別居なら、仕送りや健康保険の扶養がわかるもの（窓口で確かめる）");
+    box("そろえる書類", "主に" + sho.length + "つ", sho.join("\n"), false);
+    var memo = (nen === "kiso" ? "障害基礎年金" : "障害厚生年金") + "を受けています。\n" + f(H) + "に\n" + (ko ? "子が生まれました\n（養子になりました）。" : "結婚しました。") + "\n加算開始事由該当届を出すと、\n" + fm(start) + "分から\n加算される形になるか、\n確かめたいです。\nそろえる書類も\n教えてください。";
+    $("memo").textContent = memo;
+    var ng = ["・年金証書を用意する（基礎年金番号・年金コード）", "・" + mado + "で、加算開始事由該当届の用紙をもらう（日本年金機構のサイトにもある）"];
+    ng.push("・戸籍抄本と、世帯全員の住民票の写しを取る");
+    ng.push(inc === "unk" ? "・" + fam + "の前年の収入を、所得証明書などで確かめる" : "・" + fam + "の収入の書類を取る");
+    if (!ko && $("hnen").value !== "no") ng.push("・配偶者の年金の権利（加入年数）を確かめる");
+    ng.push("・出す前に、書類のコピーを取っておく");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("hi").value = "2026-09-14"; make(); }
+})();
+</script>
+</body>
+</html>
