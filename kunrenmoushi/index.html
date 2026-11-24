@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の申し込みの順番｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.mo { margin: 0; padding-left: 1.3em; } ol.tl li, ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #mochi li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .note, .mihon .hint { visibility: hidden; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の申し込みの順番</h1>
+  <p class="lead">ハローワークで公共職業訓練（ハロートレーニング）に申し込みたい人向けです。募集案内に書かれた締め切りの日・選考の日・訓練が始まる日を入れると、相談から受講までの6つの段を、いつまでに何をするかの順に並べます。ハローワークの窓口で聞くことと、伝える一言もわかります。締め切りや選考の中身はコースごとに違うので、日付は募集案内を見て入れてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 日付（募集案内を見て）</h2>
+    <label class="f" for="d0">今日の日付</label>
+    <input type="date" id="d0">
+    <label class="f" for="dk">申し込みの締め切り（募集期間の最後の日）</label>
+    <input type="date" id="dk">
+    <label class="f" for="ds">選考の日<span class="hint">わからなければ空のままでかまいません</span></label>
+    <input type="date" id="ds">
+    <label class="f" for="dt">訓練が始まる日</label>
+    <input type="date" id="dt">
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="kyu">ハローワークの求職申込み<span class="hint">ハローワークに登録して、仕事を探していると申し込むことです</span></label>
+    <select id="kyu">
+      <option value="yes">もうした</option>
+      <option value="no">まだ</option>
+    </select>
+    <label class="f" for="sk">失業保険（雇用保険の基本手当）</label>
+    <select id="sk">
+      <option value="yes">受けている（受ける予定）</option>
+      <option value="no">受けていない</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="jc">募集案内に「ジョブ・カード」「訓練前キャリアコンサルティング」の文字<span class="hint">コースによっては、申し込みの前に要ることがあります</span></label>
+    <select id="jc">
+      <option value="unk">わからない・まだ見ていない</option>
+      <option value="yes">書いてある</option>
+      <option value="no">書いていない</option>
+    </select>
+  </div>
+  <button id="make" type="button">順番を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>6つの段と、いつまでに</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口で聞くこと</h3>
+    <ul class="mo" id="mochi"></ul>
+    <h3>ハローワークの窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">一言をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「ハロートレーニング受講の流れ」（求職申込み・職業相談→受講申込み→面接・筆記試験等→選考結果通知→受講あっせん→受講）と、神奈川労働局「ハロートレーニングとは」（申込みには事前の求職申込みが必要・事前に複数回の相談が必要・管轄のハローワークに募集期間内に申し込む・選考は訓練実施施設・合格後はハローワークでも手続き）をもとにした目安です。締め切り・選考の中身・必要書類は、都道府県とコースごとに違います。受講あっせん（受講指示）を受けられるか、訓練中も失業保険が続くかは、ハローワークが決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function md(d) { return (d.getMonth() + 1) + "月" + d.getDate() + "日（" + WD.charAt(d.getDay()) + "）"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("mochi").appendChild(e); }
+  function make() {
+    var d0 = pd($("d0").value), dk = pd($("dk").value), ds = pd($("ds").value), dt = pd($("dt").value);
+    if (!d0 || !dk || !dt) { alert("今日の日付・締め切り・訓練が始まる日を入れてください"); return false; }
+    if (dt < dk) { alert("訓練が始まる日が、締め切りより前になっています。募集案内の日付を見直してください"); return false; }
+    var kyu = $("kyu").value === "yes", sk = $("sk").value, jc = $("jc").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("mochi").innerHTML = "";
+    var left = dd(d0, dk), toStart = dd(d0, dt);
+    var late = left < 0, hurry = !late && left <= 7;
+
+    // 1. 締め切りまで
+    if (late) {
+      box("締め切りまで", "締め切りを" + (-left) + "日過ぎています",
+        "このコースの募集期間は終わっています。ハローワークの窓口で、同じ分野の次の募集がいつかを聞きます。東京労働局の案内では、施設内訓練の主な入校時期は4月・7月・10月・1月、委託訓練は毎月です（地域で違います）。", true);
+    } else if (hurry) {
+      box("締め切りまで", left === 0 ? "今日が締め切りです" : "あと" + left + "日",
+        left === 0 ? "申し込みの前には、ハローワークでの相談が要ります。今日のうちに窓口へ行き、まだ間に合うかを聞きます。"
+          : "申し込みの前には、ハローワークでの相談が要ります。相談は1回で済まないこともあるので、今日か次の開庁日に窓口へ行きます。間に合うかは、窓口で聞きます。", true);
+    } else {
+      box("締め切りまで", "あと" + left + "日",
+        "まだ日はありますが、申し込みの前の相談は複数回要ることがあります。締め切りの直前ではなく、早めに1回目の相談に行きます。", false);
+    }
+
+    // 2. 訓練が始まるまで
+    if (late) box("訓練が始まるまで", "次の募集の案内で確かめる",
+      "このコースの日付は使えません。次の募集の締め切り・選考の日・始まる日がわかったら、もう一度入れて順番を作り直します。" + (sk === "yes" ? "失業保険を受けている人は、受け取れる期間（原則、辞めた日の翌日から1年）が待つあいだも進みます。次の募集で間に合うかを窓口で聞きます。" : ""), true);
+    else box("訓練が始まるまで", "あと" + toStart + "日（" + md(dt) + "）",
+      sk === "unk" ? "失業保険を受けられるかで、使う訓練と、訓練中にもらえるお金の制度が変わります。受けられるかどうかを、1回目の相談のときに聞きます。"
+        : sk === "yes" ? "失業保険を受けている人は、訓練が始まる時点で残りの日数がどれだけあるかで、訓練中も失業保険が続くかが変わることがあります。いまの残りの日数で足りるか、1回目の相談のときに聞きます。"
+        : "訓練中の生活費が心配なときは、条件を満たすと月10万円の給付金が出る制度（求職者支援制度）もあります。どちらの訓練・制度になるかを、窓口で聞きます。", sk === "yes");
+
+    // 3. 6つの段
+    var s1 = late ? "次の募集に向けて、すぐ" : (left === 0 ? (kyu ? "今日すぐ" : "今日すぐ、求職申込みから") : (kyu ? "今日〜" + md(dk) + "の前まで（複数回のことも）" : "まず求職申込みをしてから、今日〜" + md(dk) + "の前まで"));
+    step("1. 求職申込み・職業相談（ハローワーク）", s1,
+      (kyu ? "" : "求職申込みがまだなら、それが先です。申し込みには、あらかじめ求職申込みが要ります。") +
+      "訓練を受けたい理由と、受けたいコースを伝えます。受講あっせんは、訓練が仕事に就くために要ると認められ、受けられる力があるとハローワークが判断した人に行われます。" +
+      (jc === "yes" ? "募集案内にジョブ・カードや訓練前キャリアコンサルティングが書いてあるので、先にその予約を取ります（予約制のことがあります）。" : ""));
+    step("2. 受講申込み（管轄のハローワーク）", late ? "次の募集の締め切りまでに" : md(dk) + "まで",
+      "住んでいるところを受け持つハローワークに、募集期間のうちに申し込みます。書類は募集案内のとおりにそろえます。");
+    step("3. 面接・筆記試験など（訓練をする施設）", late ? "次の募集の案内の日" : (ds ? md(ds) : "募集案内の日（まだ入れていません）"),
+      "選考は訓練をする施設で受けます。面接だけ、筆記もある、などコースで違います。場所と持ち物は案内で確かめます。");
+    step("4. 選考の結果の通知（訓練をする施設）", late ? "選考のあと、次の訓練が始まる前" : (ds ? md(ds) + "のあと〜" + md(dt) + "の前" : md(dt) + "の前"),
+      "結果は施設から届きます。届き方と時期は、申し込みのときに聞いておきます。");
+    step("5. 受講あっせんの手続き（ハローワーク）", late ? "合格がわかったら、訓練が始まる前に" : "合格がわかったら、" + md(dt) + "より前に",
+      "合格したら、ハローワークでも手続きをします。" + (sk === "yes" ? "失業保険を受けている人は、このとき訓練中の失業保険の扱いと、認定日の変わり方を聞きます。" : "訓練中にもらえるお金の手続きも、このとき聞きます。"));
+    step("6. 訓練が始まる（訓練をする施設）", late ? "次の募集の案内の日" : md(dt),
+      "施設の説明会やオリエンテーションがあることがあります。案内に書かれた日と持ち物を確かめます。");
+
+    // 4. 窓口で聞くこと
+    li("このコースの申し込みに要る書類と、出す場所");
+    li("締め切りまでに、相談があと何回要るか");
+    li("選考の中身（面接・筆記）と、結果の届き方");
+    if (jc !== "no") li("ジョブ・カードや訓練前キャリアコンサルティングが要るか、予約はいつ取れるか");
+    if (sk === "yes") {
+      li((late ? "次の募集のコースで" : "このコースで") + "受講あっせん（受講指示）を受けられるか");
+      li("いまの残りの日数で、訓練中も失業保険が続くか");
+    } else if (sk === "unk") {
+      li("自分は失業保険を受けられるか（受けられるかで、使う制度が変わる）");
+    } else {
+      li("求職者支援訓練や、月10万円の給付金の対象になるか");
+    }
+    if (late) li("同じ分野の、次の募集はいつか");
+
+    // 5. 一言
+    $("memo").textContent = (late ? "職業訓練の〇〇のコースに\n申し込みたかったのですが、\n締め切りを過ぎていました。\n次の募集を教えてください。\n"
+      : "職業訓練の〇〇のコースに\n申し込みたいです。\n締め切りは" + md(dk) + "です。\n") +
+      (kyu ? "" : "求職申込みはまだです。\n") +
+      (sk === "yes" ? "失業保険を受けています。\n訓練中も続くか、\n残りの日数で\n足りるかも知りたいです。\n" : "") +
+      "申し込みまでに\n何回相談が要るか、\n要る書類を\n教えてください。";
+
+    $("ng").textContent = "・申し込みの前に、ハローワークの求職申込みと相談が要る（相談は複数回のことがある）\n・申し込みは、住んでいるところを受け持つハローワークへ。募集期間を過ぎると、そのコースには申し込めない\n・選考は訓練をする施設、受講あっせんはハローワーク。合格したら、ハローワークでも手続きをする\n・締め切り・選考・必要書類は、都道府県とコースごとに違う。日付は募集案内で確かめる\n・訓練中に失業保険が続くか、受講あっせんを受けられるかは、ハローワークが決める";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("d0").value = iso(new Date());
+  if (DEMO) { $("d0").value = "2026-12-01"; $("dk").value = "2026-12-18"; $("ds").value = "2027-01-08"; $("dt").value = "2027-02-02"; $("sk").value = "yes"; $("jc").value = "unk"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
