@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>在職老齢年金で止まる額の計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #sim li, .mihon #todo li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>在職老齢年金で止まる額の計算</h1>
+  <p class="lead">厚生年金に入って働きながら老齢厚生年金を受け取る人が、年金の額と給料・賞与を入れると、毎月いくら止まるか、受け取れる年金の月額、あといくら給料が上がると止まり始めるか、給料が変わったときの止まり方を並べます。日本年金機構の「在職老齢年金の計算方法」（令和8年度の基準額65万円）に当てはめた目安です。正確な額は、年金事務所で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 年齢と働き方</h2>
+    <label class="f" for="age">年齢</label>
+    <select id="age">
+      <option value="60">60〜64歳（特別支給の老齢厚生年金などを受け取っている）</option>
+      <option value="65" selected>65〜69歳</option>
+      <option value="70">70歳以上</option>
+    </select>
+    <label class="f" for="work">いまの働き方<span class="hint">70歳以上は、厚生年金の保険料はかかりませんが、厚生年金のある会社に勤めていると同じ計算で止まります</span></label>
+    <select id="work">
+      <option value="kousei">会社で厚生年金に入って働いている（70歳以上は、厚生年金のある会社に勤めている）</option>
+      <option value="none">厚生年金に入らない働き方（自営業・短い時間のパートなど）</option>
+      <option value="taishoku">退職した・退職する予定</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 年金の額（年額）</h2>
+    <label class="f" for="kousei">老齢厚生年金の年額（円）<span class="hint">年金額改定通知書・年金決定通知書の「老齢厚生年金」の額。加給年金額と経過的加算は除いた、報酬比例の部分の額です。わからなければ年金事務所で聞くか、ねんきん定期便の見込み額で目安を出します</span></label>
+    <input type="number" id="kousei" inputmode="numeric" min="0" step="1000" placeholder="例：1200000">
+    <label class="f" for="kiso">老齢基礎年金の年額（円・任意）<span class="hint">基礎年金は止まりません。受け取る合計を出すためだけに使います</span></label>
+    <input type="number" id="kiso" inputmode="numeric" min="0" step="1000" placeholder="例：800000">
+  </div>
+
+  <div class="card">
+    <h2>3. 給料と賞与</h2>
+    <label class="f" for="hyo">標準報酬月額（円）<span class="hint">会社からの通知や給与明細の担当に聞くとわかります。わからなければ、残業代・通勤手当も入れた税・保険料を引く前の月給で目安を出します</span></label>
+    <input type="number" id="hyo" inputmode="numeric" min="0" step="1000" placeholder="例：380000">
+    <label class="f" for="sho">この1年間の賞与の合計（円）<span class="hint">見たい月を含む、それまで1年間に受け取った賞与（税・保険料を引く前）の合計。なければ0</span></label>
+    <input type="number" id="sho" inputmode="numeric" min="0" step="1000" placeholder="例：600000">
+  </div>
+  <button id="make" type="button">計算する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3 id="simh">給料が変わったときの止まり方</h3>
+    <ol class="tl" id="sim"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「在職老齢年金の計算方法」（令和8年4月1日更新）をもとにした目安です。基本月額＝加給年金額を除いた老齢厚生年金（報酬比例部分）の月額。総報酬月額相当額＝その月の標準報酬月額＋その月以前1年間の標準賞与額の合計÷12。基本月額と総報酬月額相当額の合計が65万円以下なら全額支給、65万円を超えると「基本月額−（基本月額＋総報酬月額相当額−65万円）÷2」が支給月額。マイナスになると老齢厚生年金（加給年金額を含む）は全額支給停止。老齢基礎年金と経過的加算額は全額支給。基準額は毎年度、賃金の変動に応じて改定されます。標準報酬月額・標準賞与額は、実際の給料・賞与と少しちがう額で決まるため、このページの額は目安です。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var BASE = 650000;
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { var s = n < 0 ? "−" : ""; return s + String(Math.round(Math.abs(n))).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function num(id) { var v = $(id).value.trim(); if (v === "") return null; var n = Number(v); return isNaN(n) || n < 0 ? NaN : n; }
+  // 支給月額（基本月額 kb、総報酬月額相当額 so）
+  function pay(kb, so) {
+    if (kb + so <= BASE) return kb;
+    var p = kb - (kb + so - BASE) / 2;
+    return p < 0 ? 0 : p;
+  }
+
+  function make() {
+    ["sum", "sim", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var age = $("age").value, work = $("work").value;
+    var kousei = num("kousei"), kiso = num("kiso"), hyo = num("hyo"), sho = num("sho");
+    if (kousei === null || isNaN(kousei) || (kiso !== null && isNaN(kiso)) || (work === "kousei" && (hyo === null || isNaN(hyo))) || (sho !== null && isNaN(sho))) {
+      box("入力をなおしてください", "老齢厚生年金の年額と、標準報酬月額を数字で入れてください", "0以上の数字を、円で入れてください（例：1200000）。賞与がなければ0か空のままでかまいません。", true);
+      $("ng").textContent = "・年金の額は、年金額改定通知書（毎年6月ごろに届く）で確かめられます";
+      $("result").hidden = false; return true;
+    }
+    if (kiso === null) kiso = 0; if (sho === null) sho = 0; if (hyo === null) hyo = 0;
+    var kb = kousei / 12;
+    var kisoM = kiso / 12;
+
+    if (work !== "kousei") {
+      var why = work === "none" ? "厚生年金に入らない働き方（自営業・厚生年金に入らない短い時間のパートなど）の給料は、この計算に入りません。" :
+        "退職して1か月がたつと、退職した翌月分から年金額が見直され、止まっていた分がなくなって全額支給になります（1か月以内に再就職して厚生年金に入ったときを除く）。";
+      box("在職老齢年金で止まる額", "止まりません（0円）", why, false);
+      box("受け取る年金の月額の目安", yen(kb + kisoM), "老齢厚生年金 " + yen(kb) + (kiso ? " ＋ 老齢基礎年金 " + yen(kisoM) : "") + "\n年額にすると " + yen((kb + kisoM) * 12) + " です（税・保険料を引く前）。", false);
+      if (work === "taishoku") {
+        li("todo", "退職日を会社に確かめる。退職して1か月たつと、退職した翌月分から年金額が見直される（退職改定）");
+        li("todo", "見直しでは、退職するまでに厚生年金に入っていた期間も年金額に入る。新しい額は、届く通知で確かめる");
+        li("todo", "1か月以内に別の会社で厚生年金に入るときは、見直しの扱いが変わる。年金事務所で確かめる");
+      } else {
+        li("todo", "働き方が変わって厚生年金に入ることになったら、もう一度このページで計算する");
+        li("todo", "短い時間のパートでも、勤め先の決まりで厚生年金に入ることがある。勤め先に、入るかどうかを確かめる");
+      }
+      ng.push("・止まるのは老齢厚生年金だけ。老齢基礎年金は、働いていても止まらない");
+      ng.push("・厚生年金に入るかどうかは勤め先の決まりで変わる。入ると、このページの「会社で厚生年金に入って働いている」で計算する");
+      ng.push("・正確な額は、年金事務所で確かめる");
+      $("ng").textContent = ng.join("\n");
+      $("result").hidden = false; return true;
+    }
+
+    var so = hyo + sho / 12;
+    var p = pay(kb, so), stop = kb - p, sumv = kb + so;
+    var full = sumv <= BASE, zero = p <= 0;
+
+    box("1か月の計算に使う2つの額",
+      "基本月額 " + yen(kb) + "／総報酬月額相当額 " + yen(so),
+      "基本月額＝老齢厚生年金の年額 " + yen(kousei) + " ÷ 12\n総報酬月額相当額＝標準報酬月額 " + yen(hyo) + " ＋ 賞与の合計 " + yen(sho) + " ÷ 12\n2つの合計：" + yen(sumv) + "（基準額 " + yen(BASE) + "）", false);
+
+    if (full) {
+      box("在職老齢年金で止まる額（月）", "止まりません（0円）",
+        "2つの合計が " + yen(BASE) + " 以下なので、老齢厚生年金は全額支給です。", false);
+    } else {
+      box("在職老齢年金で止まる額（月）", yen(stop) + (zero ? "（全額停止）" : ""),
+        "（" + yen(kb) + " ＋ " + yen(so) + " − " + yen(BASE) + "）÷ 2 ＝ " + yen((sumv - BASE) / 2) +
+        (zero ? "\n基本月額より大きいので、老齢厚生年金は全額止まります。加給年金額がある人は、それも止まります。" : "\n年に直すと、およそ " + yen(stop * 12) + " 止まります（給料・賞与がこのまま1年続いたとき）。"), true);
+    }
+    box("受け取る年金の月額の目安", yen(p + kisoM),
+      "老齢厚生年金 " + yen(p) + (kiso ? " ＋ 老齢基礎年金 " + yen(kisoM) + "（基礎年金は止まりません）" : "") +
+      "\n給料（標準報酬月額）と合わせると、月 " + yen(p + kisoM + hyo) + " の目安です（税・保険料を引く前。賞与は入れていません）。", false);
+
+    var room = BASE - sumv;
+    if (room > 0) box("あといくらで止まり始めるか", "総報酬月額相当額があと " + yen(room) + " 増えるまでは止まりません",
+      "標準報酬月額で " + yen(hyo + room) + " くらいまで（賞与が今の額のとき）。賞与で増えるときは、賞与12分の1ずつで数えます（例：賞与が " + yen(room * 12) + " 増えると同じ）。", false);
+    else if (!zero) box("全額止まるまで", "総報酬月額相当額があと " + yen(p * 2) + " 増えると全額止まります",
+      "止まり始めたあとは、給料が1万円増えるごとに、年金がおよそ5,000円止まります（増えた分の半分）。", true);
+
+    // 給料が変わったとき
+    [-100000, -50000, 50000, 100000].forEach(function (d) {
+      var h2 = hyo + d; if (h2 < 0) return;
+      var p2 = pay(kb, h2 + sho / 12);
+      li("sim", "標準報酬月額が " + yen(h2) + "（" + (d > 0 ? "+" : "−") + yen(Math.abs(d)) + "）なら：止まる額 " + yen(kb - p2) + "、年金 " + yen(p2) + "、給料と厚生年金の合計 " + yen(h2 + p2));
+    });
+    li("sim", "賞与がなかったら：止まる額 " + yen(kb - pay(kb, hyo)) + "（賞与は、受け取った月から1年間、12分の1ずつ数えに入ります）");
+
+    li("todo", "年金額改定通知書と、会社からの標準報酬月額の通知で、入れた額が合っているか確かめる");
+    if (!full) {
+      li("todo", "止まる額は、日本年金機構が会社の届け出をもとに計算する。自分で出す書類があるかは、年金事務所で確かめる");
+      li("todo", "給料や働く時間を変えると止まる額が変わる。変える前に、年金事務所で新しい額を出してもらう");
+    }
+    if (age === "65") li("todo", "まだ年金を受け取らずに繰下げ（遅らせる）を考えているときは、止まる分は遅らせても増えない。止まる額を聞いてから比べる");
+    if (age !== "70") li("todo", "毎年9月1日に厚生年金に入っていると、10月分から年金額が見直される（在職定時改定）。止まる額も変わるので、届く通知を見る");
+    li("todo", "退職したら、1か月たったあと、退職した翌月分から見直されて全額支給になる（1か月以内に再就職して厚生年金に入ったときを除く）");
+
+    ng.push("・止まるのは老齢厚生年金だけ。老齢基礎年金と経過的加算額は止まらない");
+    ng.push("・基準額65万円は令和8年度（2026年4月〜）の額。毎年度、賃金の変動で改定される。それまでは51万円だった");
+    ng.push("・賞与は、受け取った月から1年間、12分の1ずつ数えに入る。賞与の月から止まる額が増えることがある");
+    ng.push("・止まる額が変わるのは、総報酬月額相当額が変わった月か、退職日の翌月");
+    ng.push("・全額止まると、加給年金額も止まる。一部だけ止まるときの加給年金の扱いは、年金事務所で確かめる");
+    if (age === "70") ng.push("・70歳以上は保険料はかからないが、厚生年金のある会社に勤めていると同じ計算で止まる（平成19年4月以降に70歳になった人）");
+    if (age === "60") ng.push("・このページは、働いて止まる分だけを出している。ほかの給付との関係で止まることがあるかは、年金事務所で確かめる");
+    ng.push("・標準報酬月額は実際の月給と少しずれるので、ここの額は目安。正確な額は年金事務所で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  function go() { var r = make(); $("simh").hidden = $("sim").hidden = !$("sim").children.length; return r; }
+  $("make").addEventListener("click", function () { if (go() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("age").value = "65"; $("work").value = "kousei";
+    $("kousei").value = "1500000"; $("kiso").value = "800000";
+    $("hyo").value = "500000"; $("sho").value = "1200000";
+    go();
+  }
+})();
+</script>
+</body>
+</html>
