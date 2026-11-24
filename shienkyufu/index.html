@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金生活者支援給付金、出し方といつの分から｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害年金生活者支援給付金、出し方といつの分から</h1>
+  <p class="lead">障害基礎年金を受けている人で、前年の所得が一定以下なら、年金に上乗せして「障害年金生活者支援給付金」が出ます。受けている年金と、いまの状況、扶養している家族を選ぶと、対象になりそうか、月額の目安、何月分から受け取れそうか、出し方と、窓口で使える一言が出ます。日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 受けている年金</h2>
+    <label class="f" for="nenkin">障害年金の種類と等級<span class="hint">年金証書や、年金決定通知書で見る</span></label>
+    <select id="nenkin">
+      <option value="k1">障害基礎年金 1級（障害厚生年金1級も含む）</option>
+      <option value="k2">障害基礎年金 2級（障害厚生年金2級も含む）</option>
+      <option value="k3">障害厚生年金 3級だけ</option>
+      <option value="mada">まだ受けていない（これから請求する）</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. いまの状況</h2>
+    <label class="f" for="jokyo">給付金について、いまどれですか</label>
+    <select id="jokyo">
+      <option value="hagaki">日本年金機構から、はがきの請求書が届いた</option>
+      <option value="todokanai">はがきは届いていないが、所得が下がった・世帯が変わった</option>
+      <option value="uketeru">もう給付金を受け取っている</option>
+      <option value="fugaito">「不該当通知書」が届いた</option>
+    </select>
+    <span class="hint" id="madahint" hidden>これから障害年金を請求する人は、この欄は使いません。</span>
+  </div>
+
+  <div class="card">
+    <h2>3. 前年の所得と扶養</h2>
+    <label class="f" for="fu1">扶養している家族（ふつうの人数）<span class="hint">税金の上で扶養している家族。下の2つに入る人は除く</span></label>
+    <select id="fu1">
+      <option value="0">0人</option><option value="1">1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人以上</option>
+    </select>
+    <label class="f" for="fu2">うち、70歳以上の配偶者・親など<span class="hint">同じ生計の70歳以上の配偶者、老人扶養親族</span></label>
+    <select id="fu2">
+      <option value="0">0人</option><option value="1">1人</option><option value="2">2人</option>
+    </select>
+    <label class="f" for="fu3">うち、16〜22歳の子など<span class="hint">特定扶養親族と、16歳以上19歳未満の扶養親族</span></label>
+    <select id="fu3">
+      <option value="0">0人</option><option value="1">1人</option><option value="2">2人</option><option value="3">3人</option>
+    </select>
+    <label class="f" for="shotoku">前年の所得（万円）<span class="hint">障害年金は入れない（数えない）。給料なら源泉徴収票の「給与所得控除後の金額」。わからなければ空欄</span></label>
+    <input type="number" id="shotoku" inputmode="numeric" min="0" placeholder="例：120">
+  </div>
+  <button id="make" type="button">給付金のことを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>窓口・電話で使う一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>やること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「障害年金生活者支援給付金の概要」（障害基礎年金を受けていて、前年の所得が4,918,000円＋扶養親族の数×38万円以下。同一生計配偶者のうち70歳以上の者・老人扶養親族は48万円、特定扶養親族・16歳以上19歳未満の扶養親族は63万円。令和8年10月分から令和9年9月分は令和7年の所得。障害年金などの非課税収入は所得に含めない。1級7,025円・2級5,620円（月額））、「年金生活者支援給付金 請求手続きのご案内（令和8年10月版）」（原則、請求した月の翌月分から。偶数月の15日に前月までの2か月分を年金とは別に振り込み。原則、添付書類は不要）、年金Q&A「手続きが遅れると受け取れなくなりますか」（令和9年1月4日までに日本年金機構に届けば令和8年10月分から）、「いつから支給の対象になりますか」（新たに基礎年金の受給権を得た人は、受給権を得た日から3か月以内の請求でさかのぼる）、「いつ、どうやって認定請求の手続きをすればよいのですか」「毎年、手続きが必要ですか」「はがき型はいつ頃送られますか」で出した目安です。額と所得の基準は年度ごとに変わります。対象になるかの最終の判断は、日本年金機構が市区町村の所得情報で行います。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function fm(n) { return Math.floor(n / 12) + "年" + (n % 12 + 1) + "月"; }
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function done(memo, ng) { $("memo").textContent = memo; $("ng").textContent = ng.join("\n"); $("result").hidden = false; return true; }
+  var DIAL = "給付金専用ダイヤル（0570-05-4092）か、近くの年金事務所";
+  function sync() { var m = $("nenkin").value === "mada"; $("jokyo").disabled = m; $("madahint").hidden = !m; }
+  $("nenkin").addEventListener("change", sync);
+  function make() {
+    $("sum").innerHTML = "";
+    var nen = $("nenkin").value, jo = $("jokyo").value;
+    var n1 = +$("fu1").value, n2 = +$("fu2").value, n3 = +$("fu3").value;
+    var line = 4918000 + n1 * 380000 + n2 * 480000 + n3 * 630000;
+    var sv = $("shotoku").value, sh = sv === "" ? null : Math.round(parseFloat(sv) * 10000);
+    var lineTxt = "所得の基準は " + yen(line) + "円以下です（4,918,000円＋扶養の分）。令和8年10月分から令和9年9月分は、令和7年の所得で見ます。障害年金は所得に数えません。";
+    if (nen === "k3") {
+      box("給付金", "対象外の見込み", "障害年金生活者支援給付金は、障害基礎年金を受けている人に出るものです。障害厚生年金3級だけのときは、障害基礎年金がないので対象になりません。等級が2級以上に変わったときは、あらためて確かめます。", true);
+      return done("障害厚生年金3級を\n受けています。\n障害年金生活者支援給付金の\n対象にならないか\n確かめたいです。", ["・年金証書で、年金の種類と等級を見直す", "・等級が変わったら、そのときに給付金のことも聞く"]);
+    }
+    if (sh !== null && sh > line) {
+      box("給付金", "対象外の見込み", "入れた所得（" + yen(sh) + "円）が、基準を超えています。\n" + lineTxt + "\n所得が下がった年があれば、その翌年の10月分からの判定で、対象になることがあります。", true);
+      return done("障害年金生活者支援給付金の\n所得の基準を確かめたいです。\n扶養している家族は\n" + (n1 + n2 + n3) + "人です。", ["・前年の所得を、源泉徴収票や課税証明書で見直す", "・扶養の人数（70歳以上・16〜22歳の人）を見直す"]);
+    }
+    if (nen !== "mada" && jo === "fugaito") {
+      box("不該当通知書", "いまは要件の外", "前年の所得などで、要件を満たさないと判定されたときに届きます。そのあいだは給付金は出ません。所得が下がるなどで、また要件を満たしたときは、あらためて自分で請求します。", true);
+      box("また対象になったら", "自分で請求する", "請求した月の翌月分からです。はがきが届くのを待たず、" + DIAL + "に相談します。", false);
+      return done("不該当通知書が届きました。\n理由と、また対象に\nなったときの請求の仕方を\n教えてください。", ["・通知書と年金証書を手元に置いて電話する", "・前年の所得を、源泉徴収票や課税証明書で確かめる"]);
+    }
+    var getsu = nen === "k1" ? 7025 : nen === "k2" ? 5620 : null;
+    var unk = sh === null;
+    box("給付金", unk ? "対象になりそう（所得を確かめる）" : "対象になりそう", (unk ? "所得が空欄なので、基準と比べていません。\n" : "入れた所得（" + yen(sh) + "円）は、基準以下です。\n") + lineTxt, unk);
+    box("月額の目安", getsu ? yen(getsu) + "円" : "1級 7,025円・2級 5,620円", (getsu ? "年額にすると" + yen(getsu * 12) + "円です。" : "等級は、障害年金の結果で決まります。") + "令和8年度の額で、年度ごとに変わります。障害年金とは別に、偶数月の15日に、前月までの2か月分が振り込まれます（口座は年金と同じ）。", false);
+    var now = DEMO ? new Date(2026, 10, 24) : new Date();
+    var nm = now.getFullYear() * 12 + now.getMonth();
+    var limit = new Date(2027, 0, 4, 23, 59, 59);
+    if (nen === "mada") {
+      box("いつの分から", "年金の請求と一緒に出す", "これから障害基礎年金を請求する人は、年金の請求書を出すときに、給付金の請求書（年金生活者支援給付金請求書）も一緒に出します。新たに基礎年金の権利を得た人は、権利を得た日から3か月以内に出せば、さかのぼって受け取れます。3か月を過ぎると、出した月の翌月分からです。権利を得た日がいつになるか（障害認定日など）と、さかのぼる範囲は、窓口で確かめます。", false);
+      box("出し方", "年金の請求と同じ窓口で", "障害年金の請求書を出すのと同じ窓口で、給付金の請求書も出します。原則、添付書類は要りません。日本年金機構が、市区町村の所得の情報で判定します。", false);
+      return done("障害基礎年金を\n請求します。\n年金生活者支援給付金の\n請求書も一緒に\n出したいです。\n書き方を教えてください。", ["・年金の請求書と一緒に、給付金の請求書をもらう", "・年金の請求書と同じ日に出す", "・控えやコピーを取っておく"]);
+    }
+    if (jo === "uketeru") {
+      box("毎年の手続き", "原則いらない", "受け取っている人で、引き続き要件を満たしていれば、翌年からの手続きは原則いりません。毎年、前年の所得で判定され、その結果は10月分（12月に振り込む分）から1年間に反映されます。", false);
+      box("外れたとき", "不該当通知書が届く", "所得が増えたなどで要件を満たさなくなると「不該当通知書」が届き、給付金は止まります。その後、また要件を満たしたときは、あらためて請求が要ります。", false);
+      return done("障害年金生活者支援給付金を\n受け取っています。\n来年も手続きなしで\n続くか確かめたいです。", ["・届いた支給決定通知書や振込通知書を、まとめて取っておく", "・住所が日本国内でなくなったときは、届け出が要る"]);
+    }
+    if (jo === "hagaki") {
+      var inTime = now <= limit;
+      box("いつの分から", inTime ? "令和8年10月分から" : fm(nm + 1) + "分から（今月出したとき）", inTime ? "はがきに書かれた提出期限を過ぎていても、令和9年1月4日（月）までに日本年金機構に届けば、さかのぼって令和8年10月分から受け取れます。\n郵便が届くまでの日数を見て、早めに出します。" : "令和9年1月4日を過ぎて届いた分は、請求した月の翌月分からです。今月中に届けば、" + fm(nm + 1) + "分からになります。遅れるほど、受け取れる月が減ります。", !inTime);
+      box("出し方", "はがきに書いてポストへ", "届いたはがき（年金生活者支援給付金請求書）に、必要なことを書き、切手を貼って、ポストに入れれば請求の手続きは終わりです。原則、添付書類は要りません。", false);
+      box("このあと", "通知書が届く", "対象になれば「支給決定通知書」と「振込通知書」が届きます（振込通知書は、初めて振り込まれる月の上旬）。対象にならなければ「不該当通知書」が届きます。", false);
+      return done("障害年金生活者支援給付金の\nはがきが届きました。\n書き方で\nわからないところがあります。\n令和8年10月分から\n受け取れる形になるか、\n確かめたいです。", ["・はがきに書く（書き方で迷ったら電話で聞く）", "・切手を貼って、ポストに入れる", inTime ? "・令和9年1月4日までに届くよう、早めに出す" : "・今月中に届くよう出す", "・出す前に、はがきの両面を写真に撮っておく"]);
+    }
+    box("いつの分から", fm(nm + 1) + "分から（今月出したとき）", "はがきが届かない人が自分で請求するときは、請求した月の翌月分からです。世帯が変わった・税額が直されたなどで要件に当てはまるようになったときは、はがきを待たずに自分で請求します。はがきは、毎年9月の第1営業日から順に送られます。", false);
+    box("出し方", "電話か年金事務所で", DIAL + "に、請求したいと伝えます。請求書（A4の形）は日本年金機構のサイトにもあり、年金事務所に出せます（郵送も可）。", false);
+    return done("障害基礎年金を\n受けています。\n" + "所得が下がった\n（世帯が変わった）ので、\n年金生活者支援給付金を\n請求したいです。\n何を出せばよいですか。", ["・年金証書（基礎年金番号）を手元に置く", "・" + DIAL + "に電話する", "・請求書を年金事務所に出す（郵送も可）", "・今月中に出す（翌月分からになるため）"]);
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("nenkin").value = "k2"; $("jokyo").value = "hagaki"; $("fu1").value = "1"; $("shotoku").value = "150"; make(); }
+})();
+</script>
+</body>
+</html>
