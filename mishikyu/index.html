@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の受給中に亡くなったとき、未支給の基本手当の請求の期限とやること｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #memo, .mihon #ng, .mihon #motsu { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の受給中に亡くなったとき、未支給の基本手当の請求の期限とやること</h1>
+  <p class="lead">失業保険（基本手当）を受けている途中で家族が亡くなったときに、まだ受け取っていない分を遺族が請求する「未支給失業等給付」について、請求できそうか・期限の日・持ち物・ハローワークでの一言を出します。決めるのはハローワークです。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 亡くなった日</h2>
+    <label class="f" for="dt">亡くなった日<span class="hint">死亡診断書などに書かれている日です</span></label>
+    <input type="date" id="dt">
+  </div>
+
+  <div class="card">
+    <h2>2. 請求する人（あなた）</h2>
+    <label class="f" for="rel">亡くなった人から見て、あなたは？</label>
+    <select id="rel">
+      <option value="0">配偶者（届出をしていない事実上の夫婦も含む）</option>
+      <option value="1">子</option>
+      <option value="2">父母</option>
+      <option value="3">孫</option>
+      <option value="4">祖父母</option>
+      <option value="5">兄弟姉妹</option>
+      <option value="9">それ以外（おじ・おば、おい・めいなど）</option>
+    </select>
+    <label class="f" for="sei">亡くなった当時、生計を同じくしていた？<span class="hint">同じ家で暮らしていた、仕送りでくらしを支え合っていた、など</span></label>
+    <select id="sei">
+      <option value="y">同じくしていた</option>
+      <option value="n">別だった</option>
+      <option value="u">わからない</option>
+    </select>
+    <div id="upw">
+      <label class="f" for="up">あなたより前の順番の家族で、生計を同じくしていた人はいる？<span class="hint">順番は、配偶者→子→父母→孫→祖父母→兄弟姉妹です</span></label>
+      <select id="up">
+        <option value="n">いない</option>
+        <option value="y">いる</option>
+        <option value="u">わからない</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. 手元のもの</h2>
+    <label class="f" for="doc">亡くなった人の、失業保険の書類は？</label>
+    <select id="doc">
+      <option value="sho">雇用保険受給資格者証がある</option>
+      <option value="tsuchi">受給資格通知を受け取っていた（マイナンバーカードで手続き）</option>
+      <option value="none">見つからない・わからない</option>
+    </select>
+    <label class="f" for="ar">最後の認定日のあと、アルバイトなどの収入はあった？</label>
+    <select id="ar">
+      <option value="n">なかった</option>
+      <option value="y">あった</option>
+      <option value="u">わからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">期限とやることを見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>やること（順番）</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークに電話するときの一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>持っていくもの</h3>
+    <div class="memo" id="motsu"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法 第10条の3（請求できる人は、配偶者（事実上の婚姻関係を含む）・子・父母・孫・祖父母・兄弟姉妹で、死亡の当時に生計を同じくしていた人。順位はこの順。同じ順位の人が2人以上いるときは、1人の請求が全員のための請求とみなされる）・第31条、雇用保険法施行規則 第17条の2（死亡した日の翌日から起算して6か月以内に、未支給失業等給付請求書に、死亡の事実と年月日・続柄・生計を同じくしていたことを証明する書類と、受給資格者証を添えて、亡くなった人のハローワークへ）・第17条の3（支給の決定の翌日から7日以内に支給）・第47条（請求する人がハローワークに出頭し、亡くなった人について失業の認定を受ける）、厚生労働省「Q&A～労働者の皆様へ（基本手当、再就職手当）～」Q47 をもとにした目安です。期限の日は、亡くなった日の6か月後の同じ日（その月に同じ日がないときは月末）として出しています。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  var W = ["日", "月", "火", "水", "木", "金", "土"];
+  var REL = ["配偶者", "子", "父母", "孫", "祖父母", "兄弟姉妹"];
+  function fmt(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日（" + W[d.getDay()] + "）"; }
+  function plusM(d, n) {
+    var y = d.getFullYear(), m = d.getMonth() + n, day = d.getDate();
+    var last = new Date(y, m + 1, 0).getDate();
+    return new Date(y, m, Math.min(day, last));
+  }
+  function sync() { $("upw").hidden = $("rel").value === "0" || $("rel").value === "9"; }
+  function make() {
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("result").hidden = true;
+    var dS = $("dt").value, rel = $("rel").value, sei = $("sei").value, up = $("up").value, doc = $("doc").value, ar = $("ar").value;
+    if (!dS) { alert("亡くなった日を入れてください"); return false; }
+    var p = dS.split("-"), d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    if (d > today) { alert("亡くなった日に、今日より後の日が入っています"); return false; }
+    var lim = plusM(d, 6);
+    var left = Math.round((lim - today) / 86400000);
+    var prev = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1);
+    if (rel === "0") up = "n";
+
+    // 請求できそうか
+    var can, cs, no = false;
+    if (rel === "9") { can = "請求できる人に入っていません"; cs = "請求できるのは、配偶者・子・父母・孫・祖父母・兄弟姉妹で、亡くなった当時に生計を同じくしていた人です。ほかに当てはまる家族がいれば、その人が請求します。"; no = true; }
+    else if (sei === "n") { can = "生計が別だと、請求できる人に入りません"; cs = "続柄が当てはまっても、亡くなった当時に生計を同じくしていたことが条件です。生計を同じくしていた家族がほかにいれば、その人が請求します。迷うときは窓口で確かめます。"; no = true; }
+    else if (up === "y") { can = "前の順番の人が請求します"; cs = "あなたより前の順番（配偶者→子→父母→孫→祖父母→兄弟姉妹）に、生計を同じくしていた人がいるため、その人が請求する順番です。手続きを手伝うときは、代理人として出す方法を窓口で確かめます。"; no = true; }
+    else if (sei === "u" || up === "u") { can = "請求できる見込み（窓口で確かめる）"; cs = REL[Number(rel)] + "は請求できる続柄です。生計を同じくしていたか・前の順番の人がいるかは、住民票の写しなどを持って窓口で確かめます。"; }
+    else { can = REL[Number(rel)] + "として請求できる見込み"; cs = "請求できる続柄で、亡くなった当時に生計を同じくしていた人です。同じ順番の人がほかにもいるときは、1人の請求が全員のための請求になります。"; }
+    box("請求できそうか", can, cs, no);
+    var ls = left < 0 ? "目安の期限を過ぎています。まず、亡くなった人のハローワークに電話して、いまから出せるかを聞きます。" : "今日から数えて、あと" + left + "日です。亡くなった日の翌日から数えて6か月以内です。葬儀やほかの手続きで後回しにしやすいので、先に日付をメモします。";
+    box("請求の期限の目安", fmt(lim) + "まで", ls, left < 0);
+    box("受け取れる分", fmt(prev) + "まで", "原則として、亡くなった日の前日までの基本手当のうち、まだ支給されていない分です。最後の認定日より後の期間は、請求する人が窓口で「亡くなった人についての失業の認定」を受けて決まります。", false);
+    box("出す先と入金", "亡くなった人の住所を管轄するハローワーク", "支給が決まると、決まった日の翌日から7日以内に支給されます。", false);
+
+    // やること
+    if (no) li("請求する順番の家族がいれば、このページの期限の日を伝えて、その人に請求してもらう（以下はその人がすること）");
+    li("亡くなった人の失業保険の書類（" + (doc === "tsuchi" ? "受給資格通知" : "雇用保険受給資格者証") + "・失業認定申告書）と、次の認定日を確かめる");
+    li("亡くなった人の住所を管轄するハローワークに電話して、受給中に亡くなったことと、未支給失業等給付を請求したいことを伝える");
+    li("未支給失業等給付請求書を、窓口でもらうか、ハローワークインターネットサービスから手に入れる");
+    li("死亡診断書の写しなど・戸籍謄本など・住民票の写しなどをそろえる（どれで足りるかは電話で確かめる）");
+    if (ar !== "n") li(ar === "y" ? "最後の認定日のあとのアルバイトなどの日と収入を、わかる範囲で書き出す（届け出が必要です）" : "最後の認定日のあとに、アルバイトなどの収入がなかったかを、通帳や予定表で確かめる");
+    li("請求する人がハローワークに行き、請求書を出して、亡くなった人についての失業の認定を受ける（行けない事情があるときは、代理人で認められるかを先に聞く）");
+    li("支給の決定のあと、7日以内の入金を確かめる");
+
+    $("memo").textContent = "失業保険を受けていた\n家族が" + (d.getMonth() + 1) + "月" + d.getDate() + "日に\n亡くなりました。\n未支給失業等給付を\n請求したいです。\n持っていくものと、\n来所する日を\n教えてください。";
+    var m = "・未支給失業等給付請求書\n・死亡の事実と日付が\n　わかる書類\n　（死亡診断書の写しなど）\n・続柄がわかる書類\n　（戸籍謄本など）\n・生計を同じくしていたと\n　わかる書類\n　（住民票の写しなど）\n";
+    if (doc === "sho") m += "・亡くなった人の\n　受給資格者証\n";
+    else if (doc === "tsuchi") m += "・亡くなった人の\n　受給資格通知\n　（あれば）\n";
+    else m += "・受給資格者証が\n　見つからないことを\n　電話で先に伝える\n";
+    m += "・失業認定申告書（あれば）\n・請求する人の本人確認書類\n・振込先の通帳など";
+    $("motsu").textContent = m;
+    var g = "・期限は亡くなった日の翌日から6か月\n・請求する人は窓口に行く\n・書類はコピーも取っておく\n";
+    if (doc === "none") g += "・受給資格者証は付ける決まりの書類\n・出せない事情は窓口で伝える\n";
+    if (ar !== "n") g += "・収入は届け出が必要\n";
+    g += "・支給の額は窓口で決まる";
+    $("ng").textContent = g;
+    $("result").hidden = false;
+    return true;
+  }
+  $("rel").addEventListener("change", sync);
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  sync();
+  if (DEMO) { $("dt").value = "2026-11-10"; $("rel").value = "0"; $("sei").value = "y"; $("doc").value = "sho"; $("ar").value = "n"; sync(); make(); }
+})();
+</script>
+</body>
+</html>
