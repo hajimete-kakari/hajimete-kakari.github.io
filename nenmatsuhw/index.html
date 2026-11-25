@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>年末に辞めたときのハローワークの日付｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 6px; } ol.tl .d { font-weight: 700; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>年末に辞めたときの、ハローワークの日付</h1>
+  <p class="lead">辞めた日と、離職票が届いたか、辞めた理由を選ぶと、ハローワークの年末年始の休み、手続きに行ける最初の日、そこからの待期の終わり、受給期間の終わりの目安を出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めた日と離職票</h2>
+    <label class="f" for="quit">辞めた日（最後に在籍した日）</label>
+    <input type="date" id="quit">
+    <label class="f" for="st">離職票は届きましたか</label>
+    <select id="st">
+      <option value="no">まだ届いていない</option>
+      <option value="yes">届いた</option>
+    </select>
+    <div id="gotbox" hidden>
+      <label class="f" for="got">離職票が届いた日</label>
+      <input type="date" id="got">
+    </div>
+    <label class="f" for="why">辞めた理由<span class="hint">離職票の内容やハローワークの判断で決まります</span></label>
+    <select id="why">
+      <option value="jiko">自分の都合（自己都合）</option>
+      <option value="kaisha">会社の都合（倒産・解雇など）</option>
+      <option value="unk">まだわからない</option>
+    </select>
+  </div>
+  <button id="make" type="button">日付を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>日付の流れ</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険の基本手当（失業保険）の一般的な決まりで出した目安です。ハローワークの雇用保険の手続きは、月〜金曜日（祝日・年末年始の12月29日〜1月3日を除く）の8時30分〜17時15分（ハローワークインターネットサービス）。会社がハローワークへ資格喪失の届け出をする期限は、被保険者でなくなった日の翌日から数えて10日以内（雇用保険法施行規則7条）。受給期間は離職日の翌日から1年、待期は受給資格が決まった日から通算7日。祝日はページの中で計算した目安です。地域のハローワークの開いている日・時間は、そのハローワークで確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); if (p.length !== 3) return null; var x = new Date(+p[0], +p[1] - 1, +p[2]); return isNaN(x) ? null : x; }
+  function add(dt, n) { var x = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function fy(dt) { return dt.getFullYear() + "年" + f(dt); }
+  function iso(dt) { return dt.getFullYear() + "-" + ("0" + (dt.getMonth() + 1)).slice(-2) + "-" + ("0" + dt.getDate()).slice(-2); }
+  function nthMon(y, m, n) { var x = new Date(y, m, 1), w = x.getDay(), first = 1 + ((8 - w) % 7); return first + (n - 1) * 7; }
+  function baseHol(dt) {
+    var y = dt.getFullYear(), m = dt.getMonth(), day = dt.getDate();
+    var fixed = { "0-1": 1, "1-11": 1, "1-23": 1, "3-29": 1, "4-3": 1, "4-4": 1, "4-5": 1, "7-11": 1, "10-3": 1, "10-23": 1 };
+    if (fixed[m + "-" + day]) return true;
+    if (m === 0 && day === nthMon(y, 0, 2)) return true;
+    if (m === 6 && day === nthMon(y, 6, 3)) return true;
+    if (m === 8 && day === nthMon(y, 8, 3)) return true;
+    if (m === 9 && day === nthMon(y, 9, 2)) return true;
+    var sp = Math.floor(20.8431 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
+    var au = Math.floor(23.2488 + 0.242194 * (y - 1980) - Math.floor((y - 1980) / 4));
+    if (m === 2 && day === sp) return true;
+    if (m === 8 && day === au) return true;
+    return false;
+  }
+  function isHol(dt) {
+    if (baseHol(dt)) return true;
+    // 振替休日：日曜の祝日のあと、最初の祝日でない日
+    var k = add(dt, -1);
+    while (baseHol(k)) { if (k.getDay() === 0) return true; k = add(k, -1); }
+    // 国民の休日：前後が祝日の平日
+    if (dt.getDay() !== 0 && baseHol(add(dt, -1)) && baseHol(add(dt, 1))) return true;
+    return false;
+  }
+  function nenmatsu(dt) { var m = dt.getMonth(), day = dt.getDate(); return (m === 11 && day >= 29) || (m === 0 && day <= 3); }
+  function closed(dt) { var w = dt.getDay(); return w === 0 || w === 6 || isHol(dt) || nenmatsu(dt); }
+  function nextOpen(dt) { var x = dt; while (closed(x)) x = add(x, 1); return x; }
+  function prevOpen(dt) { var x = dt; while (closed(x)) x = add(x, -1); return x; }
+
+  $("st").addEventListener("change", function () { $("gotbox").hidden = $("st").value !== "yes"; });
+
+  if (DEMO) {
+    $("quit").value = "2026-12-25"; $("st").value = "yes"; $("gotbox").hidden = false; $("got").value = "2027-01-06"; $("why").value = "jiko";
+  }
+
+  var TL = [];
+  function li(dt, text, key) {
+    var label = typeof dt === "string" ? dt : f(dt);
+    TL.push([key !== undefined ? key : dt.getTime(), TL.length, label, text]);
+  }
+  function drawTL() {
+    TL.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+    TL.forEach(function (t) {
+      var e = document.createElement("li");
+      var s = document.createElement("span"); s.className = "d"; s.textContent = t[2];
+      e.appendChild(s); e.appendChild(document.createTextNode("　" + t[3])); $("tl").appendChild(e);
+    });
+  }
+
+  function make() {
+    var q = d($("quit").value), st = $("st").value, why = $("why").value, g = d($("got").value);
+    $("sum").innerHTML = ""; $("tl").innerHTML = ""; TL = []; $("memo").textContent = ""; $("ng").textContent = "";
+    var res = $("result"); res.hidden = false;
+    var box = document.createElement("div"); box.className = "big";
+    box.innerHTML = '<div class="k">ハローワークに行ける最初の日</div><div class="v"></div><div class="s"></div>';
+    $("sum").appendChild(box);
+    if (!q) { box.className = "big no"; box.querySelector(".v").textContent = "辞めた日を入れてください"; box.querySelector(".s").textContent = ""; res.scrollIntoView({ behavior: "smooth" }); return; }
+    if (st === "yes" && !g) { box.className = "big no"; box.querySelector(".v").textContent = "離職票が届いた日を入れてください"; box.querySelector(".s").textContent = ""; res.scrollIntoView({ behavior: "smooth" }); return; }
+    if (st === "yes" && g < q) { box.className = "big no"; box.querySelector(".v").textContent = "届いた日が、辞めた日より前になっています"; box.querySelector(".s").textContent = "日付を確かめて、もう一度入れてください。"; res.scrollIntoView({ behavior: "smooth" }); return; }
+
+    // 年末年始の休み（辞めた日に近い年末）
+    var yy = q.getMonth() === 0 && q.getDate() <= 3 ? q.getFullYear() - 1 : q.getFullYear();
+    var ns = new Date(yy, 11, 29), ne = new Date(yy + 1, 0, 3);
+    var lastOpen = prevOpen(add(ns, -1)), firstOpen = nextOpen(add(ne, 1));
+    var restStart = add(lastOpen, 1), restEnd = add(firstOpen, -1);
+    var restDays = Math.round((restEnd - restStart) / 86400000) + 1;
+    var nearYE = q >= new Date(yy, 10, 15) && q <= new Date(yy + 1, 0, 15);
+
+    // 会社の届け出の期限（被保険者でなくなった日＝辞めた日の翌日、の翌日から10日以内）
+    var lossDay = add(q, 1), dl = add(lossDay, 10), dlEff = nextOpen(dl);
+    var endKyu = new Date(q.getFullYear() + 1, q.getMonth(), q.getDate());
+    if (endKyu.getMonth() !== q.getMonth()) endKyu = new Date(q.getFullYear() + 1, q.getMonth() + 1, 0);
+
+    var go, v, s;
+    if (st === "yes") {
+      go = nextOpen(g);
+      v = fy(go) + "から行けます";
+      s = (go.getTime() !== g.getTime() ? "届いた" + f(g) + "はハローワークの休みの日なので、次に開く日です。" : "届いた日が開いている日なので、その日から行けます。") + "手続きは16時前に着くのがすすめられています。";
+    } else {
+      go = null;
+      box.className = "big no";
+      v = "離職票が届いてから、次に開いている日です";
+      s = "会社の届け出の期限の目安は" + f(dlEff) + "（年末年始・土日祝にかかると、次に開く日までのびます）。そのあと会社を通して届きます。先にネットで求職の申込みだけはできます。";
+    }
+    box.querySelector(".v").textContent = v; box.querySelector(".s").textContent = s;
+
+    var b2 = document.createElement("div"); b2.className = "big";
+    b2.innerHTML = '<div class="k">ハローワークの年末年始の休み</div><div class="v"></div><div class="s"></div>';
+    b2.querySelector(".v").textContent = f(restStart) + "〜" + f(restEnd) + "（" + restDays + "日）";
+    b2.querySelector(".s").textContent = "年内の最後は" + f(lastOpen) + "、年明けの最初は" + f(firstOpen) + "。" + (nearYE ? "" : "辞めた日が年末から離れているので、休みは参考です。");
+    $("sum").appendChild(b2);
+
+    var b3 = document.createElement("div"); b3.className = "big";
+    b3.innerHTML = '<div class="k">受給期間（手当を受けられる期間）の終わり</div><div class="v"></div><div class="s"></div>';
+    b3.querySelector(".v").textContent = fy(endKyu) + "まで";
+    b3.querySelector(".s").textContent = "辞めた日の翌日から1年。この日を過ぎると、日数が残っていても受けられません（延長の申し出をした人などを除く）。";
+    $("sum").appendChild(b3);
+
+    // 日付の流れ
+    li(q, "辞めた日");
+    li(dlEff, "会社がハローワークへ届け出る期限の目安" + (dlEff.getTime() !== dl.getTime() ? "（本来の" + f(dl) + "が休みのため、のびた日）" : ""));
+    if (nearYE) {
+      li(lastOpen, "ハローワークの年内の最後の日");
+      li(firstOpen, "ハローワークの年明けの最初の日");
+    }
+    if (st === "yes") {
+      li(g, "離職票が届いた日");
+      li(go, "ハローワークで求職の申込みと離職票の提出（受給資格の決定）");
+      var tEnd = add(go, 6);
+      li(tEnd, "待期の7日間が終わる日（この間に働くと後ろにずれます）");
+      var nx = add(go, 7);
+      if (why === "kaisha") li(nx, "手当の対象の日が始まります（振込は認定日のあと）");
+      else if (why === "jiko") li(nx, "給付制限（手当が出ない期間）が始まります。原則1か月");
+      else li(nx, "手当の対象の日か、給付制限のどちらかが始まります");
+    } else {
+      li("届いた日", "その日か、次に開いている日に、ハローワークへ", endKyu.getTime() - 2);
+      li("行った日から7日", "待期の7日間（手当は出ません）", endKyu.getTime() - 1);
+    }
+    li(fy(endKyu), "受給期間の終わり", endKyu.getTime());
+    drawTL();
+
+    // 一言
+    var m;
+    if (st === "yes") {
+      m = "雇用保険の手続きに来ました。\n" + f(q) + "に辞めて、\n離職票は" + f(g) + "に\n届きました。\n離職票と本人確認の書類を\n持ってきています。";
+    } else {
+      m = "■会社に聞くとき\n" + f(q) + "に辞めました。\n離職票はいつごろ\n届きそうでしょうか。\nハローワークへの届け出は\nもう済んでいますか。";
+    }
+    $("memo").textContent = m;
+
+    // 気をつけること
+    var ng = [];
+    ng.push("・年末年始と土日祝は、雇用保険の手続きができません。年内の最後の日に行くなら、16時前を目安に早めに。");
+    if (st === "no") ng.push("・会社の届け出の期限を過ぎてしばらくしても届かないときは、まず会社に確かめ、だめなら住んでいる地域のハローワークに相談します。");
+    if (why === "jiko") ng.push("・自己都合の給付制限は、2025年4月1日以降に辞めた人は原則1か月。辞めた日から5年の間に、自己都合で辞めて受給資格の決定を受けたことが2回以上あると3か月です。");
+    if (why === "unk") ng.push("・辞めた理由は、離職票の内容とハローワークの判断で決まります。違うと思ったら、手続きのときに伝えます。");
+    ng.push("・振込は認定日から通常5営業日。年末年始や祝日をはさむと遅れることがあります。");
+    var left = Math.round((endKyu - (go || q)) / 86400000);
+    if (go && left < 120) ng.push("・受給期間の終わりまで、残りが" + left + "日です。もらえる日数によっては、全部を受け取れないことがあります。早めに窓口へ。");
+    $("ng").textContent = ng.join("\n");
+    res.scrollIntoView({ behavior: "smooth" });
+  }
+  $("make").addEventListener("click", make);
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
