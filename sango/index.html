@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>国民年金の第3号から外れるときの手続き｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>国民年金の第3号から外れるときの手続き</h1>
+  <p class="lead">会社員・公務員の配偶者に扶養されている「第3号被保険者」の人が、配偶者の退職・転職・65歳、自分の収入が増えた・就職した・離婚したときに、第3号が続くか、次は何号になるか、どこに何を出すか、期限の目安、保険料の額を並べます。日本年金機構の案内と国民年金法施行規則に当てはめた目安です。最後は、市区町村の国民年金の窓口か年金事務所で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 起きたこと</h2>
+    <label class="f" for="ev">いちばん近いもの</label>
+    <select id="ev">
+      <option value="retire">配偶者が会社を辞めた（次の会社にすぐは入らない・自営業になる）</option>
+      <option value="job">配偶者が転職した（間を空けずに次の会社で厚生年金に入る）</option>
+      <option value="sp65">配偶者が65歳になった（老齢年金を受け取れる）</option>
+      <option value="income">自分の収入が増えて、扶養の条件（年収130万円未満など）を超えた</option>
+      <option value="myjob">自分が就職した・勤め先で厚生年金に入ることになった</option>
+      <option value="rikon">離婚した</option>
+    </select>
+    <label class="f" for="day">その日<span class="hint">配偶者の退職日・離婚した日・扶養を外れた日・入社した日。65歳のときは、65歳の誕生日の前日</span></label>
+    <input type="date" id="day">
+  </div>
+
+  <div class="card">
+    <h2>2. 自分のこと</h2>
+    <label class="f" for="age">自分の年齢（その日の時点）</label>
+    <input type="number" id="age" inputmode="numeric" min="15" max="80" placeholder="例：45">
+    <label class="f" for="next">このあと自分は厚生年金に入るか<span class="hint">自分が勤め先で厚生年金に入るなら「入る」。パートで入らない・働いていないなら「入らない」</span></label>
+    <select id="next">
+      <option value="no">入らない（働いていない・厚生年金のないパートなど）</option>
+      <option value="yes">入る（勤め先で厚生年金に入る）</option>
+      <option value="unk">わからない・勤め先に聞いていない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. いまの状況</h2>
+    <label class="f" for="done">市区町村や勤め先への届け出<span class="hint">配偶者の勤め先で扶養を外す手続きをしたかどうかも含めます</span></label>
+    <select id="done">
+      <option value="not">まだ出していない</option>
+      <option value="done">もう出した</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="pay">保険料を払うのが難しそうか</label>
+    <select id="pay">
+      <option value="ok">払えそう</option>
+      <option value="hard">難しそう</option>
+    </select>
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※日本年金機構「国民年金の加入（第1号・第3号）」「会社を退職したときの国民年金」「配偶者が65歳になったとき」「被扶養者の届出」「国民年金保険料」、3号不整合記録のQ&Aと、国民年金法施行規則（第6条の2・第6条の2の2）をもとにした目安です。第3号の条件は、日本国内に住んでいること・20歳以上60歳未満・厚生年金に入る配偶者（65歳以上70歳未満で老齢年金の受給権がある人を除く）に扶養され、原則として年収130万円未満であること。国民年金保険料は令和8年度 月17,920円、納める期限は対象の月の翌月末日。届け出が遅れて未納になった期間は、2年より前の分は時効で納められません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  var HOKEN = 17920;
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function ymd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function addDays(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+
+  function make() {
+    ["sum", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var ev = $("ev").value, next = $("next").value, done = $("done").value, pay = $("pay").value;
+    var ageS = $("age").value.trim(), age = Number(ageS), dayS = $("day").value;
+    if (ageS === "" || isNaN(age) || age < 15 || age > 80 || !dayS) {
+      box("入力をなおしてください", "その日と、自分の年齢を入れてください", "年齢は数字で（例：45）。日付は、配偶者の退職日や離婚した日などを選びます。", true);
+      $("ng").textContent = "・日付がはっきりしないときは、退職証明書・離職票・戸籍の届け出の控えなどで確かめる";
+      $("result").hidden = false; return true;
+    }
+    var p = dayS.split("-"), day = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    if (age < 20 || age >= 60) {
+      box("第3号の対象かどうか", age < 20 ? "20歳になるまでは第3号ではありません" : "60歳からは第3号ではありません",
+        "第3号は20歳以上60歳未満の人だけです。" + (age >= 60 ? "60歳以上の人の国民年金の扱い（任意で入るかなど）は、年金事務所で確かめてください。" : "20歳になったときの扱いは、届く案内か市区町村の窓口で確かめてください。"), true);
+      li("配偶者の健康保険の扶養は、年金とは別に条件がある。勤め先の健康保険の担当に確かめる");
+      $("ng").textContent = "・このページは20歳以上60歳未満の人のためのもの";
+      $("result").hidden = false; return true;
+    }
+
+    var stay = false, kind = "", where = "", what = "", base = day, dlLabel = "";
+    var toMy = (next === "yes");
+    if (ev === "job") {
+      stay = true;
+    } else if (ev === "myjob") {
+      toMy = true;
+    }
+    // 外れたあとの種別
+    if (stay) kind = "第3号のまま";
+    else if (toMy) kind = "第2号（自分の厚生年金）";
+    else if (next === "unk") kind = "第1号か第2号（勤め先で厚生年金に入るかで決まる）";
+    else kind = "第1号（自分で国民年金の保険料を納める）";
+
+    // 1. 第3号が続くか
+    if (stay) {
+      box("第3号は続くか", "続く見込みです（第3号のまま）",
+        "配偶者が間を空けずに次の会社で厚生年金に入り、自分がその扶養の条件に入っていれば、第3号のままです。退職日と入社日のあいだに空いた日がある・次の会社で扶養に入れないときは、「配偶者が会社を辞めた」で判定し直してください。", false);
+    } else {
+      var why = {
+        retire: "配偶者が厚生年金をやめると、配偶者は第2号ではなくなります。そのため、扶養されていた人も同時に第3号ではなくなります。",
+        sp65: "配偶者が65歳になって老齢年金を受け取れるようになると、配偶者は第2号ではなくなります。そのため、扶養されていた人も第3号ではなくなります。配偶者が65歳以上でも年金の受給権がないときは扱いがちがうので、年金事務所で確かめてください。",
+        income: "第3号は、原則として年収130万円未満で配偶者に扶養されていることが条件です。扶養の条件を超えると、第3号ではなくなります。",
+        myjob: "自分が勤め先で厚生年金に入ると、自分が第2号になります。第3号ではなくなります。",
+        rikon: "離婚すると、配偶者に扶養される人ではなくなるので、第3号ではなくなります。"
+      }[ev];
+      box("第3号は続くか", "外れます", why, true);
+    }
+    box("次の種別", kind, stay ? "保険料は、これまでどおり自分で納めません。" :
+      (toMy ? "厚生年金の保険料は、給料から引かれます。国民年金の保険料を自分で納めることはありません。" :
+       "国民年金保険料は令和8年度 月" + yen(HOKEN) + "（1年で" + yen(HOKEN * 12) + "）。外れた日のある月の分からかかるのが目安で、納付書で確かめます。"), !stay && !toMy);
+
+    // 2. 出すもの・出す先
+    var shuIn = "住所のある市区町村の国民年金の窓口に、第1号になる届け出（国民年金被保険者関係届書）を出す。出すのは本人か世帯主";
+    if (stay) {
+      what = "新しい勤め先で、扶養に入れる手続き";
+      where = "配偶者の新しい勤め先（会社が年金事務所などに出す）";
+      box("出すもの・出す先", what, "健康保険の扶養に入れる届け（被扶養者（異動）届）と、第3号の届け（国民年金第3号被保険者関係届）は、ふつう一緒になっています。配偶者が新しい勤め先に申し出ます。新しい勤め先が共済組合（公務員など）のときは、第3号の「種別確認」の届け出を、その勤め先を通して出します。", false);
+    } else if (toMy) {
+      box("出すもの・出す先", "自分の勤め先が厚生年金の手続きをします",
+        "厚生年金に入る届け出は、勤め先（事業主）が出します。第2号になるときは、市区町村に自分で出す「種別の変更の届け出」の対象から外れています（国民年金法施行規則 第6条の2）。" +
+        (ev === "myjob" || ev === "income" ? "\nあわせて、配偶者の勤め先で健康保険の扶養を外す手続き（被扶養者（異動）届）が要ります。" :
+         ev === "rikon" ? "\nあわせて、元の配偶者の勤め先で、健康保険の扶養を外す手続きが要ります。" : ""), false);
+    } else {
+      var s = "";
+      if (ev === "retire") s = "出す先：住所のある市区役所・町村役場の国民年金の窓口\n出す人：本人か世帯主\n書類：国民年金被保険者関係届書（申出書）\n日本年金機構の案内では、会社を辞めた人の第1号の手続きは退職日の翌日から14日以内。扶養されていた60歳未満の配偶者も、同じように手続きが要ります。";
+      else if (ev === "sp65") s = "出す先：住所のある市区町村の国民年金の窓口か、年金事務所（郵送・マイナポータルでの電子申請もできると案内されています）\n書類：国民年金被保険者関係届書\n届け出の期限は、施行規則で、その事実があった日から14日以内です。";
+      else s = "① 配偶者の勤め先で、健康保険の扶養を外す手続き（被扶養者（異動）届）をしてもらう。扶養から外れるときは「その都度」出す届けです。これを出すと、第3号でなくなった届け出も出したことになります（施行規則 第6条の2の2）\n② 自分は、住所のある市区町村の国民年金の窓口で、第1号になる届け出（国民年金被保険者関係届書）を出す\n配偶者の健康保険が健康保険組合などのときは、第3号の届け出が別に要るか、勤め先に確かめます。";
+      box("出すもの・出す先", next === "unk" ? "先に、勤め先で厚生年金に入るかを確かめる" : "市区町村の国民年金の窓口に、第1号になる届け出", s, false);
+    }
+
+    // 3. 期限
+    if (!stay && !toMy) {
+      var dl = addDays(base, 14);
+      var t = today(), late = t > dl, over2 = t > addDays(base, 365 * 2 + 30);
+      var s2 = (ev === "retire" ? "退職日の翌日" : "その日の翌日") + "から数えて14日目は " + ymd(dl) + " です（目安）。日の数え方の細かいところは窓口で確かめてください。";
+      if (done === "done") {
+        box("期限の目安", ymd(dl) + "（出し済み）", s2 + "\n出し済みなら、届く納付書の月と額が合っているか確かめます。", false);
+      } else if (over2) {
+        box("期限の目安", ymd(dl) + "（2年以上たっています）",
+          s2 + "\n届け出がないまま第3号として残っている期間は「3号不整合記録」と呼ばれ、年金を受け取るときの記録が合わなくなります。過去2年より前の分は、時効で保険料を納められません。届け出をして、2年以内の分を納めるか、免除の相談をします。2年より前の分は「特定期間該当届」を出すと、年金を受け取るための期間には数えられますが、年金の額には入りません。", true);
+      } else if (late) {
+        box("期限の目安", ymd(dl) + "（過ぎています）", s2 + "\n過ぎても、届け出はできます。遅れた分の保険料は、届く納付書で、それぞれの月の分を納めます。そのままにすると未納になり、2年を過ぎた分は時効で納められなくなります。", true);
+      } else {
+        var left = Math.round((dl - t) / 86400000);
+        box("期限の目安", ymd(dl) + "（あと" + left + "日）", s2, false);
+      }
+    } else if (stay) {
+      box("期限の目安", "新しい勤め先に入ったら、早めに",
+        "扶養の手続きは、新しい勤め先が年金事務所などに出します。配偶者が入社するときに、扶養に入れたい家族として申し出てもらいます。", false);
+    } else {
+      box("期限の目安", "勤め先の手続きに合わせて",
+        "厚生年金に入る届け出は、勤め先が出します（事業主の届け出）。入る日は、勤め先に確かめます。", false);
+    }
+
+    // 4. 次にやること
+    if (stay) {
+      li("配偶者に、新しい勤め先で家族を扶養に入れる手続きをしてもらう");
+      li("退職日と入社日のあいだに空いた日がないか、配偶者の退職証明書や入社の書類で確かめる");
+      li("空いた日があるときは、そのあいだは第3号ではない。市区町村の窓口で、その月の扱いを確かめる");
+      li("健康保険証（資格確認書）が新しい勤め先のものになったか確かめる");
+    } else if (toMy) {
+      li("勤め先に、厚生年金と健康保険に入る日を確かめる");
+      if (ev !== "retire" && ev !== "sp65") li((ev === "rikon" ? "元の配偶者" : "配偶者") + "に、勤め先で健康保険の扶養を外す手続き（被扶養者（異動）届）をしてもらう");
+      if (ev === "retire" || ev === "sp65") li("自分の厚生年金が始まるまでに空いた日があるときは、そのあいだは第1号。市区町村の窓口で確かめる");
+      li("給与明細で、厚生年金の保険料が引かれ始めたか確かめる");
+    } else {
+      if (next === "unk") li("まず、自分の勤め先に、厚生年金に入るかどうかを聞く。入るなら手続きは勤め先、入らないなら市区町村");
+      if (ev === "income" || ev === "rikon") li((ev === "rikon" ? "元の配偶者" : "配偶者") + "の勤め先で、健康保険の扶養を外す手続きをしてもらう");
+      li("住所のある市区町村の国民年金の窓口に、第1号になる届け出を出す。持ち物は、事前に窓口に電話かホームページで確かめる");
+      li("届いた納付書で、何月の分からかかっているかを確かめる。口座振替や前納にすると、払い忘れが減る");
+      if (pay === "hard") li("同じ窓口で、保険料の免除・納付猶予（50歳未満）を申し込めるか相談する。免除された分は、10年以内なら後から納められる（追納）");
+      li(ev === "retire" || ev === "sp65" ? "健康保険も切り替えが要る。国民健康保険・配偶者の任意継続の扶養などから、自分に合うものを選ぶ" : "健康保険も扶養から外れる。国民健康保険か、自分の勤め先の健康保険に入る");
+    }
+    if (done === "unk") li("届け出が出ているかわからないときは、年金事務所かねんきんネットで、いまの種別（第何号か）を確かめる");
+
+    // 5. 気をつけること
+    if (!stay && !toMy) {
+      ng.push("・第3号から外れたことは、自分で届け出ないと記録に残らないことがある。そのままだと未納になり、将来の年金が少なくなることがある");
+      ng.push("・未納の期間があると、障害年金を受け取る条件（納めた期間の条件）に影響することがある");
+    }
+    if (stay) ng.push("・転職のあいだに1日でも空いた日があると、その月の扱いが変わることがある。日付は配偶者の書類で確かめる");
+    if (toMy) ng.push("・自分の厚生年金が始まる日より前に第3号でなくなっていた日があると、そのあいだは第1号になることがある");
+    if (ev === "income") ng.push("・扶養の条件の年収は、これからの1年の見込みで見るのが基本。130万円は第3号の原則の線で、くわしい判断は配偶者の健康保険が行う");
+    if (ev === "income" && age < 23) ng.push("・健康保険の扶養では、令和7年10月1日以降の認定で19歳以上23歳未満の人は年収150万円未満とされている。第3号の扱いもあわせて、配偶者の健康保険に確かめる");
+    if (ev === "sp65") ng.push("・配偶者の65歳は、誕生日の前日に65歳になったものとして扱われる");
+    if (ev === "rikon") ng.push("・離婚したときの年金の分割は、このページでは扱っていない。年金事務所で相談する");
+    if (!stay && !toMy) ng.push("・保険料の月額は年度ごとに変わる。17,920円は令和8年度（2026年4月〜2027年3月）の額");
+    ng.push("・最後は、市区町村の国民年金の窓口か年金事務所で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("ev").value = "retire"; $("next").value = "no"; $("done").value = "not"; $("pay").value = "ok";
+    var d = addDays(today(), -5);
+    $("day").value = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    $("age").value = "45";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
