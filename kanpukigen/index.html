@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>還付申告はいつから・いつまで出せるか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #docs li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .note { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>還付申告はいつから・いつまで出せるか</h1>
+  <p class="lead">年の途中で辞めた人などが、納めすぎた所得税を返してもらうための申告（還付申告）を、いつから・いつまで出せるかの目安を出します。3月15日までに出す必要がある人かどうかも見分けます。税額の計算はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. どの年の分？</h2>
+    <label class="f" for="nen">申告する年<span class="hint">1月〜12月の、どの年の収入の分かです。2026年に辞めたなら、ふつうは2026年の分</span></label>
+    <select id="nen">
+      <option value="2021">2021年</option><option value="2022">2022年</option><option value="2023">2023年</option>
+      <option value="2024">2024年</option><option value="2025">2025年</option><option value="2026" selected>2026年</option>
+    </select>
+    <label class="f" for="gen">源泉徴収票の「源泉徴収税額」の欄<span class="hint">辞めた会社からもらった源泉徴収票の、右上あたりの欄です</span></label>
+    <select id="gen">
+      <option value="yes">0より大きい金額が書いてある</option>
+      <option value="zero">0と書いてある（全部の源泉徴収票で）</option>
+      <option value="unk">まだ届いていない・わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 申告すると、税金は？</h2>
+    <label class="f" for="muki">見込み<span class="hint">年の途中で辞めて年末調整を受けていない人は、戻る見込みのことがあります。作成コーナーで入れてみると、戻るか納めるかがわかります</span></label>
+    <select id="muki">
+      <option value="kanpu">戻る見込み</option>
+      <option value="nofu">納める見込み（副業の所得が20万円をこえたなど）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="toku">3月15日までに出すことが条件の特例を使う？<span class="hint">青色申告特別控除（55万円・65万円）など。会社員だけだった人は、ふつうは「使わない」</span></label>
+    <select id="toku">
+      <option value="no">使わない</option>
+      <option value="yes">使う</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="today">今日の日付<span class="hint">ふつうはそのままで大丈夫です</span></label>
+    <input type="date" id="today">
+  </div>
+  <button id="make" type="button">出せる期間を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>今のうちに集めておくもの</h3>
+    <ul class="tl" id="docs"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>カレンダーに入れるメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁タックスアンサー No.2030「還付申告」、No.2020「確定申告」、No.2024「確定申告を忘れたとき」、国税通則法第10条・同施行令第2条をもとにした目安です。還付申告は、その年の翌年1月1日から5年間出せます。確定申告の期間は、原則として翌年2月16日から3月15日までで、3月15日が土日にあたるときは次の月曜日にしています（祝日などの扱いは税務署に確かめてください）。出す義務があるか、税金が戻るかを決めるのは税務署です。住民税の扱いは、市区町村に確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
