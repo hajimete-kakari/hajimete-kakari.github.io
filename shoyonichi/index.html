@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ボーナスは失業保険の額に入る？ 判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mid: #f6efd9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mid: #35301f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  label.c { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: .95rem; }
+  label.c input { margin-top: 6px; flex: none; width: 18px; height: 18px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .big.mid { background: var(--mid); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 8px; }
+  ul.mo li .t { font-weight: 700; display: block; }
+  ul.mo li .w { font-size: .9rem; display: block; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon .res li .w, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>ボーナスは失業保険の額に入る？ 判定</h1>
+  <p class="lead">辞める前後にもらうお金が、失業保険（基本手当）の1日の額のもとになる「賃金日額」に数えられるかを、ひとつずつ分けます。ボーナスの年の回数と、もらうお金にチェックを入れてください。入力した内容は、このページの外には送られません。金額の計算はしません。</p>
+
+  <div class="card">
+    <h2>1. 辞める日とボーナス</h2>
+    <label class="f" for="td">辞める日（予定でも可）</label>
+    <input type="date" id="td">
+    <label class="f" for="bd">いちばん最近のボーナスの支給日（空でも可）<span class="hint">これから出る予定のものでもかまいません</span></label>
+    <input type="date" id="bd">
+    <label class="f" for="cnt">ボーナス（賞与）は年に何回出る会社ですか<span class="hint">名前がちがっても、同じ性質のもの（例：賞与と決算手当が同じ決め方で出る）は合わせて数えます</span></label>
+    <select id="cnt">
+      <option value="2">年2回（夏・冬など）</option>
+      <option value="1">年1回</option>
+      <option value="3">年3回</option>
+      <option value="4">年4回以上</option>
+      <option value="0">ボーナスはない</option>
+      <option value="u">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞める前の6か月ごろに、もらう・もらったお金</h2>
+    <label class="c"><input type="checkbox" id="k_zan"><span>残業代（時間外の手当）</span></label>
+    <label class="c"><input type="checkbox" id="k_tsu"><span>通勤手当（定期代を何か月分かまとめて受け取るものも）</span></label>
+    <label class="c"><input type="checkbox" id="k_jut"><span>住宅手当・家族手当など、毎月の手当</span></label>
+    <label class="c"><input type="checkbox" id="k_yuk"><span>有給休暇を使った日の給料</span></label>
+    <label class="c"><input type="checkbox" id="k_kes"><span>決算賞与・大入袋など、会社に利益が出たときに出るお金</span></label>
+    <label class="c"><input type="checkbox" id="k_kai"><span>有給休暇の買い取り</span></label>
+    <label class="c"><input type="checkbox" id="k_tai"><span>退職金（辞めたあと、または辞めることを理由に一時金で）</span></label>
+    <label class="c"><input type="checkbox" id="k_mae"><span>在職中に給料に上乗せされていた「前払い退職金」</span></label>
+    <label class="c"><input type="checkbox" id="k_iwa"><span>結婚祝金・見舞金など</span></label>
+    <label class="c"><input type="checkbox" id="k_tuk"><span>月の途中で辞めるのに、その月の給料が全額出る</span></label>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>数えるお金</h3>
+    <ul class="mo res" id="inc"></ul>
+    <h3>数えないお金</h3>
+    <ul class="mo res" id="exc"></ul>
+    <div id="askw"><h3>窓口で確かめるお金</h3>
+    <ul class="mo res" id="ask"></ul></div>
+    <h3>ハローワークで聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法 第4条4項（賃金の意味）・第17条1項（賃金日額は最後の6か月に支払われた賃金を180で割る。臨時に支払われる賃金と3か月を超える期間ごとに支払われる賃金は除く）、ハローワークインターネットサービス「基本手当について」、厚生労働省「雇用保険に関する業務取扱要領」50451〜50503（年3回以内の賞与・大入袋・退職金・祝金・法定外の有給の買上げ・退職日の翌日以後の分は数えない、通勤手当・住宅手当・有給休暇日の給与は数える、など）をもとにした目安です。数えるかどうかを決めるのはハローワークです。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  function ymd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  function box(k, v, s, cls) {
+    var el = document.createElement("div"); el.className = "big" + (cls ? " " + cls : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function item(where, t, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".w").textContent = w;
+    $(where).appendChild(e);
+  }
+  function ck(id) { return $(id).checked; }
+
+  function make() {
+    $("result").hidden = true;
+    var td = pd($("td").value), bd = pd($("bd").value), cnt = $("cnt").value;
+    if (!td) { alert("辞める日を入れてください（予定の日でかまいません）"); return false; }
+    if ($("bd").value && !bd) { alert("ボーナスの支給日の形がちがいます"); return false; }
+    $("sum").innerHTML = ""; $("inc").innerHTML = ""; $("exc").innerHTML = ""; $("ask").innerHTML = "";
+    var askList = [];
+
+    // 6か月の目安（辞める日のおよそ6か月前から）
+    var last = new Date(td.getFullYear(), td.getMonth() - 5, 0).getDate(); // 6か月前の月の日数
+    var from = new Date(td.getFullYear(), td.getMonth() - 6, Math.min(td.getDate(), last) + 1);
+
+    // 1. ボーナス
+    var bIn = null;
+    if (bd) bIn = dd(from, bd) >= 0 && dd(bd, td) >= 0;
+    if (cnt === "0") {
+      box("ボーナス", "ボーナスはない入力です", "下の、ほかのお金の分け方を見てください。", "");
+    } else if (cnt === "4") {
+      box("ボーナス", "数える見込み（年4回以上）",
+        "3か月以内ごとに出る性質のお金は「特別の賃金」として、賃金日額に数えます。ただし、燃料手当と年末賞与のように性質がちがうものを合わせて4回になるだけなら、数えません。数え方はハローワークが決めます。", "mid");
+      askList.push(["年4回のボーナスの数え方", "同じ性質のものが年4回以上か、勤めて1年未満なら就業規則に年4回以上と書いてあるかを伝えて聞きます。"]);
+    } else if (cnt === "u") {
+      box("ボーナス", "回数を確かめてから",
+        "年3回以内なら数えず、同じ性質のものが年4回以上なら数えます。就業規則や賃金規程の賞与の決まりで、年に何回かを確かめます。", "mid");
+      askList.push(["ボーナスの回数", "就業規則で回数を確かめてから、数えるかを聞きます。"]);
+    } else {
+      var s = "年" + cnt + "回のボーナスは「3か月を超える期間ごとに支払われる賃金」にあたり、賃金日額に数えません。";
+      if (bd) s += bIn ? "支給日の" + ymd(bd) + "は辞める前6か月の目安に入っていますが、それでも数えません。" : "支給日の" + ymd(bd) + "は辞める前6か月の目安の外です。入っていても数えません。";
+      s += "ボーナスをもらってから辞めても、失業保険の1日の額は増えません。";
+      box("ボーナス", "数えない", s, "no");
+    }
+
+    box("辞める前6か月の目安", ymd(from) + "〜" + ymd(td),
+      "実際は、給料の締め日で区切った最後の6か月で数えます（働いた日が少ない月は除くことがあります）。どの月を使うかは離職票の賃金の欄で確かめます。", "");
+
+    // 2. ひとつずつ
+    var any = false;
+    if (ck("k_zan")) { any = true; item("inc", "残業代", "時間外の手当も賃金です。残業があった月の賃金として数えます。"); }
+    if (ck("k_tsu")) { any = true; item("inc", "通勤手当", "まとめて受け取った定期代も、1か月分ずつ、それぞれの月に割り振って数えます。"); }
+    if (ck("k_jut")) { any = true; item("inc", "住宅手当・家族手当など毎月の手当", "毎月決まって出る手当は数えます。"); }
+    if (ck("k_yuk")) { any = true; item("inc", "有給休暇を使った日の給料", "ふつうに働いた日と同じく賃金として数えます。"); }
+    if (ck("k_mae")) { any = true; item("inc", "前払い退職金", "在職中に給料に上乗せされる分は、原則として数えます（臨時のものや、3か月を超える間隔で出るものは別）。"); }
+    if (ck("k_kes")) { any = true; item("exc", "決算賞与・大入袋など", "会社に利益が出たときに出るお金は「臨時に支払われる賃金」として数えません。"); }
+    if (ck("k_tai")) { any = true; item("exc", "退職金", "辞めたあと、または辞めることを理由に一時金で払われる退職金は数えません。"); }
+    if (ck("k_iwa")) { any = true; item("exc", "結婚祝金・見舞金など", "個人的なお祝い・お見舞いのお金は数えません。"); }
+    if (ck("k_tuk")) { any = true; item("exc", "辞めた日の翌日から月末までの分", "月の途中で辞めて、その月の給料が全額出ても、辞めた日の翌日以後にあたる分は数えません。"); }
+    if (ck("k_kai")) { any = true; askList.push(["有給休暇の買い取り", "会社が法律より多く上乗せした有給の買い取りは、臨時に支払われる賃金として数えない扱いです。自分の買い取りがどれにあたるかは、窓口で聞きます。"]); }
+    if (cnt === "2" || cnt === "1" || cnt === "3") item("exc", "ボーナス（年" + cnt + "回）", "上の結果のとおり、数えません。");
+    if (cnt === "4") item("inc", "ボーナス（同じ性質で年4回以上）", "上の結果のとおり、数える見込みです（窓口で確かめる）。");
+    if (!$("inc").children.length) item("inc", "毎月の基本給", "チェックした中に数えるお金はありませんが、毎月の基本給は数えます。");
+    if (!$("exc").children.length) item("exc", "（チェックした中にはない）", "数えないお金にチェックはありませんでした。");
+    askList.forEach(function (a) { item("ask", a[0], a[1]); });
+    $("askw").hidden = !askList.length;
+
+    // 3. メモ
+    var memo = "賃金日額に入るお金を確かめたいです\n";
+    memo += "辞める日：" + ymd(td) + "\n";
+    memo += "ボーナス：" + (cnt === "0" ? "なし" : cnt === "u" ? "回数を確かめ中" : cnt === "4" ? "年4回以上" : "年" + cnt + "回") + "\n";
+    if (askList.length) { memo += "聞きたいこと：\n"; askList.forEach(function (a) { memo += "　・" + a[0] + "\n"; }); }
+    memo += "離職票の賃金の欄と\n給与明細を見比べたいです";
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・年3回以内のボーナスは、辞める直前にもらっても数えない\n・残業代・通勤手当・毎月の手当は数える。離職票の賃金の欄に入っているか、給与明細と見比べる\n・退職金・祝金・利益が出たときの一時金は数えない\n・1日の額は、賃金日額のおよそ5〜8割（60〜64歳は4.5〜8割）で、上限と下限がある\n・数えるかどうか、どの6か月を使うかを決めるのはハローワーク";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) {
+    $("td").value = "2026-12-31"; $("bd").value = "2026-12-10"; $("cnt").value = "2";
+    ["k_zan", "k_tsu", "k_kes", "k_tai", "k_kai"].forEach(function (id) { $(id).checked = true; });
+    make();
+  }
+})();
+</script>
+</body>
+</html>
