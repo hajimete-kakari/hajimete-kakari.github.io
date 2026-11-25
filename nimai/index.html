@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>確定申告で源泉徴収票が2枚以上あるときの書き方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], input[type=text], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #lines .val, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon .note { display: none; }
+  .slip { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 14px; }
+  .slip:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .slip h3 { margin-top: 0; }
+  #lines { font-size: .95rem; }
+  .mihon .nmrow { display: none; }
+  #lines div { padding: 6px 0; border-bottom: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<main>
+  <h1>確定申告で源泉徴収票が2枚以上あるとき</h1>
+  <p class="lead">転職した年など、源泉徴収票が2枚以上あるときに、確定申告書のどの欄に、どの金額を足して書くかを出します。前の会社の分が、新しい会社の年末調整にもう入っているかも見分けます。税額の計算はしません。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="nencho">新しい会社で、前の会社の源泉徴収票を出して年末調整を受けた？<span class="hint">12月の給料のころに、会社に前の会社の源泉徴収票を渡したかどうかです</span></label>
+    <select id="nencho">
+      <option value="no">出していない・年末調整は受けていない</option>
+      <option value="yes">出して、年末調整を受けた</option>
+      <option value="none">辞めたあと、年末まで勤めていない</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="mai">源泉徴収票は何枚？</label>
+    <select id="mai">
+      <option value="2" selected>2枚</option>
+      <option value="3">3枚</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 源泉徴収票の金額</h2>
+    <p class="note" style="margin-top:0">それぞれの源泉徴収票の、3つの欄の金額を入れます（円・数字だけ）。</p>
+    <div id="slips"></div>
+  </div>
+  <button id="make" type="button">書き方を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>申告書に書く金額</h3>
+    <div id="lines"></div>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>書き写すときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※国税庁「確定申告の手引き」（給与所得：給与等を2か所以上から受けている場合は収入金額の合計額を記入／社会保険料控除：支払保険料等の合計額を記入／源泉徴収税額：源泉徴収税額の合計額を記入し、第二表の「所得の内訳」欄に該当事項を記入）、タックスアンサー No.2674「中途就職者の年末調整」、No.1910「中途で退職し年末調整を受けていないとき」、No.1900「給与所得者で確定申告が必要な人」、No.2030「還付申告」をもとにした目安です。税金が戻るか・いくらになるかは、確定申告書等作成コーナーで入れると出ます。迷うときは税務署に確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
