@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>生活福祉資金の判定と返し方の計算｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  .chk { display: block; margin: 6px 0; font-size: .95rem; }
+  .chk input { width: 20px; height: 20px; vertical-align: -4px; margin-right: 6px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #pay li, .mihon #todo li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c2, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>生活福祉資金の判定と返し方の計算</h1>
+  <p class="lead">お金に困ったときに、市区町村の社会福祉協議会（社協）で借りられる「生活福祉資金」のうち、自分の困りごとに合う資金と、借りられる上限・返さなくてよい期間（据置期間）・返す期間・利子、借りる前に先に使う制度、相談の順番を並べます。厚生労働省の「生活福祉資金貸付条件等一覧」と、国の貸付けの決まり（要綱）に当てはめた目安です。借りられるかどうかと額は、社協の審査で決まります。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いま困っていること</h2>
+    <label class="f" for="use">お金が要る理由</label>
+    <select id="use">
+      <option value="seikatsu">失業・収入が減って、毎月の生活費が数か月足りない</option>
+      <option value="tsunagi">給料・給付が入るまでの、つなぎの生活費（少しの額）</option>
+      <option value="nyukyo">部屋を借りるときの敷金・礼金など</option>
+      <option value="saiken">滞納した公共料金の支払い・債務整理の費用など、立て直しの一時的な出費</option>
+      <option value="gino">仕事に就くための資格・技能を身につける費用</option>
+      <option value="iryo">けが・病気の療養や、介護サービスの費用と、その間の生活費</option>
+      <option value="ichiji">冠婚葬祭・引っ越し・就職の支度など、一時的な出費</option>
+      <option value="kyoiku">子どもの高校・高専・短大・大学の学費や入学の費用</option>
+      <option value="fudosan">65歳以上で、持ち家を担保に生活費を借りたい</option>
+    </select>
+  </div>
+
+  <div class="card" id="c2">
+    <h2>2. 世帯のこと</h2>
+    <label class="f" for="ninzu">世帯の人数</label>
+    <select id="ninzu">
+      <option value="1">ひとり（単身）</option>
+      <option value="2" selected>二人以上</option>
+    </select>
+    <label class="f" for="kazei">世帯の住民税<span class="hint">低所得世帯は「おおむね市町村民税が非課税くらい」とされています（都道府県ごとに少し幅があります）</span></label>
+    <select id="kazei">
+      <option value="hi">かからない（非課税）くらいの収入</option>
+      <option value="ka">かかっている（課税）</option>
+      <option value="fumei">わからない</option>
+    </select>
+    <label class="f">世帯にいる人<span class="hint">当てはまるものを全部</span></label>
+    <label class="chk"><input type="checkbox" id="kourei">65歳以上の人がいる</label>
+    <label class="chk"><input type="checkbox" id="kaigo">その65歳以上の人に、療養か介護が要る</label>
+    <label class="chk"><input type="checkbox" id="shogai">障害者手帳を持つ人がいる（障害福祉サービスを使っている人も）</label>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. いま受けているもの・住まい</h2>
+    <label class="f">いま受けている・受けられるもの<span class="hint">当てはまるものを全部</span></label>
+    <label class="chk"><input type="checkbox" id="g_shitsu">失業保険（雇用保険の基本手当）</label>
+    <label class="chk"><input type="checkbox" id="g_kunren">職業訓練受講給付金</label>
+    <label class="chk"><input type="checkbox" id="g_hogo">生活保護</label>
+    <label class="chk"><input type="checkbox" id="g_nenkin">年金</label>
+    <label class="f" for="sumai">住まい</label>
+    <select id="sumai">
+      <option value="ari">いまの住まいに住み続けられる</option>
+      <option value="kakuho">家賃が払えず、住居確保給付金を申し込む（申し込んだ）</option>
+      <option value="nashi">住まいがない・すぐに出ないといけない</option>
+    </select>
+    <label class="f" for="hosho">連帯保証人を頼める人</label>
+    <select id="hosho">
+      <option value="ari">いる</option>
+      <option value="nashi">いない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>4. 借りたい額と返せる額</h2>
+    <label class="f" for="gaku" id="gakuL">借りたい額の合計（円）<span class="hint">見積もりや請求書の額。生活費のときは、1か月に足りない額を入れます</span></label>
+    <input type="number" id="gaku" inputmode="numeric" min="0" step="1000" placeholder="例：150000">
+    <label class="f" for="tsuki" id="tsukiL">何か月分（生活費のときだけ）<span class="hint">原則3か月まで。延長して最長12か月</span></label>
+    <input type="number" id="tsuki" inputmode="numeric" min="1" max="12" step="1" placeholder="例：3">
+    <label class="f" for="kaeseru">返し始めてから、毎月返せる額（円・任意）</label>
+    <input type="number" id="kaeseru" inputmode="numeric" min="0" step="1000" placeholder="例：10000">
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3 id="payh">返し方の目安</h3>
+    <ol class="tl" id="pay"></ol>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「生活福祉資金貸付条件等一覧」、国の通知「生活福祉資金の貸付けについて」の要綱、全国社会福祉協議会「生活福祉資金貸付制度について」（厚労省の会議資料）をもとにした目安です。総合支援資金：生活支援費は二人以上 月20万円以内・単身 月15万円以内（原則3か月、最長12か月）、住宅入居費40万円以内、一時生活再建費60万円以内、据置期間6か月以内、据置期間経過後10年以内に返す。福祉費：580万円以内（用途ごとに上限の目安）、据置期間6か月以内、据置期間経過後20年以内（用途ごとに返す期間の目安）。総合支援資金と福祉費は、連帯保証人ありなら無利子、なしなら据置期間経過後 年1.5％。緊急小口資金：10万円以内、据置期間2か月以内、据置期間経過後12か月以内、無利子・保証人不要。教育支援資金：教育支援費 高校月3.5万円・高専月6万円・短大月6万円・大学月6.5万円以内（特に必要なときは1.5倍まで）、就学支度費50万円以内、卒業後6か月以内の据置、据置期間経過後20年以内、無利子。不動産担保型生活資金：土地の評価額の70％程度・月30万円以内。返す額はお金を借りた額を回数で割る「元金均等」で数えています。実際の返し方・回数は社協との契約で決まります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function man(n) { return (n / 10000).toLocaleString("ja-JP") + "万円"; }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function num(id) { var v = $(id).value.trim(); if (v === "") return null; var n = Number(v); return isNaN(n) || n < 0 ? NaN : n; }
+
+  // 資金ごとの決まり（limit：上限、sueoki：据置、kikan：返す期間の月数、rishi：保証人なしの利子がかかるか、who：対象）
+  var F = {
+    seikatsu: { name: "総合支援資金（生活支援費）", sueoki: "最後に借りた日から6か月以内", kikan: 120, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "low", sogo: true },
+    nyukyo:   { name: "総合支援資金（住宅入居費）", limit: 400000, sueoki: "借りた日から6か月以内（生活支援費もあわせて借りるときは、その最後に借りた日から）", kikan: 120, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "low", sogo: true },
+    saiken:   { name: "総合支援資金（一時生活再建費）", limit: 600000, sueoki: "借りた日から6か月以内（生活支援費もあわせて借りるときは、その最後に借りた日から）", kikan: 120, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "low", sogo: true },
+    tsunagi:  { name: "緊急小口資金", limit: 100000, sueoki: "借りた日から2か月以内", kikan: 12, rishi: false, hosho: "要らない", who: "fukushi", jiritsu: true },
+    gino:     { name: "福祉費（技能習得の経費）", limit: 1300000, sueoki: "借りた日（分けて受け取るときは最後の日）から6か月以内", kikan: 96, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "fukushi",
+                memo: "上限の目安は、習う期間が6か月ほどで130万円、1年ほどで220万円、2年ほどで400万円、3年以内で580万円。返す期間の目安は8年" },
+    iryo:     { name: "福祉費（療養・介護サービスの経費）", limit: 1700000, sueoki: "借りた日（分けて受け取るときは最後の日）から6か月以内", kikan: 60, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "fukushi",
+                memo: "上限の目安は、療養・介護の期間が1年以内なら170万円、1年を超え1年6か月以内で世帯の自立に必要なときは230万円。返す期間の目安は5年" },
+    ichiji:   { name: "福祉費（冠婚葬祭・住まいの移転・就職の支度・その他一時的な経費）", limit: 500000, sueoki: "借りた日から6か月以内", kikan: 36, rishi: true, hosho: "原則必要（いなくても借りられる）", who: "fukushi",
+                memo: "上限の目安は、どれも50万円。返す期間の目安は3年" },
+    kyoiku:   { name: "教育支援資金（教育支援費・就学支度費）", sueoki: "卒業したあと6か月以内", kikan: 240, rishi: false, hosho: "原則要らない（世帯の中で一緒に借りる人＝連帯借受人が要る）", who: "low",
+                memo: "教育支援費は、月に高校3.5万円・高専6万円・短大6万円・大学6.5万円以内（特に必要と認められると1.5倍まで）。入学のときの就学支度費は50万円以内" },
+    fudosan:  { name: "不動産担保型生活資金", sueoki: "契約が終わってから3か月以内", kikan: 0, rishi: false, hosho: "推定相続人（将来、相続人になる人）の中から1人", who: "fudosan" }
+  };
+
+  function make() {
+    ["sum", "pay", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var use = $("use").value, f = F[use];
+    var single = $("ninzu").value === "1", kazei = $("kazei").value;
+    var kourei = $("kourei").checked, kaigo = $("kaigo").checked && kourei, shogai = $("shogai").checked;
+    var gs = $("g_shitsu").checked, gk = $("g_kunren").checked, gh = $("g_hogo").checked, gn = $("g_nenkin").checked;
+    var sumai = $("sumai").value, hoshoNashi = $("hosho").value === "nashi";
+    var gaku = num("gaku"), tsuki = num("tsuki"), kaeseru = num("kaeseru");
+    if ((gaku !== null && isNaN(gaku)) || (tsuki !== null && (isNaN(tsuki) || tsuki < 1)) || (kaeseru !== null && isNaN(kaeseru))) {
+      box("入力をなおしてください", "額と月数は、0以上の数字で入れてください", "円で入れます（例：150000）。月数は1〜12です。", true);
+      $("ng").textContent = "・額がわからなければ空のままでも、合う資金と順番は出せます";
+      $("result").hidden = false; return true;
+    }
+
+    // 1. 世帯が対象に入るか
+    var low = kazei === "hi";
+    var ok, why;
+    if (f.who === "low") {
+      ok = low ? "yes" : (kazei === "fumei" ? "maybe" : "no");
+      why = "この資金は低所得世帯（おおむね市町村民税が非課税くらい）が対象です。障害者世帯・高齢者世帯というだけでは対象になりません。";
+    } else if (f.who === "fukushi") {
+      var t = low || shogai || kaigo;
+      ok = t ? "yes" : (kazei === "fumei" ? "maybe" : "no");
+      why = "この資金は、低所得世帯・障害者世帯・高齢者世帯が対象です。障害者世帯は収入の条件がありません。高齢者世帯は、療養か介護が要る65歳以上の人がいる世帯に限られます（福祉資金の決まり）。";
+    } else {
+      ok = kourei && low ? "yes" : (kourei && kazei === "fumei" ? "maybe" : "no");
+      why = "65歳以上の世帯（原則として世帯の全員）で、市町村民税が非課税くらい、自分だけの名義の持ち家に住んでいて、抵当権などが付いていないことが条件です。";
+    }
+    var head = ok === "yes" ? "対象に入りそうです" : ok === "maybe" ? "住民税しだいです（社協で確かめる）" : "この条件だと、対象から外れそうです";
+    box("合う資金", f.name, head + "\n" + why, ok === "no");
+
+    // 2. 先に使う制度・借りられない場合
+    var saki = [];
+    if (f.sogo) {
+      if (gs || gk || gh || gn) saki.push("総合支援資金は「失業保険・職業訓練受講給付金・生活保護・年金など、ほかの公的な給付や貸付けを受けられず、生活費をまかなえない」ことが条件です。いま受けているものがあるので、原則として借りられません。");
+      if (sumai === "nashi") saki.push("総合支援資金は、住まいがあるか、住居確保給付金を申し込んで住まいが確実に見込めることが条件です。まず市区町村の自立相談支援機関（生活に困ったときの相談窓口）で、住まいの相談と住居確保給付金の相談をします。");
+      if (sumai === "kakuho") saki.push("住居確保給付金を申し込んでいるので、住まいの条件には当てはまりそうです。住居確保給付金は家賃に、生活支援費は生活費に、と分けて考えます。");
+    }
+    if (gh) saki.push("生活保護を受けているときは、まず福祉事務所の担当者（ケースワーカー）に相談します。生活保護を受け始めると、貸付けが止まる決まりがあります。");
+    if (use === "seikatsu" && !gs && !gk) saki.push("雇用保険に入っていた人は、失業保険を先に確かめます。受けられるなら、そちらが先です。");
+    if (use === "kyoiku") saki.push("大学などは、授業料の減免と給付型の奨学金（高等教育の修学支援新制度）、高校は就学支援金を先に確かめます。入学前に入学金などを払う場合や、給付で足りない場合に、教育支援資金を考えます。");
+    if (use === "iryo") saki.push("医療費は、高額療養費（1か月の自己負担に上限がある制度）を先に確かめます。会社の健康保険に入っている人は、傷病手当金も確かめます。");
+    if (saki.length) box("借りる前に確かめること", saki.length + "つあります", saki.join("\n\n"), (f.sogo && (gs || gk || gh || gn || sumai === "nashi")));
+
+    // 3. 上限と額
+    var A = null, lim = f.limit || 0, gakuMsg;
+    if (use === "seikatsu") {
+      var mcap = single ? 150000 : 200000;
+      var m = gaku === null ? mcap : Math.min(gaku, mcap);
+      var n = tsuki === null ? 3 : Math.min(tsuki, 12);
+      A = m * n;
+      gakuMsg = "月 " + yen(m) + " × " + n + "か月 ＝ " + yen(A) + "\n上限は" + (single ? "単身で月15万円" : "二人以上で月20万円") + "以内。借りる期間は原則3か月、延長して最長12か月（延長は3回まで）。" +
+        (gaku !== null && gaku > mcap ? "\n入れた額が上限を超えているので、上限で数えています。" : "") + (n > 3 ? "\n3か月を超える分は、延長が認められたときです。" : "");
+      box("借りられる額の目安", yen(A) + "まで", gakuMsg, false);
+    } else if (use === "kyoiku") {
+      box("借りられる額の目安", "学校の種類で決まります", f.memo + "\n" + (gaku !== null ? "入れた額：" + yen(gaku) + "。月の学費なら上の月額と、入学の費用なら50万円と比べます。" : ""), false);
+      A = gaku;
+    } else if (use === "fudosan") {
+      box("借りられる額の目安", "土地の評価額の70％程度・月30万円以内", "借りる期間は、借りた人が亡くなるまでか、借りた額と利子の合計が上限に達するまで。利子は年3％か長期プライムレートの低い方。契約が終わったあと3か月以内に、まとめて返します。持ち家には根抵当権が付きます。\n生活保護が必要になる世帯向けには、別に「要保護世帯向け不動産担保型生活資金」（土地と建物の評価額の70％程度、集合住宅は50％）があり、福祉事務所（保護の実施機関）から通知を受けた人が申し込みます。", false);
+    } else {
+      A = gaku === null ? null : Math.min(gaku, lim);
+      box("借りられる額の目安", man(lim) + "以内", (f.memo ? f.memo + "\n" : "") + (gaku !== null ? "入れた額：" + yen(gaku) + (gaku > lim ? "（上限を超えているので、上限で数えています）" : "") : "見積もりがあれば、その額を入れると返し方も出ます。"), gaku !== null && gaku > lim);
+    }
+
+    // 4. 据置・返す期間・利子
+    var rate = f.rishi && hoshoNashi ? 0.015 : (use === "fudosan" ? null : 0);
+    var kikanTxt = f.kikan ? (f.kikan % 12 === 0 ? (f.kikan / 12) + "年以内" : f.kikan + "か月以内") : "据置期間が終わるとき（まとめて）";
+    box("返さなくてよい期間と返す期間", "据置 " + f.sueoki + "／その後 " + kikanTxt,
+      "利子：" + (use === "fudosan" ? "年3％か長期プライムレートの低い方" : f.rishi ? (hoshoNashi ? "連帯保証人がいないので、据置期間が終わってから年1.5％" : "連帯保証人がいるので無利子") : "無利子") +
+      "\n連帯保証人：" + f.hosho + "\n返すのが遅れると、遅れた元金に年3％の延滞利子がかかります（国の要綱）。早く返すこと（繰上償還）は、いつでもできます。", false);
+
+    // 5. 返し方の目安
+    if (A !== null && A > 0 && f.kikan) {
+      var n2 = f.kikan, p = A / n2;
+      var inter = rate ? A * rate / 12 * (n2 + 1) / 2 : 0;
+      li("pay", "いちばん長い " + kikanTxt + "（" + n2 + "回）で返すと：毎月の元金 " + yen(p) + (rate ? "、はじめの月の利子 " + yen(A * rate / 12) + "、利子の合計 およそ " + yen(inter) : "（利子なし）"));
+      li("pay", "返す合計：" + yen(A + inter) + (rate ? "（元金 " + yen(A) + " ＋ 利子 およそ " + yen(inter) + "）" : ""));
+      if (kaeseru !== null && kaeseru > 0) {
+        var need = Math.ceil(A / kaeseru);
+        if (need <= n2) li("pay", "毎月 " + yen(kaeseru) + " ずつなら、およそ " + need + "回（" + Math.floor(need / 12) + "年" + (need % 12) + "か月）で返し終わります。期間の中に収まります" + (rate ? "（利子の分は少し増えます）" : ""));
+        else li("pay", "毎月 " + yen(kaeseru) + " だと " + need + "回かかり、返す期間（" + n2 + "回）に収まりません。期間内に返すには毎月 " + yen(p) + " 以上が要ります。借りる額を減らすか、社協で相談します");
+      }
+      if (use === "seikatsu" || use === "nyukyo" || use === "saiken") li("pay", "総合支援資金は、生活支援費・住宅入居費・一時生活再建費をあわせて借りることもできます。そのときは合計で返す計画を立てます");
+      if (use === "tsunagi") li("pay", "緊急小口資金は、2か月の据置のあと12か月以内に返します。10万円なら、毎月およそ " + yen(100000 / 12) + " です");
+    } else if (use === "fudosan") {
+      li("pay", "毎月返すのではなく、契約が終わったあと（借りた人が亡くなったときなど）にまとめて返します");
+    } else {
+      li("pay", "借りたい額を入れると、毎月の返す額の目安が出ます");
+    }
+
+    // 6. 次にやること
+    li("todo", "住んでいる市区町村の社会福祉協議会（社協）に電話して、生活福祉資金の相談をしたいと伝え、日にちを決める（申し込みは、社協での面談が基本）");
+    if (f.sogo || use === "tsunagi") li("todo", "総合支援資金と緊急小口資金は、原則として自立相談支援機関（市区町村の生活に困ったときの相談窓口）の支援を受けることが条件。どこに相談するかは社協で聞く");
+    if (use === "gino" || use === "iryo" || use === "ichiji" || use === "kyoiku") li("todo", "福祉費・教育支援資金は、地域の民生委員が世帯の様子を聞きに来ることがある。社協から案内があったら日にちを合わせる");
+    li("todo", "相談のときに、何に・いくら要るか、収入と支出、借金や滞納があるかを話せるようにメモしておく。要る書類は社協で教えてもらう（都道府県ごとに少しちがう）");
+    if (f.sogo) li("todo", "住居確保給付金・失業保険など、先に使える制度がないかを一緒に確かめてもらう");
+    if (use === "kyoiku") li("todo", "学校の入学金・授業料の納める期日を確かめる。審査には日にちがかかるので、期日に間に合うかを社協に先に聞く");
+    li("todo", "審査は都道府県の社協が行う。決まると貸付決定通知書が届き、契約をして借用書を出してから、お金を受け取る");
+    li("todo", "据置期間が終わったら返し始める。返せなくなりそうなときは、遅れる前に社協に相談する（災害などやむを得ないときは、返すのを待ってもらえる「償還猶予」の決まりがある）");
+
+    // 7. 気をつけること
+    ng.push("・生活福祉資金は「もらえるお金」ではなく「借りるお金」。返す前提で、返せる見込みがあるかも審査される");
+    ng.push("・審査に日にちがかかる。今日・明日のお金に間に合わないことがある。急ぐときは、そのことを最初に伝える");
+    ng.push("・借りる額は、上限ではなく「本当に要る額」で決まる。上限までいつも借りられるわけではない");
+    if (f.rishi && hoshoNashi) ng.push("・連帯保証人がいないと、据置期間のあと年1.5％の利子がかかる。いれば無利子");
+    if (f.sogo) ng.push("・総合支援資金は、借りたあとも社協や自立相談支援機関の支援（仕事探しの相談など）を続けて受けることに同意して借りる");
+    ng.push("・暴力団員がいる世帯は対象外。借りたお金を別のことに使うと、貸付けが止まったり、まとめて返すよう求められたりする");
+    ng.push("・コロナの時期の「特例貸付」とは別の、ふだんの制度。特例貸付の返済や免除の相談も、社協が窓口");
+    ng.push("・上限・期間は国の目安。都道府県の社協ごとに運用が少しちがうので、最後は社協で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  function syncLabels() {
+    var s = $("use").value === "seikatsu";
+    $("tsukiL").hidden = $("tsuki").hidden = !s;
+  }
+  function go() { var r = make(); $("payh").hidden = $("pay").hidden = !$("pay").children.length; return r; }
+  $("use").addEventListener("change", syncLabels);
+  $("make").addEventListener("click", function () { if (go() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  syncLabels();
+  if (DEMO) {
+    $("use").value = "seikatsu"; $("ninzu").value = "2"; $("kazei").value = "hi";
+    $("sumai").value = "ari"; $("hosho").value = "nashi";
+    $("gaku").value = "150000"; $("tsuki").value = "3"; $("kaeseru").value = "10000";
+    syncLabels(); go();
+  }
+})();
+</script>
+</body>
+</html>
