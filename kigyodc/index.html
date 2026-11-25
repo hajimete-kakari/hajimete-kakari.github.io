@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>企業型DCを辞めたあと移す先｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=text], input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .copy { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 9px; font-size: .92rem; margin-top: 10px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } ol.tl li { margin-bottom: 8px; } ol.tl .d { font-weight: 700; }
+  .mail { white-space: pre-wrap; background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: .92rem; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .err { color: var(--warn); font-size: .9rem; margin-top: 10px; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo, .mihon #tl, .mihon #tel, .mihon #ng { filter: blur(6px); user-select: none; }
+  ul.w { margin: 0; padding-left: 1.2em; } ul.w li { margin-bottom: 6px; }
+</style>
+<body>
+<main>
+  <h1>企業型DCを辞めたあと移す先</h1>
+  <p class="lead">会社の企業型の確定拠出年金（企業型DC）に入っていた人が、辞めたあとにお金を移す先の候補と、6か月の期限の目安、やる順番、問い合わせのメモを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの状況</h2>
+    <label class="f" for="taishoku">退職日<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="taishoku">
+    <label class="f" for="next">辞めたあと<span class="hint">次の会社の企業年金は、人事の人か入社の書類で確かめる</span></label>
+    <select id="next">
+      <option value="dc">次の会社に企業型DCがある</option>
+      <option value="db">次の会社は企業型DCがなく、確定給付企業年金（DB）がある</option>
+      <option value="none">次の会社に企業年金がない</option>
+      <option value="1">自営業・フリーランス・無職（国民年金）</option>
+      <option value="3">会社員・公務員の配偶者の扶養に入る</option>
+      <option value="u">まだ決めていない・わからない</option>
+    </select>
+    <label class="f" for="cont">これからの掛金</label>
+    <select id="cont">
+      <option value="yes">これからも積み立てたい</option>
+      <option value="no">積み立てはやめて、運用だけでよい</option>
+    </select>
+    <label class="f" for="rk">前の会社のDCの問い合わせ先<span class="hint">加入中に届いたお知らせや、DCのサイトに書いてある名前（空でも可）</span></label>
+    <input type="text" id="rk" placeholder="例：〇〇信託銀行">
+    <label class="f" for="me">自分の名前<span class="hint">問い合わせのメモに入ります</span></label>
+    <input type="text" id="me" placeholder="例：山田花子">
+  </div>
+  <button id="make" type="button">移す先を見る</button>
+  <div class="err" id="err" hidden></div>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>やること</h3>
+    <ul class="w" id="todo"></ul>
+    <h3>やる順番</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>問い合わせのときに言うこと</h3>
+    <div class="mail" id="tel"></div>
+    <button type="button" class="copy" data-t="tel">文面をコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※一般的な目安です。期限は、確定拠出年金法で「資格を失った日が属する月の翌月から数えて6か月以内」とされています。資格を失う日は、ふつう退職日の翌日です。正確な日付と用紙の名前は、前の会社のDCの問い合わせ先と、移す先の金融機関で確かめてください。手数料は2026年4月の改定後の額です。脱退一時金を受け取れるかは、このページでは判定しません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function d(s) { if (!s) return null; var p = s.split("-"); if (p.length !== 3) return null; var x = new Date(+p[0], +p[1] - 1, +p[2]); return isNaN(x) ? null : x; }
+  function add(dt, n) { var x = new Date(dt); x.setDate(x.getDate() + n); return x; }
+  function f(dt) { return dt.getFullYear() + "年" + (dt.getMonth() + 1) + "月" + dt.getDate() + "日（" + "日月火水木金土".charAt(dt.getDay()) + "）"; }
+  function li(ul, date, text) { var e = document.createElement("li"); if (date) { e.innerHTML = '<span class="d"></span> <span class="t"></span>'; e.querySelector(".d").textContent = date; e.querySelector(".t").textContent = text; } else e.textContent = text; $(ul).appendChild(e); }
+  function make() {
+    $("err").hidden = true;
+    var ts = d($("taishoku").value);
+    if (!ts) { $("err").textContent = "退職日を入れてください。"; $("err").hidden = false; $("result").hidden = true; return false; }
+    var next = $("next").value, cont = $("cont").value;
+    var rkIn = $("rk").value.trim(); var rk = rkIn || "前の会社のDCの問い合わせ先";
+    var me = $("me").value.trim() || "（自分の名前）";
+    var lose = add(ts, 1);
+    // 資格を失った日が属する月の翌月から数えて6か月 → 失った月の6か月後の月の末日
+    var lim = new Date(lose.getFullYear(), lose.getMonth() + 7, 0);
+    var soon = new Date(lim.getFullYear(), lim.getMonth() - 1, 1);
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("tl").innerHTML = "";
+    var todo = [], ng = [], head, sub, warn = false, ask, where;
+    if (next === "dc") {
+      head = "次の会社の企業型DCへ移す";
+      sub = "次の会社の人事の人に、前の会社の企業型DCのお金を移したいと伝えます。次の会社の決まりでiDeCoへの加入も認められていれば、iDeCoへ移して続ける道もあります。";
+      where = "次の会社の人事";
+      todo.push("次の会社の人事の人に「前の会社の企業型DCのお金を移したい」と伝え、移す手続きの用紙を受け取る");
+      todo.push("前の会社のDCの、加入者の番号がわかるお知らせを探しておく");
+      ask = "前の会社で企業型DCに入っていました。\nこちらの会社の企業型DCへ、お金を移したいです。\n移す手続きの用紙と、出す先を教えてください。";
+    } else if (next === "u") {
+      head = "決まるのを待たずに、移す先を決める";
+      warn = true;
+      sub = "辞めたあとが決まらなくても、6か月の期限は進みます。迷うときは、iDeCo（個人型の確定拠出年金）へ移しておくと、あとで次の会社の企業型DCができたときに、そちらへ移すこともできます。";
+      where = "iDeCoを扱う金融機関";
+      todo.push("iDeCoを扱う金融機関（運営管理機関）を1つ選ぶ");
+      todo.push("その金融機関から「個人別管理資産移換依頼書」を取り寄せる。サイトから申し込めるところもある");
+      todo.push("前の会社のDCの、加入者の番号がわかるお知らせを探しておく");
+      ask = "前の会社の企業型DCのお金を移したいです。\n辞めたあとの働き方はまだ決まっていません。\niDeCoへ移す用紙を送っていただけますか。";
+    } else {
+      var label = next === "db" ? "次の会社はDBだけ" : next === "none" ? "次の会社に企業年金がない" : next === "1" ? "国民年金（自営業・無職など）" : "会社員の配偶者の扶養";
+      head = cont === "yes" ? "iDeCoへ移して、積み立てを続ける" : "iDeCoへ移して、運用だけ続ける";
+      sub = "「" + label + "」の場合、移す先はiDeCoが中心です。" + (cont === "yes" ? "移すときに、iDeCoの加入の申し込みもいっしょにします。" : "積み立てをしないときは、運用の指図だけをする人（運用指図者）になります。") + (next === "db" ? "次の会社のDBが受け入れを認めていれば、DBへ移すこともできます。" : "") + "企業年金連合会の「通算企業年金」へ移す道もあります。";
+      where = "iDeCoを扱う金融機関";
+      todo.push("iDeCoを扱う金融機関（運営管理機関）を1つ選ぶ");
+      todo.push("その金融機関から「個人別管理資産移換依頼書」を取り寄せる" + (cont === "yes" ? "。積み立てるなら「個人型年金加入申出書」もいっしょに" : ""));
+      if (cont === "yes" && (next === "db" || next === "none")) todo.push("次の会社に、iDeCoの申し込みで会社に書いてもらう欄があると伝える");
+      if (cont === "yes" && next === "1") todo.push("国民年金の保険料の免除・猶予を受けるあいだは、iDeCoの掛金を出せない。積み立てるかは保険料の払い方で決める");
+      if (next === "db") todo.push("DBへ移したいときは、次の会社の人事の人に、DCのお金を受け入れられるか聞く");
+      todo.push("前の会社のDCの、加入者の番号がわかるお知らせを探しておく");
+      ask = "前の会社の企業型DCのお金を、iDeCoへ移したいです。\n" + (cont === "yes" ? "積み立てもしたいので、加入の申し込みの用紙もお願いします。" : "積み立てはせず、運用だけにする予定です。") + "\n移す用紙を送っていただけますか。";
+    }
+    var el = document.createElement("div"); el.className = "big" + (warn ? " no" : "");
+    el.innerHTML = '<div class="k">移す先の候補</div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".v").textContent = head;
+    el.querySelector(".s").textContent = sub;
+    $("sum").appendChild(el);
+    var el2 = document.createElement("div"); el2.className = "big no";
+    el2.innerHTML = '<div class="k">6か月の期限の目安</div><div class="v"></div><div class="s"></div>';
+    el2.querySelector(".v").textContent = (lim.getFullYear()) + "年" + (lim.getMonth() + 1) + "月末ごろ";
+    el2.querySelector(".s").textContent = "資格を失う日は、ふつう退職日の翌日の" + f(lose) + "。その月の翌月から数えて6か月以内に移らないと、自動移換になります。移す手続きには時間がかかるので、遅くとも" + (soon.getFullYear()) + "年" + (soon.getMonth() + 1) + "月に入る前に申し込みを済ませるのが安心です。正確な日付は、" + rk + "で確かめます。";
+    $("sum").appendChild(el2);
+    todo.forEach(function (x) { li("todo", "", x); });
+
+    li("tl", f(lose), "前の会社の企業型DCの資格がなくなる（ふつう退職日の翌日）");
+    if (next === "u") li("tl", "なるべく早く", "辞めたあとを決める。決まらなければ、iDeCoへ移す準備を先に進める");
+    if (next === "dc") li("tl", "入社したら", "次の会社の人事の人に、移したいと伝えて用紙を受け取る（下の文面）");
+    else li("tl", "退職後すぐ", where + "を選んで、用紙を取り寄せる（下の文面）");
+    li("tl", "用紙が届いたら", "前の会社のDCの加入者の番号などを書いて出す。控えをとっておく");
+    li("tl", "遅くとも" + (soon.getFullYear()) + "年" + (soon.getMonth() + 1) + "月に入る前", "申し込みを済ませておく。期限ぎりぎりだと、移す処理が間に合わないことがある");
+    li("tl", "出してから1〜3か月", "移し終わったお知らせが届くか確かめる。届かなければ、出した先に問い合わせる");
+    li("tl", (lim.getFullYear()) + "年" + (lim.getMonth() + 1) + "月末ごろ", "6か月の期限の目安。ここまでに移らないと自動移換");
+
+    $("tel").textContent = "お世話になります。" + me + "と申します。\n" + f(ts) + "に退職しました。\n" + ask + (rkIn ? "\n前の会社のDCの問い合わせ先は、" + rkIn + "です。" : "");
+
+    ng.push("・6か月以内に移さないと、お金は国民年金基金連合会へ自動で移される（自動移換）");
+    ng.push("・自動移換のあいだは、運用されない");
+    ng.push("・自動移換のとき、1,048円と3,300円の手数料が、お金から引かれる");
+    ng.push("・自動移換された月の4か月後からは、月40円と58円の管理手数料も引かれ続ける");
+    ng.push("・自動移換の期間は、受け取りの条件になる加入の期間に数えられない。受け取れる年齢が遅くなることがある");
+    ng.push("・iDeCoへ移すときも手数料がかかる（自動移換のあとから移すときも同じ）。額は選んだ金融機関で確かめる");
+    if (next === "dc" || next === "u") ng.push("・6か月以内に新しい会社の企業型DCやiDeCoに入ったと確認できると、申し出なしで移されることもある。ただし待たずに確かめる");
+    ng.push("・お金を引き出せる「脱退一時金」は、条件に当たる人だけ。このページでは判定しない");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+  [].forEach.call(document.querySelectorAll(".copy"), function (b) {
+    b.addEventListener("click", function () {
+      var txt = $(b.getAttribute("data-t")).textContent, label = b.textContent;
+      var ok = function () { b.textContent = "コピーしました"; setTimeout(function () { b.textContent = label; }, 1500); };
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = txt; document.body.appendChild(t);
+        t.select(); try { document.execCommand("copy"); ok(); } catch (err) {} document.body.removeChild(t);
+      }
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    });
+  });
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("taishoku").value = "2026-12-31"; $("next").value = "none"; $("cont").value = "yes"; $("rk").value = "〇〇信託銀行"; $("me").value = "山田花子"; make(); }
+})();
+</script>
+</body>
+</html>
