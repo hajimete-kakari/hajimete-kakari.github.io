@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の託児サービス 準備チェック｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=date], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  ol.tl { list-style: none; padding-left: 0; margin: 0; } ol.tl li { margin-bottom: 8px; }
+  ol.tl li .t { font-weight: 700; display: block; }
+  ol.tl li .d { color: var(--accent); font-weight: 700; font-size: .9rem; display: block; }
+  ol.tl li .w { font-size: .9rem; display: block; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li .w, .mihon #todo li .d, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の託児サービス 準備チェック</h1>
+  <p class="lead">子どもを預けながら職業訓練（ハロートレーニング）を受けたい人向けです。子どもの生まれた日と、受けたい訓練の期間、家で子どもを見られる人がいるかを入れると、託児サービスを使う条件に当てはまりそうか、訓練が始まる日と終わる日の子どもの年齢、申し込みの順番と、ハローワークで聞くことを並べます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 子どもと訓練の期間</h2>
+    <label class="f" for="bd">子どもの生まれた日</label>
+    <input type="date" id="bd">
+    <label class="f" for="ds">訓練が始まる日（予定）<span class="hint">コースの案内にある「訓練期間」の初日です。まだ決まっていなければ、だいたいの日で</span></label>
+    <input type="date" id="ds">
+    <label class="f" for="de">訓練が終わる日（予定）</label>
+    <input type="date" id="de">
+  </div>
+
+  <div class="card">
+    <h2>2. 家の状況</h2>
+    <label class="f" for="hg">訓練の時間、子どもを見られる同居の家族など</label>
+    <select id="hg">
+      <option value="none">いない（自分が受講すると見る人がいない）</option>
+      <option value="some">いる（同居の家族が見られる）</option>
+      <option value="part">曜日や時間によってはいる</option>
+    </select>
+    <label class="f mh" for="ho">子どもの今の預け先</label>
+    <select id="ho" class="mh">
+      <option value="home">家で見ている</option>
+      <option value="hoiku">保育園などに通っている</option>
+    </select>
+    <label class="f mh" for="sg">託児の施設への送り迎え<span class="hint">託児の施設は訓練の場所と離れていることがあり、送り迎えは保護者がする案内が多いです</span></label>
+    <select id="sg" class="mh">
+      <option value="car">車でできる</option>
+      <option value="train">電車・バス・徒歩でならできる</option>
+      <option value="hard">むずかしい</option>
+    </select>
+    <label class="f mh" for="al">食物アレルギー・持病など、保育で気をつけること</label>
+    <select id="al" class="mh">
+      <option value="no">とくにない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>申し込みの順番</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>ハローワークで聞くこと</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>相談のときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省の求職者支援訓練のリーフレット（託児サービスの利用が可能なコースがあること）、大阪労働局「託児付きコース」の案内（対象となる方の2つの条件・託児は無料でミルク・おむつ代等は実費）、岐阜労働局で案内されている求職者支援訓練の託児サービスの案内（申込みは住所を管轄するハローワークに相談のうえ「託児サービス利用申込書」を提出、受講決定後の見学・顔合わせ、入所届、受け入れ年齢と人数は施設ごと、申込多数で使えない場合あり）をもとにした目安です。受け入れの年齢・時間・費用・定員はコースと施設ごとにちがいます。利用できるかどうかは、ハローワークと訓練の施設が決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function pd(s) { if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null; var a = s.split("-"); return new Date(+a[0], +a[1] - 1, +a[2]); }
+  var WD = "日月火水木金土";
+  function ymd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function dd(a, b) { return Math.round((b - a) / 86400000); }
+  // 生まれた日から、ある日までの年齢（〇歳〇か月）
+  function age(b, d) {
+    var m = (d.getFullYear() - b.getFullYear()) * 12 + (d.getMonth() - b.getMonth());
+    if (d.getDate() < b.getDate()) m--;
+    return { y: Math.floor(m / 12), m: m % 12, days: dd(b, d) };
+  }
+  function ageTxt(a) {
+    if (a.days < 0) return "まだ生まれていない";
+    if (a.y === 0 && a.m === 0) return "生後" + a.days + "日";
+    return a.y + "歳" + a.m + "か月（生後" + a.days + "日）";
+  }
+  // 小学校に上がる年の4月1日（4月2日〜12月31日生まれは7年後、1月1日〜4月1日生まれは6年後）
+  function schoolStart(b) {
+    var early = (b.getMonth() < 3) || (b.getMonth() === 3 && b.getDate() === 1);
+    return new Date(b.getFullYear() + (early ? 6 : 7), 3, 1);
+  }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function step(t, d, w) {
+    var e = document.createElement("li");
+    e.innerHTML = '<span class="t"></span><span class="d"></span><span class="w"></span>';
+    e.querySelector(".t").textContent = t; e.querySelector(".d").textContent = d; e.querySelector(".w").textContent = w;
+    $("todo").appendChild(e);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("chk").appendChild(e); }
+
+  function make() {
+    $("result").hidden = true;
+    var bd = pd($("bd").value), ds = pd($("ds").value), de = pd($("de").value);
+    if (!bd || !ds || !de) { alert("子どもの生まれた日と、訓練が始まる日・終わる日を入れてください"); return false; }
+    if (dd(ds, de) < 0) { alert("訓練が終わる日は、始まる日より後の日にしてください"); return false; }
+    if (dd(bd, ds) < 0) { alert("子どもの生まれた日は、訓練が始まる日より前の日にしてください"); return false; }
+    var hg = $("hg").value, ho = $("ho").value, sg = $("sg").value, al = $("al").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("chk").innerHTML = "";
+
+    var a0 = age(bd, ds), a1 = age(bd, de), ss = schoolStart(bd);
+    var born = true;
+    var schoolBefore = dd(ss, ds) >= 0;           // 始まる日にはもう小学生
+    var schoolDuring = !schoolBefore && dd(ss, de) >= 0; // 訓練の途中で小学校に上がる
+    var young = born && a0.days < 57;             // 案内の例「生後57日から」より前
+
+    // 1. 条件
+    if (hg === "some") {
+      box("あなたの場合", "託児の条件に当たらない見込み",
+        "託児サービスは、自分が訓練を受けると子どもを見る人がいなくなり、同居の家族なども見られない人が対象です。同居の家族が見られるなら、まずその形で受けられるかを考えます。事情があれば、ハローワークで相談できます。", true);
+    } else if (hg === "part") {
+      box("あなたの場合", "曜日や時間によるので、窓口で相談",
+        "対象は、訓練を受けると子どもを見られず、同居の家族なども見られない人です。家族が見られない曜日・時間があるときにどう扱うかは、コースごとの要件で決まるので、ハローワークの訓練の窓口で聞きます。", true);
+    } else if (schoolBefore) {
+      box("あなたの場合", "子どもの年齢が託児の対象から外れる見込み",
+        "訓練の託児サービスは、小学校に上がる前の子どもが対象です。訓練が始まる日には、もう小学校に上がっています。", true);
+    } else {
+      box("あなたの場合", "託児の条件に当てはまりそう（決めるのはハローワークと施設）",
+        "自分が訓練を受けると子どもを見る人がいなくなり、同居の家族なども見られない、という2つの条件に当たる入力です。あとは、コースに託児が付いているか、施設の受け入れ年齢と人数に空きがあるかで決まります。", false);
+    }
+
+    // 2. 年齢
+    if (born && !schoolBefore) {
+      var s2 = "訓練が終わる日は" + ageTxt(a1) + "です。受け入れる年齢は施設ごとにちがい、案内の例では「生後57日〜小学校就学前」「生後8か月目〜6歳」などがあります。";
+      if (young) s2 += "始まる日が生後57日より前なので、受け入れの下限に届かない施設があります。";
+      if (a1.y >= 6 && !schoolDuring) s2 += (a0.y >= 6 ? "訓練の間は6歳なので、" : "訓練の途中で6歳になるので、") + "「6歳まで」と書かれた施設では、小学校に上がるまで預かるかを確かめます。";
+      box("訓練が始まる日の子どもの年齢", ageTxt(a0), s2, young);
+    }
+
+    // 3. 小学校
+    if (born) {
+      var s3;
+      if (schoolBefore) s3 = "訓練が始まる日には、もう小学校に上がっています。";
+      else if (schoolDuring) s3 = "訓練の途中で小学校に上がります。小学校に上がったあとの託児がどうなるかは、施設とハローワークに聞きます。";
+      else s3 = "訓練が終わるまで、小学校に上がる前の期間です（あと" + dd(de, ss) + "日あります）。";
+      box("小学校に上がる日（目安）", ymd(ss), s3, schoolBefore || schoolDuring);
+    }
+
+    // 4. 順番
+    var n = 1;
+    if (schoolBefore) {
+      step(n++ + ". 訓練の時間の預け先を、別に考える", "申し込む前",
+        "訓練の託児は小学校に上がる前の子どもが対象です。放課後や長い休みの預け先は、市区町村の窓口で聞きます。訓練の時間（1日の時間が短いコースなど）も、ハローワークで相談できます。");
+    } else {
+    step(n++ + ". ハローワークで求職の申し込みと、訓練の相談", "受けたいコースの申込締切より前",
+      "訓練の窓口で「託児付きのコースを受けたい」と伝えます。コース名に「託児」と付いたものが託児付きです。すべてのコースに付いているわけではありません。");
+    step(n++ + ". 託児付きのコースの案内を読む", "申し込む前",
+      "託児の施設の場所、受け入れる年齢と人数、預かる時間、送り迎えのしかた、自己負担になるもの（食事・おむつなど）が書かれています。");
+    step(n++ + ". 受講の申込書と「託児サービス利用申込書」を出す", "コースの申込締切まで",
+      "住所を管轄するハローワークに相談のうえ出します。" + (al === "yes" ? "食物アレルギーや持病など、保育で気をつけることは、申込書の欄に書いておきます。" : "保育で気をつけることがあれば、申込書の欄に書きます。"));
+    step(n++ + ". 選考（面接・筆記など）を受ける", "コースの選考日",
+      "受かったら、ハローワークで受講のあっせん（受講の手続き）があります。託児の希望が多いと、受講が決まっても託児が使えないことがあります。");
+    step(n++ + ". 託児の施設の見学・顔合わせと、入所の届け", "受講が決まったあと",
+      "訓練の施設から連絡が来る案内があります。入所届など、施設に出す書類と持ち物をそろえます。");
+    step(n++ + ". 訓練が始まる", ymd(ds),
+      "預かるのは、訓練を受ける日だけという案内が多いです（祝日は使えない例もあります）。" + (sg === "hard" ? "送り迎えがむずかしいときは、通える場所の施設があるかを、申し込む前に聞いておきます。" : ""));
+    }
+
+    // 5. 聞くこと
+    if (schoolBefore) {
+      li("1日の時間が短いコースなど、子どもの下校の時間に合わせやすいコースがあるか");
+    } else {
+    li("住んでいる地域で、託児付きのコースがいつ・どの分野で開かれるか");
+    li("託児の施設は、子どもの年齢（始まる日に" + ageTxt(a0) + "）で受け入れてもらえるか");
+    li("預かる時間と、訓練の時間・送り迎えの時間が合うか");
+    li("託児は無料か、自己負担になるもの（食事・おやつ・おむつ・ミルクなど）はいくらくらいか");
+    li("託児の人数の空きと、使えなかったときに受講はどうなるか");
+    if (ho === "hoiku") li("今の保育園などに通いながら訓練の託児を使えるか、使わない形にするか（保育園のことは市区町村の保育の担当にも聞く）");
+    if (hg === "part") li("家族が見られない曜日・時間だけでも、託児の対象になるか");
+    if (schoolDuring) li("訓練の途中で小学校に上がったあとの預け先");
+    }
+
+    // 6. メモ
+    var memo = "託児付きのコースを受けたいです\n";
+    memo += "子どもの年齢：訓練開始の日に\n　" + (born && !schoolBefore ? a0.y + "歳" + a0.m + "か月" : "（確かめる）") + "\n";
+    memo += "家で見られる人：" + (hg === "none" ? "いない" : hg === "part" ? "曜日による" : "いる") + "\n";
+    memo += "送り迎え：" + (sg === "car" ? "車" : sg === "train" ? "電車・バス・徒歩" : "むずかしい") + "\n";
+    memo += "保育で気をつけること：" + (al === "yes" ? "あり" : "なし") + "\n";
+    memo += "受けたい期間：\n　" + ymd(ds) + "〜\n　" + ymd(de);
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・託児付きは一部のコースだけ。コース名に「託児」とあるか確かめる\n・対象は、受講すると子どもを見られず、同居の家族なども見られない人\n・託児そのものは無料の案内が多いが、食事・おむつ・ミルクなどは実費のことがある\n・受け入れる年齢・時間・人数・場所は施設ごとにちがう\n・申し込みが多いと、託児が使えないことがある\n・使えるかどうかは、ハローワークと訓練の施設が決める";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  $("ds").value = iso(new Date());
+  if (DEMO) { $("bd").value = "2024-06-15"; $("ds").value = "2027-01-12"; $("de").value = "2027-04-27"; $("hg").value = "none"; $("sg").value = "car"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
