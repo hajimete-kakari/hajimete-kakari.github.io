@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>求職者支援訓練 基礎コースと実践コースの選び方｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #diff li, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>求職者支援訓練 基礎コースと実践コースの選び方</h1>
+  <p class="lead">求職者支援訓練の「基礎コース」と「実践コース」のどちらを考えるとよさそうかを、働いた経験・パソコン・就きたい仕事などから並べます。ちがい、続けて受ける道、ハローワークで聞くことも出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. いまの自分</h2>
+    <label class="f" for="ex">働いた経験</label>
+    <select id="ex">
+      <option value="none">ほとんどない</option>
+      <option value="gap">あるが、ブランクが長い</option>
+      <option value="yes">ある（最近まで働いていた）</option>
+    </select>
+    <label class="f" for="pc">パソコンの基本（文字の入力・メール・表の入力など）</label>
+    <select id="pc">
+      <option value="weak">自信がない</option>
+      <option value="ok">ひととおりできる</option>
+    </select>
+    <label class="f" for="job">就きたい仕事</label>
+    <select id="job">
+      <option value="clear">決まっている（例：介護・医療事務・IT・デザインなど）</option>
+      <option value="vague">いくつか候補がある</option>
+      <option value="none">まだ決まっていない</option>
+    </select>
+    <label class="f mh" for="worry">授業や通うことへの不安<span class="hint">生活のリズム・人と話すこと・長い時間座ることなど</span></label>
+    <select id="worry" class="mh">
+      <option value="no">とくにない</option>
+      <option value="yes">ある</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. お金と家のこと</h2>
+    <label class="f" for="kyufu">月10万円の職業訓練受講給付金</label>
+    <select id="kyufu">
+      <option value="yes">もらいながら受けたい</option>
+      <option value="no">考えていない（失業保険がある・条件に当たらない）</option>
+    </select>
+    <label class="f mh" for="care">子育て・介護をしながら受ける<span class="hint">小学生以下の子の養育や、一定の家族の介護</span></label>
+    <select id="care" class="mh">
+      <option value="no">いいえ</option>
+      <option value="yes">はい</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>2つのコースのちがい</h3>
+    <ul class="mo" id="diff"></ul>
+    <h3>ハローワークで聞くこと</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>相談のときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「求職者支援制度のご案内」、「求職者支援制度・訓練受講のしおり」（基礎コース・実践コースの説明、訓練期間2〜6か月、受講料は原則無料でテキスト代などは自己負担、連続受講の組み合わせ、基礎コースを受講する人の欠席の扱い）、「求職者支援制度に関するよくあるご質問」をもとにした目安です。どのコースを受けるかは、ハローワークで相談して決め、受講はハローワークのあっせんが必要です。開かれるコースは地域と時期でちがいます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+
+  function make() {
+    var ex = $("ex").value, pc = $("pc").value, job = $("job").value, worry = $("worry").value,
+        kyufu = $("kyufu").value, care = $("care").value;
+    $("sum").innerHTML = ""; $("diff").innerHTML = ""; $("chk").innerHTML = "";
+
+    // 基礎に寄る点・実践に寄る点を数える
+    var kiso = 0, jissen = 0, why = [];
+    if (ex === "none") { kiso += 2; why.push("働いた経験がほとんどない"); }
+    else if (ex === "gap") { kiso += 1; why.push("ブランクが長い"); }
+    else { jissen += 1; }
+    if (pc === "weak") { kiso += 1; why.push("パソコンの基本に自信がない"); } else { jissen += 1; }
+    if (job === "clear") { jissen += 2; }
+    else if (job === "none") { kiso += 1; why.push("就きたい仕事がまだ決まっていない"); }
+    if (worry === "yes") { kiso += 1; why.push("授業や通うことに不安がある"); }
+
+    var res, sub, no = false;
+    if (job === "clear" && kiso >= 2) {
+      res = "基礎コースから実践コースへ、の順も考えられる";
+      sub = "就きたい仕事は決まっていますが、" + why.join("・") + "という入力です。まず基礎コースで社会人としての基礎を身につけ、そのあと実践コースや公共職業訓練へ、という組み合わせは、ハローワークが必要と認めれば続けて受けられます。いきなり実践コースでよいかも含めて、窓口で相談します。";
+    } else if (kiso > jissen) {
+      res = "基礎コースが合いそう";
+      sub = (why.length ? why.join("・") + "という入力です。" : "") + "基礎コースは、社会人としての基礎的な技能などを身につける訓練です。社会人スキルを学ぶ授業（職業能力開発講習）もあります。";
+    } else if (jissen > kiso && job !== "none") {
+      res = "実践コースが合いそう";
+      var pos = [];
+      if (ex === "yes") pos.push("最近まで働いていた");
+      if (pc === "ok") pos.push("パソコンの基本はある");
+      sub = "就きたい仕事" + (job === "clear" ? "が決まっている" : "の候補がある") + (pos.length ? "・" + pos.join("・") : "") + "という入力です。" + (why.length ? why.join("・") + "ことは、相談のときに伝えます。" : "") + "実践コースは、就きたい仕事で使う実践的な技能などを身につける訓練です。";
+    } else {
+      res = "どちらもありうるので、窓口で相談";
+      sub = "入力からは、どちらとも言いにくい形です。就きたい仕事の候補を1つか2つに絞ってから、ハローワークで基礎と実践のどちらがよいかを相談します。";
+      no = true;
+    }
+    box("あなたの場合（目安）", res, sub, no);
+
+    box("訓練の期間", "どちらも2〜6か月",
+      "求職者支援訓練は、1コース2か月から6か月までです。受講料は原則無料で、テキスト代などは自己負担です。コースごとの期間と時間は、コースの案内で確かめます。", false);
+
+    if (kyufu === "yes") {
+      if (care === "yes") {
+        box("休んだときの給付金の扱い", "子育て・介護中は、どちらのコースでも同じ扱い",
+          "やむを得ない理由以外で休んだ日があると、原則は給付金が出ません。ただ、子の養育や一定の家族の介護をしている人は、出席が8割以上なら、休んだ日数に応じて減らして出る扱いです。", false);
+      } else {
+        box("休んだときの給付金の扱い", "基礎コースと実践コースでちがう",
+          "やむを得ない理由以外で休んだ日があると、原則は給付金が出ません。ただ、基礎コースを受講している人は、出席が8割以上なら、休んだ日数に応じて減らして出る扱いです。実践コースには、この扱いがありません（子育て・介護中の人は別）。", true);
+      }
+    }
+
+    li("diff", "目的：基礎は社会人としての基礎的な技能など、実践は就きたい仕事で使う実践的な技能など");
+    li("diff", "授業：基礎コースには、社会人スキルを身につける授業（職業能力開発講習）がある");
+    li("diff", "コースの例：基礎はビジネスパソコン科・オフィスワーク科など、実践はIT・営業販売事務・医療事務・介護福祉・デザインなどの分野");
+    li("diff", "期間：どちらも2〜6か月。受講料は原則無料（テキスト代などは自己負担）");
+    li("diff", "続けて受ける：訓練を終えて1年たつ前の次の訓練は原則できないが、「基礎コース→実践コースか公共職業訓練」は、ハローワークが必要と認めれば続けて受けられる");
+
+    li("chk", "住んでいる地域で、近く開く基礎コース・実践コースと、申込の締切");
+    li("chk", "自分の場合、基礎コースと実践コースのどちらがよいか");
+    if (job === "clear" && kiso >= 2) li("chk", "基礎コースのあとに実践コース（または公共職業訓練）へ続けて受けられそうか");
+    if (job !== "clear") li("chk", "就きたい仕事の候補を絞るための相談（キャリアコンサルティングなど）");
+    li("chk", "コースの1日の時間・通う曜日・テキスト代などの自己負担");
+    if (kyufu === "yes") li("chk", "職業訓練受講給付金の条件に当たりそうか（事前審査のこと）");
+
+    var memo = "求職者支援訓練を考えています\n";
+    memo += "働いた経験：" + (ex === "none" ? "ほとんどない" : ex === "gap" ? "ブランクが長い" : "ある") + "\n";
+    memo += "パソコン：" + (pc === "weak" ? "自信がない" : "ひととおりできる") + "\n";
+    memo += "就きたい仕事：" + (job === "clear" ? "決まっている（　　）" : job === "vague" ? "候補あり（　　）" : "まだ") + "\n";
+    memo += "給付金：" + (kyufu === "yes" ? "もらいながら受けたい" : "考えていない") + "\n";
+    memo += "子育て・介護：" + (care === "yes" ? "あり" : "なし") + "\n";
+    memo += "聞きたいこと：基礎と実践の\n　どちらがよいか";
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・どちらを受けるかは、ハローワークで相談して決める\n・受講には、選考の合格とハローワークの受講あっせんが要る\n・開かれるコースは地域と時期でちがう\n・訓練を終えて1年たつ前の次の訓練は、原則できない\n・ここに出るのは目安。期間・時間・自己負担はコースの案内で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) { $("ex").value = "gap"; $("pc").value = "weak"; $("job").value = "clear"; $("worry").value = "no"; $("kyufu").value = "yes"; $("care").value = "no"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
