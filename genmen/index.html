@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業中の国保・年金・住民税、減らせる制度の判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], input[type=date], select { width: 100%; max-width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-height: 44px; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  ol.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業中の国保・年金・住民税、減らせる制度の判定</h1>
+  <p class="lead">会社を辞めて収入がないときに、国民健康保険料・国民年金保険料・住民税を「減らす」「免除してもらう」「待ってもらう」制度のうち、自分が使えそうなものと、出す先・持ち物・申し込む順番を並べます。厚生労働省・日本年金機構の案内と、市区町村の案内の例に当てはめた目安です。国保と住民税の減免は市区町村ごとに条件がちがうので、最後は住んでいる市区町村の窓口で確かめてください。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞めたときのこと</h2>
+    <label class="f" for="riyu">辞めた理由<span class="hint">離職票やハローワークの受給資格者証に書かれる理由に近いもの</span></label>
+    <select id="riyu">
+      <option value="kaisha">会社の都合（倒産・解雇・退職勧奨など）</option>
+      <option value="seito">雇い止め・正当な理由のある自己都合（病気・けが・家族の介護など）</option>
+      <option value="jiko">自己都合（転職・キャリアなど）</option>
+      <option value="teinen">定年</option>
+      <option value="unk">わからない・まだ決まっていない</option>
+    </select>
+    <label class="f" for="day">退職日<span class="hint">会社に在籍した最後の日</span></label>
+    <input type="date" id="day">
+    <label class="f" for="age">退職日の年齢</label>
+    <input type="number" id="age" inputmode="numeric" min="15" max="90" placeholder="例：38">
+    <label class="f" for="koyo">雇用保険（ハローワーク）の書類<span class="hint">受給資格者証か受給資格通知。手続きの前なら、離職票</span></label>
+    <select id="koyo">
+      <option value="aru">受給資格者証（受給資格通知）がある</option>
+      <option value="rishoku">離職票はあるが、ハローワークの手続きはまだ</option>
+      <option value="nashi">まだ届いていない</option>
+      <option value="hairazu">雇用保険に入っていなかった</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 健康保険と年金</h2>
+    <label class="f" for="hoken">辞めたあとの健康保険</label>
+    <select id="hoken">
+      <option value="kokuho">国民健康保険（国保）に入る・入った</option>
+      <option value="nini">前の会社の健康保険の任意継続</option>
+      <option value="fuyo">家族の健康保険の扶養に入る</option>
+      <option value="unk">まだ決めていない</option>
+    </select>
+    <label class="f" for="nenkin">辞めたあとの年金</label>
+    <select id="nenkin">
+      <option value="1go">自分で国民年金の保険料を納める（第1号）</option>
+      <option value="3go">会社員・公務員の配偶者の扶養に入る（第3号）</option>
+      <option value="shoku">すぐ次の会社で厚生年金に入る</option>
+    </select>
+    <label class="f" for="kazoku">配偶者・世帯主の前の年の所得<span class="hint">年金の免除は、配偶者と世帯主の所得も見ます。自分が世帯主でひとり暮らしなら「いない」</span></label>
+    <select id="kazoku">
+      <option value="none">いない（自分が世帯主・配偶者なし）</option>
+      <option value="low">少ない（働いていない・パート程度）</option>
+      <option value="high">ふつうに働いて収入がある</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>3. 住民税</h2>
+    <label class="f" for="jumin">辞めたあとの住民税の払い方</label>
+    <select id="jumin">
+      <option value="futsu">納付書が届いた・届く（自分で納める）</option>
+      <option value="ikkatsu">最後の給料や退職金から、残りをまとめて引かれた</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="pay">いま、払うのが難しいか</label>
+    <select id="pay">
+      <option value="hard">難しい・遅れそう</option>
+      <option value="ok">払えるが、減らせるなら減らしたい</option>
+    </select>
+  </div>
+  <button id="make" type="button">判定する</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>申し込む順番</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「国民健康保険の保険料・保険税について」（非自発的失業者の軽減：前年の給与所得を30/100として算定・失業時からその翌年度末まで・高額療養費の所得区分も同じ、7割・5割・2割軽減、災害その他特別の事情による減免・納付猶予）、日本年金機構「国民年金保険料の免除制度・納付猶予制度」「免除等の申請が可能な期間」（失業等による特例・承認基準・年金額への反映・追納・2年1か月）、市区町村の国保・個人住民税の減免と徴収猶予の案内の例をもとにした目安です。国保の保険料・住民税の減免の条件と割合は市区町村の条例で決まり、ここでは扱いません。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(t) { var e = document.createElement("li"); e.textContent = t; $("todo").appendChild(e); }
+  function ymd(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日"; }
+  function ym(d) { return d.getFullYear() + "年" + (d.getMonth() + 1) + "月"; }
+  function addDays(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+  function today() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+
+  function make() {
+    ["sum", "todo"].forEach(function (i) { $(i).innerHTML = ""; });
+    var ng = [];
+    var riyu = $("riyu").value, koyo = $("koyo").value, hoken = $("hoken").value, nenkin = $("nenkin").value;
+    var kazoku = $("kazoku").value, jumin = $("jumin").value, pay = $("pay").value;
+    var ageS = $("age").value.trim(), age = Number(ageS), dayS = $("day").value;
+    if (ageS === "" || isNaN(age) || age < 15 || age > 90 || !dayS) {
+      box("入力をなおしてください", "退職日と、退職日の年齢を入れてください", "年齢は数字で（例：38）。退職日は、離職票や退職証明書で確かめられます。", true);
+      $("ng").textContent = "・退職日がわからないときは、前の会社の担当に聞くか、離職票・退職証明書を見る";
+      $("result").hidden = false; return true;
+    }
+    var p = dayS.split("-"), day = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    var next = addDays(day, 1);
+    // 翌年度末：離職日の翌日の属する年度の、次の年度の3月31日
+    var fy = next.getMonth() >= 3 ? next.getFullYear() : next.getFullYear() - 1;
+    var end = new Date(fy + 2, 2, 31);
+    var hiji = (riyu === "kaisha" || riyu === "seito");
+
+    // 1. 国保：非自発的失業者の軽減
+    if (hoken === "kokuho" || hoken === "unk") {
+      var pre = hoken === "unk" ? "国保に入るなら：" : "";
+      if (koyo === "hairazu") {
+        box("国保：失業の軽減（給与所得を3割で計算）", pre + "対象になりにくいです",
+          "この軽減は、雇用保険の受給資格者証（受給資格通知）の離職理由で判定します。雇用保険に入っていなかったときは、この軽減ではなく、下の「所得が減ったときの減免」を市区町村に相談します。", true);
+      } else if (age >= 65) {
+        box("国保：失業の軽減（給与所得を3割で計算）", pre + "対象外の見込みです",
+          "多くの市区町村の案内では、離職の時点で65歳未満の人が対象です。65歳以上で辞めた人は、下の「所得が減ったときの減免」を相談します。", true);
+      } else if (riyu === "jiko" || riyu === "teinen") {
+        box("国保：失業の軽減（給与所得を3割で計算）", pre + "対象外の見込みです",
+          "この軽減の対象は、倒産・解雇などで辞めた人（特定受給資格者）と、雇い止めや正当な理由のある自己都合で辞めた人（特定理由離職者）です。" + (riyu === "teinen" ? "定年は対象に入っていません。" : "ふつうの自己都合は対象に入っていません。") + "\nハローワークで離職理由が変わったとき（会社の説明とちがう理由が認められたとき）は、受給資格者証の番号で判定し直します。", true);
+      } else {
+        box("国保：失業の軽減（給与所得を3割で計算）", pre + (riyu === "unk" ? "離職理由しだいで対象です" : "対象になる見込みです"),
+          "前の年の給与所得を30/100（3割）として、国保の保険料を計算します。7割・5割・2割軽減の判定や、高額療養費の所得区分でも同じように扱われます。\n期間：" + ym(next) + "（離職日の翌日の月）から " + ymd(end) + "（翌年度末）まで\n判定：受給資格者証（受給資格通知）の離職理由の番号。多くの市区町村の案内では 11・12・21・22・23・31・32・33・34 が対象\n出し方：市区町村の国保の窓口に届け出る（受給資格者証の写し）。郵送や電子申請ができる市区町村もある" +
+          (koyo !== "aru" ? "\nまだ受給資格者証がないので、ハローワークで手続きをして受け取ってから届け出ます。" : ""), riyu === "unk");
+      }
+      box("国保：7割・5割・2割軽減", "所得が分かっていれば、市区町村が判定します",
+        "世帯の所得が基準を下回ると、均等割・平等割（加入する人数や世帯ごとにかかる分）が7割・5割・2割減ります。申請は要らない市区町村が多いですが、世帯の誰かの所得の申告がないと、軽減が受けられないことがあります。所得がない年も、住民税の申告をしておきます。", false);
+      box("国保：所得が減ったときの減免", "市区町村ごとの制度。申請した月から",
+        "退職などで、これからの所得が大きく減るときに、保険料を減らす制度を条例で設けている市区町村があります。ある大きな市の案内では、退職後1年間の世帯の見込みの所得が前の年の7割以下になる世帯が対象で、減免を受けたい月の納期限までに申請、申請した月以降の分が対象でした。条件・割合はちがうので、住んでいる市区町村の国保の窓口で聞きます。", false);
+    } else if (hoken === "nini") {
+      box("健康保険（任意継続）", "国保の軽減・減免は使えません",
+        "任意継続は前の会社の健康保険なので、ここで並べる国保の軽減・減免の対象ではありません。倒産・解雇・雇い止めなどで辞めた人は、国保に入ると保険料が大きく下がることがあります。任意継続をやめて国保に移れるか、加入している健康保険に確かめます。", true);
+    } else {
+      box("健康保険（家族の扶養）", "保険料はかかりません",
+        "家族の健康保険の扶養に入れれば、自分の保険料はかかりません。失業手当の日額によっては扶養に入れないことがあるので、家族の勤め先の健康保険に確かめます。", false);
+    }
+
+    // 2. 国民年金
+    if (nenkin === "1go") {
+      if (age >= 60) {
+        box("国民年金：免除", "60歳からは、保険料を納める義務はありません",
+          "国民年金の第1号は20歳以上60歳未満の人です。60歳以上で任意で入っている人は、免除を申請できません。", false);
+      } else {
+        var menV, menS, menNo = false;
+        if (kazoku === "high") {
+          menV = "本人は特例の対象。配偶者・世帯主の所得で通らないことがあります";
+          menS = "失業の特例では、辞めた本人の前の年の所得をないものとして審査します。ただし、配偶者や世帯主がいるときは、その人たちも所得の基準内か、失業などの特例に当たる必要があります。" +
+            (age < 50 ? "\n50歳未満なら納付猶予も申し込めます。納付猶予は世帯主の所得は見ません（本人と配偶者だけ）。配偶者の所得が多いと、納付猶予も通りにくくなります。" : "");
+          menNo = true;
+        } else if (kazoku === "unk") {
+          menV = "本人は特例の対象。配偶者・世帯主の所得も審査されます";
+          menS = "失業の特例では、辞めた本人の前の年の所得をないものとして審査します。配偶者や世帯主がいるときは、その人たちの所得も基準内か見られます。申請すれば、通るかどうかは審査の結果でわかります。";
+        } else {
+          menV = "失業の特例で、免除が通る見込みがあります";
+          menS = "辞めた本人の前の年の所得をないものとして審査します（失業等による特例免除）。" + (kazoku === "low" ? "配偶者・世帯主も所得の基準内なら、全額免除になる見込みがあります。" : "全額免除になる見込みがあります。");
+        }
+        box("国民年金：失業の特例免除", menV,
+          menS + "\n対象：失業した月の前月の分から\n申請：1年度（7月〜翌年6月）ごと。特例で承認された人は、翌年度も申請が要る\n出す先：住所のある市区町村の国民年金の窓口か年金事務所（郵送・電子申請も）\n持ち物：離職票か受給資格者証（受給資格通知）の写し\nさかのぼり：申請の時点から2年1か月前の月の分まで", menNo);
+        box("国民年金：免除された期間の扱い", "年金を受け取る期間には数えられます",
+          "全額免除の月は、年金額に2分の1が入ります（平成21年4月分から）。納付猶予の月は、年金額には入りません。どちらも10年以内なら、あとから納められます（追納）。免除や猶予を申請せずに払わないと「未納」になり、受け取る期間にも数えられません。", false);
+      }
+    } else if (nenkin === "3go") {
+      box("国民年金", "第3号なら、保険料はかかりません",
+        "配偶者の勤め先で、扶養に入れる手続きをしてもらいます。第3号の届け出は、ふつう健康保険の扶養の届けと一緒になっています。", false);
+    } else {
+      box("国民年金", "次の会社で厚生年金に入るなら、免除の手続きは要りません",
+        "退職日の翌日から次の会社に入るまでに1日でも空く月は、第1号になることがあります。空く月があるときは、市区町村の窓口で確かめます。", false);
+    }
+
+    // 3. 住民税
+    var jV, jS, jNo = false;
+    if (riyu === "kaisha" || riyu === "seito") {
+      jV = "減免がある市区町村なら、相談する価値があります";
+      jS = "住民税は前の年の所得にかかるので、辞めた年もかかります。失業した人の減免を条例で設けている市区町村があり、ある大きな市の例では、倒産・解雇などで辞めて雇用保険の受給資格がある人などで、前の年の所得・これからの所得の見込み・預貯金の額が基準内の人が対象でした。";
+    } else if (riyu === "jiko" || riyu === "teinen") {
+      jV = "失業の減免は対象外のことが多いです";
+      jS = "ある大きな市の例では、正当な理由のない自己都合と定年での退職は、失業の減免の対象から外れていました。それでも払えないときは、納期限の前に、分割など払い方の相談をします。";
+      jNo = true;
+    } else {
+      jV = "離職理由しだいです";
+      jS = "失業の減免を設けている市区町村では、会社の都合で辞めた人を対象にし、正当な理由のない自己都合や定年を外していることが多いです。離職理由が決まってから相談します。";
+    }
+    if (jumin === "ikkatsu") jS += "\nすでに給料や退職金からまとめて引かれた分は、減免の対象になりません（納めた税額は減らせない、と案内する市区町村が多い）。";
+    else jS += "\n申請は、減らしてほしい納期の納期限までが多いです。期限を過ぎた分・すでに納めた分は対象外になることが多いので、次の納期限の前に相談します。";
+    box("住民税：失業の減免", jV, jS, jNo);
+    box("住民税：待ってもらう制度", pay === "hard" ? "納期限の前に、払い方を相談します" : "払えるなら、使わなくてかまいません",
+      "地方税には、災害・病気・けが・事業をやめた・事業で大きな損失が出たときに、1年以内に限って納めるのを待ってもらう「徴収猶予」があります。失業そのものは理由に挙がっていないことが多いです。一度に払うと生活が成り立たないときの「換価の猶予」もあり、どちらも申請と審査が要ります。まずは納税の窓口で、分けて払えるかを相談します。", false);
+
+    // 4. 順番
+    if (koyo === "rishoku" || koyo === "nashi") li("ハローワークで失業手当の手続きをして、受給資格者証（受給資格通知）を受け取る。離職票が届かないときは、前の会社とハローワークに聞く");
+    if (hoken === "kokuho" || hoken === "unk") {
+      li("市区町村の国保の窓口で、国保に入る届け出（退職日の翌日から14日以内が目安）。" + (hiji || riyu === "unk" ? "同じときに、失業の軽減の届け出（受給資格者証の写し）" : "保険料の額を聞いておく"));
+    }
+    if (nenkin === "1go" && age < 60) li("同じ役所の国民年金の窓口で、第1号になる届け出と、免除の申請（失業の特例。離職票か受給資格者証の写し）");
+    li("所得がない年も、翌年の住民税の申告（2月〜3月）をする。国保の軽減の判定に使われる");
+    li("住民税の納付書が届いたら、納期限の前に市区町村の税の窓口で、失業の減免があるか・分割できるかを聞く");
+    if (hoken === "kokuho" || hoken === "unk") li(pay === "hard" ? "国保の保険料の通知が届いたら、所得が減ったときの減免を国保の窓口で相談する（申請した月からのことが多い）" : "国保の保険料の通知が届いたら、軽減が入っているか確かめる");
+    if (nenkin === "1go" && age < 60) li("翌年の7月になったら、国民年金の免除をもう一度申請する（失業の特例は自動で続かない）");
+
+    // 5. 気をつけること
+    ng.push("・どの制度も、申請しないと始まらない。払わずに放っておくと、延滞金や未納になる");
+    if (hoken === "kokuho" || hoken === "unk") {
+      ng.push("・国保の失業の軽減は、国保をやめると終わる。再就職して会社の健康保険に入ったら、国保をやめる届け出をする");
+      ng.push("・国保の保険料の計算のしかた・減免の割合は市区町村ごとにちがう");
+    }
+    if (nenkin === "1go" && age < 60) ng.push("・免除の月は、年金額が満額より少なくなる。余裕ができたら10年以内に追納できる");
+    if (koyo === "hairazu") ng.push("・雇用保険に入っていなかった人の失業の確かめ方は、国民年金・住民税とも窓口で確かめる");
+    ng.push("・ここでの判定は目安。最後は、住んでいる市区町村の窓口・年金事務所で確かめる");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false;
+    return true;
+  }
+
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("riyu").value = "kaisha"; $("koyo").value = "aru"; $("hoken").value = "kokuho"; $("nenkin").value = "1go";
+    $("kazoku").value = "none"; $("jumin").value = "futsu"; $("pay").value = "hard";
+    var d = addDays(today(), -20);
+    $("day").value = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    $("age").value = "38";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
