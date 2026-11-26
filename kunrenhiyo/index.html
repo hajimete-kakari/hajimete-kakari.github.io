@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>職業訓練の受講料とテキスト代・交通費の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #pay li, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>職業訓練の受講料とテキスト代・交通費の目安</h1>
+  <p class="lead">受ける訓練の種類・失業保険・収入の目安・通い方を選ぶと、受講料がかかるか、自分で払うもの、交通費などで出る手当、訓練校とハローワークで聞くことを並べます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 受ける訓練</h2>
+    <label class="f" for="kind">訓練の種類<span class="hint">ハローワークで案内される、離職した人向けの訓練がほとんどです</span></label>
+    <select id="kind">
+      <option value="koukyo">公共職業訓練（離職した人向け）</option>
+      <option value="kyushoku">求職者支援訓練</option>
+      <option value="unknown">まだわからない</option>
+      <option value="gakusotsu">学校を出た人向けの1〜2年の訓練</option>
+      <option value="zaishoku">働いている人向けの短い訓練</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. お金と通い方</h2>
+    <label class="f" for="koyo">失業保険（雇用保険の基本手当）</label>
+    <select id="koyo">
+      <option value="yes">受けている・受ける予定</option>
+      <option value="no">受けられない・終わった</option>
+      <option value="unknown">わからない</option>
+    </select>
+    <label class="f" for="inc">本人と世帯の収入（ひと月・税引き前）<span class="hint">失業保険がない人の職業訓練受講給付金の目安。世帯は同居の家族などの合計</span></label>
+    <select id="inc">
+      <option value="low">本人8万円以下・世帯30万円以下</option>
+      <option value="mid">本人12万円以下・世帯34万円以下（上より多い）</option>
+      <option value="high">それより多い</option>
+      <option value="unknown">わからない</option>
+    </select>
+    <label class="f" for="go">訓練校への通い方</label>
+    <select id="go">
+      <option value="train">電車・バス</option>
+      <option value="car">車・バイクなど</option>
+      <option value="walk">歩いて行ける近さ（片道2km未満）</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>自分で払うことになるもの</h3>
+    <ul class="mo" id="pay"></ul>
+    <h3>訓練校とハローワークで聞くこと</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省「ハロートレーニングQ＆A」（受講料は基本的に無料・一部テキスト代等は自己負担・在職者や学卒者向けは有料）、「求職者支援制度に関するよくあるご質問」「求職者支援制度・訓練受講のしおり」（受講料等はかからない・テキスト代等は各自負担、職業訓練受講給付金は月10万円＋通所手当＋寄宿手当、通所手当だけ出る場合の収入の線）、雇用保険法施行規則（受講手当は日額500円・40日分まで、通所手当の上限42,500円、片道2km未満は対象外）をもとにした目安です。手当が出るかは、ほかの条件も含めてハローワークが決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  var KN = { koukyo: "公共職業訓練（離職した人向け）", kyushoku: "求職者支援訓練", unknown: "まだわからない", gakusotsu: "学校を出た人向けの訓練", zaishoku: "働いている人向けの訓練" };
+
+  function make() {
+    var kind = $("kind").value, koyo = $("koyo").value, inc = $("inc").value, go = $("go").value;
+    $("sum").innerHTML = ""; $("pay").innerHTML = ""; $("chk").innerHTML = "";
+    var paid = (kind === "gakusotsu" || kind === "zaishoku");
+    var gotxt = go === "train" ? "電車・バスの運賃" : go === "car" ? "車などの燃料代" : "";
+
+    // 受講料
+    if (paid) {
+      box("受講料", "有料の訓練", (kind === "gakusotsu" ? "学校を出た人向けの訓練" : "働いている人向けの訓練") + "は、受講料がかかります。いくらかは、その訓練の案内で確かめます。離職して仕事を探している人向けの訓練（公共職業訓練・求職者支援訓練）とは別のものです。", true);
+    } else if (kind === "unknown") {
+      box("受講料", "離職した人向けなら、基本は無料", "公共職業訓練（離職した人向け）も求職者支援訓練も、受講料は基本的にかかりません。ただ、テキスト代などは自分で払います。どちらの制度になるかは、ハローワークで相談して決まります。", false);
+    } else {
+      box("受講料", "基本は無料", KN[kind] + "は、受講料は基本的にかかりません。ただ、テキスト代などは自分で払います。いくらかはコースによってちがいます。", false);
+    }
+
+    // 交通費などの手当
+    var t, s, no = false;
+    if (paid) {
+      t = "このページでは扱わない";
+      s = "受講料がかかる訓練の手当は、ここでは扱いません。訓練の案内か窓口で確かめます。";
+      no = true;
+    } else if (koyo === "yes") {
+      if (kind === "kyushoku") {
+        t = "失業保険がある間は、月10万円の給付金は出ない";
+        s = "基本手当の受給資格がある間は、職業訓練受講給付金は受けられません。求職者支援訓練を受けるときの交通費などの扱いは、ハローワークで確かめます。";
+        no = true;
+      } else {
+        t = go === "walk" ? "受講手当（1日500円・40日分まで）" : "受講手当と通所手当（交通費）";
+        s = "ハローワークの受講指示を受けて公共職業訓練を受けると、基本手当のほかに、受講手当（1日500円、40日分まで）が出ます。" + (go === "walk" ? "片道2km未満の近さだと、通所手当（交通費）は出ません。" : "通所手当として" + gotxt + "の分も出ます（上限は月42,500円。片道2km未満なら出ません）。") + "受講指示を受けずに自分で申し込んだ訓練は、扱いがちがうことがあります。";
+      }
+    } else if (koyo === "no") {
+      if (inc === "low") {
+        t = "月10万円＋通所手当の、収入の線の内側";
+        s = "本人8万円以下・世帯30万円以下は、職業訓練受講給付金（月10万円の職業訓練受講手当と、通所手当）の収入の線の内側です。ただ、世帯の金融資産300万円以下・すべての訓練日に出席することなど、ほかの条件もすべて満たす必要があります。";
+      } else if (inc === "mid") {
+        t = "通所手当（交通費）だけ出る場合がある";
+        s = "本人12万円以下・世帯34万円以下で、月10万円の線（本人8万円・世帯30万円）を超える人は、通所手当だけを受けられる場合があります。収入以外の条件（金融資産300万円以下・出席など）は、すべて満たす必要があります。" + (go === "walk" ? "歩いて行ける近さだと、交通費の手当が出るかは窓口で確かめます。" : "");
+        no = go === "walk";
+      } else if (inc === "high") {
+        t = "給付金は出ない見込み";
+        s = "本人12万円・世帯34万円を超えると、職業訓練受講給付金（通所手当も含む）の収入の線の外です。受講料は基本無料のままですが、" + (gotxt ? gotxt + "や" : "") + "テキスト代などは自分で払います。";
+        no = true;
+      } else {
+        t = "収入しだい";
+        s = "本人8万円以下・世帯30万円以下なら月10万円＋通所手当、本人12万円以下・世帯34万円以下なら通所手当だけの場合があり、それより多いと出ません。収入の数え方は、ハローワークで確かめます。";
+        no = true;
+      }
+    } else {
+      t = "失業保険があるかで分かれる";
+      s = "失業保険を受けながらハローワークの受講指示で公共職業訓練を受けると、受講手当（1日500円・40日分まで）と通所手当が出ます。失業保険がない人は、収入などの条件に当たれば職業訓練受講給付金（月10万円＋通所手当）です。まずハローワークで受給資格を確かめます。";
+      no = true;
+    }
+    box("交通費などで出る手当", t, s, no);
+
+    // 自分で払うもの
+    li("pay", "テキスト代など（何が入るか・いくらかは、コースの案内と説明会で確かめる）");
+    if (paid) li("pay", "受講料");
+    if (go !== "walk") {
+      if (!paid && koyo === "yes" && kind !== "kyushoku") li("pay", gotxt + "のうち、上限の月42,500円を超える分");
+      else if (!paid && koyo === "no" && (inc === "low" || inc === "mid")) li("pay", gotxt + "のうち、通所手当で出ない分（通所手当は、むだのない通常の経路の運賃などで決まる）");
+      else li("pay", gotxt + "（手当が出るかによる）");
+    }
+    li("pay", "資格の試験を受ける費用や、作業で使う物など、受講料に入っていないもの（あるかはコースによる）");
+
+    // 聞くこと
+    li("chk", "訓練校（説明会）：テキスト代などは、いくら・いつ払うか");
+    li("chk", "訓練校（説明会）：資格の試験の費用や、そろえる物があるか");
+    if (!paid && koyo !== "no") li("chk", "ハローワーク：受講指示を受けられるか、受講手当と通所手当の届け出");
+    if (!paid && koyo !== "yes") li("chk", "ハローワーク：職業訓練受講給付金の条件に当たるか（事前審査）");
+    if (!paid && go === "car") li("chk", "ハローワーク：車で通うときの通所手当の扱い");
+    if (paid) li("chk", "訓練校：受講料の額と払い方");
+
+    var memo = "職業訓練の費用で聞きたいこと\n";
+    memo += "訓練：" + KN[kind] + "\n";
+    memo += "失業保険：" + (koyo === "yes" ? "あり" : koyo === "no" ? "なし" : "わからない") + "\n";
+    memo += "通い方：" + (go === "train" ? "電車・バス" : go === "car" ? "車など" : "歩き") + "\n";
+    memo += "・テキスト代などは\n　いくら・いつ払うか\n";
+    memo += "・試験の費用や\n　そろえる物はあるか\n";
+    memo += paid ? "・受講料の額と払い方" : "・交通費の手当は出るか";
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・受講料が無料でも、テキスト代などは自分で払う\n・手当が出るかは、ほかの条件も含めてハローワークが決める\n・職業訓練受講給付金は、休むと出ない月がある（出席の決まりがある）\n・給付金を一度受けると、次は6年たつまで受けられない\n・ここに出るのは目安。額はコースの案内と窓口で確かめる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) { $("kind").value = "kyushoku"; $("koyo").value = "no"; $("inc").value = "mid"; $("go").value = "train"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
