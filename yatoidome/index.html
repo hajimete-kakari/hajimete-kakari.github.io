@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>契約社員の雇止め 失業保険の区分の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select, input[type=date] { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>契約社員の雇止め 失業保険の区分の目安</h1>
+  <p class="lead">契約の更新がなく辞めることになったとき、失業保険で「特定受給資格者」「特定理由離職者」に当たりそうかを、更新の回数・通算の期間・契約書の書き方・更新の希望から並べます。給付日数の目安と、満了日までにやること、ハローワークで伝えることも出ます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 契約のこと</h2>
+    <label class="f" for="kai">これまでに契約を更新した回数</label>
+    <select id="kai">
+      <option value="0">0回（今の契約が最初）</option>
+      <option value="1">1回以上</option>
+    </select>
+    <label class="f" for="nen">最初に雇われた日から、満了日までの通算<span class="hint">同じ会社で続けて雇われている期間</span></label>
+    <select id="nen">
+      <option value="lt3">3年未満</option>
+      <option value="ge3">3年以上</option>
+    </select>
+    <label class="f" for="kaki">契約書・労働条件通知書の「更新」の書き方</label>
+    <select id="kaki">
+      <option value="aru">「更新する場合がある」など（確約はない）</option>
+      <option value="kaku">「更新する」と約束されている（口頭で約束し合った場合も）</option>
+      <option value="nashi">「更新しない」と最初から書いてある</option>
+      <option value="fumei">わからない・手元にない</option>
+    </select>
+    <label class="f" for="jogen">更新の上限（通算○年まで・更新○回まで）</label>
+    <select id="jogen">
+      <option value="none">上限はない・上限で辞めるのではない</option>
+      <option value="ato">あとから上限ができた・短くされた・「更新しない」が足された</option>
+      <option value="hajime">最初の契約から上限があり、その上限で辞める</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 更新の希望と満了日</h2>
+    <label class="f" for="kibo">更新についての自分の希望</label>
+    <select id="kibo">
+      <option value="tsutaeta">満了日までに「更新したい」と会社に伝えた</option>
+      <option value="mada">続けたいが、まだ伝えていない</option>
+      <option value="iranai">自分から「更新しない」と伝えた</option>
+    </select>
+    <label class="f" for="day">契約の満了日（辞める日）</label>
+    <input type="date" id="day">
+    <label class="f mh" for="age">満了日の年齢</label>
+    <select id="age" class="mh">
+      <option value="a1">30歳未満</option>
+      <option value="a2">30歳以上35歳未満</option>
+      <option value="a3">35歳以上45歳未満</option>
+      <option value="a4">45歳以上60歳未満</option>
+      <option value="a5">60歳以上65歳未満</option>
+    </select>
+    <label class="f mh" for="hk">雇用保険に入っていた期間（通算）<span class="hint">前の会社の分を足せることもあります</span></label>
+    <select id="hk" class="mh">
+      <option value="h0">1年未満</option>
+      <option value="h1">1年以上5年未満</option>
+      <option value="h5">5年以上10年未満</option>
+      <option value="h10">10年以上20年未満</option>
+      <option value="h20">20年以上</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>満了日までにやること</h3>
+    <ul class="mo" id="todo"></ul>
+    <h3>ハローワークで確かめること</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>ハローワークで伝えるメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※ハローワークインターネットサービス「特定受給資格者及び特定理由離職者の範囲の概要」「基本手当の所定給付日数」「基本手当について」、厚生労働省「雇用保険に関する業務取扱要領」（令和8年4月版、所定給付日数の部分）をもとにした目安です。区分を決めるのはハローワークで、離職票の内容や会社への確認、本人の申立てなどをもとに判断されます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  // 所定給付日数（ハローワーク「基本手当の所定給付日数」。30歳未満の20年以上は表にないので10年以上の欄を使う）
+  var TOKU = { a1: [90, 90, 120, 180, 180], a2: [90, 120, 180, 210, 240], a3: [90, 150, 180, 240, 270],
+               a4: [90, 180, 240, 270, 330], a5: [90, 150, 180, 210, 240] };
+  var IPPAN = [90, 90, 90, 120, 150];
+  var HI = { h0: 0, h1: 1, h5: 2, h10: 3, h20: 4 };
+  var LIMIT = "2027-03-31";
+
+  function make() {
+    var kai = $("kai").value, nen = $("nen").value, kaki = $("kaki").value, jogen = $("jogen").value,
+        kibo = $("kibo").value, day = $("day").value, age = $("age").value, hk = $("hk").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("chk").innerHTML = "";
+    if (!day) { box("入力が足りません", "契約の満了日を入れてください", "", true); $("result").hidden = false; return true; }
+    var inLimit = day <= LIMIT;
+    var d = new Date(day + "T00:00:00"), t = new Date(); t.setHours(0, 0, 0, 0);
+    var before = d >= t;
+    var d3 = (kai === "1" && nen === "ge3");
+
+    // 区分：toku（特定受給資格者）／riyu（特定理由離職者）／ippan（どちらでもない見込み）／madoguchi（窓口で）／mada（申し出がまだ）
+    var kubun, why;
+    if (kibo === "iranai") {
+      kubun = "ippan";
+      why = "自分から更新しないと伝えて辞める場合は、特定受給資格者の雇止めの基準にも、特定理由離職者にも当たらない扱いです。";
+    } else if (jogen === "hajime") {
+      kubun = "madoguchi";
+      why = "最初の契約からあった上限で辞める場合は、上限の長さや設けた時期などで扱いが分かれます。このページでは判定せず、ハローワークで確かめます。";
+    } else if (jogen === "ato") {
+      if (!inLimit) {
+        kubun = "madoguchi";
+        why = "あとからできた上限・短くされた上限・足された「更新しない」で辞める場合の特別な扱いは、2027年3月31日までに辞めた人が対象です。それより後の満了日なので、ハローワークで確かめます。";
+      } else if (d3) {
+        kubun = "toku";
+        why = "1回以上更新して通算3年以上で、上限があとからできた（短くされた）場合は、特定受給資格者として扱われます（2027年3月31日までに辞めた人）。";
+      } else {
+        kubun = "riyu";
+        why = "上限があとからできた（短くされた）場合は、特定理由離職者として扱われます（2027年3月31日までに辞めた人）。";
+      }
+    } else if (d3) {
+      kubun = "toku";
+      why = "1回以上更新して、最初に雇われてから通算3年以上で、本人が更新しないと申し出たのではない雇止めは、特定受給資格者の基準に当たります。";
+    } else if (kaki === "kaku") {
+      kubun = "toku";
+      why = "契約のときに「更新する」と約束されていた（口頭で約束し合った場合も含む）のに更新されなかった場合は、特定受給資格者の基準に当たります。";
+    } else if (kaki === "nashi") {
+      kubun = "madoguchi";
+      why = "最初から「更新しない」と書かれた契約が終わる場合は、事情によって扱いが分かれます。ハローワークで確かめます。";
+    } else if (kibo === "tsutaeta") {
+      kubun = "riyu";
+      why = "「更新する場合がある」など、更新の確約はない契約で、満了日までに更新を申し出たのに合意できなかった場合は、特定理由離職者に当たります。";
+    } else {
+      kubun = before ? "mada" : "ippan";
+      why = before
+        ? "確約のない契約で特定理由離職者に当たるには、満了日までに本人が更新を申し出ていることが要ります。まだ満了前なので、今から伝えられます。"
+        : "確約のない契約で特定理由離職者に当たるには、満了日までに本人が更新を申し出ていることが要ります。申し出ずに満了した場合は、当たらない見込みです。";
+    }
+    if (kaki === "fumei" && (kubun === "riyu" || kubun === "mada")) why += "契約書が手元にないときは、会社に写しをもらって「更新」の書き方を確かめます。「更新する」と約束されていれば、特定受給資格者に当たることもあります。";
+
+    var title = { toku: "特定受給資格者に当たりそう", riyu: "特定理由離職者に当たりそう", ippan: "どちらにも当たらない見込み",
+                  madoguchi: "このページでは判定できない（窓口で確かめる）", mada: "今のままでは当たらない（満了日までに更新の希望を伝える）" }[kubun];
+    box("区分の見込み", title, why, kubun === "ippan" || kubun === "madoguchi" || kubun === "mada");
+
+    // 給付日数
+    var hi = HI[hk], days, dnote;
+    var tokuDays = TOKU[age][hi];
+    var near = "";
+    if (kubun === "toku" || (kubun === "riyu" && inLimit)) {
+      days = tokuDays;
+      dnote = (kubun === "toku" ? "特定受給資格者の表の日数です。" : "雇止めで特定理由離職者になる人は、2027年3月31日までに辞めた場合に限り、特定受給資格者と同じ日数です。") + near;
+    } else if (kubun === "riyu") {
+      days = IPPAN[hi]; dnote = "2027年4月以降に辞める場合、雇止めの特定理由離職者の日数は一般の離職者と同じ表になります（受け取る条件の6か月はそのまま）。";
+    } else {
+      days = IPPAN[hi]; dnote = "一般の離職者の表の日数です。";
+    }
+    var cmp = "";
+    if ((kubun === "toku" || kubun === "riyu") && days !== IPPAN[hi]) cmp = "どちらにも当たらない場合は" + IPPAN[hi] + "日です。";
+    if (kubun === "mada") {
+      var md = inLimit ? tokuDays : IPPAN[hi];
+      cmp = md !== IPPAN[hi] ? "満了日までに申し出て特定理由離職者になれば" + md + "日の見込みです。" : "日数は変わりませんが、特定理由離職者になると受け取る条件が6か月になります。";
+    }
+    var dv = days + "日";
+    if (kubun === "madoguchi") {
+      dnote = IPPAN[hi] === tokuDays ? "この年齢と期間では、どの区分でも" + IPPAN[hi] + "日です。" : "区分によって日数が変わります。どちらにも当たらない場合は" + IPPAN[hi] + "日、特定受給資格者なら" + tokuDays + "日です。"; cmp = "";
+      dv = IPPAN[hi] === tokuDays ? IPPAN[hi] + "日" : IPPAN[hi] + "日〜" + tokuDays + "日";
+    }
+    box("給付日数の目安", dv, dnote + cmp, false);
+
+    // 受け取る条件
+    var toriyu = (kubun === "toku" || kubun === "riyu");
+    box("受け取る条件（雇用保険に入っていた月）",
+      toriyu ? "辞める前の1年間に6か月以上" : "辞める前の2年間に12か月以上",
+      toriyu ? "特定受給資格者・特定理由離職者は、辞める前の1年間に被保険者期間が通算6か月以上あれば受け取れます。1か月に数えるのは、賃金の支払いの基礎になった日が11日以上か、80時間以上ある月です。"
+             : "原則は、辞める前の2年間に被保険者期間が通算12か月以上要ります。1か月に数えるのは、賃金の支払いの基礎になった日が11日以上か、80時間以上ある月です。" + (hi === 0 ? "入っていた期間が1年未満なので、足りるかを窓口で確かめます。" : ""),
+      false);
+
+    // 満了日までにやること
+    if (before) {
+      if (kibo !== "iranai") li("todo", "更新したいことを、満了日までに会社へ伝える（メールなど、日付が残る形で）");
+      li("todo", "契約書・労働条件通知書・更新のたびの契約書を集める（写しでよい）");
+      if (jogen === "ato") li("todo", "上限ができた（短くされた）ときの書面や、説明を受けた日をメモする");
+      if (kaki === "kaku") li("todo", "「更新する」と約束された書面か、口頭で約束したときの日付・相手・言葉をメモする");
+    } else {
+      li("todo", "更新を希望したことがわかるもの（メール・メモ）があれば、まとめておく");
+      li("todo", "契約書・労働条件通知書・更新のたびの契約書を集める（写しでよい）");
+    }
+    li("todo", "届いた離職票の離職理由の欄を確かめる");
+
+    // 確かめること
+    li("chk", "自分が特定受給資格者・特定理由離職者に当たるか（受給資格者証などに出る理由の番号）");
+    li("chk", "離職票の離職理由が、自分の認識と合っているか。ちがうときは、そのことを伝える");
+    if (kubun === "madoguchi") li("chk", "上限や「更新しない」の書き方がある場合の扱い");
+    li("chk", "給付制限があるか、最初の振込はいつごろになるか");
+    li("chk", "被保険者期間が足りているか（前の会社の分を足せるか）");
+
+    var memo = "契約の更新がなく辞めました\n";
+    memo += "満了日：" + day + "\n";
+    memo += "更新：" + (kai === "1" ? "1回以上" : "0回") + "／通算" + (nen === "ge3" ? "3年以上" : "3年未満") + "\n";
+    memo += "契約書：" + { aru: "更新する場合がある", kaku: "更新すると約束", nashi: "更新しない", fumei: "確認中" }[kaki] + "\n";
+    memo += "上限：" + { none: "なし", ato: "あとからできた", hajime: "最初からあった" }[jogen] + "\n";
+    memo += "更新の希望：" + { tsutaeta: "満了日までに伝えた\n　（　月　日）", mada: "続けたかった", iranai: "自分から更新しないと伝えた" }[kibo] + "\n";
+    memo += "持ってきたもの：契約書の写し\n　更新を希望したメールなど";
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・区分を決めるのはハローワーク。ここに出るのは目安\n・離職理由は、離職票の内容や会社への確認、本人の申立てなどをもとに判断される\n・自分から「更新しない」と伝えると、雇止めの扱いにならない\n・上限で辞める場合や、2027年4月以降に辞める場合は、扱いが変わることがある\n・就職が難しい事情のある人などは、別の日数になる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) { $("kai").value = "1"; $("nen").value = "lt3"; $("kaki").value = "aru"; $("jogen").value = "none"; $("kibo").value = "tsutaeta"; $("day").value = "2027-03-31"; $("age").value = "a3"; $("hk").value = "h1"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
