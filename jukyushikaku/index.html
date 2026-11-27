@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の受給資格の判定｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e; --mid-soft: #fbf1d9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578; --mid-soft: #3a3322;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input, select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-width: 0; }
+  .job { border-top: 1px solid var(--line); padding: 10px 0 4px; }
+  .job .t { font-size: .92rem; font-weight: 600; margin-bottom: 4px; }
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .g2 label { font-size: .75rem; color: var(--sub); display: block; line-height: 1.3; margin-bottom: 2px; }
+  .g2 input { padding: 7px 6px; font-size: .95rem; }
+  .small label { font-size: .8rem; color: var(--sub); display: block; margin: 6px 0 2px; line-height: 1.4; }
+  .chk { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; font-size: .92rem; }
+  .chk input { width: auto; margin-top: 6px; flex: none; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  .big.mid { background: var(--mid-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .lead, .mihon .hint, .mihon .chk, .mihon .small, .mihon label[for=sick], .mihon #sick, .mihon label[for=age], .mihon #age { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #tl, .mihon #road, .mihon #todo, .mihon #memo, .mihon #motte, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の受給資格の判定</h1>
+  <p class="lead">辞める日・辞める理由と、雇用保険に入っていた会社の入社日・退職日を入れると、失業保険（雇用保険の基本手当）を受ける資格に必要な加入期間が足りているかの目安、数える期間、足りないときに取れる道と窓口で伝えることを出します。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 辞める日と理由</h2>
+    <label class="f" for="end">いまの会社を辞める日（退職日）</label>
+    <input type="date" id="end">
+    <label class="f" for="why">辞める理由</label>
+    <select id="why">
+      <option value="j">自分の都合（転職・引っ越し・家庭の事情など）</option>
+      <option value="k">会社の都合や契約が更新されないなど（倒産・解雇・雇止め・体調や介護などの正当な理由）</option>
+      <option value="u">まだわからない・どちらになるか自信がない</option>
+    </select>
+    <label class="f" for="age">辞める日の年齢</label>
+    <select id="age">
+      <option value="0">65歳未満</option>
+      <option value="1">65歳以上</option>
+    </select>
+    <label class="f" for="sick">病気・けが・出産・育児・家族の介護などで、30日以上続けて給料が出なかった日数<span class="hint">辞める前の2年（会社の都合などなら1年）の中にあった分。休職して無給だった期間など。なければ0。2回以上あれば足す</span></label>
+    <input inputmode="numeric" id="sick" value="0">
+  </div>
+
+  <div class="card">
+    <h2>2. 雇用保険に入っていた会社</h2>
+    <p class="hint">いまの会社から順に入れます。前の会社は、辞めてからおよそ2年以内（30日以上給料が出なかった期間があれば、その分さかのぼる）に働いていたところだけで大丈夫です</p>
+    <div id="jobs"></div>
+  </div>
+  <button id="make" type="button">受給資格の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>会社ごとの数え方</h3>
+    <ol class="tl" id="tl"></ol>
+    <h3>足りないとき・ぎりぎりのときに取れる道</h3>
+    <ul class="tl" id="road"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>窓口で伝える文</h3>
+    <div class="memo" id="memo"></div>
+    <h3>持っていくもの</h3>
+    <div class="memo" id="motte"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険の基本手当の、一般的な決まりで出した目安です（離職日からさかのぼって1か月ずつ区切り、給料の出た日が11日以上か、働いた時間が80時間以上の区切りを1か月と数える。1か月に満たない端は15日以上あれば半月。自分の都合で辞めたときは辞める前の2年に12か月以上、倒産・解雇・雇止めなどや正当な理由で辞めたときは辞める前の1年に6か月以上でもよい。病気などで30日以上続けて給料が出なかった日数はその分だけ期間を前に延ばせる（最大4年）。前の会社を辞めたときに受給資格の決定を受けていたら、それより前の期間は数えない。65歳以上で辞めたときは、高年齢求職者給付金として辞める前の1年に6か月以上）。辞めた理由の扱いと最終的な判定は、ハローワークが離職票をもとに決めます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  var N = document.body.className === "mihon" ? 2 : 3;
+  var box = $("jobs");
+  for (var i = 0; i < N; i++) {
+    var r = document.createElement("div"); r.className = "job";
+    r.innerHTML = '<div class="t">' + (i === 0 ? 'いまの会社' : (i + 1) + 'つ目（その前の会社）') + '</div>' +
+      '<div class="g2"><div><label>入社日（雇用保険に入った日）</label><input type="date" class="st"></div>' +
+      (i === 0 ? '<div><label>退職日</label><input type="text" class="en" disabled placeholder="上で入れた日"></div>'
+               : '<div><label>退職日</label><input type="date" class="en"></div>') + '</div>' +
+      '<div class="small"><label>給料の出た日が10日以下で、働いた時間も80時間未満だった月の数（なければ0）</label><input inputmode="numeric" class="few" value="0"></div>' +
+      '<label class="chk"><input type="checkbox" class="unk"> 雇用保険に入っていたかわからない（給与明細で雇用保険料が引かれていなかった・被保険者証をもらっていない）</label>' +
+      (i === 0 ? '' : '<label class="chk"><input type="checkbox" class="te"> この会社を辞めたとき、ハローワークで失業保険の手続きをした（受け取ったかどうかは問わない）</label>');
+    box.appendChild(r);
+  }
+  function d(s) { if (!s) return null; var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addM(x, m) { var y = x.getFullYear(), mo = x.getMonth() + m, day = x.getDate();
+    var last = new Date(y, mo + 1, 0).getDate(); return new Date(y, mo, Math.min(day, last)); }
+  function addD(x, n) { return new Date(x.getFullYear(), x.getMonth(), x.getDate() + n); }
+  function days(a, b) { return Math.round((b - a) / 86400000) + 1; }
+  function f(x) { return x.getFullYear() + "年" + (x.getMonth() + 1) + "月" + x.getDate() + "日"; }
+  function num(v) { var n = Number(String(v).replace(/[^0-9.]/g, "")); return isFinite(n) && n > 0 ? n : 0; }
+  // 1つの会社の期間を、その会社の退職日からさかのぼって1か月ずつ区切って数える（from より前は数えない）
+  function count(st, en, from) {
+    var s = st < from ? from : st; if (en < s) return 0;
+    var eom = addD(en, 1).getDate() === 1, n = 0, cur = en;
+    while (n < 600) {
+      var p = eom ? new Date(en.getFullYear(), en.getMonth() - n, 0) : addM(en, -(n + 1));
+      var b = addD(p, 1); if (b < s) break; n++; cur = p;
+    }
+    var rest = days(s, cur);
+    if (cur >= s && rest >= 15) n += 0.5;
+    return n;
+  }
+  function jobsOf(end) {
+    var list = [];
+    [].forEach.call(box.querySelectorAll(".job"), function (r, i) {
+      var st = d(r.querySelector(".st").value), en = i === 0 ? end : d(r.querySelector(".en").value);
+      var te = i > 0 && r.querySelector(".te").checked;
+      if (st && en && st <= en) list.push({ i: i, st: st, en: en, te: te, few: num(r.querySelector(".few").value), unk: r.querySelector(".unk").checked });
+    });
+    return list;
+  }
+  // months: 24 か 12。ext: 延ばす日数
+  function total(end, months, ext, list) {
+    var maxExt = days(addD(addM(end, -48), 1), addD(addM(end, -months), 0));
+    var e = Math.min(ext, maxExt);
+    var from = addD(addD(addM(end, -months), 1), -e), sum = 0, sumAll = 0, rows = [], cut = false;
+    list.forEach(function (j) {
+      if (cut) { rows.push({ j: j, n: 0, why: "前の手続きより前の期間なので数えない" }); return; }
+      if (j.te) { cut = true; rows.push({ j: j, n: 0, why: "この会社を辞めたときに受給資格の決定を受けたので、ここから前は数えない" }); return; }
+      var n = count(j.st, j.en, from);
+      var few = Math.min(j.few, Math.floor(n));
+      var m = Math.max(0, n - few);
+      var why = n ? "" : (j.en < from ? "数える期間より前なので数えない" : "");
+      rows.push({ j: j, n: m, few: few, why: why });
+      sumAll += m; if (!j.unk) sum += m;
+    });
+    // 給料が出なかった期間そのものは数えない（30日でおよそ1か月分を引く）
+    var off = Math.floor(e / 30);
+    return { sum: Math.max(0, sum - off), all: Math.max(0, sumAll - off), rows: rows, from: from, ext: e, off: off };
+  }
+  function judge(end, ext, list, kind, old) {
+    var two = total(end, 24, kind === "j" || kind === "u" ? ext : Math.min(ext, 99999), list);
+    var one = total(end, 12, ext, list);
+    if (old) return { ok: one.sum >= 6, okAll: one.all >= 6, two: two, one: one };
+    var okJ = two.sum >= 12, okK = okJ || one.sum >= 6;
+    var okJa = two.all >= 12, okKa = okJa || one.all >= 6;
+    return { okJ: okJ, okK: okK, okJa: okJa, okKa: okKa, two: two, one: one };
+  }
+  function li(ul, t) { var x = document.createElement("li"); x.textContent = t; ul.appendChild(x); }
+  function box2(out, cls, k, v, s) {
+    var el = document.createElement("div"); el.className = "big" + (cls ? " " + cls : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    out.appendChild(el);
+  }
+  function make() {
+    var end = d($("end").value), kind = $("why").value, old = $("age").value === "1", ext = num($("sick").value);
+    if (ext < 30 || old) ext = 0;
+    var list = jobsOf(end), out = $("sum"), tl = $("tl"), road = $("road"), todo = $("todo");
+    out.innerHTML = ""; tl.innerHTML = ""; road.innerHTML = ""; todo.innerHTML = "";
+    if (!end || !list.length || list[0].i !== 0) {
+      box2(out, "no", "受給資格の目安", "辞める日と、いまの会社の入社日を入れてください", "");
+      $("memo").textContent = ""; $("motte").textContent = ""; $("ng").textContent = "";
+      $("result").hidden = false; return;
+    }
+    var shortSick = num($("sick").value) > 0 && num($("sick").value) < 30;
+    var r = judge(end, ext, list, kind, old);
+    var hasUnk = list.some(function (j) { return j.unk; });
+    var hasFew = list.some(function (j) { return j.few > 0; });
+    var hasTe = list.some(function (j) { return j.te; });
+    var n2 = r.two.sum, n1 = r.one.sum;
+    var L2 = ext ? "延ばした2年" : "辞める前の2年", L1 = ext ? "延ばした1年" : "辞める前の1年";
+    var status; // ok / mid / no
+    var head, sub;
+    if (old) {
+      status = r.ok ? "ok" : (r.okAll ? "mid" : "no");
+      head = L1 + "に、およそ" + n1 + "か月（6か月以上が要る）";
+      sub = r.ok ? "65歳以上で辞めたときの高年齢求職者給付金（一時金）を受ける加入期間には届いている目安です。毎月受け取る基本手当ではなく、1回で受け取る形です。"
+        : (r.okAll ? "加入していたかわからない会社の分を足すと届く目安です。まず加入の記録を確かめます。"
+          : "高年齢求職者給付金に必要な6か月に、あと" + (6 - n1) + "か月ほど足りない目安です。");
+    } else if (kind === "j") {
+      status = r.okJ ? "ok" : (r.okJa ? "mid" : "no");
+      head = L2 + "に、およそ" + n2 + "か月（12か月以上が要る）";
+      sub = r.okJ ? (n2 < 13 ? "届いていますが、ぎりぎりです。半月の数え方や給料の出た日数で1か月ずれると届かないことがあるので、辞める日を決める前に窓口で数えてもらうと安心です。" : "受給資格に必要な加入期間には届いている目安です。")
+        : (r.okJa ? "加入していたかわからない会社の分を足すと届く目安です。まず加入の記録を確かめます。"
+          : "自分の都合で辞めるときに必要な12か月に、あと" + (12 - n2) + "か月ほど足りない目安です。" + (n1 >= 6 ? L1 + "には6か月あるので、会社の都合や正当な理由と認められると届きます。" : ""));
+    } else {
+      var okNow = r.okK, okA = r.okKa;
+      status = okNow ? (kind === "u" && !r.okJ ? "mid" : "ok") : (okA ? "mid" : "no");
+      head = L2 + "に、およそ" + n2 + "か月／" + L1 + "に、およそ" + n1 + "か月";
+      if (r.okJ) sub = "どちらの理由でも届く目安です（2年に12か月以上）。";
+      else if (okNow) sub = "会社の都合・雇止め・正当な理由と認められれば「1年に6か月以上」で届く目安です。" + (kind === "u" ? "自分の都合と判断されると2年に12か月が要るので、届きません。理由の扱いが分かれ道です。" : "自分の都合と判断されると2年に12か月が要るので、離職票の理由を必ず確かめます。");
+      else if (okA) sub = "加入していたかわからない会社の分を足すと届く目安です。まず加入の記録を確かめます。";
+      else sub = "1年に6か月にも、あと" + (6 - n1) + "か月ほど足りない目安です。";
+    }
+    box2(out, status === "ok" ? "" : (status === "mid" ? "mid" : "no"), "受給資格の目安", head, sub);
+    var winTxt = old ? "辞める前の1年：" + f(r.one.from) + "〜" + f(end)
+      : (kind === "j" ? "辞める前の2年：" + f(r.two.from) + "〜" + f(end)
+        : "辞める前の2年：" + f(r.two.from) + "〜" + f(end) + "\n辞める前の1年：" + f(r.one.from) + "〜" + f(end));
+    box2(out, "", "数える期間", winTxt.split("\n")[0], (winTxt.split("\n")[1] || "") + (ext ? (winTxt.split("\n")[1] ? "。" : "") + "給料が出なかった" + ext + "日の分だけ前に延ばし、その期間（およそ" + r.two.off + "か月）は数えずに引いています（延ばせるのは最大4年まで）" : ""));
+    var useRows = old ? r.one.rows : (kind === "j" ? r.two.rows : r.two.rows);
+    useRows.forEach(function (x) {
+      var name = x.j.i === 0 ? "いまの会社" : (x.j.i + 1) + "つ目の会社";
+      var t = name + "（" + f(x.j.st) + "〜" + f(x.j.en) + "）：" + (x.why || (x.n + "か月と数える"));
+      if (x.few) t += "（少なかった月" + x.few + "か月を引いた）";
+      if (x.j.unk && !x.why) t += "。ただし加入の記録が確かめられたときだけ";
+      li(tl, t);
+    });
+    var offN = old ? r.one.off : r.two.off;
+    if (offN) li(tl, "給料が出なかった期間：およそ" + offN + "か月を合計から引く");
+    // 道
+    var short = status !== "ok";
+    var tight = !old && kind === "j" && r.okJ && n2 < 13;
+    if (status === "ok" && !tight && (old || r.okJ)) {
+      li(road, "いまのところ大きな心配はありません。辞めたら離職票を待って、住所のハローワークで求職の申込みをします。");
+    }
+    if (tight) li(road, "ぎりぎりなので、辞める日を1〜2か月あとにできるなら、そのほうが安心です。辞める前に、ハローワークで数えてもらうこともできます。");
+    if (old && num($("sick").value) >= 30) li(road, "65歳以上で辞めるときの、給料が出なかった期間の扱いは、このページでは計算に入れていません。窓口で伝えて確かめます。");
+    if (!old && kind !== "k" && !r.okJ && n1 >= 6) li(road, "辞める理由が、倒産・解雇・雇止め・体調や介護などの正当な理由にあたるなら、「1年に6か月」で届きます。会社の都合や正当な理由にあたる事情（医師の意見書・介護の証明・契約書など）を集めて、窓口で伝えます。");
+    if (kind === "k" && !r.okJ && r.okK) li(road, "いまは「1年に6か月」で届いています。離職票の離職理由が自分の都合になっていたら、窓口で事情を伝えて、資料を出します（届くかどうかがここで決まります）。");
+    if (hasUnk) li(road, "加入していたかわからない会社は、ハローワークで加入の記録を確かめてもらいます。入っていなかったときは、会社に手続きを頼むと、確認された日から2年前までさかのぼって加入できます。給与明細で雇用保険料が引かれていたとわかれば、2年より前もさかのぼれることがあります。");
+    if (shortSick) li(road, "給料が出なかった日数が30日に届いていないので、延ばす計算には入れていません。延ばせるのは、続けて30日以上給料が出なかった期間だけです。");
+    if (short && ext === 0 && !shortSick) li(road, "数える期間の中に、病気・けが・出産・育児・家族の看護などで30日以上続けて給料が出なかった期間があれば、その日数だけ前に延ばせます（最大4年）。延ばすと前の会社の分が入って届くことがあります。");
+    if (hasFew) li(road, "給料の出た日が10日以下の月でも、働いた時間が80時間以上なら1か月と数えることがあります。勤務時間がわかる給与明細を持っていきます。");
+    if (hasTe) li(road, "前の会社を辞めたときに受給資格の決定を受けているので、それより前は数えません。お金を受け取っていなくても同じです。");
+    var hit = null;
+    if (short) {
+      for (var k = 1; k <= 730; k++) {
+        var e2 = addD(end, k), l2 = jobsOf(e2), r2 = judge(e2, ext, l2, kind, old);
+        var good = old ? r2.ok : (kind === "j" ? r2.okJ : (kind === "k" ? r2.okK : r2.okJ));
+        if (good) { hit = e2; break; }
+      }
+      if (hit) li(road, "いまの会社でこのまま働くと、" + f(hit) + "以降に辞めれば届く目安です（その間も毎月11日以上か80時間以上働く場合）。" + (kind === "u" ? "自分の都合になっても届く日で出しています。" : ""));
+      li(road, "それでも受けられないときは、ハローワークの求職者支援制度（無料の職業訓練と、条件を満たすと月10万円の給付金）や、家賃の住居確保給付金を確かめます。");
+    }
+    // 次にやること
+    if (status === "ok") {
+      li(todo, "退職後、会社から届く離職票を待つ（前の会社の分を合わせて数えるなら、前の会社の離職票も用意する）");
+      li(todo, "住所のハローワークで求職の申込みをして、離職票を出す");
+      li(todo, "受給資格の決定のあと、説明会と1回目の認定日を案内される");
+    } else {
+      li(todo, "辞める日を決める前に、ハローワークで加入期間を数えてもらう（被保険者証か、入社・退職の日がわかるものを持っていく）");
+      if (hasUnk) li(todo, "加入の記録がない会社があれば、その会社に資格取得の手続きを頼む");
+      if (!old && kind !== "j") li(todo, "辞める理由が会社の都合や正当な理由にあたる資料をそろえる");
+      li(todo, "受けられないと言われた離職票は捨てずに取っておく（次の仕事を辞めたときに、合わせて数えられることがある）");
+    }
+    // 窓口の文
+    var m = "失業保険の受給資格に必要な\n加入期間が足りるか\n数えていただけますか。\n\n" +
+      "辞める日：" + f(end) + "\n" +
+      (list.length > 1 ? "前の会社の期間も\n合わせて数えたいです。\n" : "") +
+      (ext ? "病気などで給料が出なかった\n期間が" + ext + "日あります。\nその分延ばせますか。\n" : "") +
+      (hasFew ? "日数の少ない月がありますが、\n80時間以上働いた月は\n数えてもらえますか。\n" : "") +
+      (hasUnk ? "加入していたかわからない\n会社があります。\n記録を確かめてください。\n" : "") +
+      (!old && kind !== "j" ? "辞める理由は、会社の都合\n（または正当な理由）に\nあたると考えています。\n" : "");
+    $("memo").textContent = m;
+    $("motte").textContent = "・離職票（1と2。前の会社の分も）\n・雇用保険被保険者証（あれば）\n・マイナンバーがわかるもの\n・本人確認の書類\n" +
+      (hasFew || hasUnk ? "・給与明細（日数・時間・雇用保険料がわかるもの）\n" : "") +
+      (ext ? "・給料が出なかった期間と理由がわかるもの（診断書・休職の通知など）\n" : "") +
+      (!old && kind !== "j" ? "・辞める理由がわかる資料（契約書・通知・診断書など）\n" : "") +
+      "・写真、通帳かキャッシュカード（受け取りの口座）";
+    $("ng").textContent = "・前の会社の離職票がないと、前の期間を合わせて数えられないことがある。届いていなければ前の会社に頼む\n" +
+      "・前の会社を辞めたときに受給資格の決定を受けていたら、お金を受け取っていなくても、それより前の期間は数えない\n" +
+      "・1か月の区切りは暦の月ではなく、退職日からさかのぼって区切る。月の途中で入社・退職すると、数え方がずれる\n" +
+      "・1か月に満たない端の期間は、15日以上あり、11日以上（または80時間以上）働いていれば半月と数える\n" +
+      (old ? "・65歳以上で辞めたときは、毎月の基本手当ではなく、30日分か50日分を1回で受け取る形になる\n" : "") +
+      (!old && kind !== "j" ? "・会社の都合や正当な理由にあたるかは、離職票の理由と資料をもとにハローワークが決める\n" : "") +
+      "・このページは目安です。最終的な判定はハローワークが行います";
+    $("result").hidden = false;
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("end").value = "2026-12-31";
+    $("why").value = "u";
+    var js = box.querySelectorAll(".job");
+    js[0].querySelector(".st").value = "2026-04-01";
+    js[1].querySelector(".st").value = "2024-06-01"; js[1].querySelector(".en").value = "2025-12-31";
+    js[1].querySelector(".few").value = "1";
+    make();
+  }
+})();
+</script>
+</body>
+</html>
