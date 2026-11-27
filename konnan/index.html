@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>失業保険の就職困難者 給付日数の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ul.mo { margin: 0; padding-left: 1.3em; } ul.mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #todo li, .mihon #chk li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>失業保険の就職困難者 給付日数の目安</h1>
+  <p class="lead">障害などで就職が難しい事情がある人は、失業保険の「就職困難者」として、ふつうより長い給付日数になることがあります。当てはまりそうか、日数の目安、ハローワークで最初に伝えることと持っていくものを並べます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 当てはまるもの</h2>
+    <label class="f" for="gaito">自分に当てはまるもの<span class="hint">いちばん近いものを1つ</span></label>
+    <select id="gaito">
+      <option value="shin">身体障害者手帳を持っている</option>
+      <option value="chi">療育手帳を持っている（知的障害の判定を受けた）</option>
+      <option value="sei">精神障害者保健福祉手帳を持っている</option>
+      <option value="byo">手帳はないが、統合失調症・そううつ病（うつ病・そう病を含む）・てんかんで通院している</option>
+      <option value="seio">手帳はなく、上の3つ以外の心の病気（適応障害など）で通院している</option>
+      <option value="shinn">手帳はないが、体に障害がある</option>
+      <option value="hogo">保護観察を受けていて、仕事探しについて保護観察所から連絡がある</option>
+      <option value="none">どれも当てはまらない</option>
+    </select>
+    <label class="f" for="antei">今の状態</label>
+    <select id="antei">
+      <option value="yes">症状が落ち着いていて、すぐに働ける</option>
+      <option value="no">まだ治療に専念していて、すぐには働けない</option>
+      <option value="fumei">わからない・主治医と相談中</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 辞めたときのこと</h2>
+    <label class="f mh" for="age">辞めた日の年齢</label>
+    <select id="age" class="mh">
+      <option value="a1">30歳未満</option>
+      <option value="a2">30歳以上35歳未満</option>
+      <option value="a3">35歳以上45歳未満</option>
+      <option value="a4">45歳以上60歳未満</option>
+      <option value="a5">60歳以上65歳未満</option>
+      <option value="a6">65歳以上</option>
+    </select>
+    <label class="f mh" for="hk">雇用保険に続けて入っていた期間<span class="hint">前の会社の分を足せることもあります</span></label>
+    <select id="hk" class="mh">
+      <option value="h0">1年未満</option>
+      <option value="h1">1年以上5年未満</option>
+      <option value="h5">5年以上10年未満</option>
+      <option value="h10">10年以上20年未満</option>
+      <option value="h20">20年以上</option>
+    </select>
+    <label class="f" for="riyu">辞めた理由</label>
+    <select id="riyu">
+      <option value="jiko">自分から辞めた（病気・体調で辞めた場合も）</option>
+      <option value="kaisha">解雇・倒産・退職勧奨など、会社の都合</option>
+      <option value="fumei">わからない</option>
+    </select>
+    <label class="f" for="step">ハローワークの手続き</label>
+    <select id="step">
+      <option value="mae">まだ（これから離職票を出す）</option>
+      <option value="sumi">もう受給資格の決定を受けた</option>
+    </select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>ハローワークに行く前にやること</h3>
+    <ul class="mo" id="todo"></ul>
+    <h3>窓口で確かめること</h3>
+    <ul class="mo" id="chk"></ul>
+    <h3>窓口で最初に伝えるメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※雇用保険法 第22条第2項、雇用保険法施行規則 第19条第2項・第32条、障害者の雇用の促進等に関する法律施行規則 第1条の2・第1条の4、ハローワークインターネットサービス「基本手当の所定給付日数」をもとにした目安です。就職困難者に当たるか、給付日数がいくつになるかを決めるのはハローワークです。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  // 所定給付日数（ハローワーク「基本手当の所定給付日数」。30歳未満の20年以上は表にないので10年以上の欄を使う）
+  var TOKU = { a1: [90, 90, 120, 180, 180], a2: [90, 120, 180, 210, 240], a3: [90, 150, 180, 240, 270],
+               a4: [90, 180, 240, 270, 330], a5: [90, 150, 180, 210, 240] };
+  var IPPAN = [90, 90, 90, 120, 150];
+  var HI = { h0: 0, h1: 1, h5: 2, h10: 3, h20: 4 };
+  function konnanDays(age, hi) { if (hi === 0) return 150; return (age === "a4" || age === "a5") ? 360 : 300; }
+
+  function make() {
+    var gaito = $("gaito").value, antei = $("antei").value, age = $("age").value, hk = $("hk").value,
+        riyu = $("riyu").value, step = $("step").value;
+    $("sum").innerHTML = ""; $("todo").innerHTML = ""; $("chk").innerHTML = "";
+    var hi = HI[hk];
+
+    if (age === "a6") {
+      box("この年齢では", "就職困難者の日数の表は使いません",
+        "65歳以上で辞めた人は、失業保険（基本手当）ではなく、高年齢求職者給付金（一時金）の対象です。日数は30日分か50日分で、就職困難者の表はありません。手続きの仕方はハローワークで確かめます。", true);
+      li("todo", "離職票と本人確認の書類をそろえる");
+      li("chk", "高年齢求職者給付金の日数と、受け取る日");
+      $("memo").textContent = "65歳以上で辞めました\n高年齢求職者給付金の手続きをしたいです";
+      $("ng").textContent = "・65歳以上は、就職困難者の300日・360日の表の対象ではない\n・決めるのはハローワーク。ここに出るのは目安";
+      $("result").hidden = false; return true;
+    }
+
+    // 就職困難者に当たりそうか：yes／maybe（窓口で）／no
+    var kon, why;
+    if (gaito === "shin" || gaito === "chi" || gaito === "sei") {
+      kon = "yes";
+      why = { shin: "身体障害者は、就職困難者の範囲に入っています。手帳は、障害があることを確かめる書類として使えます。",
+              chi: "知的障害者（児童相談所などで知的障害があると判定された人）は、就職困難者の範囲に入っています。",
+              sei: "精神障害者保健福祉手帳を持っていて、症状が落ち着いて働ける状態の人は、就職困難者の範囲に入っています。" }[gaito];
+    } else if (gaito === "byo") {
+      kon = "maybe";
+      why = "手帳がなくても、統合失調症・そううつ病（うつ病・そう病を含む）・てんかんにかかっていて、症状が落ち着いて働ける状態の人は、法律でいう精神障害者に入ります。どの書類で確かめるか（主治医に書いてもらう書類など）は、ハローワークの指示に従います。";
+    } else if (gaito === "seio") {
+      kon = "no";
+      why = "法律でいう精神障害者は、精神障害者保健福祉手帳を持っている人か、統合失調症・そううつ病・てんかんにかかっている人です。手帳がなく、この3つ以外の病気の場合は、障害を理由にした就職困難者には当たらない見込みです。手帳を申請中・申請を考えているときは、手続きの前に窓口で相談します。";
+    } else if (gaito === "shinn") {
+      kon = "maybe";
+      why = "体の障害は、法律の表に当てはまるかで決まります。手帳がないときに何で確かめるかは、ハローワークで確かめます。";
+    } else if (gaito === "hogo") {
+      kon = "maybe";
+      why = "保護観察を受けている人などで、仕事の紹介について保護観察所長からハローワークに連絡があった人は、就職困難者の範囲に入っています。";
+    } else {
+      kon = "no";
+      why = "障害などの事情がない場合は、ふつうの表の日数です。社会的な事情で就職がとても難しい場合の扱いもあるので、事情があれば窓口で伝えます。";
+    }
+    if (antei === "no") {
+      why += "なお、失業保険は、すぐに働ける状態で仕事を探している人が対象です。治療に専念している間は受け取れないので、先に受給期間の延長を考えます。";
+    } else if (antei === "fumei") {
+      why += "失業保険は、すぐに働ける状態で仕事を探している人が対象です。働けるかどうかを主治医と確かめておきます。";
+    }
+    var title = { yes: "就職困難者に当たりそう", maybe: "当たる可能性がある（窓口で確かめる）", no: "就職困難者には当たらない見込み" }[kon];
+    box("就職困難者に当たりそうか", title, why, kon === "no" || antei === "no");
+
+    // 給付日数
+    var ippan = IPPAN[hi];
+    var futsu = (riyu === "kaisha") ? TOKU[age][hi] : ippan;
+    var futsuLabel = (riyu === "kaisha") ? "会社都合（特定受給資格者）の表" : "一般の離職者の表";
+    if (riyu === "fumei") futsuLabel = TOKU[age][hi] === ippan ? "一般の離職者の表（会社都合でも同じ）" : "一般の離職者の表（会社都合なら" + TOKU[age][hi] + "日）";
+    var kd = konnanDays(age, hi);
+    var dnote;
+    if (kon === "no") {
+      dnote = futsuLabel + "で" + futsu + "日です。就職困難者に当たれば" + kd + "日です。";
+      box("給付日数の目安", futsu + "日", dnote, false);
+    } else {
+      dnote = "就職困難者の日数は、辞めた理由にかかわらず、辞めた日の年齢と、雇用保険に続けて入っていた期間で決まります。当たらない場合は" + futsuLabel + "で" + futsu + "日なので、" + (kd - futsu > 0 ? "差は" + (kd - futsu) + "日です。" : "日数は同じです。");
+      box("給付日数の目安（就職困難者に当たったとき）", kd + "日", dnote, false);
+    }
+
+    // 受け取る条件
+    var toriyu = (riyu === "kaisha");
+    box("受け取る条件（雇用保険に入っていた月）",
+      toriyu ? "辞める前の1年間に6か月以上" : "辞める前の2年間に12か月以上（病気で辞めたなどは6か月のことも）",
+      (toriyu ? "会社都合で辞めた人は、辞める前の1年間に被保険者期間が通算6か月以上あれば受け取れます。"
+              : "原則は、辞める前の2年間に被保険者期間が通算12か月以上要ります。体の不調などで辞めた人は、特定理由離職者として1年間に6か月以上でよいこともあります。")
+      + "1か月に数えるのは、賃金の支払いの基礎になった日が11日以上か、80時間以上ある月です。就職困難者でも、この条件は同じです。" + (hi === 0 ? "入っていた期間が1年未満なので、足りるかを窓口で確かめます。" : ""),
+      false);
+
+    // やること
+    if (antei === "no") li("todo", "すぐに働けない期間が30日以上続くなら、受給期間の延長を申し出る");
+    if (gaito === "shin" || gaito === "chi" || gaito === "sei") li("todo", "手帳を持っていく（離職票・本人確認の書類と一緒に）");
+    if (gaito === "byo" || gaito === "shinn") li("todo", "通院先と病名・障害がわかるものを用意し、どの書類が要るか先にハローワークに電話で聞く");
+    if (gaito === "seio") li("todo", "手帳を申請する予定なら、手続きの前にハローワークで扱いを相談する");
+    if (gaito === "hogo") li("todo", "保護観察所の担当者に、ハローワークへの連絡のことを相談する");
+    li("todo", "離職票・本人確認の書類・写真・通帳などをそろえる");
+    if (antei === "fumei") li("todo", "働ける状態かどうかを主治医と確かめる");
+
+    // 確かめること
+    if (step === "sumi") {
+      li("chk", "受給資格者証の所定給付日数の欄が、何日になっているか");
+      li("chk", "受給資格の決定のあとに事情を伝えた場合の扱い（日数が変わるか）");
+    } else {
+      li("chk", "離職票を出すときに、障害などの事情を最初に伝えて、就職困難者として扱えるか");
+    }
+    li("chk", "確かめるのに要る書類（手帳・主治医に書いてもらう書類など）");
+    li("chk", "給付制限があるか、最初の振込はいつごろか");
+    li("chk", "障害のある人向けの窓口で、仕事の相談ができるか");
+
+    var memo = gaito === "none" ? "給付日数を確かめたいです\n" : "障害などの事情があり\n就職困難者に当たるか\n確かめたいです\n";
+    memo += "当てはまるもの：" + { shin: "身体障害者手帳", chi: "療育手帳", sei: "精神障害者保健福祉手帳",
+      byo: "通院中（手帳なし）", seio: "通院中（手帳なし）", shinn: "体の障害（手帳なし）", hogo: "保護観察中", none: "なし" }[gaito] + "\n";
+    memo += "今の状態：" + { yes: "働ける", no: "治療中", fumei: "主治医と相談中" }[antei] + "\n";
+    memo += "辞めた理由：" + { jiko: "自己都合", kaisha: "会社都合", fumei: "確認中" }[riyu] + "\n";
+    memo += "持ってきたもの：離職票" + ((gaito === "shin" || gaito === "chi" || gaito === "sei") ? "\n　手帳" : (gaito === "none" || gaito === "hogo") ? "" : "\n　通院先のわかるもの");
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・決めるのはハローワーク。ここに出るのは目安\n・事情は自分から伝える。伝えないと、ふつうの表で決まることがある\n・失業保険は、すぐに働ける人が対象。治療に専念している間は受け取れない\n・就職困難者でも、受け取る条件（雇用保険に入っていた月）は同じ\n・65歳以上で辞めた人は、別の給付（一時金）になる";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) { $("gaito").value = "sei"; $("antei").value = "yes"; $("age").value = "a3"; $("hk").value = "h1"; $("riyu").value = "jiko"; $("step").value = "mae"; }
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
