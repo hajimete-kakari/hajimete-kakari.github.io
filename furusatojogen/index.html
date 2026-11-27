@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>退職・転職した年のふるさと納税の上限の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5; --mus: #c99a2e; --mid-soft: #fbf1d9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622; --mus: #e3c578; --mid-soft: #3a3322;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input, select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; min-width: 0; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .g3 label { font-size: .75rem; color: var(--sub); display: block; line-height: 1.3; margin-bottom: 2px; }
+  .g3 input { padding: 7px 6px; font-size: .95rem; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .big.mid { background: var(--mid-soft); }
+  ol.tl, ul.tl { margin: 0; padding-left: 1.3em; } .tl li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon .lead, .mihon .hint, .mihon #c3 { display: none; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #calc, .mihon #how, .mihon #todo, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>ふるさと納税の上限の目安（退職・転職した年）</h1>
+  <p class="lead">今年の給料の合計・社会保険料・家族を入れると、退職や転職で収入が変わった年の、自己負担2,000円で済む寄附額の目安、去年の収入で考えたときとの差、ワンストップ特例か確定申告か、期限と次にやることを出します。給料だけの人向けの目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 今年（1月〜12月）の収入</h2>
+    <label class="f" for="sal">今年の給料の合計（税金などが引かれる前の額）<span class="hint">前の会社の源泉徴収票の「支払金額」＋次の会社でこれから12月までにもらう見込み。ボーナスも入れる。失業保険（基本手当）は税金がかからないので入れない。退職金も入れない</span></label>
+    <input inputmode="numeric" id="sal" placeholder="例：3200000">
+    <label class="f" for="sha">今年払う社会保険料の合計<span class="hint">給料から引かれた健康保険・厚生年金・雇用保険・介護保険と、辞めたあと自分で払う国民健康保険・国民年金・任意継続の合計。空欄なら給料の15%で見積もります</span></label>
+    <input inputmode="numeric" id="sha" placeholder="空欄なら給料×15%">
+    <label class="f" for="oth">そのほかの所得控除（住民税の分）<span class="hint">生命保険料控除・医療費控除・iDeCoなど、使うものがあれば住民税で引かれる額の合計。わからなければ0</span></label>
+    <input inputmode="numeric" id="oth" value="0">
+  </div>
+
+  <div class="card">
+    <h2>2. 家族</h2>
+    <label class="f" for="sp">配偶者<span class="hint">配偶者の今年の収入が給料だけで年収123万円以下くらいなら「控除に入れる」に</span></label>
+    <select id="sp">
+      <option value="0">いない・控除に入れない</option>
+      <option value="1">控除に入れる（配偶者が70歳未満）</option>
+      <option value="2">控除に入れる（配偶者が70歳以上）</option>
+    </select>
+    <div class="g3" style="margin-top:12px">
+      <div><label>扶養する16〜18歳・23〜69歳の人数</label><input inputmode="numeric" id="f1" value="0"></div>
+      <div><label>扶養する19〜22歳の人数</label><input inputmode="numeric" id="f2" value="0"></div>
+      <div><label>扶養する70歳以上の人数</label><input inputmode="numeric" id="f3" value="0"></div>
+    </div>
+    <p class="hint">年齢は今年の12月31日の時点。15歳以下の子は人数に入れません（控除がないため）</p>
+  </div>
+
+  <div class="card">
+    <h2>3. 寄附と申告</h2>
+    <label class="f" for="kifu">今年すでに寄附した額の合計<span class="hint">まだなら0</span></label>
+    <input inputmode="numeric" id="kifu" value="0">
+    <label class="f" for="cnt">寄附先の自治体の数（これからの分も）</label>
+    <input inputmode="numeric" id="cnt" value="1">
+    <label class="f" for="nc">年末調整と確定申告</label>
+    <select id="nc">
+      <option value="ya">12月まで次の会社で働き、年末調整をしてもらう</option>
+      <option value="no">年内に次の会社に入らない（年末調整がない）</option>
+      <option value="sk">年末調整はあるが、医療費控除などで確定申告もする</option>
+      <option value="un">まだわからない</option>
+    </select>
+  </div>
+
+  <div class="card" id="c3">
+    <h2>4. 見比べ用（空欄でも可）</h2>
+    <label class="f" for="last">去年1年間の給料の合計<span class="hint">去年の源泉徴収票の「支払金額」。入れると、去年の収入で上限を考えたときとの差を出します</span></label>
+    <input inputmode="numeric" id="last" placeholder="例：5000000">
+  </div>
+  <button id="make" type="button">上限の目安を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>計算の中身</h3>
+    <ol class="tl" id="calc"></ol>
+    <h3>控除の受け方と期限</h3>
+    <ul class="tl" id="how"></ul>
+    <h3>次にやること</h3>
+    <ol class="tl" id="todo"></ol>
+    <h3>寄附先に住所や申請を確かめるときの文</h3>
+    <div class="memo" id="memo"></div>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※地方税法の寄附金税額控除（ふるさと納税の住民税の特例分は、住民税の所得割の2割まで）の決まりで出した目安です。給料の所得は国税庁の給与所得控除（2026年分の表）、住民税の所得控除は基礎控除43万円・配偶者33万円（70歳以上38万円）・扶養33万円（19〜22歳45万円・70歳以上38万円）、所得割は10%から調整控除を引いた額、特例分の割合は課税所得から人的控除の差を引いた額ごとの率（85%〜45%、マイナスなら90%）で出しています。復興特別所得税の分の細かい調整・100円未満の端数・自治体ごとの非課税の基準・給料以外の所得は入れていません。実際の控除の額は、翌年に届く住民税の決定通知書で確かめます。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function num(v) { var n = Number(String(v).replace(/[^0-9.]/g, "")); return isFinite(n) && n > 0 ? n : 0; }
+  function yen(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "円"; }
+  function man(n) { return (Math.round(n / 1000) / 10) + "万円"; }
+  // 給与所得控除（y=2026: 2026年分の表、y=2025: 2025年分の表）
+  function kyuyoKojo(s, y) {
+    var min = y === 2026 ? 740000 : 650000, edge = y === 2026 ? 2200000 : 1900000;
+    if (s <= edge) return Math.min(s, min);
+    if (s <= 3600000) return s * 0.3 + 80000;
+    if (s <= 6600000) return s * 0.2 + 440000;
+    if (s <= 8500000) return s * 0.1 + 1100000;
+    return 1950000;
+  }
+  // 所得税の基礎控除（人的控除の差を出すためだけに使う）
+  function shotokuKiso(g, y) {
+    if (y === 2026) return g <= 6550000 ? 1040000 : (g <= 23500000 ? 620000 : 480000);
+    if (g <= 1320000) return 950000; if (g <= 3360000) return 880000; if (g <= 4890000) return 680000;
+    if (g <= 6550000) return 630000; if (g <= 23500000) return 580000; return 480000;
+  }
+  function rate(x) {
+    if (x < 0) return 0.90;
+    if (x <= 1950000) return 0.85; if (x <= 3300000) return 0.80; if (x <= 6950000) return 0.70;
+    if (x <= 9000000) return 0.67; if (x <= 18000000) return 0.57; if (x <= 40000000) return 0.50; return 0.45;
+  }
+  function calc(sal, sha, oth, fam, y) {
+    var g = Math.max(0, sal - kyuyoKojo(sal, y));
+    var spK = 0, spA = 0;
+    if (fam.sp) {
+      var t = g <= 9000000 ? 0 : (g <= 9500000 ? 1 : (g <= 10000000 ? 2 : 3));
+      spK = fam.sp === 1 ? [330000, 220000, 110000, 0][t] : [380000, 260000, 130000, 0][t];
+      spA = fam.sp === 1 ? [50000, 40000, 20000, 0][t] : [100000, 60000, 30000, 0][t];
+    }
+    var kiso = g <= 24000000 ? 430000 : 0;
+    var fuK = fam.f1 * 330000 + fam.f2 * 450000 + fam.f3 * 380000;
+    var fuA = fam.f1 * 50000 + fam.f2 * 180000 + fam.f3 * 100000;
+    var ded = kiso + sha + oth + spK + fuK;
+    var T = Math.floor(Math.max(0, g - ded) / 1000) * 1000;
+    var pd = 50000 + spA + fuA;
+    var adj = T <= 0 ? 0 : (T <= 2000000 ? Math.min(pd, T) * 0.05 : Math.max(50000, pd - (T - 2000000)) * 0.05);
+    var wari = Math.max(0, T * 0.1 - adj);
+    var diff = pd + Math.max(0, shotokuKiso(g, y) - 480000);
+    var r = rate(T - diff);
+    var L = wari > 0 ? Math.floor(wari * 0.2 / r) + 2000 : 0;
+    var cap = g * 0.3;
+    var capped = false;
+    if (L > cap) { L = cap; capped = true; }
+    L = Math.floor(L / 1000) * 1000;
+    return { g: g, ded: ded, T: T, adj: adj, wari: wari, r: r, L: L, capped: capped, pd: pd, diff: diff };
+  }
+  function li(ul, t) { var x = document.createElement("li"); x.textContent = t; ul.appendChild(x); }
+  function box(cls, k, v, s) {
+    var el = document.createElement("div"); el.className = "big" + (cls ? " " + cls : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s || "";
+    $("sum").appendChild(el);
+  }
+  function make() {
+    var sal = num($("sal").value), shaIn = $("sha").value.trim(), sha = shaIn === "" ? Math.round(sal * 0.15) : num(shaIn);
+    var oth = num($("oth").value), kifu = num($("kifu").value), cnt = Math.max(1, Math.floor(num($("cnt").value)) || 1);
+    var nc = $("nc").value, last = num($("last").value);
+    var fam = { sp: Number($("sp").value), f1: Math.floor(num($("f1").value)), f2: Math.floor(num($("f2").value)), f3: Math.floor(num($("f3").value)) };
+    var calcEl = $("calc"), how = $("how"), todo = $("todo");
+    $("sum").innerHTML = ""; calcEl.innerHTML = ""; how.innerHTML = ""; todo.innerHTML = "";
+    $("result").hidden = false;
+    if (!sal) {
+      box("no", "上限の目安", "今年の給料の合計を入れてください", "まだ働いていない月の分は、もらう見込みの額で入れます。今年の給料がない場合は、住民税の所得割がかからず、ふるさと納税で住民税が減る分もほとんどありません。");
+      $("memo").textContent = ""; $("ng").textContent = ""; return;
+    }
+    var c = calc(sal, sha, oth, fam, 2026);
+    var rest = c.L - kifu;
+    if (c.L <= 2000) {
+      box("no", "自己負担2,000円で済む寄附額の目安", "ほとんどありません",
+        "今年の収入だと、来年の住民税の所得割がほとんどかからない見込みです。寄附をしても、減る税金が少なく、寄附額のほとんどが自分の負担になります。返礼品が目当てでも、今年は見送るか、ごく少額にするほうが無難です。");
+    } else if (c.L < 10000) {
+      box("mid", "自己負担2,000円で済む寄附額の目安", "およそ " + yen(c.L) + " まで",
+        "来年の住民税の所得割が少ないので、目安もごく少なくなります。返礼品の多くは1万円以上の寄附なので、ほとんどが自分の負担になります。今年は見送るのも一つの手です。");
+    } else {
+      box("", "自己負担2,000円で済む寄附額の目安", "およそ " + yen(c.L) + " まで",
+        "この額までなら、寄附額から2,000円を引いた分が、所得税と来年の住民税からほぼ戻る目安です。" + (c.capped ? "\n収入に対して寄附できる枠（所得の30%）で抑えています。" : "") + "\n計算の誤差に備えて、1〜2割少なめに抑えると安心です。");
+    }
+    if (kifu > 0) {
+      if (rest >= 0) box("", "今年あと寄附できる目安", "およそ " + yen(rest), "すでに寄附した " + yen(kifu) + " を引いた残りです。");
+      else box("no", "今年あと寄附できる目安", "すでに目安を " + yen(-rest) + " こえています", "こえた分は、税金が減らず自分の負担になる目安です（寄附そのものは取り消せません）。これからの寄附は見送ります。");
+    }
+    if (last) {
+      var lc = calc(last, Math.round(last * 0.15), oth, fam, 2025);
+      var d = lc.L - c.L;
+      box(d > 0 ? "mid" : "", "去年の収入で考えたときの目安", "およそ " + yen(lc.L) + (d > 0 ? "（今年より " + yen(d) + " 多い）" : ""),
+        d > 0 ? "去年の給料（社会保険料は15%で見積もり）で出すと、今年の目安より多く出ます。ふるさと納税のサイトの目安や、去年の住民税の通知書から出した額で寄附すると、こえやすいところです。" : "今年の収入のほうが多いか同じくらいなので、去年の収入で考えても、こえる心配は少なめです。");
+    }
+    // 計算の中身
+    li(calcEl, "給料の所得：" + yen(sal) + " − 給与所得控除 " + yen(sal - c.g) + " ＝ " + yen(c.g));
+    li(calcEl, "住民税の所得控除：" + yen(c.ded) + "（基礎控除43万円・社会保険料 " + yen(sha) + (shaIn === "" ? "（給料の15%で見積もり）" : "") + (oth ? "・そのほか " + yen(oth) : "") + (fam.sp || fam.f1 || fam.f2 || fam.f3 ? "・配偶者と扶養の分" : "") + "）");
+    li(calcEl, "住民税の課税所得：" + yen(c.T));
+    li(calcEl, "来年の住民税の所得割：" + yen(c.T) + " × 10% − 調整控除 " + yen(c.adj) + " ＝ およそ " + yen(c.wari));
+    li(calcEl, "特例分の割合：" + Math.round(c.r * 100) + "%（課税所得から人的控除の差 " + man(c.diff) + " を引いた額で決まる）");
+    li(calcEl, "上限の目安：所得割 " + yen(c.wari) + " × 20% ÷ " + Math.round(c.r * 100) + "% ＋ 2,000円 ＝ およそ " + yen(c.L) + "（1,000円未満は切り捨て）");
+    // 受け方と期限
+    var needSk = nc === "no" || nc === "sk" || cnt > 5;
+    if (nc === "un") {
+      li(how, "年内に次の会社に入って年末調整をしてもらえるかで変わります。年末調整がない・確定申告をするなら、寄附はワンストップ特例ではなく確定申告に入れます。決まったら選び直してください。");
+    } else if (needSk) {
+      li(how, "確定申告で寄附金控除を入れます" + (cnt > 5 ? "（寄附先が6つ以上なので、ワンストップ特例は使えません）" : "（確定申告をする年は、ワンストップ特例の申請をしていても使われず、その年の寄附は全部、確定申告に入れます）") + "。");
+      li(how, "期限：寄附は今年の12月31日まで。確定申告は翌年の3月15日まで。税金が戻る申告（還付申告）なら、翌年1月1日から出せます。");
+      li(how, "所得税から戻る分は確定申告のあとに口座へ、住民税の分は翌年6月からの住民税が減る形で戻ります。");
+    } else {
+      li(how, "寄附先が5つ以内で、確定申告をしないなら、ワンストップ特例が使えます。寄附先ごとに申請書を出します。");
+      li(how, "期限：寄附は今年の12月31日まで。ワンストップ特例の申請書は、翌年1月10日までに寄附先に届くように出します（住所などが変わったら、変更の届けも1月10日まで）。");
+      li(how, "戻る分は全部、翌年6月からの住民税が減る形になります（所得税からは戻りません）。");
+    }
+    // 次にやること
+    if (c.L < 10000) li(todo, kifu > 0 ? "これからの寄附は見送る（すでにした分は、下の受け方で控除を受ける）" : "今年のふるさと納税は見送るか、するなら少額にとどめる");
+    if (c.L >= 10000 && rest > 0) li(todo, "これからの寄附は、合計がおよそ " + yen(Math.floor(c.L * 0.85 / 1000) * 1000) + "（目安の85%）くらいまでに抑える");
+    li(todo, "前の会社の源泉徴収票を手元に置き、「支払金額」「社会保険料等の金額」を入れ直して確かめる");
+    if (nc === "no" || nc === "un") li(todo, "辞めたあと自分で払った国民健康保険・国民年金の額をメモしておく（確定申告で社会保険料控除に入れる）");
+    if (needSk || nc === "un") li(todo, "寄附先から届く「寄附金受領証明書」をなくさないように1か所にまとめる（確定申告で使う）");
+    else li(todo, "寄附先ごとにワンストップ特例の申請書と、マイナンバーと本人確認の書類の写しを出す");
+    li(todo, "翌年5〜6月に届く住民税の決定通知書で、寄附金税額控除が入っているか確かめる");
+    // 文
+    $("memo").textContent = (needSk ?
+      "今年寄附した分について、\n寄附金受領証明書が\nまだ届いていません。\n確定申告で使うので、\n送っていただけますか。\n\n寄附日：\n寄附額：\n申込番号：" :
+      "ワンストップ特例の申請書を\n出しました。\n届いているか確かめて\nいただけますか。\n\n" + (nc === "ya" ? "転職で住所が変わったときは、\n変更の届けも出します。\n" : "") + "寄附日：\n申込番号：");
+    $("ng").textContent = "・上限は来年の住民税の所得割で決まる。去年の通知書や、去年の年収で出した目安で寄附すると、退職した年はこえやすい\n" +
+      "・退職金は住民税の所得割の計算に入らない（別に引かれる）ので、退職金が多くても上限はほとんど増えない\n" +
+      "・失業保険（基本手当）は税金がかからないので、収入に入れない。上限も増えない\n" +
+      "・ワンストップ特例の申請をしたあとに確定申告をすると、特例は使われない。確定申告に寄附を全部入れ忘れると、控除がなくなる\n" +
+      "・12月の寄附は、決済の日付が年内になっているかを受領証明書で確かめる\n" +
+      "・住宅ローン控除・医療費控除などを使うと、上限が少し下がることがある\n" +
+      "・このページは目安です。正確な額は、翌年の住民税の決定通知書で確かめます";
+  }
+  $("make").addEventListener("click", function () { make(); if (!DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) {
+    $("sal").value = "3200000"; $("sha").value = "470000"; $("kifu").value = "30000"; $("cnt").value = "3";
+    $("nc").value = "ya"; $("last").value = "5000000";
+    make();
+  }
+  window.__calc = calc;
+})();
+</script>
+</body>
+</html>
