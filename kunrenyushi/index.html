@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>求職者支援資金融資の上限と返し方の目安｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  button.copy { width: auto; font-size: .88rem; padding: 6px 14px; margin-top: 8px; }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; }
+  .big.no { background: var(--warn-soft); }
+  ol.mo, ul.mo { margin: 0; padding-left: 1.3em; } .mo li { margin-bottom: 6px; }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #step li, .mihon #bring li, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+  .mihon .lead, .mihon .mh { display: none; }
+  .mihon .note, .mihon .hint { visibility: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <h1>求職者支援資金融資の上限と返し方の目安</h1>
+  <p class="lead">職業訓練受講給付金（月10万円の受講手当）だけでは生活費が足りないときに、労働金庫から借りられる「求職者支援資金融資」。家族・受講予定の月数・借りたい額などを選ぶと、借りられる上限、返し始める月、毎月の返済の目安、申し込みの順番を並べます。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 借りられる人か</h2>
+    <label class="f" for="teate">職業訓練受講手当（月10万円）<span class="hint">求職者支援制度の給付金のうち、月10万円の手当のこと</span></label>
+    <select id="teate">
+      <option value="yes">支給決定を受けた・受ける見込み</option>
+      <option value="tsusho">通所手当（交通費）だけの見込み</option>
+      <option value="koyo">失業保険（基本手当）を受けている</option>
+      <option value="unknown">まだわからない</option>
+    </select>
+    <label class="f" for="fam">一緒に暮らす家族<span class="hint">同居、または別に住んでいても生計が同じ、配偶者・子・父母</span></label>
+    <select id="fam">
+      <option value="no">いない（ひとり暮らしなど）</option>
+      <option value="yes">配偶者・子・父母のどれかがいる</option>
+    </select>
+    <label class="f" for="age">今の年齢</label>
+    <select id="age"></select>
+  </div>
+
+  <div class="card">
+    <h2>2. 借りる額と訓練の月</h2>
+    <label class="f" for="mon">受講予定の訓練月数<span class="hint">申し込む時点で、手当の支給・不支給がまだ決まっていない月の数</span></label>
+    <select id="mon"></select>
+    <label class="f" for="amt">借りたい額（ひと月あたり）<span class="hint">1万円単位。上限より多いと上限に合わせます</span></label>
+    <select id="amt"></select>
+    <label class="f" for="end">訓練が終わる月</label>
+    <select id="end"></select>
+  </div>
+  <button id="make" type="button">結果を見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>結果</h2>
+    <div id="sum"></div>
+    <h3>申し込みの順番</h3>
+    <ol class="mo" id="step"></ol>
+    <h3>労働金庫に持っていくもの</h3>
+    <ul class="mo" id="bring"></ul>
+    <h3>ハローワークで聞くときのメモ</h3>
+    <div class="memo" id="memo"></div>
+    <button class="copy" id="cp" type="button">メモをコピー</button>
+    <h3>気をつけること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生労働省・都道府県労働局・ハローワーク「求職者支援資金融資のご案内」（貸付額は配偶者・子・父母がいる場合 月10万円、それ以外 月5万円が上限×受講予定訓練月数（最大12）、1万円単位、年2.0%（信用保証料0.5%を含む）、訓練終了月の3か月後の末日まで元金据え置き、貸付日から5年以内（50万円以上は10年以内）に元利均等払い、最終返済時65歳）と、厚生労働省「求職者支援制度のご案内」をもとにした目安です。返済の額・回数は、年2.0%・期限いっぱいの元利均等で出した概算で、実際は労働金庫の返済の表で決まります。借りられるかは労働金庫の審査で決まります。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function opt(id, v, t) { var o = document.createElement("option"); o.value = v; o.textContent = t; $(id).appendChild(o); }
+  var a; opt("age", "17", "17歳以下");
+  for (a = 18; a <= 64; a++) opt("age", String(a), a + "歳");
+  for (a = 1; a <= 24; a++) opt("mon", String(a), a + "か月");
+  for (a = 1; a <= 10; a++) opt("amt", String(a), "月" + a + "万円");
+  for (a = 1; a <= 12; a++) opt("end", String(a), a + "月");
+  $("age").value = "35"; $("mon").value = "6"; $("amt").value = "5"; $("end").value = "3";
+
+  function box(k, v, s, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = s;
+    $("sum").appendChild(el);
+  }
+  function li(id, t) { var e = document.createElement("li"); e.textContent = t; $(id).appendChild(e); }
+  function yen(n) { return Math.round(n).toLocaleString("ja-JP") + "円"; }
+  function man(n) { return (n / 10000).toLocaleString("ja-JP") + "万円"; }
+  function mname(e, plus) { return ((e - 1 + plus) % 12 + 1) + "月"; }
+
+  function make() {
+    var teate = $("teate").value, fam = $("fam").value, age = +$("age").value,
+        mon = +$("mon").value, amt = +$("amt").value, end = +$("end").value;
+    $("sum").innerHTML = ""; $("step").innerHTML = ""; $("bring").innerHTML = "";
+    var cap = fam === "yes" ? 10 : 5;
+    var per = Math.min(amt, cap);
+    var m1 = Math.min(mon, 12);
+    var P = per * 10000 * m1;
+    var ok = true;
+
+    // 1. 借りられる人か
+    if (teate === "tsusho") {
+      box("借りられる人か", "対象外の見込み", "この融資は、月10万円の職業訓練受講手当の支給決定を受けた人が対象です。通所手当（交通費）だけを受ける人は、当たらない見込みです。生活費の相談は、ハローワークや住んでいる市区町村の窓口でします。", true);
+      ok = false;
+    } else if (teate === "koyo") {
+      box("借りられる人か", "対象外の見込み", "この融資は、求職者支援制度で職業訓練受講手当を受ける人のためのものです。失業保険（基本手当）を受けている間は、職業訓練受講給付金を受けられないため、この融資にも当たらない見込みです。", true);
+      ok = false;
+    } else if (age < 18) {
+      box("借りられる人か", "原則として使えない", "未成年の人は、原則としてこの融資を使えません。", true);
+      ok = false;
+    } else if (teate === "unknown") {
+      box("借りられる人か", "手当の支給決定しだい", "対象は、月10万円の職業訓練受講手当の支給決定を受けた人です。まず給付金の事前審査と申請を進めます。下の額は、支給決定を受けたときの目安です。", true);
+    } else {
+      box("借りられる人か", "対象になりうる", "職業訓練受講手当の支給決定を受け、ハローワークで要件確認書の交付を受けた人が対象です。そのうえで、労働金庫の審査があり、借りられないこともあります。", false);
+    }
+
+    if (ok || teate === "unknown") {
+      // 2. 上限
+      var s = (fam === "yes" ? "配偶者・子・父母のどれかがいるので、上限は月10万円。" : "ひとり暮らしなどなので、上限は月5万円。") + "上限×受講予定の訓練月数（1回の手続きで最大12）までです。";
+      if (amt > cap) s += "月" + amt + "万円は上限を超えるので、月" + cap + "万円で数えました。";
+      if (mon > 12) s += "残りの" + (mon - 12) + "か月分は、最初の12か月がたつ前に、もう一度ハローワークと労働金庫で手続きします。";
+      s += "お金は、労働金庫の本人の口座に一度に振り込まれます。";
+      box("借りられる額（1回目）", "月" + per + "万円×" + m1 + "か月＝" + man(P), s, false);
+
+      // 3. 返し方
+      var r = 0.02 / 12;
+      var limitY = P >= 500000 ? 10 : 5;
+      var nTerm = limitY * 12 - 3 - mon;          // 貸付から期限までの月 − 据え置き
+      var nAge = (65 - age) * 12 - mon - 3;       // 65歳までに終える
+      var n = Math.min(nTerm, nAge);
+      var intOnly = P * r;
+      var s2 = "訓練が終わる月の3か月後の末日（" + mname(end, 3) + "末）までは、元金を返さず利息だけを払います（月" + yen(intOnly) + "ほど）。" + mname(end, 4) + "末から、元金と利息を毎月返します。返す期限は、借りた日から" + limitY + "年以内" + (limitY === 10 ? "（50万円以上のため）" : "（50万円未満のため）") + "です。";
+      if (n < 1) {
+        box("返し方の目安", "期限までに返す月が足りない", s2 + "最後に返すときの年齢は65歳までと決まっていて、今の年齢と訓練の月数だと、返す月がほとんど残りません。借りられるか、どう返すかは、ハローワークと労働金庫で相談します。", true);
+      } else {
+        var pay = P * r / (1 - Math.pow(1 + r, -n));
+        var tot = pay * n;
+        var note = n === nAge && nAge < nTerm ? "最後に返すときの年齢は65歳までと決まっているので、今の年齢から少し早めに終わる形で数え、回数が少なくなっています。" : "";
+        box("返し方の目安", "月" + yen(pay) + "ほど×" + n + "回", s2 + "期限いっぱいに分けて、年2.0%の元利均等で返すと、毎月" + yen(pay) + "ほど、元金と利息の合計は" + yen(tot + intOnly * (mon + 2)) + "ほど（据え置きの間の利息も入れた概算）です。" + note + "実際の額と回数は、労働金庫の返済の表で確かめます。", false);
+      }
+    }
+
+    // 申し込みの順番
+    li("step", "ハローワークで、融資の確認申請をする");
+    li("step", "条件に当たると、「求職者支援資金融資要件確認書」を受け取る");
+    li("step", "職業訓練受講手当の支給決定を受ける");
+    li("step", "要件確認書と、支給決定がわかる書類を、ハローワークが指定する労働金庫に持っていく");
+    li("step", "労働金庫の審査に通ると、本人の口座に振り込まれる");
+
+    li("bring", "求職者支援資金融資要件確認書（ハローワークで受け取る）");
+    li("bring", "支給決定を受けたことがわかる書類（例：給付金の支給記録の写し）");
+    li("bring", "そのほか、労働金庫が案内する書類（労働金庫の口座がなければ、口座を作る用意も）");
+
+    var memo = "求職者支援資金融資で聞きたいこと\n";
+    memo += "受講手当：" + { yes: "支給決定あり・見込み", tsusho: "通所手当だけの見込み", koyo: "失業保険を受けている", unknown: "まだわからない" }[teate] + "\n";
+    memo += "家族：" + (fam === "yes" ? "配偶者・子・父母あり" : "ひとり暮らしなど") + "\n";
+    memo += "受講予定：" + mon + "か月\n";
+    memo += "・確認申請はいつ出せるか\n";
+    memo += "・指定の労働金庫はどこか\n";
+    memo += "・持っていく書類は何か";
+    $("memo").textContent = memo;
+
+    $("ng").textContent = "・借りたお金なので、利息も含めて返す（返さなくてよくなる仕組みはない）\n・労働金庫の審査で、借りられないこともある\n・訓練を途中でやめたら、1か月以内にハローワークに届け出て、労働金庫で契約を変える（しないと、残りを一度に返すことに）\n・就職支援を断る、理由のない欠席をくり返すなどで給付金が出なくなると、残りを一度に返す\n・返すのが遅れると、遅れた元金に年14.5%の損害金\n・ここに出る返済の額は概算。上限の範囲で、返せる額だけにする";
+    $("result").hidden = false;
+    return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  $("cp").addEventListener("click", function () {
+    var s = $("memo").textContent;
+    if (navigator.clipboard) navigator.clipboard.writeText(s).then(function () { $("cp").textContent = "コピーしました"; });
+  });
+  if (DEMO) make();
+})();
+</script>
+</body>
+</html>
