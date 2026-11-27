@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>障害年金の障害手当金、受け取れそうか｜はじめての係</title>
+<style>
+  :root {
+    --bg: #faf8f5; --card: #ffffff; --text: #2b2b2b; --sub: #6b6b6b;
+    --line: #e4dfd8; --accent: #2f6f5e; --accent-soft: #e6f0ec; --input: #fffbe8;
+    --warn: #a4412f; --warn-soft: #f8e9e5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1e; --card: #26262a; --text: #ececec; --sub: #a5a5a5;
+      --line: #3a3a3f; --accent: #7cc4ad; --accent-soft: #23372f; --input: #2e2c22;
+      --warn: #f0a08f; --warn-soft: #3d2622;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif; line-height: 1.7; font-size: 16px; }
+  main { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  h2 { font-size: 1.05rem; margin: 0 0 10px; }
+  h3 { font-size: .98rem; margin: 18px 0 6px; }
+  .lead { color: var(--sub); font-size: .9rem; margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  label.f { display: block; font-weight: 600; margin: 14px 0 6px; }
+  .card > label.f:first-of-type { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--sub); font-size: .85rem; display: block; }
+  input[type=number], select { width: 100%; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--input); color: var(--text); font-family: inherit; }
+  button { width: 100%; font-size: 1rem; font-weight: 700; padding: 12px; border: 0; border-radius: 10px;
+    background: var(--accent); color: #fff; margin-top: 18px; cursor: pointer; font-family: inherit; }
+  @media (prefers-color-scheme: dark) { button { color: #10231d; } }
+  .big { border-radius: 10px; padding: 12px; margin-bottom: 8px; background: var(--accent-soft); }
+  .big .k { font-size: .85rem; color: var(--sub); }
+  .big .v { font-size: 1.05rem; font-weight: 700; }
+  .big .s { font-size: .88rem; white-space: pre-wrap; }
+  .big.no { background: var(--warn-soft); }
+  .memo { background: var(--input); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: .92rem; white-space: pre-wrap; }
+  .ng { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 12px; font-size: .9rem; white-space: pre-wrap; }
+  .note { font-size: .8rem; color: var(--sub); }
+  [hidden] { display: none !important; }
+  .mihon #sum .v, .mihon #sum .s, .mihon #memo, .mihon #ng { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>障害手当金、受け取れそうか</h1>
+  <p class="lead">会社員・公務員のとき（厚生年金に入っていた間）に初診日がある病気やけがが、初診日から5年以内に治って（症状が固まって）、3級より軽い一定の障害が残ったときに、一時金で出るのが障害手当金です。いくつかの質問に答えると、当てはまりそうか、当てはまらないならどこで外れるか、額の目安、窓口で伝える一言が出ます。厚生年金保険法と日本年金機構の案内で出した目安です。入力した内容は、このページの外には送られません。</p>
+
+  <div class="card">
+    <h2>1. 初診日と治った日</h2>
+    <label class="f" for="kanyu">初診日に入っていた年金<span class="hint">初診日＝その病気やけがで初めて医師にかかった日</span></label>
+    <select id="kanyu">
+      <option value="kosei">厚生年金（会社員・公務員として働いていた）</option>
+      <option value="kokumin">国民年金だけ（自営業・学生・無職・扶養など）</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="naotta">治った（症状が固まった）日はいつか<span class="hint">治った＝症状が固定し、治療の効果が期待できない状態になった日も含む</span></label>
+    <select id="naotta">
+      <option value="in5">初診日から5年以内に治った</option>
+      <option value="over5">初診日から5年をこえてから治った</option>
+      <option value="still">まだ治療中（症状が変わっている）</option>
+    </select>
+    <label class="f" for="teido">残った障害の重さ<span class="hint">医師の見立てで選ぶ。決めるのは日本年金機構</span></label>
+    <select id="teido">
+      <option value="kei">3級よりは軽いが、仕事や暮らしに制限が残る</option>
+      <option value="san">3級以上にあたりそう</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>2. 保険料とほかの給付</h2>
+    <label class="f" for="nofu">初診日の前日までの保険料<span class="hint">前々月までの加入期間の3分の2以上を納付・免除、または前々月までの1年に未納なし（初診日に65歳未満）</span></label>
+    <select id="nofu">
+      <option value="ok">どちらかに当てはまる</option>
+      <option value="ng">どちらにも当てはまらない</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="nenkin">治った日に、ほかの年金を受ける権利があるか<span class="hint">老齢・遺族・障害の年金など（国民年金・厚生年金とも）</span></label>
+    <select id="nenkin">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+      <option value="unk">わからない</option>
+    </select>
+    <label class="f" for="rosai">同じ病気・けがで、労災の障害補償を受ける権利があるか<span class="hint">仕事中・通勤中のけがなどで、労災保険や公務災害の障害の給付</span></label>
+    <select id="rosai">
+      <option value="no">ない</option>
+      <option value="yes">ある</option>
+      <option value="unk">わからない</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>3. 額の目安（わかれば）</h2>
+    <label class="f" for="umare">生まれた日</label>
+    <select id="umare">
+      <option value="new">昭和31年4月2日以後</option>
+      <option value="old">昭和31年4月1日以前</option>
+    </select>
+    <label class="f" for="hirei">報酬比例の年金額（年額・円）<span class="hint">年金事務所で出してもらう額。わからなければ空でよい</span></label>
+    <input type="number" id="hirei" inputmode="numeric" min="0" step="1000" placeholder="例：300000">
+  </div>
+  <button id="make" type="button">当てはまるか見る</button>
+
+  <div class="card" id="result" hidden style="margin-top:16px">
+    <h2>できあがり</h2>
+    <div id="sum"></div>
+    <h3>窓口で伝える一言</h3>
+    <div class="memo" id="memo"></div>
+    <h3>これからやること</h3>
+    <div class="ng" id="ng"></div>
+  </div>
+
+  <p class="note">※厚生年金保険法 第47条（治った日＝症状が固定し治療の効果が期待できない状態に至った日を含む）・第55条（初診日に被保険者で、初診日から5年を経過する日までに治り、政令で定める程度の障害が残ったとき）・第56条（治った日に年金の受給権者である人、同じ傷病で労災保険などの障害補償を受ける権利がある人には支給しない。例外あり）・第57条（額は報酬比例の年金額の100分の200。最低保障は第50条第3項の額の2倍）と、日本年金機構「障害厚生年金の受給要件・請求時期・年金額」（3級の最低保障額 令和8年4月分から 635,500円・昭和31年4月1日以前生まれ 633,700円）で出した目安です。最低保障の目安は、この3級の最低保障額を2倍した額（1,271,000円・1,267,400円）です。障害の程度の基準・額・受け取れるかの判断は日本年金機構が行います。年金事務所で確かめてください。<br>
+  最終更新：2026年11月　はじめての係</p>
+</main>
+
+<script>
+(function () {
+  var DEMO = location.search.indexOf("demo") >= 0;
+  if (location.search.indexOf("mihon") >= 0) document.body.className = "mihon";
+  function $(id) { return document.getElementById(id); }
+  function yen(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  var MIN = { "new": 1271000, "old": 1267400 };
+  function box(k, v, t, no) {
+    var el = document.createElement("div"); el.className = "big" + (no ? " no" : "");
+    el.innerHTML = '<div class="k"></div><div class="v"></div><div class="s"></div>';
+    el.querySelector(".k").textContent = k; el.querySelector(".v").textContent = v; el.querySelector(".s").textContent = t;
+    $("sum").appendChild(el);
+  }
+  function make() {
+    $("sum").innerHTML = "";
+    var kanyu = $("kanyu").value, naotta = $("naotta").value, teido = $("teido").value;
+    var nofu = $("nofu").value, nenkin = $("nenkin").value, rosai = $("rosai").value, um = $("umare").value;
+    var h = $("hirei").value === "" ? null : Math.floor(+$("hirei").value);
+    var out = [], unk = [], memo = [], ng = [];
+    if (kanyu === "kokumin") out.push(["初診日の年金", "障害手当金は厚生年金の制度です。初診日に国民年金だけだったときは、障害手当金はありません。障害が重い（1級・2級）なら、障害基礎年金の側を見ます。"]);
+    if (kanyu === "unk") unk.push(["初診日の年金", "初診日に厚生年金に入っていたかで決まります。年金事務所で加入の記録を見てもらえます。"]);
+    if (naotta === "over5") out.push(["治った日", "初診日から5年をこえてから治ったときは、障害手当金の対象から外れます（初診日から5年を経過する日までに治ったことが条件）。"]);
+    if (naotta === "still") unk.push(["治った日", "まだ治療中なら、障害手当金はまだ決まりません。治らないまま初診日から1年6か月たったときは、その日の状態で障害年金（3級以上）に当たるかを見ます。"]);
+    if (teido === "san") out.push(["障害の重さ", "3級以上にあたるなら、一時金の障害手当金ではなく、障害厚生年金（年金で続けて出る）の側を見ます。"]);
+    if (teido === "unk") unk.push(["障害の重さ", "障害手当金は、3級より軽い一定の障害（政令の表のくらい）が残ったときです。軽すぎると出ません。医師の診断書で判断されます。"]);
+    if (nofu === "ng") out.push(["保険料", "初診日の前日に、保険料の条件（3分の2以上、または前々月までの1年に未納なし）を満たさないと、障害手当金は出ません。"]);
+    if (nofu === "unk") unk.push(["保険料", "初診日の前日時点の納付の記録で決まります。年金事務所で、初診日を伝えて見てもらえます。"]);
+    if (nenkin === "yes") out.push(["ほかの年金", "治った日に、年金（老齢・遺族・障害など）を受ける権利があると、障害手当金は出ません。ただし、障害の年金で、障害の状態でなくなってから3年たっている場合などは例外があります。"]);
+    if (nenkin === "unk") unk.push(["ほかの年金", "治った日に年金を受ける権利があるかで変わります。年金証書や、年金事務所の記録で確かめます。"]);
+    if (rosai === "yes") out.push(["労災の障害補償", "同じ病気・けがで、労災保険や公務災害の障害の給付を受ける権利があると、障害手当金は出ません。"]);
+    if (rosai === "unk") unk.push(["労災の障害補償", "仕事中・通勤中の病気やけがなら、労災の障害の給付と重なるかを先に確かめます。"]);
+    var kekka, no;
+    if (out.length) { kekka = "当てはまらない見込み"; no = true; }
+    else if (unk.length) { kekka = "まだ決めきれない"; no = false; }
+    else { kekka = "当てはまりそう"; no = false; }
+    box("判定", kekka, out.length ? "外れそうなところが" + out.length + "つあります。下に理由を出しました。" : (unk.length ? "外れるところは見つかりませんでしたが、確かめることが" + unk.length + "つあります。" : "入れた答えでは、障害手当金の条件（厚生年金の間の初診日・5年以内に治った・3級より軽い一定の障害・保険料・ほかの給付なし）に当てはまりそうです。"), no);
+    out.forEach(function (x) { box(x[0], "ここで外れる", x[1], true); });
+    unk.forEach(function (x) { box(x[0], "確かめる", x[1], false); });
+    var min = MIN[um], umtxt = um === "new" ? "昭和31年4月2日以後" : "昭和31年4月1日以前";
+    if (!out.length) {
+      if (h !== null && h > 0) {
+        var two = h * 2, g = Math.max(two, min);
+        box("額の目安（一時金）", yen(g) + "円", "報酬比例の年金額 " + yen(h) + "円の2倍は " + yen(two) + "円です。" + (two < min ? "最低保障の目安 " + yen(min) + "円より少ないので、最低保障の額になります。" : "最低保障の目安 " + yen(min) + "円より多いので、2倍の額のままです。") + "1回だけ出る一時金です。額は日本年金機構が決めます。", false);
+      } else {
+        box("額の目安（一時金）", "最低 " + yen(min) + "円の目安", "報酬比例の年金額の2倍で、それが少ないときは最低保障の額（" + umtxt + "生まれの目安）になります。報酬比例の年金額を入れると、2倍の額も出ます。1回だけ出る一時金です。", false);
+      }
+    }
+    memo.push("初診日は");
+    memo.push(kanyu === "kosei" ? "厚生年金に入って\nいた間です。" : (kanyu === "kokumin" ? "国民年金だけの\n間です。" : "どの年金の間か\nわかりません。"));
+    memo.push(naotta === "in5" ? "初診日から5年以内に\n症状が固まりました。" : (naotta === "over5" ? "初診日から5年を\nこえて症状が\n固まりました。" : "まだ治療中です。"));
+    memo.push(teido === "san" ? "障害年金（3級以上）に\n当たるか、" : "障害手当金に\n当てはまるか、");
+    memo.push("保険料の記録と\nあわせて確かめたいです。");
+    if (naotta === "still") ng.push("・治療を続けながら、初診日から1年6か月の日を書き出しておく");
+    if (kanyu !== "kokumin") ng.push("・年金事務所に予約して、初診日を伝え、加入と保険料の記録を見てもらう");
+    ng.push("・初診の病院と日付（受診状況等証明書が要るか）を確かめる");
+    if (teido !== "san" && naotta === "in5") ng.push("・治った日（症状が固まった日）の状態を、医師に診断書で書いてもらえるか聞く");
+    if (teido === "san") ng.push("・障害厚生年金（3級以上）の請求の流れを見る");
+    if (rosai !== "no") ng.push("・労災の障害の給付を受けるか、受けられるかを先に確かめる");
+    ng.push("・最後に決めるのは日本年金機構。迷う点は年金事務所で聞く");
+    $("memo").textContent = memo.join("\n");
+    $("ng").textContent = ng.join("\n");
+    $("result").hidden = false; return true;
+  }
+  $("make").addEventListener("click", function () { if (make() && !DEMO) $("result").scrollIntoView({ behavior: "smooth" }); });
+  if (DEMO) { $("hirei").value = "300000"; make(); }
+})();
+</script>
+</body>
+</html>
